@@ -21,7 +21,7 @@ public class TransportLine implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     @Column(nullable = false)
     private String name;
@@ -30,14 +30,11 @@ public class TransportLine implements Serializable {
     @Enumerated(EnumType.ORDINAL)
     private VehicleType type;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Station> stations;
 
     @Column
     private HashMap<Days,ArrayList<LocalDateTime>> schedule;
-
-    //@OneToMany(fetch = FetchType.LAZY, mappedBy = "currentLine", cascade = CascadeType.ALL)
-    //private Set<Vehicle> currentVehicles;
 
     @ManyToOne(optional = false)
     private Zone zone;
@@ -59,11 +56,11 @@ public class TransportLine implements Serializable {
         return serialVersionUID;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 

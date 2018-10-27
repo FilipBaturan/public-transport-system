@@ -2,7 +2,6 @@ package construction_and_testing.public_transport_system.domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Set;
 
 @Entity
 public class Station implements Serializable {
@@ -11,7 +10,7 @@ public class Station implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
 
     @Column(nullable = false)
     private String name;
@@ -19,29 +18,26 @@ public class Station implements Serializable {
     @Column
     private double coordinates;
 
-    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-    private Set<TransportLine> lines;
 
     public Station(){
 
     }
 
-    public Station(long id, String name, double coordinates, Set<TransportLine> lines) {
+    public Station(long id, String name, double coordinates, TransportLine lines) {
         this.id = id;
         this.name = name;
         this.coordinates = coordinates;
-        this.lines = lines;
     }
 
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
-    public void setId(long id) {
+    public void setId(Long id) {
         this.id = id;
     }
 
@@ -61,11 +57,4 @@ public class Station implements Serializable {
         this.coordinates = coordinates;
     }
 
-    public Set<TransportLine> getLines() {
-        return lines;
-    }
-
-    public void setLines(Set<TransportLine> lines) {
-        this.lines = lines;
-    }
 }
