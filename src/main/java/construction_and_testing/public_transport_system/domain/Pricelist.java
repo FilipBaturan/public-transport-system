@@ -1,11 +1,12 @@
 package construction_and_testing.public_transport_system.domain;
 
-import construction_and_testing.public_transport_system.domain.enums.AgeType;
-import construction_and_testing.public_transport_system.domain.enums.LineCount;
-import construction_and_testing.public_transport_system.domain.enums.TicketType;
+import construction_and_testing.public_transport_system.domain.Item;
+import construction_and_testing.public_transport_system.domain.util.LocalDateTimeConverter;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.time.LocalDateTime;
+import java.util.Set;
 
 /**
  * Add later
@@ -20,34 +21,17 @@ public class Pricelist implements Serializable {
     private Long id;
 
     @Column(nullable = false)
-    @Enumerated(EnumType.ORDINAL)
-    private TicketType type;
+    @Convert(converter = LocalDateTimeConverter.class)
+    private LocalDateTime startDate;
 
     @Column(nullable = false)
-    @Enumerated(EnumType.ORDINAL)
-    private AgeType age;
+    @Convert(converter = LocalDateTimeConverter.class)
+    private LocalDateTime endDate;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.ORDINAL)
-    private LineCount lineCount;
-
-    @Column(nullable = false)
-    private double cost;
-
-    //sta staviti za cascade ????
-    @OneToOne(fetch = FetchType.EAGER)
-    private Zone zone;
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    private Set<Item> items;
 
     public Pricelist() {
-    }
-
-    public Pricelist(long id, TicketType type, AgeType age, LineCount lineCount, double cost, Zone zone) {
-        this.id = id;
-        this.type = type;
-        this.age = age;
-        this.lineCount = lineCount;
-        this.cost = cost;
-        this.zone = zone;
     }
 
     public static long getSerialVersionUID() {
@@ -62,43 +46,27 @@ public class Pricelist implements Serializable {
         this.id = id;
     }
 
-    public TicketType getType() {
-        return type;
+    public LocalDateTime getStartDate() {
+        return startDate;
     }
 
-    public void setType(TicketType type) {
-        this.type = type;
+    public void setStartDate(LocalDateTime startDate) {
+        this.startDate = startDate;
     }
 
-    public AgeType getAge() {
-        return age;
+    public LocalDateTime getEndDate() {
+        return endDate;
     }
 
-    public void setAge(AgeType age) {
-        this.age = age;
+    public void setEndDate(LocalDateTime endDate) {
+        this.endDate = endDate;
     }
 
-    public LineCount getLineCount() {
-        return lineCount;
+    public Set<Item> getItems() {
+        return items;
     }
 
-    public void setLineCount(LineCount lineCount) {
-        this.lineCount = lineCount;
-    }
-
-    public Zone getZone() {
-        return zone;
-    }
-
-    public void setZone(Zone zone) {
-        this.zone = zone;
-    }
-
-    public double getCost() {
-        return cost;
-    }
-
-    public void setCost(double cost) {
-        this.cost = cost;
+    public void setItems(Set<Item> items) {
+        this.items = items;
     }
 }
