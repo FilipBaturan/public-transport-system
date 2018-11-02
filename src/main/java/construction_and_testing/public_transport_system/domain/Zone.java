@@ -2,6 +2,7 @@ package construction_and_testing.public_transport_system.domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 import java.util.Set;
 
 /**
@@ -57,5 +58,18 @@ public class Zone implements Serializable {
 
     public void setLines(Set<TransportLine> lines) {
         this.lines = lines;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Zone)) return false;
+        Zone zone = (Zone) o;
+        return Objects.equals(id, zone.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

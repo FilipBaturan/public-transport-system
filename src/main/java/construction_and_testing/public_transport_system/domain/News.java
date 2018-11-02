@@ -5,6 +5,7 @@ import construction_and_testing.public_transport_system.domain.util.LocalDateTim
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 /**
  * Add later
@@ -84,5 +85,18 @@ public class News implements Serializable {
 
     public void setOperator(Operator operator) {
         this.operator = operator;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof News)) return false;
+        News news = (News) o;
+        return Objects.equals(id, news.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

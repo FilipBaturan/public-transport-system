@@ -2,6 +2,7 @@ package construction_and_testing.public_transport_system.domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Add later
@@ -38,11 +39,13 @@ public class User implements Serializable {
     @Column(nullable = false)
     private boolean confirmation;
 
-    User() {
+
+
+    public User() {
         confirmation = false;
     }
 
-    User(Long id, String name, String lastName, String username, String password, String email, String telephone,
+    public User(Long id, String name, String lastName, String username, String password, String email, String telephone,
                  boolean confirmation) {
         this.id = id;
         this.name = name;
@@ -120,5 +123,18 @@ public class User implements Serializable {
 
     public void setConfirmation(boolean confirmation) {
         this.confirmation = confirmation;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        User user = (User) o;
+        return Objects.equals(id, user.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

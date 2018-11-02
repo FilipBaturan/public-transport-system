@@ -4,6 +4,7 @@ import construction_and_testing.public_transport_system.domain.enums.VehicleType
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Add later
@@ -72,5 +73,18 @@ public class Vehicle implements Serializable {
 
     public void setCurrentLine(TransportLine currentLine) {
         this.currentLine = currentLine;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Vehicle)) return false;
+        Vehicle vehicle = (Vehicle) o;
+        return Objects.equals(id, vehicle.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
     }
 }

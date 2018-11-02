@@ -5,6 +5,7 @@ import construction_and_testing.public_transport_system.domain.enums.TicketType;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Add later
@@ -88,4 +89,16 @@ public class Item implements Serializable {
         this.cost = cost;
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Item)) return false;
+        Item item = (Item) o;
+        return Objects.equals(id, item.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id);
+    }
 }
