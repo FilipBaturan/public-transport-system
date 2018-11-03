@@ -1,7 +1,7 @@
 package construction_and_testing.public_transport_system.domain;
 
-import construction_and_testing.public_transport_system.domain.Item;
 import construction_and_testing.public_transport_system.domain.util.LocalDateTimeConverter;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -13,6 +13,7 @@ import java.util.Set;
  * Add later
  */
 @Entity
+@Where(clause = "active =1")
 public class Pricelist implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -29,10 +30,14 @@ public class Pricelist implements Serializable {
     @Convert(converter = LocalDateTimeConverter.class)
     private LocalDateTime endDate;
 
-    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-    private Set<Item> items;
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "pricelist")
+    private Set<PricelistItem> items;
+
+    @Column(nullable = false, name = "active")
+    private boolean active;
 
     public Pricelist() {
+        this.active = true;
     }
 
     public static long getSerialVersionUID() {
@@ -63,11 +68,11 @@ public class Pricelist implements Serializable {
         this.endDate = endDate;
     }
 
-    public Set<Item> getItems() {
+    public Set<PricelistItem> getItems() {
         return items;
     }
 
-    public void setItems(Set<Item> items) {
+    public void setItems(Set<PricelistItem> items) {
         this.items = items;
     }
 
@@ -82,5 +87,13 @@ public class Pricelist implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

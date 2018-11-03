@@ -1,6 +1,7 @@
 package construction_and_testing.public_transport_system.domain;
 
 import construction_and_testing.public_transport_system.domain.util.LocalDateTimeConverter;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,6 +12,7 @@ import java.util.Objects;
  * Add later
  */
 @Entity
+@Where(clause = "active =1")
 public class Ticket implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -30,7 +32,7 @@ public class Ticket implements Serializable {
     @Column(nullable = false)
     private String token;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "active")
     private boolean active;
 
     @OneToOne(fetch = FetchType.LAZY)

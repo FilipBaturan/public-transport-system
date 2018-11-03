@@ -1,5 +1,7 @@
 package construction_and_testing.public_transport_system.domain;
 
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -8,6 +10,7 @@ import java.util.Objects;
  * Add later
  */
 @Entity
+@Where(clause = "active =1")
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(name = "type", discriminatorType = DiscriminatorType.STRING)
 public class User implements Serializable {
@@ -39,10 +42,12 @@ public class User implements Serializable {
     @Column(nullable = false)
     private boolean confirmation;
 
-
+    @Column(nullable = false, name = "active")
+    private boolean active;
 
     public User() {
-        confirmation = false;
+        this.confirmation = false;
+        this.active = true;
     }
 
     public User(Long id, String name, String lastName, String username, String password, String email, String telephone,
@@ -136,5 +141,13 @@ public class User implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

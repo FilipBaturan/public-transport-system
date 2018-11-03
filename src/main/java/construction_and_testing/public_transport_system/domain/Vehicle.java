@@ -1,6 +1,7 @@
 package construction_and_testing.public_transport_system.domain;
 
 import construction_and_testing.public_transport_system.domain.enums.VehicleType;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -10,6 +11,7 @@ import java.util.Objects;
  * Add later
  */
 @Entity
+@Where(clause = "active =1")
 public class Vehicle implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -29,7 +31,11 @@ public class Vehicle implements Serializable {
     @JoinColumn(nullable = true)
     private TransportLine currentLine;
 
+    @Column(nullable = false, name = "active")
+    private boolean active;
+
     public Vehicle() {
+        this.active = true;
     }
 
     public Vehicle(long id, String name, VehicleType type, TransportLine currentLine) {
@@ -86,5 +92,13 @@ public class Vehicle implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

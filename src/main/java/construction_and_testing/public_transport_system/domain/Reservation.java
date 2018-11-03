@@ -1,5 +1,7 @@
 package construction_and_testing.public_transport_system.domain;
 
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
@@ -9,6 +11,7 @@ import java.util.Set;
  * Add later
  */
 @Entity
+@Where(clause = "active =1")
 public class Reservation implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -23,7 +26,11 @@ public class Reservation implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     private RegisteredUser owner;
 
+    @Column(nullable = false, name = "active")
+    private boolean active;
+
     public Reservation() {
+        this.active = true;
     }
 
     public Reservation(long id, Set<Ticket> tickets, RegisteredUser owner) {
@@ -71,5 +78,13 @@ public class Reservation implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

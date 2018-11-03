@@ -1,14 +1,17 @@
 package construction_and_testing.public_transport_system.domain;
 
+import org.hibernate.annotations.Where;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
 
 /**
- * Add later
+ * Zone represents group of transport lines
  */
 @Entity
+@Where(clause = "active =1")
 public class Zone implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -17,13 +20,17 @@ public class Zone implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "zone")
     private Set<TransportLine> lines;
 
+    @Column(nullable = false, name = "active")
+    private boolean active;
+
     public Zone() {
+        this.active = true;
     }
 
     public Zone(long id, String name, Set<TransportLine> lines) {
@@ -71,5 +78,13 @@ public class Zone implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

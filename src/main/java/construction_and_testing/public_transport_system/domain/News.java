@@ -1,6 +1,7 @@
 package construction_and_testing.public_transport_system.domain;
 
 import construction_and_testing.public_transport_system.domain.util.LocalDateTimeConverter;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -11,6 +12,7 @@ import java.util.Objects;
  * Add later
  */
 @Entity
+@Where(clause = "active =1")
 public class News implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -32,7 +34,11 @@ public class News implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY)
     private Operator operator;
 
+    @Column(nullable = false, name = "active")
+    private boolean active;
+
     public News() {
+        this.active = true;
     }
 
     public News(Long id, String title, String content, LocalDateTime date, Operator operator) {
@@ -98,5 +104,13 @@ public class News implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

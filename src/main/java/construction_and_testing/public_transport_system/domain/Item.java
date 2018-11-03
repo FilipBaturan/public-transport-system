@@ -2,15 +2,18 @@ package construction_and_testing.public_transport_system.domain;
 
 import construction_and_testing.public_transport_system.domain.enums.AgeType;
 import construction_and_testing.public_transport_system.domain.enums.TicketType;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
+import java.util.Set;
 
 /**
  * Add later
  */
 @Entity
+@Where(clause = "active =1")
 public class Item implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -34,15 +37,23 @@ public class Item implements Serializable {
     @OneToOne(fetch = FetchType.EAGER)
     private Zone zone;
 
+    @Column(nullable = false, name = "active")
+    private boolean active;
+
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "item")
+    private Set<PricelistItem> pricelists;
+
     public Item() {
+        this.active = true;
     }
 
-    public Item(long id, TicketType type, AgeType age, double cost, Zone zone) {
+    public Item(long id, TicketType type, AgeType age, double cost, Zone zone, Set<PricelistItem> pricelists) {
         this.id = id;
         this.type = type;
         this.age = age;
         this.cost = cost;
         this.zone = zone;
+        this.pricelists = pricelists;
     }
 
     public static long getSerialVersionUID() {
@@ -100,5 +111,21 @@ public class Item implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
+    }
+
+    public Set<PricelistItem> getPricelists() {
+        return pricelists;
+    }
+
+    public void setPricelists(Set<PricelistItem> pricelists) {
+        this.pricelists = pricelists;
     }
 }

@@ -2,6 +2,7 @@ package construction_and_testing.public_transport_system.domain;
 
 import construction_and_testing.public_transport_system.domain.enums.Days;
 import construction_and_testing.public_transport_system.domain.enums.VehicleType;
+import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -16,6 +17,7 @@ import java.util.Set;
  * Add later
  */
 @Entity
+@Where(clause = "active =1")
 public class TransportLine implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -40,7 +42,11 @@ public class TransportLine implements Serializable {
     @ManyToOne(optional = false)
     private Zone zone;
 
+    @Column(nullable = false, name = "active")
+    private boolean active;
+
     public TransportLine() {
+        this.active = true;
     }
 
     public TransportLine(long id, String name, VehicleType type, Set<Station> stations, HashMap<Days,
@@ -116,5 +122,13 @@ public class TransportLine implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }
