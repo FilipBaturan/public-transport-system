@@ -22,6 +22,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return new ResponseEntity<>(e.getMessage(), e.getHttpStatus());
     }
 
+    @ExceptionHandler(NumberFormatException.class)
+    public ResponseEntity<String> handleNumberFormatException(NumberFormatException e){
+        return new ResponseEntity<>("Bad number format " + e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
     @ExceptionHandler(MultipartException.class)
     public ResponseEntity<String> handleFileToLargeException(MultipartException e){
         return new ResponseEntity<>("File is too large", HttpStatus.BAD_REQUEST);

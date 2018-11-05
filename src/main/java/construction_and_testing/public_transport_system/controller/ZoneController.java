@@ -44,11 +44,7 @@ public class ZoneController {
     @ResponseBody
     public ResponseEntity<Zone> getById(@PathVariable String id) {
         logger.info("Requesting zone with id {} at time {}.", id, Calendar.getInstance().getTime());
-        try {
-            return new ResponseEntity<>(zoneService.findById(Long.parseLong(id)), HttpStatus.FOUND);
-        } catch (NumberFormatException e) {
-            throw new ValidationException("Bad format of requested id!", HttpStatus.BAD_REQUEST);
-        }
+        return new ResponseEntity<>(zoneService.findById(Long.parseLong(id)), HttpStatus.FOUND);
     }
 
     /**
