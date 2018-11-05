@@ -32,4 +32,10 @@ public interface NewsService {
      */
     boolean modify(News news);
 
+    /**
+     * Method for removing news
+     * @param id - id of news for deleting
+     */
+    void remove(Long id);
+
 }

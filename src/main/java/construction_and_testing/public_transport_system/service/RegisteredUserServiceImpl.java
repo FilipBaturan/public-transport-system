@@ -5,7 +5,9 @@ import construction_and_testing.public_transport_system.repository.RegisteredUse
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class RegisteredUserServiceImpl implements RegisteredUserService {
@@ -44,6 +46,18 @@ public class RegisteredUserServiceImpl implements RegisteredUserService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void remove(Long id) {
+        Optional<RegisteredUser> entity = registeredUserRepository.findById(id);
+        if(entity.isPresent()){
+            RegisteredUser user = entity.get();
+            user.setActive(false);
+            registeredUserRepository.save(user);
+        }else {
+            throw new EntityNotFoundException();
+        }
     }
 
 

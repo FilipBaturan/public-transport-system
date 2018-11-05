@@ -5,7 +5,9 @@ import construction_and_testing.public_transport_system.repository.NewsRepositor
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class NewsServiceImpl implements NewsService {
@@ -44,5 +46,17 @@ public class NewsServiceImpl implements NewsService {
             return true;
         }
         return false;
+    }
+
+    @Override
+    public void remove(Long id) {
+        Optional<News> entity = newsRepository.findById(id);
+        if(entity.isPresent()){
+            News news = entity.get();
+            news.setActive(false);
+            newsRepository.save(news);
+        }else {
+            throw new EntityNotFoundException();
+        }
     }
 }

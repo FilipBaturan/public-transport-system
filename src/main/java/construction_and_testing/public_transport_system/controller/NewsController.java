@@ -2,7 +2,7 @@ package construction_and_testing.public_transport_system.controller;
 
 
 import construction_and_testing.public_transport_system.domain.News;
-import construction_and_testing.public_transport_system.domain.RegisteredUser;
+import construction_and_testing.public_transport_system.domain.util.ValidationException;
 import construction_and_testing.public_transport_system.service.NewsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -12,6 +12,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
+import java.util.Calendar;
 import java.util.List;
 
 @RestController
@@ -23,6 +25,10 @@ public class NewsController {
     @Autowired
     private NewsService newsService;
 
+    /**
+     * Getting all news
+     * @return all news
+     */
     @RequestMapping(method = RequestMethod.GET, value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<News>> getAll(){
         logger.info("Fetching all news...");
@@ -30,6 +36,11 @@ public class NewsController {
         return new ResponseEntity<>(allNews, HttpStatus.OK);
     }
 
+    /**
+     * Getting news news by given id
+     * @param id - id of news
+     * @return news with given id
+     */
     @RequestMapping(method = RequestMethod.GET, value = "/getById/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<News> getById(@PathVariable Long id){
         logger.info("Trying to get news with id " + id + ".");
@@ -44,6 +55,11 @@ public class NewsController {
         }
     }
 
+    /**
+     * Adding new news
+     * @param news - new news for adding
+     * @return added news
+     */
     @RequestMapping(method = RequestMethod.POST, value = "/addNew", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<News> addNewUser(@RequestBody News news){
         boolean succeeded = newsService.addNew(news);
@@ -57,6 +73,12 @@ public class NewsController {
         }
     }
 
+    /**
+     * Modifiyng existing news
+     * @param id - id of news for modifiyng
+     * @param news - news with new information
+     * @return modified news
+     */
     @RequestMapping(method = RequestMethod.PUT, value = "/modify/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<News> modify(@PathVariable Long id, @RequestBody News news){
         news.setId(id);
@@ -71,6 +93,21 @@ public class NewsController {
         }
     }
 
-
+    /**
+     * Deleting existing news
+     * @param news for removing
+     * @return feedback message
+     */
+    @RequestMapping(method = RequestMethod.DELETE, value = "/delete", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public ResponseEntity<String> deleteNews(@RequestBody News news) {
+        logger.info("Deleting news with id {} at time {}.", news.getId(), Calendar.getInstance().getTime());
+        try {
+            newsService.remove(news.getId());
+            return new ResponseEntity<>("News successfully deleted!", HttpStatus.OK);
+        }catch (EntityNotFoundException e){
+            throw new ValidationException("Requested news does not exist!", HttpStatus.NOT_FOUND);
+        }
+    }
 
 }

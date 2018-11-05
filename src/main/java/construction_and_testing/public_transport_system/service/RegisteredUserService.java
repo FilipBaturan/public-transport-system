@@ -33,4 +33,9 @@ public interface RegisteredUserService {
      */
     boolean modify(RegisteredUser user);
 
+    /**
+     * Method for removing existing user
+     * @param id - id of user for deleting
+     */
+    void remove(Long id);
 }
