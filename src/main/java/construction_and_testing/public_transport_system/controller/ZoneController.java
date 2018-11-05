@@ -48,8 +48,6 @@ public class ZoneController {
             return new ResponseEntity<>(zoneService.findById(Long.parseLong(id)), HttpStatus.FOUND);
         } catch (NumberFormatException e) {
             throw new ValidationException("Bad format of requested id!", HttpStatus.BAD_REQUEST);
-        } catch (EntityNotFoundException e) {
-            throw new ValidationException("Requested zone does not exist!", HttpStatus.NOT_FOUND);
         }
     }
 
@@ -57,27 +55,11 @@ public class ZoneController {
      * @param zone that needs to be added
      * @return added zone
      */
-    @RequestMapping(method = RequestMethod.POST, value = "/add", produces = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(method = RequestMethod.POST, value = "/save", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<Zone> addZone(@RequestBody Zone zone) {
-        logger.info("Adding zone with at time {}.", Calendar.getInstance().getTime());
-        Zone newZone = zoneService.add(zone);
-        if( newZone != null){
-            return new ResponseEntity<>(newZone, HttpStatus.CREATED);
-        }else{
-            throw new ValidationException("Zone with given name already exist!", HttpStatus.BAD_REQUEST);
-        }
-    }
-
-    /**
-     * @param zone that needs to be updated
-     * @return updated zone
-     */
-    @RequestMapping(method = RequestMethod.PUT, value = "/update", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<Zone> updateZone(@RequestBody Zone zone) {
-        logger.info("Updating zone with id {} at time {}.", zone.getId(), Calendar.getInstance().getTime());
-        return new ResponseEntity<>(zoneService.update(zone), HttpStatus.OK);
+    public ResponseEntity<Zone> saveZone(@RequestBody Zone zone) {
+        logger.info("Saving zone with at time {}.", Calendar.getInstance().getTime());
+        return new ResponseEntity<>(zoneService.save(zone), HttpStatus.OK);
     }
 
     /**
@@ -88,11 +70,7 @@ public class ZoneController {
     @ResponseBody
     public ResponseEntity<String> deleteZone(@RequestBody Zone zone) {
         logger.info("Deleting zone with id {} at time {}.", zone.getId(), Calendar.getInstance().getTime());
-        try {
-            zoneService.remove(zone.getId());
-            return new ResponseEntity<>("Zone successfully deleted!", HttpStatus.OK);
-        }catch (EntityNotFoundException e){
-            throw new ValidationException("Requested zone does not exist!", HttpStatus.NOT_FOUND);
-        }
+        zoneService.remove(zone.getId());
+        return new ResponseEntity<>("Zone successfully deleted!", HttpStatus.OK);
     }
 }

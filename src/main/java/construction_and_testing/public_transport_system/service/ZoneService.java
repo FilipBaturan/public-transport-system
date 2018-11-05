@@ -18,16 +18,10 @@ public interface ZoneService {
     Zone findById(Long id);
 
     /**
-     * @param newZone that needs to be saved
+     * @param zone that needs to be saved
      * @return saved zone in database
      */
-    Zone add(Zone newZone);
-
-    /**
-     * @param updatedZone modified zone that needs to be saved
-     * @return modified zone saved in database
-     */
-    Zone update(Zone updatedZone);
+    Zone save(Zone zone);
 
     /**
      * @param id of zone that needs to be removed

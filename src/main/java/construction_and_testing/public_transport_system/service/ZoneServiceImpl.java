@@ -1,13 +1,13 @@
 package construction_and_testing.public_transport_system.service;
 
 import construction_and_testing.public_transport_system.domain.Zone;
+import construction_and_testing.public_transport_system.domain.util.ValidationException;
 import construction_and_testing.public_transport_system.repository.ZoneRepository;
-import org.hibernate.exception.ConstraintViolationException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,22 +27,18 @@ public class ZoneServiceImpl implements ZoneService {
 
     @Override
     public Zone findById(Long id) {
-        return zoneRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        return zoneRepository.findById(id).orElseThrow(() -> new ValidationException("Requested zone does not exist!",
+                HttpStatus.BAD_REQUEST));
     }
 
     @Override
-    public Zone add(Zone newZone) {
+    public Zone save(Zone zone) {
         try {
-            return zoneRepository.save(newZone);
+            return zoneRepository.save(zone);
         } catch (DataIntegrityViolationException e){
-             return null;
+             throw new ValidationException("Zone with given name already exist!", HttpStatus.BAD_REQUEST);
         }
 
-    }
-
-    @Override
-    public Zone update(Zone updatedZone) {
-        return zoneRepository.save(updatedZone);
     }
 
     @Override
@@ -53,7 +49,7 @@ public class ZoneServiceImpl implements ZoneService {
             zone.setActive(false);
             zoneRepository.save(zone);
         }else {
-            throw new EntityNotFoundException();
+            throw new ValidationException("Requested zone does not exist!", HttpStatus.BAD_REQUEST);
         }
     }
 }
