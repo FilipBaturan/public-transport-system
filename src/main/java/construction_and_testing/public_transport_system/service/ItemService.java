@@ -10,6 +10,8 @@ public interface ItemService {
 
     Item saveItem(Item i);
 
+    void remove(Long id);
+
     List<Item> findAllItems();
 
     Item findItemById(long id);

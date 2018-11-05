@@ -1,11 +1,15 @@
 package construction_and_testing.public_transport_system.service;
 
 import construction_and_testing.public_transport_system.domain.Pricelist;
+import construction_and_testing.public_transport_system.domain.Ticket;
 import construction_and_testing.public_transport_system.repository.PricelistRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
+import javax.persistence.EntityNotFoundException;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 
 @Service
@@ -16,7 +20,23 @@ public class PricelistServiceImpl implements PricelistService {
 
     @Override
     public Pricelist savePricelist(Pricelist p) {
-        return this.pricelistRepository.save(p);
+        try {
+            return this.pricelistRepository.save(p);
+        } catch (DataIntegrityViolationException e){
+            return null;
+        }
+    }
+
+    @Override
+    public void remove(Long id) {
+        Optional<Pricelist> entity = pricelistRepository.findById(id);
+        if(entity.isPresent()){
+            Pricelist pricelist = entity.get();
+            pricelist.setActive(false);
+            pricelistRepository.save(pricelist);
+        }else {
+            throw new EntityNotFoundException();
+        }
     }
 
     @Override

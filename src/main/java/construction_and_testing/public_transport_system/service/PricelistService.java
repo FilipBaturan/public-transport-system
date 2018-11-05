@@ -8,6 +8,8 @@ public interface PricelistService {
 
     Pricelist savePricelist(Pricelist p);
 
+    void remove(Long id);
+
     List<Pricelist> findAllPricelists();
 
     Pricelist findPricelistById(long id);

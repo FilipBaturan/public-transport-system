@@ -2,6 +2,8 @@ package construction_and_testing.public_transport_system.controller;
 
 
 import construction_and_testing.public_transport_system.domain.Pricelist;
+import construction_and_testing.public_transport_system.domain.Zone;
+import construction_and_testing.public_transport_system.domain.util.ValidationException;
 import construction_and_testing.public_transport_system.service.PricelistService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +13,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
+import java.util.Calendar;
 import java.util.List;
 
 @RestController
@@ -23,21 +27,34 @@ public class PricelistController {
     private PricelistService pricelistService;
 
     @RequestMapping(method = RequestMethod.GET, value = "/savePricelist", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Pricelist> findPricelistById(@RequestBody Pricelist pricelist) {
+    public ResponseEntity<Pricelist> savePricelist(@RequestBody Pricelist pricelist) {
+        logger.info("Adding pricelist at time {}.", Calendar.getInstance().getTime());
         Pricelist p = this.pricelistService.savePricelist(pricelist);
-        return new ResponseEntity<>(p, HttpStatus.CREATED);
+        if( p != null){
+            return new ResponseEntity<>(p, HttpStatus.CREATED);
+        }else{
+            throw new ValidationException("Pricelist with given name already exist!", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/findAllPricelists", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Pricelist>> findAllPricelists() {
+        logger.info("Requesting all available pricelists at time {}.", Calendar.getInstance().getTime());
         List<Pricelist> pricelists = this.pricelistService.findAllPricelists();
         return new ResponseEntity<>(pricelists, HttpStatus.OK);
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/findPricelistById/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Pricelist> findPricelistById(@PathVariable("id") String id) {
-        Pricelist pricelist = this.pricelistService.findPricelistById(Long.parseLong(id));
-        return new ResponseEntity<>(pricelist, HttpStatus.OK);
+        logger.info("Requesting pricelist with id {} at time {}.", id, Calendar.getInstance().getTime());
+        try {
+            Pricelist pricelist = this.pricelistService.findPricelistById(Long.parseLong(id));
+            return new ResponseEntity<>(pricelist, HttpStatus.FOUND);
+        } catch (NumberFormatException e) {
+            throw new ValidationException("Bad format of requested id!", HttpStatus.BAD_REQUEST);
+        } catch (EntityNotFoundException e) {
+            throw new ValidationException("Requested pricelist does not exist!", HttpStatus.NOT_FOUND);
+        }
     }
 
 }

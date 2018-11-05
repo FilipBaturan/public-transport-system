@@ -1,7 +1,9 @@
 package construction_and_testing.public_transport_system.controller;
 
 
+import construction_and_testing.public_transport_system.domain.Pricelist;
 import construction_and_testing.public_transport_system.domain.Ticket;
+import construction_and_testing.public_transport_system.domain.util.ValidationException;
 import construction_and_testing.public_transport_system.service.TicketService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,6 +13,8 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.persistence.EntityNotFoundException;
+import java.util.Calendar;
 import java.util.List;
 
 @RestController
@@ -23,9 +27,14 @@ public class TicketController {
     private TicketService ticketService;
 
     @RequestMapping(method = RequestMethod.GET, value = "/saveTicket", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Ticket> findTicketById(@RequestBody Ticket ticket) {
+    public ResponseEntity<Ticket> saveTicket(@RequestBody Ticket ticket) {
+        logger.info("Adding ticket at time {}.", Calendar.getInstance().getTime());
         Ticket t = this.ticketService.saveTicket(ticket);
-        return new ResponseEntity<>(t, HttpStatus.CREATED);
+        if( t != null){
+            return new ResponseEntity<>(t, HttpStatus.CREATED);
+        }else{
+            throw new ValidationException("Ticket with given name already exist!", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @RequestMapping(method = RequestMethod.GET, value = "/findAllTickets", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -36,7 +45,14 @@ public class TicketController {
 
     @RequestMapping(method = RequestMethod.GET, value = "/findTicketById/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Ticket> findTicketById(@PathVariable("id") String id) {
-        Ticket ticket = this.ticketService.findTicketById(Long.parseLong(id));
-        return new ResponseEntity<>(ticket, HttpStatus.OK);
+        logger.info("Requesting ticket with id {} at time {}.", id, Calendar.getInstance().getTime());
+        try {
+            Ticket ticket = this.ticketService.findTicketById(Long.parseLong(id));
+            return new ResponseEntity<>(ticket, HttpStatus.FOUND);
+        } catch (NumberFormatException e) {
+            throw new ValidationException("Bad format of requested id!", HttpStatus.BAD_REQUEST);
+        } catch (EntityNotFoundException e) {
+            throw new ValidationException("Requested ticket does not exist!", HttpStatus.NOT_FOUND);
+        }
     }
 }

@@ -8,6 +8,8 @@ public interface TicketService {
 
     Ticket saveTicket(Ticket t);
 
+    void remove(Long id);
+
     List<Ticket> findAllTickets();
 
     Ticket findTicketById(long id);
