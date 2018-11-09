@@ -11,7 +11,7 @@ import java.util.Set;
  * Add later
  */
 @Entity
-@DiscriminatorValue("op")
+@DiscriminatorValue("OPERATOR")
 public class Operator extends User implements Serializable {
 
     private static final long serialVersionUID = 1L;

@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Add later
  */
 @Entity
-@DiscriminatorValue("sys")
+@DiscriminatorValue("ADMIN")
 public class Admin extends User implements Serializable {
 
     private static final long serialVersionUID = 1L;

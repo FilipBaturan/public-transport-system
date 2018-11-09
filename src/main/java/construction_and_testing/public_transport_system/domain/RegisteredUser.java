@@ -8,7 +8,7 @@ import java.util.Set;
  * Add later
  */
 @Entity
-@DiscriminatorValue("reg")
+@DiscriminatorValue("REGISTERED_USER")
 public class RegisteredUser extends User implements Serializable {
 
     private static final long serialVersionUID = 1L;
