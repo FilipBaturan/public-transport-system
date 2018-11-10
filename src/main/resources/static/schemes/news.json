@@ -1,0 +1,87 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://public_transport_system/schemes/news.json",
+  "type": "object",
+  "title": "The News Schema",
+  "description": "Represents the news about public transport system made by operators",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "title",
+    "content",
+    "date",
+    "active",
+    "operator"
+  ],
+  "properties": {
+    "id": {
+      "$id": "#/properties/id",
+      "type": "integer",
+      "title": "Id",
+      "description": "News id",
+      "default": 0,
+      "examples": [
+        1
+      ],
+      "multipleOf": 1,
+      "minimum": 0
+    },
+    "title": {
+      "$id": "#/properties/title",
+      "type": "string",
+      "title": "Title",
+      "description": "Title of news",
+      "default": "",
+      "maxLength": 30,
+      "examples": [
+        "New route"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "content": {
+      "$id": "#/properties/content",
+      "type": "string",
+      "title": "Content",
+      "description": "Content of news",
+      "default": "",
+      "examples": [
+        "New route has been added."
+      ],
+      "pattern": "^(.*)$"
+    },
+    "date": {
+      "$id": "#/properties/date",
+      "type": "string",
+      "title": "Date",
+      "description": "Date when news are created",
+      "default": "",
+      "examples": [
+        "2018-11-08T00:00:00"
+      ]
+
+    },
+    "active": {
+      "$id": "#/properties/active",
+      "type": "boolean",
+      "title": "Active",
+      "description": "indicates are news exist in database",
+      "default": true,
+      "examples": [
+        true
+      ]
+    },
+    "operator": {
+      "$id": "#/properties/operator",
+      "type": "integer",
+      "title": "Operator",
+      "description": "Id of operator which posted the news",
+      "default": 0,
+      "examples": [
+        1
+      ],
+      "multipleOf": 1,
+      "minimum": 0
+    }
+  }
+}

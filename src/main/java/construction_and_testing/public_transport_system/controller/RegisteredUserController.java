@@ -2,7 +2,7 @@ package construction_and_testing.public_transport_system.controller;
 
 
 import construction_and_testing.public_transport_system.domain.RegisteredUser;
-import construction_and_testing.public_transport_system.domain.util.ValidationException;
+import construction_and_testing.public_transport_system.domain.util.GeneralException;
 import construction_and_testing.public_transport_system.service.RegisteredUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,7 +13,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -108,7 +107,7 @@ public class RegisteredUserController {
             registeredUserService.remove(user.getId());
             return new ResponseEntity<>("User successfully deleted!", HttpStatus.OK);
         }catch (EntityNotFoundException e){
-            throw new ValidationException("Requested user does not exist!", HttpStatus.NOT_FOUND);
+            throw new GeneralException("Requested user does not exist!", HttpStatus.NOT_FOUND);
         }
     }
 

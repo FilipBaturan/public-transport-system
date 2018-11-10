@@ -1,6 +1,7 @@
 package construction_and_testing.public_transport_system.controller;
 
-import construction_and_testing.public_transport_system.domain.util.ValidationException;
+import construction_and_testing.public_transport_system.domain.util.GeneralException;
+import org.everit.json.schema.ValidationException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
@@ -19,6 +20,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ValidationException.class)
     public ResponseEntity<String> handleValidationException(ValidationException e){
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+    }
+
+    @ExceptionHandler(GeneralException.class)
+    public ResponseEntity<String> handleGeneralException(GeneralException e){
         return new ResponseEntity<>(e.getMessage(), e.getHttpStatus());
     }
 

@@ -1,7 +1,6 @@
 package construction_and_testing.public_transport_system.controller;
 
 import construction_and_testing.public_transport_system.domain.Zone;
-import construction_and_testing.public_transport_system.domain.util.ValidationException;
 import construction_and_testing.public_transport_system.service.ZoneService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -11,7 +10,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.Calendar;
 import java.util.List;
 
@@ -54,8 +52,8 @@ public class ZoneController {
     @RequestMapping(method = RequestMethod.POST, value = "/save", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Zone> saveZone(@RequestBody Zone zone) {
-        logger.info("Saving zone with at time {}.", Calendar.getInstance().getTime());
-        return new ResponseEntity<>(zoneService.save(zone), HttpStatus.OK);
+        logger.info("Saving zone at time {}.", Calendar.getInstance().getTime());
+        return new ResponseEntity<>(zoneService.save(zone), HttpStatus.ACCEPTED);
     }
 
     /**

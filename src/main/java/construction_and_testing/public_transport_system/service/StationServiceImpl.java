@@ -1,9 +1,11 @@
 package construction_and_testing.public_transport_system.service;
 
 import construction_and_testing.public_transport_system.domain.Station;
+import construction_and_testing.public_transport_system.domain.util.GeneralException;
 import construction_and_testing.public_transport_system.repository.StationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
@@ -27,18 +29,8 @@ public class StationServiceImpl implements StationService {
     }
 
     @Override
-    public Station add(Station newStation) {
-        try {
-            return stationRepository.save(newStation);
-        } catch (DataIntegrityViolationException e){
-            return null;
-        }
-
-    }
-
-    @Override
-    public Station update(Station updatedStation) {
-        return stationRepository.save(updatedStation);
+    public Station save(Station station) {
+        return stationRepository.save(station);
     }
 
     @Override
@@ -49,7 +41,7 @@ public class StationServiceImpl implements StationService {
             station.setActive(false);
             stationRepository.save(station);
         }else {
-            throw new EntityNotFoundException();
+            throw new GeneralException("Requested station does not exist!", HttpStatus.BAD_REQUEST);
         }
     }
 

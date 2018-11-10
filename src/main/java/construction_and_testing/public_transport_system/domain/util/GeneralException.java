@@ -5,14 +5,14 @@ import org.springframework.http.HttpStatus;
 /**
  * General error exception
  */
-public class ValidationException extends RuntimeException{
+public class GeneralException extends RuntimeException{
 
     private HttpStatus httpStatus;
 
-    public ValidationException() {
+    public GeneralException() {
     }
 
-    public ValidationException(String message, HttpStatus httpStatus) {
+    public GeneralException(String message, HttpStatus httpStatus) {
 
         super(message);
         this.httpStatus = httpStatus;

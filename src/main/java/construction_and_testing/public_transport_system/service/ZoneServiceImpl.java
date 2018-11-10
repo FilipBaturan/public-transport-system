@@ -1,7 +1,7 @@
 package construction_and_testing.public_transport_system.service;
 
 import construction_and_testing.public_transport_system.domain.Zone;
-import construction_and_testing.public_transport_system.domain.util.ValidationException;
+import construction_and_testing.public_transport_system.domain.util.GeneralException;
 import construction_and_testing.public_transport_system.repository.ZoneRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
@@ -27,7 +27,7 @@ public class ZoneServiceImpl implements ZoneService {
 
     @Override
     public Zone findById(Long id) {
-        return zoneRepository.findById(id).orElseThrow(() -> new ValidationException("Requested zone does not exist!",
+        return zoneRepository.findById(id).orElseThrow(() -> new GeneralException("Requested zone does not exist!",
                 HttpStatus.BAD_REQUEST));
     }
 
@@ -36,7 +36,7 @@ public class ZoneServiceImpl implements ZoneService {
         try {
             return zoneRepository.save(zone);
         } catch (DataIntegrityViolationException e){
-             throw new ValidationException("Zone with given name already exist!", HttpStatus.BAD_REQUEST);
+             throw new GeneralException("Zone with given name already exist!", HttpStatus.BAD_REQUEST);
         }
 
     }
@@ -49,7 +49,7 @@ public class ZoneServiceImpl implements ZoneService {
             zone.setActive(false);
             zoneRepository.save(zone);
         }else {
-            throw new ValidationException("Requested zone does not exist!", HttpStatus.BAD_REQUEST);
+            throw new GeneralException("Requested zone does not exist!", HttpStatus.BAD_REQUEST);
         }
     }
 }

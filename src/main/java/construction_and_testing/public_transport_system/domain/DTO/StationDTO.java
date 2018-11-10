@@ -1,43 +1,32 @@
-package construction_and_testing.public_transport_system.domain;
+package construction_and_testing.public_transport_system.domain.DTO;
 
-import construction_and_testing.public_transport_system.domain.DTO.StationDTO;
-import org.hibernate.annotations.Where;
+import construction_and_testing.public_transport_system.domain.Station;
 
-import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Objects;
 
-@Entity
-@Where(clause = "active =1")
-public class Station implements Serializable {
+public class StationDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false)
     private String name;
 
-    @Column
     private double coordinates;
 
-    @Column(nullable = false, name = "active")
     private boolean active;
 
-    public Station(){
-        this.active = true;
+    public StationDTO() {
     }
 
-    public Station(long id, String name, double coordinates, TransportLine lines, boolean active) {
+    public StationDTO(Long id, String name, double coordinates, boolean active) {
         this.id = id;
         this.name = name;
         this.coordinates = coordinates;
         this.active = active;
     }
 
-    public Station(StationDTO station){
+    public StationDTO(Station station){
         this.id = station.getId();
         this.name = station.getName();
         this.coordinates = station.getCoordinates();
@@ -70,19 +59,6 @@ public class Station implements Serializable {
 
     public void setCoordinates(double coordinates) {
         this.coordinates = coordinates;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Station)) return false;
-        Station station = (Station) o;
-        return Objects.equals(id, station.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
     }
 
     public boolean isActive() {

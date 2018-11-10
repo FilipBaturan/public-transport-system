@@ -18,16 +18,10 @@ public interface StationService {
     Station findById(Long id);
 
     /**
-     * @param newStation that needs to be saved
+     * @param station that needs to be saved
      * @return saved station in database
      */
-    Station add(Station newStation);
-
-    /**
-     * @param updatedStation modified station that needs to be saved
-     * @return modified station saved in database
-     */
-    Station update(Station updatedStation);
+    Station save(Station station);
 
     /**
      * @param id of station that needs to be removed
