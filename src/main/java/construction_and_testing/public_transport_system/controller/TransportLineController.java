@@ -27,7 +27,8 @@ public class TransportLineController {
     @RequestMapping(method = RequestMethod.GET, value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<TransportLine>> getAll() {
         logger.info("Requesting all available transport lines at time {}.", Calendar.getInstance().getTime());
-        return new ResponseEntity<>(transportLineService.getAll(), HttpStatus.OK);
+        List<TransportLine> temp = transportLineService.getAll();
+        return new ResponseEntity<>(temp, HttpStatus.OK);
     }
 
     /**
