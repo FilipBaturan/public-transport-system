@@ -3,7 +3,7 @@ package construction_and_testing.public_transport_system.controller;
 
 import construction_and_testing.public_transport_system.domain.RegisteredUser;
 import construction_and_testing.public_transport_system.domain.util.GeneralException;
-import construction_and_testing.public_transport_system.service.RegisteredUserService;
+import construction_and_testing.public_transport_system.service.definition.RegisteredUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

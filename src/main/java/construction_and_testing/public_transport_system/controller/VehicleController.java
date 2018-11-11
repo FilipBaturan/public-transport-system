@@ -2,7 +2,7 @@ package construction_and_testing.public_transport_system.controller;
 
 import construction_and_testing.public_transport_system.domain.Vehicle;
 import construction_and_testing.public_transport_system.domain.util.GeneralException;
-import construction_and_testing.public_transport_system.service.VehicleService;
+import construction_and_testing.public_transport_system.service.definition.VehicleService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
