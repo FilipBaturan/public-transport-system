@@ -3,6 +3,7 @@ package construction_and_testing.public_transport_system.service.implementation;
 import construction_and_testing.public_transport_system.domain.Schedule;
 import construction_and_testing.public_transport_system.domain.util.GeneralException;
 import construction_and_testing.public_transport_system.repository.ScheduelRepository;
+import construction_and_testing.public_transport_system.repository.TransportLineRepository;
 import construction_and_testing.public_transport_system.service.definition.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,6 +17,9 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Autowired
     private ScheduelRepository scheduelRepository;
+
+    @Autowired
+    private TransportLineRepository transportLineRepository;
 
     @Override
     public List<Schedule> getAll() {

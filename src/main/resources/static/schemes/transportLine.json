@@ -1,0 +1,92 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://public_transport_system/schemes/transportLine.json",
+  "type": "object",
+  "title": "Transport Line",
+  "description": "Represents the transport line available in public transport system",
+  "required": [
+    "id",
+    "name",
+    "type",
+    "stations",
+    "schedule",
+    "active",
+    "zone"
+  ],
+  "properties": {
+    "id": {
+      "$id": "#/properties/id",
+      "type": "integer",
+      "title": "The Id Schema",
+      "default": 0,
+      "examples": [
+        1
+      ]
+    },
+    "name": {
+      "$id": "#/properties/name",
+      "type": "string",
+      "title": "The Name Schema",
+      "default": "",
+      "examples": [
+        "test"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "type": {
+      "$id": "#/properties/type",
+      "type": "string",
+      "title": "The Type Schema",
+      "default": "",
+      "examples": [
+        "BUS"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "stations": {
+      "$id": "#/properties/stations",
+      "type": "array",
+      "minItems": 2,
+      "title": "The Stations Schema",
+      "items": {
+        "$id": "#/properties/stations/items",
+        "type": "object",
+        "title": "The Items Schema",
+        "$ref": "http://localhost:8080/schemes/station.json"
+      }
+    },
+    "schedule": {
+      "$id": "#/properties/schedule",
+      "type": "array",
+      "title": "The Schedule Schema",
+      "minItems": 1,
+      "items": {
+        "$id": "#/properties/schedule/items",
+        "type": "object",
+        "title": "The Items Schema",
+        "$ref": "http://localhost:8080/schemes/schedule.json"
+      }
+    },
+    "active": {
+      "$id": "#/properties/active",
+      "type": "boolean",
+      "title": "Active",
+      "description": "indicates is transport line exist in database",
+      "default": true,
+      "examples": [
+        true
+      ]
+    },
+    "zone": {
+      "$id": "#/properties/zone",
+      "type": "integer",
+      "title": "Zone",
+      "description": "Transport line zone",
+      "default": 0,
+      "examples": [
+        1
+      ]
+    }
+  }
+}

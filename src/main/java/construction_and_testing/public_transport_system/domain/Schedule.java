@@ -1,6 +1,7 @@
 package construction_and_testing.public_transport_system.domain;
 
 import construction_and_testing.public_transport_system.domain.DTO.ScheduleDTO;
+import construction_and_testing.public_transport_system.domain.enums.Days;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -20,8 +21,12 @@ public class Schedule implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
     private TransportLine transportLine;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.ORDINAL)
+    private Days day;
 
     @Column(nullable = false)
     private String startTime;
@@ -33,9 +38,10 @@ public class Schedule implements Serializable {
         this.active = true;
     }
 
-    public Schedule(Long id, TransportLine transportLine, String startTime, boolean active) {
+    public Schedule(Long id, TransportLine transportLine, Days day, String startTime, boolean active) {
         this.id = id;
         this.transportLine = transportLine;
+        this.day = day;
         this.startTime = startTime;
         this.active = active;
     }
@@ -44,7 +50,16 @@ public class Schedule implements Serializable {
         this.id = schedule.getId();
         this.transportLine = new TransportLine(schedule.getTransportLine());
         this.startTime = schedule.getStartTime();
-        this.active = isActive();
+        this.active = schedule.isActive();
+        this.day = schedule.getDay();
+    }
+
+    public Schedule(ScheduleDTO schedule, TransportLine transportLine){
+        this.id = schedule.getId();
+        this.transportLine = transportLine;
+        this.startTime = schedule.getStartTime();
+        this.active = schedule.isActive();
+        this.day = schedule.getDay();
     }
 
     public static long getSerialVersionUID() {
@@ -94,5 +109,13 @@ public class Schedule implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
+    }
+
+    public Days getDay() {
+        return day;
+    }
+
+    public void setDay(Days day) {
+        this.day = day;
     }
 }

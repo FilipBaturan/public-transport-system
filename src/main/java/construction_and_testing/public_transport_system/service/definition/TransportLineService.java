@@ -19,16 +19,10 @@ public interface TransportLineService {
     TransportLine findById(Long id);
 
     /**
-     * @param newTransportLine that needs to be saved
+     * @param transportLine that needs to be saved
      * @return saved transport line  in database
      */
-    TransportLine add(TransportLine newTransportLine);
-
-    /**
-     * @param updatedTransportLine modified transport line that needs to be saved
-     * @return modified transport line saved in database
-     */
-    TransportLine update(TransportLine updatedTransportLine);
+    TransportLine save(TransportLine transportLine);
 
     /**
      * @param id of transport line that needs to be removed

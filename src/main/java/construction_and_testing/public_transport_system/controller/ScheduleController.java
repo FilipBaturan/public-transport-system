@@ -5,6 +5,7 @@ import construction_and_testing.public_transport_system.converter.ScheduleConver
 import construction_and_testing.public_transport_system.domain.DTO.ScheduleDTO;
 import construction_and_testing.public_transport_system.domain.Schedule;
 import construction_and_testing.public_transport_system.service.definition.ScheduleService;
+import construction_and_testing.public_transport_system.service.definition.TransportLineService;
 import org.everit.json.schema.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -26,6 +27,9 @@ public class ScheduleController extends ValidationController {
 
     @Autowired
     private ScheduleService scheduleService;
+
+    @Autowired
+    private TransportLineService transportLineService;
 
     @RequestMapping(method = RequestMethod.GET, value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ScheduleDTO>> getAll() {
@@ -55,8 +59,10 @@ public class ScheduleController extends ValidationController {
         logger.info("Saving schedule at time {}.", Calendar.getInstance().getTime());
         validateJSON(schedule,"schedule.json");
         ObjectMapper mapper = new ObjectMapper();
-        return new ResponseEntity<>(new ScheduleDTO(scheduleService.save(new Schedule(mapper.readValue(schedule,
-                ScheduleDTO.class)))), HttpStatus.ACCEPTED);
+        Schedule temp = new Schedule(mapper.readValue(schedule, ScheduleDTO.class));
+        temp.setTransportLine(transportLineService.findById(temp.getTransportLine().getId()));
+        return new ResponseEntity<>(new ScheduleDTO(scheduleService.save(temp))
+                , HttpStatus.ACCEPTED);
     }
 
     /**

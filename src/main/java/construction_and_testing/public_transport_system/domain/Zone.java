@@ -23,13 +23,18 @@ public class Zone implements Serializable {
     @Column(nullable = false, unique = true)
     private String name;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "zone")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "zone")
     private Set<TransportLine> lines;
 
     @Column(nullable = false, name = "active")
     private boolean active;
 
     public Zone() {
+        this.active = true;
+    }
+
+    public Zone(long id){
+        this.id = id;
         this.active = true;
     }
 

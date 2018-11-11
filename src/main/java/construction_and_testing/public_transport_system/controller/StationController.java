@@ -27,6 +27,9 @@ public class StationController extends ValidationController {
     @Autowired
     private StationService stationService;
 
+    /**
+     * @return all available stations
+     */
     @RequestMapping(method = RequestMethod.GET, value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<StationDTO>> getAll() {
         logger.info("Requesting all available stations at time {}.", Calendar.getInstance().getTime());

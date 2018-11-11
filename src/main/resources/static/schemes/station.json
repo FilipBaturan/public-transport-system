@@ -16,7 +16,7 @@
   "properties": {
     "id": {
       "$id": "#/properties/id",
-      "type": "integer",
+      "type": ["integer", "null"],
       "title": "Id",
       "description": "Station id",
       "default": 0,
@@ -33,7 +33,7 @@
       "description": "Station name",
       "default": "",
       "examples": [
-        "Liman1", "Detilinara3"
+        "zone1", "zone2"
       ],
       "maxLength": 30,
       "pattern": "^(.*)$"

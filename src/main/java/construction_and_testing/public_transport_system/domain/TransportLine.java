@@ -1,5 +1,7 @@
 package construction_and_testing.public_transport_system.domain;
 
+import construction_and_testing.public_transport_system.domain.DTO.ScheduleDTO;
+import construction_and_testing.public_transport_system.domain.DTO.TransportLineDTO;
 import construction_and_testing.public_transport_system.domain.enums.VehicleType;
 import org.hibernate.annotations.Where;
 
@@ -7,6 +9,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 
 /**
@@ -22,7 +25,7 @@ public class TransportLine implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String name;
 
     @Column(nullable = false)
@@ -51,13 +54,25 @@ public class TransportLine implements Serializable {
     }
 
     public TransportLine(long id, String name, VehicleType type, Set<Station> stations,
-                         Set<Schedule> schedule, Zone zone) {
+                         Set<Schedule> schedule, Zone zone, boolean active) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.stations = stations;
         this.schedule = schedule;
         this.zone = zone;
+        this.active = active;
+    }
+
+    public TransportLine(TransportLineDTO transportLine){
+        this.id = transportLine.getId();
+        this.name = transportLine.getName();
+        this.type = transportLine.getType();
+        this.stations = transportLine.getStations().stream().map(Station::new).collect(Collectors.toSet());
+        this.schedule = transportLine.getSchedule().stream().map((ScheduleDTO s) -> new Schedule(s,this))
+                .collect(Collectors.toSet());
+        this.zone = new Zone(transportLine.getZone());
+        this.active = transportLine.isActive();
     }
 
     public static long getSerialVersionUID() {
