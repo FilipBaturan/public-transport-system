@@ -1,6 +1,6 @@
 package construction_and_testing.public_transport_system.controller;
 
-import construction_and_testing.public_transport_system.service.ReservationService;
+import construction_and_testing.public_transport_system.service.definition.ReservationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

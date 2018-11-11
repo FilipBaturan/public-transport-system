@@ -1,8 +1,9 @@
 package construction_and_testing.public_transport_system.controller;
 
+import construction_and_testing.public_transport_system.converter.ZoneConverter;
+import construction_and_testing.public_transport_system.domain.DTO.ZoneDTO;
 import construction_and_testing.public_transport_system.domain.Zone;
-import construction_and_testing.public_transport_system.domain.util.ValidationException;
-import construction_and_testing.public_transport_system.service.ZoneService;
+import construction_and_testing.public_transport_system.service.definition.ZoneService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +12,6 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.Calendar;
 import java.util.List;
 
@@ -31,9 +31,9 @@ public class ZoneController {
      * @return all zones
      */
     @RequestMapping(method = RequestMethod.GET, value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Zone>> getAll() {
+    public ResponseEntity<List<ZoneDTO>> getAll() {
         logger.info("Requesting all available zones at time {}.", Calendar.getInstance().getTime());
-        return new ResponseEntity<>(zoneService.getAll(), HttpStatus.OK);
+        return new ResponseEntity<>(ZoneConverter.fromEntityList(zoneService.getAll(),ZoneDTO::new), HttpStatus.OK);
     }
 
     /**
@@ -42,9 +42,9 @@ public class ZoneController {
      */
     @RequestMapping(method = RequestMethod.GET, value = "/get/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<Zone> getById(@PathVariable String id) {
+    public ResponseEntity<ZoneDTO> getById(@PathVariable String id) {
         logger.info("Requesting zone with id {} at time {}.", id, Calendar.getInstance().getTime());
-        return new ResponseEntity<>(zoneService.findById(Long.parseLong(id)), HttpStatus.FOUND);
+        return new ResponseEntity<>(new ZoneDTO(zoneService.findById(Long.parseLong(id))), HttpStatus.FOUND);
     }
 
     /**
@@ -54,8 +54,8 @@ public class ZoneController {
     @RequestMapping(method = RequestMethod.POST, value = "/save", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public ResponseEntity<Zone> saveZone(@RequestBody Zone zone) {
-        logger.info("Saving zone with at time {}.", Calendar.getInstance().getTime());
-        return new ResponseEntity<>(zoneService.save(zone), HttpStatus.OK);
+        logger.info("Saving zone at time {}.", Calendar.getInstance().getTime());
+        return new ResponseEntity<>(zoneService.save(zone), HttpStatus.ACCEPTED);
     }
 
     /**

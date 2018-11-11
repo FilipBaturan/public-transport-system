@@ -1,5 +1,6 @@
 package construction_and_testing.public_transport_system.domain;
 
+import construction_and_testing.public_transport_system.domain.DTO.StationDTO;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -29,10 +30,18 @@ public class Station implements Serializable {
         this.active = true;
     }
 
-    public Station(long id, String name, double coordinates, TransportLine lines) {
+    public Station(long id, String name, double coordinates, TransportLine lines, boolean active) {
         this.id = id;
         this.name = name;
         this.coordinates = coordinates;
+        this.active = active;
+    }
+
+    public Station(StationDTO station){
+        this.id = station.getId();
+        this.name = station.getName();
+        this.coordinates = station.getCoordinates();
+        this.active = station.isActive();
     }
 
     public static long getSerialVersionUID() {

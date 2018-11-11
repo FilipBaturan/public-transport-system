@@ -1,14 +1,10 @@
 package construction_and_testing.public_transport_system.domain;
 
-import construction_and_testing.public_transport_system.domain.enums.Days;
 import construction_and_testing.public_transport_system.domain.enums.VehicleType;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.Objects;
 import java.util.Set;
 
@@ -36,8 +32,8 @@ public class TransportLine implements Serializable {
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Station> stations;
 
-    @Column
-    private HashMap<Days,ArrayList<LocalDateTime>> schedule;
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "transportLine")
+    private Set<Schedule> schedule;
 
     @ManyToOne(optional = false)
     private Zone zone;
@@ -49,8 +45,13 @@ public class TransportLine implements Serializable {
         this.active = true;
     }
 
-    public TransportLine(long id, String name, VehicleType type, Set<Station> stations, HashMap<Days,
-            ArrayList<LocalDateTime>> schedule, Zone zone) {
+    public TransportLine(long id){
+        this.id = id;
+        this.active = true;
+    }
+
+    public TransportLine(long id, String name, VehicleType type, Set<Station> stations,
+                         Set<Schedule> schedule, Zone zone) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -95,11 +96,11 @@ public class TransportLine implements Serializable {
         this.stations = stations;
     }
 
-    public HashMap<Days, ArrayList<LocalDateTime>> getSchedule() {
+    public Set<Schedule> getSchedule() {
         return schedule;
     }
 
-    public void setSchedule(HashMap<Days, ArrayList<LocalDateTime>> schedule) {
+    public void setSchedule(Set<Schedule> schedule) {
         this.schedule = schedule;
     }
 

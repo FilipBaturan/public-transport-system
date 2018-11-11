@@ -5,7 +5,7 @@ import javax.persistence.Entity;
 import java.io.Serializable;
 
 @Entity
-@DiscriminatorValue("val")
+@DiscriminatorValue("VALIDATOR")
 public class Validator extends User implements Serializable {
 
     private static final long serialVersionUID = 1L;

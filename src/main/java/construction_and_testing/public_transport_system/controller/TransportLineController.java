@@ -1,8 +1,8 @@
 package construction_and_testing.public_transport_system.controller;
 
 import construction_and_testing.public_transport_system.domain.TransportLine;
-import construction_and_testing.public_transport_system.domain.util.ValidationException;
-import construction_and_testing.public_transport_system.service.TransportLineService;
+import construction_and_testing.public_transport_system.domain.util.GeneralException;
+import construction_and_testing.public_transport_system.service.definition.TransportLineService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,9 +41,9 @@ public class TransportLineController {
         try {
             return new ResponseEntity<>(transportLineService.findById(Long.parseLong(id)), HttpStatus.FOUND);
         } catch (NumberFormatException e) {
-            throw new ValidationException("Bad format of requested id!", HttpStatus.BAD_REQUEST);
+            throw new GeneralException("Bad format of requested id!", HttpStatus.BAD_REQUEST);
         } catch (EntityNotFoundException e) {
-            throw new ValidationException("Requested transportLine does not exist!", HttpStatus.NOT_FOUND);
+            throw new GeneralException("Requested transportLine does not exist!", HttpStatus.NOT_FOUND);
         }
     }
 
@@ -59,7 +59,7 @@ public class TransportLineController {
         if( newTransportLine != null){
             return new ResponseEntity<>(newTransportLine, HttpStatus.CREATED);
         }else{
-            throw new ValidationException("TransportLine with given name already exist!", HttpStatus.BAD_REQUEST);
+            throw new GeneralException("TransportLine with given name already exist!", HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -86,7 +86,7 @@ public class TransportLineController {
             transportLineService.remove(transportLine.getId());
             return new ResponseEntity<>("TransportLine successfully deleted!", HttpStatus.OK);
         }catch (EntityNotFoundException e){
-            throw new ValidationException("Requested transportLine does not exist!", HttpStatus.NOT_FOUND);
+            throw new GeneralException("Requested transportLine does not exist!", HttpStatus.NOT_FOUND);
         }
     }
 }
