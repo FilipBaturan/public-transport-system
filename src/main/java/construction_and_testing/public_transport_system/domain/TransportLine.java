@@ -75,6 +75,17 @@ public class TransportLine implements Serializable {
         this.active = transportLine.isActive();
     }
 
+    public TransportLine(TransportLineDTO transportLine, Zone zone){
+        this.id = transportLine.getId();
+        this.name = transportLine.getName();
+        this.type = transportLine.getType();
+        this.stations = transportLine.getStations().stream().map(Station::new).collect(Collectors.toSet());
+        this.schedule = transportLine.getSchedule().stream().map((ScheduleDTO s) -> new Schedule(s,this))
+                .collect(Collectors.toSet());
+        this.zone = zone;
+        this.active = transportLine.isActive();
+    }
+
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }

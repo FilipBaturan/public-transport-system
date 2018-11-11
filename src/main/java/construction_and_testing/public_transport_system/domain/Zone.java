@@ -1,11 +1,14 @@
 package construction_and_testing.public_transport_system.domain;
 
+import construction_and_testing.public_transport_system.domain.DTO.TransportLineDTO;
+import construction_and_testing.public_transport_system.domain.DTO.ZoneDTO;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Zone represents group of transport lines
@@ -38,10 +41,19 @@ public class Zone implements Serializable {
         this.active = true;
     }
 
-    public Zone(long id, String name, Set<TransportLine> lines) {
+    public Zone(long id, String name, Set<TransportLine> lines, boolean active) {
         this.id = id;
         this.name = name;
         this.lines = lines;
+        this.active = active;
+    }
+
+    public Zone(ZoneDTO zone){
+        this.id = zone.getId();
+        this.name = zone.getName();
+        this.active = zone.isActive();
+        this.lines = zone.getLines().stream().map((TransportLineDTO t) -> new TransportLine(t,this)).
+                collect(Collectors.toSet());
     }
 
     public static long getSerialVersionUID() {

@@ -1,9 +1,11 @@
 package construction_and_testing.public_transport_system.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import construction_and_testing.public_transport_system.converter.ZoneConverter;
 import construction_and_testing.public_transport_system.domain.DTO.ZoneDTO;
 import construction_and_testing.public_transport_system.domain.Zone;
 import construction_and_testing.public_transport_system.service.definition.ZoneService;
+import org.everit.json.schema.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 
@@ -20,7 +23,7 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("/zone")
-public class ZoneController {
+public class ZoneController extends ValidationController {
 
     private static final Logger logger = LoggerFactory.getLogger(ZoneController.class);
 
@@ -53,9 +56,12 @@ public class ZoneController {
      */
     @RequestMapping(method = RequestMethod.POST, value = "/save", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<Zone> saveZone(@RequestBody Zone zone) {
+    public ResponseEntity<ZoneDTO> saveZone(@RequestBody String zone) throws IOException, ValidationException {
         logger.info("Saving zone at time {}.", Calendar.getInstance().getTime());
-        return new ResponseEntity<>(zoneService.save(zone), HttpStatus.ACCEPTED);
+        validateJSON(zone, "zone.json");
+        ObjectMapper mapper = new ObjectMapper();
+        return new ResponseEntity<>(new ZoneDTO(zoneService.save(new Zone(mapper.readValue(zone,ZoneDTO.class)))),
+                HttpStatus.ACCEPTED);
     }
 
     /**
@@ -64,9 +70,11 @@ public class ZoneController {
      */
     @RequestMapping(method = RequestMethod.DELETE, value = "/delete", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public ResponseEntity<String> deleteZone(@RequestBody Zone zone) {
-        logger.info("Deleting zone with id {} at time {}.", zone.getId(), Calendar.getInstance().getTime());
-        zoneService.remove(zone.getId());
+    public ResponseEntity<String> deleteZone(@RequestBody String zone) throws IOException, ValidationException {
+        logger.info("Deleting zone at time {}.", Calendar.getInstance().getTime());
+        validateJSON(zone, "zone.json");
+        ObjectMapper mapper = new ObjectMapper();
+        zoneService.remove((new Zone(mapper.readValue(zone,ZoneDTO.class)).getId()));
         return new ResponseEntity<>("Zone successfully deleted!", HttpStatus.OK);
     }
 }

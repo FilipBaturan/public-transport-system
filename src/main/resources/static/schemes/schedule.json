@@ -42,6 +42,7 @@
       "type": "integer",
       "title": "Transport Line",
       "description": "Schedule transport line",
+      "maxLength": 30,
       "default": 0,
       "examples": [
         1
