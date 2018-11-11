@@ -32,7 +32,7 @@ public class TransportLine implements Serializable {
     @Enumerated(EnumType.ORDINAL)
     private VehicleType type;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ManyToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Set<Station> stations;
 
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "transportLine")
