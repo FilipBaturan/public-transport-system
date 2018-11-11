@@ -1,45 +1,29 @@
-package construction_and_testing.public_transport_system.domain;
+package construction_and_testing.public_transport_system.domain.DTO;
 
-import construction_and_testing.public_transport_system.domain.DTO.VehicleDTO;
+import construction_and_testing.public_transport_system.domain.Vehicle;
 import construction_and_testing.public_transport_system.domain.enums.VehicleType;
-import org.hibernate.annotations.Where;
 
-import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Objects;
 
-/**
- * Add later
- */
-@Entity
-@Where(clause = "active =1")
-public class Vehicle implements Serializable {
+public class VehicleDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @Column(nullable = false)
     private String name;
 
-    @Column(nullable = false)
-    @Enumerated(EnumType.ORDINAL)
     private VehicleType type;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
-    @JoinColumn
-    private TransportLine currentLine;
+    private Long currentLine;
 
-    @Column(nullable = false, name = "active")
     private boolean active;
 
-    public Vehicle() {
+    public VehicleDTO() {
         this.active = true;
     }
 
-    public Vehicle(long id, String name, VehicleType type, TransportLine currentLine, boolean active) {
+    public VehicleDTO(Long id, String name, VehicleType type, Long currentLine, boolean active) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -47,12 +31,12 @@ public class Vehicle implements Serializable {
         this.active = active;
     }
 
-    public Vehicle(VehicleDTO vehicle){
+    public VehicleDTO(Vehicle vehicle){
         this.id = vehicle.getId();
         this.name = vehicle.getName();
         this.type = vehicle.getType();
+        this.currentLine = vehicle.getCurrentLine().getId();
         this.active = vehicle.isActive();
-        this.currentLine = new TransportLine(vehicle.getId());
     }
 
     public static long getSerialVersionUID() {
@@ -83,25 +67,12 @@ public class Vehicle implements Serializable {
         this.type = type;
     }
 
-    public TransportLine getCurrentLine() {
+    public Long getCurrentLine() {
         return currentLine;
     }
 
-    public void setCurrentLine(TransportLine currentLine) {
+    public void setCurrentLine(Long currentLine) {
         this.currentLine = currentLine;
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Vehicle)) return false;
-        Vehicle vehicle = (Vehicle) o;
-        return Objects.equals(id, vehicle.id);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(id);
     }
 
     public boolean isActive() {

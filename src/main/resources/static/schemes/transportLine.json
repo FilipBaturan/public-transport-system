@@ -17,13 +17,15 @@
   "properties": {
     "id": {
       "$id": "#/properties/id",
-      "type": "integer",
+      "type": ["integer", "null"],
       "title": "Id",
       "description": "Transport line id",
       "default": 0,
       "examples": [
         1
-      ]
+      ],
+      "minimum": 0,
+      "multipleOf": 1
     },
     "name": {
       "$id": "#/properties/name",

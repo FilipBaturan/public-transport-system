@@ -19,16 +19,10 @@ public interface VehicleService {
     Vehicle findById(Long id);
 
     /**
-     * @param newVehicle that needs to be saved
+     * @param vehicle that needs to be saved
      * @return saved vehicle in database
      */
-    Vehicle add(Vehicle newVehicle);
-
-    /**
-     * @param updatedVehicle modified vehicle that needs to be saved
-     * @return modified vehicle saved in database
-     */
-    Vehicle update(Vehicle updatedVehicle);
+    Vehicle save(Vehicle vehicle);
 
     /**
      * @param id of vehicle that needs to be removed

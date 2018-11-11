@@ -31,7 +31,7 @@ public class ZoneController extends ValidationController {
     private ZoneService zoneService;
 
     /**
-     * @return all zones
+     * @return all available zones
      */
     @RequestMapping(method = RequestMethod.GET, value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ZoneDTO>> getAll() {
@@ -61,7 +61,7 @@ public class ZoneController extends ValidationController {
         validateJSON(zone, "zone.json");
         ObjectMapper mapper = new ObjectMapper();
         return new ResponseEntity<>(new ZoneDTO(zoneService.save(new Zone(mapper.readValue(zone,ZoneDTO.class)))),
-                HttpStatus.ACCEPTED);
+                HttpStatus.OK);
     }
 
     /**

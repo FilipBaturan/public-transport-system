@@ -32,6 +32,9 @@ public class ScheduleController extends ValidationController {
     @Autowired
     private TransportLineService transportLineService;
 
+    /**
+     * @return all available schedules
+     */
     @RequestMapping(method = RequestMethod.GET, value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ScheduleDTO>> getAll() {
         logger.info("Requesting all available schedules at time {}.", Calendar.getInstance().getTime());

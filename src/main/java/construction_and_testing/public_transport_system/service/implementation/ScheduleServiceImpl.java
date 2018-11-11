@@ -45,7 +45,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             schedule.setActive(false);
             scheduelRepository.save(schedule);
         }else{
-            throw new GeneralException("Requested schedule does not exist!", HttpStatus.BAD_REQUEST);
+            throw new GeneralException("Schedule with id:" + id + " does not exist!", HttpStatus.BAD_REQUEST);
         }
     }
 }

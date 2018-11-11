@@ -1,13 +1,14 @@
 {
   "definitions": {},
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "http://public_transport_system/schemes/zone.json",
+  "$id": "http://example.com/root.json",
   "type": "object",
-  "title": "Zone",
+  "title": "Vehicle",
   "required": [
     "id",
     "name",
-    "lines",
+    "type",
+    "currentLine",
     "active"
   ],
   "properties": {
@@ -15,7 +16,7 @@
       "$id": "#/properties/id",
       "type": ["integer", "null"],
       "title": "Id",
-      "description": "Zone id",
+      "description": "Vehicle id",
       "default": 0,
       "examples": [
         1
@@ -27,26 +28,33 @@
       "$id": "#/properties/name",
       "type": "string",
       "title": "Name",
-      "description": "Zone name",
+      "description": "Vehicle name",
       "default": "",
       "maxLength": 30,
       "examples": [
-        "north"
+        "bus1"
       ],
       "pattern": "^(.*)$"
     },
-    "lines": {
-      "$id": "#/properties/lines",
-      "type": "array",
-      "title": "Lines",
-      "description": "Zone lines",
-      "minItems": 1,
-      "items": {
-        "$id": "#/properties/lines/items",
-        "type": "object",
-        "title": "Line",
-        "$ref": "http://localhost:8080/schemes/transportLine.json"
-      }
+    "type": {
+      "$id": "#/properties/type",
+      "type": "string",
+      "title": "The Type Schema",
+      "default": "BUS",
+      "enum": ["BUS", "METRO", "TRAM"],
+      "examples": [
+        "BUS", "METRO", "TRAM"
+      ]
+    },
+    "currentLine": {
+      "$id": "#/properties/currentLine",
+      "type": "integer",
+      "title": "Current line",
+      "description": "Vehicle current line",
+      "default": 0,
+      "examples": [
+        1
+      ]
     },
     "active": {
       "$id": "#/properties/active",
