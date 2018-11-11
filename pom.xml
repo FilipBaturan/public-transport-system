@@ -6,7 +6,7 @@
 	<groupId>construction_and_testing</groupId>
 	<artifactId>public_transport_system</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>jar</packaging>
+	<packaging>war</packaging>
 
 	<name>public_transport_system</name>
 	<description>Project for construction and testing</description>
