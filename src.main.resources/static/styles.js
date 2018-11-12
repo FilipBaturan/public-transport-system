@@ -7,7 +7,7 @@
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-module.exports = "/* You can add global styles to this file, and also import other style files */\n"
+module.exports = "/* You can add global styles to this file, and also import other style files */\r\n"
 
 /***/ }),
 
@@ -539,7 +539,7 @@ if(false) {}
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! D:\Faks\Semestar VII\KTS\Projekat\public-transport-system\public-transport-system-frontend\src\styles.css */"./src/styles.css");
+module.exports = __webpack_require__(/*! C:\Users\stefk\Desktop\FTN-SIIT\7.semestar\Konstrukcija i testiranje softvera\projekat\public-transport-system\public-transport-system-frontend\src\styles.css */"./src/styles.css");
 
 
 /***/ })
