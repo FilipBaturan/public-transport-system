@@ -52,7 +52,7 @@ public class Vehicle implements Serializable {
         this.name = vehicle.getName();
         this.type = vehicle.getType();
         this.active = vehicle.isActive();
-        this.currentLine = new TransportLine(vehicle.getId());
+        this.currentLine = new TransportLine(vehicle.getCurrentLine());
     }
 
     public static long getSerialVersionUID() {

@@ -54,7 +54,9 @@
       "default": 0,
       "examples": [
         1
-      ]
+      ],
+      "minimum": 0,
+      "multipleOf": 1
     },
     "active": {
       "$id": "#/properties/active",
