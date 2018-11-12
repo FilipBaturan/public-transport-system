@@ -1,5 +1,6 @@
 package construction_and_testing.public_transport_system.domain;
 
+import construction_and_testing.public_transport_system.domain.enums.AuthorityType;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -45,13 +46,16 @@ public class User implements Serializable {
     @Column(nullable = false, name = "active")
     private boolean active;
 
+    @Column(nullable = false, name = "authority")
+    private AuthorityType authorityType;
+
     public User() {
         this.confirmation = false;
         this.active = true;
     }
 
     public User(Long id, String name, String lastName, String username, String password, String email, String telephone,
-                 boolean confirmation) {
+                boolean confirmation) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
@@ -60,6 +64,19 @@ public class User implements Serializable {
         this.email = email;
         this.telephone = telephone;
         this.confirmation = confirmation;
+    }
+
+    public User(Long id, String name, String lastName, String username, String password, String email, String telephone,
+                 boolean confirmation, AuthorityType authorityType) {
+        this.id = id;
+        this.name = name;
+        this.lastName = lastName;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.telephone = telephone;
+        this.confirmation = confirmation;
+        this.authorityType = authorityType;
     }
 
     public static long getSerialVersionUID() {
@@ -130,6 +147,14 @@ public class User implements Serializable {
         this.confirmation = confirmation;
     }
 
+    public AuthorityType getAuthorityType() { return authorityType; }
+
+    public void setAuthorityType(AuthorityType authorityType) { this.authorityType = authorityType; }
+
+    public boolean isActive() { return active; }
+
+    public void setActive(boolean active) { this.active = active; }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -141,13 +166,5 @@ public class User implements Serializable {
     @Override
     public int hashCode() {
         return Objects.hash(id);
-    }
-
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
     }
 }
