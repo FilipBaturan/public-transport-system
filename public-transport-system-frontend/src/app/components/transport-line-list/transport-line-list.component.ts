@@ -11,19 +11,26 @@ import { ITransportLine } from '../../model/ITransportLine';
 })
 export class TransportLineListComponent implements OnInit {
 
-  transportLines : ITransportLine[] = [];
-
+  transportLines : ITransportLine[];
+  
   constructor(private transportLineService: TransportLineService) { }
 
   ngOnInit() {
-    this.transportLineService.getTransportLines().subscribe(
-      transportLines => this.transportLines = transportLines
-    )
+    
+    this.transportLines = [];
 
-    if (this.transportLines.length == 0)
-      console.log("asdasdasd");
+    this.transportLineService.getTransportLines().subscribe(
+
+      response=> this.transportLines = response,
+      (err) => console.error(err) 
+     
+    )
   }
 
- 
+  showStations(transportLineId:number) 
+  {
+    console.log("Mapa: " + transportLineId);
+  }
+
 
 }

@@ -1,7 +1,9 @@
 <div>
   <div *ngFor="let tl of transportLines" >
-    {{transportLines.name}}
+    <button (click) = 'showStations(tl.id)'>{{tl.name}} </button>
   </div>
+
+
 
 
 </div>

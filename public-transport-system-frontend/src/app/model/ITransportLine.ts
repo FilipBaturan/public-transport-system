@@ -1,9 +1,11 @@
+import { IStation } from "./IStation";
+
 export interface ITransportLine {
     id: number,
     name: string,
-    vehicle:{any},
-    statsions: [any],
-    schedule: [any],
+    statsions: IStation[],
+    schedule: number[],
     active: boolean,
-    zone: {any}
+    type : string,
+    zone: number
 }

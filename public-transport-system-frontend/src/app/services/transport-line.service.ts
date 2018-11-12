@@ -8,13 +8,23 @@ import { ITransportLine } from '../model/ITransportLine';
 })
 export class TransportLineService {
 
+  transportLineUrl : string = '/server/transportLine/get/1';
+  allTransportLinesUrl : string = '/server/transportLine/all';
+
   constructor(private http: HttpClient) { }
 
   getTransportLines(): Observable<ITransportLine[]>{
     var qwe: Observable<ITransportLine[]>;
-    qwe = this.http.get<ITransportLine[]>('/server/transportLine/all');
+    qwe = this.http.get<ITransportLine[]>(this.allTransportLinesUrl);
     return qwe;
   }
+
+  getOneTransportLine(): Observable<ITransportLine>{
+    var qwe: Observable<ITransportLine>;
+    qwe = this.http.get<ITransportLine>(this.transportLineUrl);
+    return qwe;
+  }
+  
 }
 
 

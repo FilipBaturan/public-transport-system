@@ -3,7 +3,7 @@
   "$schema": "http://json-schema.org/draft-07/schema#",
   "$id": "http://public_transport_system/schemes/news.json",
   "type": "object",
-  "title": "The News Schema",
+  "title": "News",
   "description": "Represents the news about public transport system made by operators",
   "additionalProperties": false,
   "required": [
@@ -17,7 +17,7 @@
   "properties": {
     "id": {
       "$id": "#/properties/id",
-      "type": "integer",
+      "type": ["integer", "null"],
       "title": "Id",
       "description": "News id",
       "default": 0,
@@ -56,8 +56,9 @@
       "title": "Date",
       "description": "Date when news are created",
       "default": "",
+      "format": "date-time",
       "examples": [
-        "2018-11-08T00:00:00"
+        "2018-11-08T00:00:00Z"
       ]
 
     },

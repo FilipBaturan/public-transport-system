@@ -31,29 +31,23 @@ public class TransportLineServiceImpl implements TransportLineService {
     }
 
     @Override
-    public TransportLine add(TransportLine newTransportLine) {
+    public TransportLine save(TransportLine transportLine) {
         try {
-            return transportLineRepository.save(newTransportLine);
-        } catch (DataIntegrityViolationException e){
-            return null;
+            return transportLineRepository.save(transportLine);
+        } catch (DataIntegrityViolationException e) {
+            throw new GeneralException("Transport line with given name already exist!", HttpStatus.BAD_REQUEST);
         }
-
-    }
-
-    @Override
-    public TransportLine update(TransportLine updatedTransportLine) {
-        return transportLineRepository.save(updatedTransportLine);
     }
 
     @Override
     public void remove(Long id) {
         Optional<TransportLine> entity = transportLineRepository.findById(id);
-        if(entity.isPresent()){
+        if (entity.isPresent()) {
             TransportLine transportLine = entity.get();
             transportLine.setActive(false);
             transportLineRepository.save(transportLine);
-        }else {
-            throw new EntityNotFoundException();
+        } else {
+            throw new GeneralException("Transport line with id:" + id + " does not exist!", HttpStatus.BAD_REQUEST);
         }
     }
 
