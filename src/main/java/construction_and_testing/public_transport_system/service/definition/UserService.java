@@ -31,5 +31,12 @@ public interface UserService {
     Boolean addUser(RegisteredUser user);
 
 
+    /**
+     * Method that tries to return a currently logged in user.
+     * If no user is logged in, returns null (should throw exception eventually).
+     *
+     * @return user currently logged in
+     */
+    public User findCurrentUser();
 
 }
