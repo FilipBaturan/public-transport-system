@@ -31,18 +31,8 @@ public class VehicleServiceImpl implements VehicleService {
     }
 
     @Override
-    public Vehicle add(Vehicle newVehicle) {
-        try {
-            return vehicleRepository.save(newVehicle);
-        } catch (DataIntegrityViolationException e){
-            return null;
-        }
-
-    }
-
-    @Override
-    public Vehicle update(Vehicle updatedVehicle) {
-        return vehicleRepository.save(updatedVehicle);
+    public Vehicle save(Vehicle vehicle) {
+        return vehicleRepository.save(vehicle);
     }
 
     @Override
@@ -53,7 +43,7 @@ public class VehicleServiceImpl implements VehicleService {
             vehicle.setActive(false);
             vehicleRepository.save(vehicle);
         }else {
-            throw new EntityNotFoundException();
+            throw new GeneralException("Vehicle with id:" + id + " does not exist!", HttpStatus.BAD_REQUEST);
         }
     }
 

@@ -1,5 +1,6 @@
 package construction_and_testing.public_transport_system.domain;
 
+import construction_and_testing.public_transport_system.domain.DTO.VehicleDTO;
 import construction_and_testing.public_transport_system.domain.enums.VehicleType;
 import org.hibernate.annotations.Where;
 
@@ -27,8 +28,8 @@ public class Vehicle implements Serializable {
     @Enumerated(EnumType.ORDINAL)
     private VehicleType type;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(nullable = true)
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.MERGE)
+    @JoinColumn
     private TransportLine currentLine;
 
     @Column(nullable = false, name = "active")
@@ -38,11 +39,20 @@ public class Vehicle implements Serializable {
         this.active = true;
     }
 
-    public Vehicle(long id, String name, VehicleType type, TransportLine currentLine) {
+    public Vehicle(long id, String name, VehicleType type, TransportLine currentLine, boolean active) {
         this.id = id;
         this.name = name;
         this.type = type;
         this.currentLine = currentLine;
+        this.active = active;
+    }
+
+    public Vehicle(VehicleDTO vehicle){
+        this.id = vehicle.getId();
+        this.name = vehicle.getName();
+        this.type = vehicle.getType();
+        this.active = vehicle.isActive();
+        this.currentLine = new TransportLine(vehicle.getCurrentLine());
     }
 
     public static long getSerialVersionUID() {

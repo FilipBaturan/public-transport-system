@@ -6,6 +6,9 @@ import construction_and_testing.public_transport_system.domain.enums.AuthorityTy
 import construction_and_testing.public_transport_system.repository.UserRepository;
 import construction_and_testing.public_transport_system.service.definition.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -32,5 +35,16 @@ public class UserServiceImpl implements UserService {
         }
         return false;
 
+    }
+
+    @Override
+    public User findCurrentUser() {
+        final UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+        if (authentication == null) {
+            return null;
+        }
+
+        final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+        return findByUsername(userDetails.getUsername());
     }
 }

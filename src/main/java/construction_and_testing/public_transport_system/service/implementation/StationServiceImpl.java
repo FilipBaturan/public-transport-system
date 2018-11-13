@@ -25,7 +25,8 @@ public class StationServiceImpl implements StationService {
 
     @Override
     public Station findById(Long id) {
-        return stationRepository.findById(id).orElseThrow(EntityNotFoundException::new);
+        return stationRepository.findById(id).orElseThrow(() ->
+                new GeneralException("Requested station does not exist!", HttpStatus.BAD_REQUEST));
     }
 
     @Override
@@ -41,7 +42,7 @@ public class StationServiceImpl implements StationService {
             station.setActive(false);
             stationRepository.save(station);
         }else {
-            throw new GeneralException("Requested station does not exist!", HttpStatus.BAD_REQUEST);
+            throw new GeneralException("Station with id:" + id + " does not exist!", HttpStatus.BAD_REQUEST);
         }
     }
 
