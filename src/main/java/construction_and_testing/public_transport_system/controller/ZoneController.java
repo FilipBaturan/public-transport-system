@@ -22,7 +22,7 @@ import java.util.List;
  * API for zones
  */
 @RestController
-@RequestMapping("/zone")
+@RequestMapping("/api/zone")
 public class ZoneController extends ValidationController {
 
     private static final Logger logger = LoggerFactory.getLogger(ZoneController.class);
@@ -31,32 +31,36 @@ public class ZoneController extends ValidationController {
     private ZoneService zoneService;
 
     /**
+     * GET /api/zone
+     *
      * @return all available zones
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping
     public ResponseEntity<List<ZoneDTO>> getAll() {
         logger.info("Requesting all available zones at time {}.", Calendar.getInstance().getTime());
         return new ResponseEntity<>(ZoneConverter.fromEntityList(zoneService.getAll(),ZoneDTO::new), HttpStatus.OK);
     }
 
     /**
+     * GET /api/zone/{id}
+     *
      * @param id of requested zone
      * @return zone with requested id
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/get/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<ZoneDTO> getById(@PathVariable String id) {
+    @GetMapping("{/id}")
+    public ResponseEntity<ZoneDTO> findById (@PathVariable String id) {
         logger.info("Requesting zone with id {} at time {}.", id, Calendar.getInstance().getTime());
         return new ResponseEntity<>(new ZoneDTO(zoneService.findById(Long.parseLong(id))), HttpStatus.FOUND);
     }
 
     /**
+     * POST /api/zone
+     *
      * @param zone that needs to be added
      * @return added zone
      */
-    @RequestMapping(method = RequestMethod.POST, value = "/save", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<ZoneDTO> saveZone(@RequestBody String zone) throws IOException, ValidationException {
+    @PostMapping
+    public ResponseEntity<ZoneDTO> create(@RequestBody String zone) throws IOException, ValidationException {
         logger.info("Saving zone at time {}.", Calendar.getInstance().getTime());
         validateJSON(zone, "zone.json");
         ObjectMapper mapper = new ObjectMapper();
@@ -65,12 +69,13 @@ public class ZoneController extends ValidationController {
     }
 
     /**
+     * DELETE /api/zone/{id}
+     *
      * @param zone that needs to be deleted
      * @return message about action results
      */
-    @RequestMapping(method = RequestMethod.DELETE, value = "/delete", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<String> deleteZone(@RequestBody String zone) throws IOException, ValidationException {
+    @DeleteMapping("{/id}")
+    public ResponseEntity<String> delete (@RequestBody String zone) throws IOException, ValidationException {
         logger.info("Deleting zone at time {}.", Calendar.getInstance().getTime());
         validateJSON(zone, "zone.json");
         ObjectMapper mapper = new ObjectMapper();

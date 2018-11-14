@@ -22,7 +22,7 @@ import java.util.Calendar;
 import java.util.List;
 
 @RestController
-@RequestMapping("/vehicle")
+@RequestMapping("/api/vehicle")
 public class VehicleController extends ValidationController {
 
     private static final Logger logger = LoggerFactory.getLogger(VehicleController.class);
@@ -34,33 +34,37 @@ public class VehicleController extends ValidationController {
     private TransportLineService transportLineService;
 
     /**
+     * GET /api/vehicle
+     *
      * @return all available vehicles
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<VehicleDTO>> getAll() {
+    @GetMapping
+    public ResponseEntity<List<VehicleDTO>> findAll() {
         logger.info("Requesting all available vehicles at time {}.", Calendar.getInstance().getTime());
         return new ResponseEntity<>(VehicleConverter.fromEntityList(vehicleService.getAll(),VehicleDTO::new),
                 HttpStatus.OK);
     }
 
     /**
+     * GET /api/vehicle/{id}
+     *
      * @param id of requested vehicle
      * @return vehicle with requested id
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/get/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<VehicleDTO> getById(@PathVariable String id) {
+    @GetMapping("{/id}")
+    public ResponseEntity<VehicleDTO> findById(@PathVariable String id) {
         logger.info("Requesting vehicle with id {} at time {}.", id, Calendar.getInstance().getTime());
         return new ResponseEntity<>(new VehicleDTO(vehicleService.findById(Long.parseLong(id))), HttpStatus.FOUND);
     }
 
     /**
+     * POST /api/vehicle
+     *
      * @param vehicle that needs to be added
      * @return added vehicle
      */
-    @RequestMapping(method = RequestMethod.POST, value = "/save", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<VehicleDTO> saveVehicle(@RequestBody String vehicle) throws IOException, ValidationException {
+    @PostMapping()
+    public ResponseEntity<VehicleDTO> create (@RequestBody String vehicle) throws IOException, ValidationException {
         logger.info("Adding vehicle with at time {}.", Calendar.getInstance().getTime());
         validateJSON(vehicle, "vehicle.json");
         ObjectMapper mapper = new ObjectMapper();
@@ -70,12 +74,13 @@ public class VehicleController extends ValidationController {
     }
 
     /**
+     * DELETE /api/zone/{id}
+     *
      * @param vehicle that needs to be deleted
      * @return message about action results
      */
-    @RequestMapping(method = RequestMethod.DELETE, value = "/delete", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<String> deleteVehicle(@RequestBody String vehicle) throws IOException, ValidationException {
+    @DeleteMapping("{/id}")
+    public ResponseEntity<String> delete (@RequestBody String vehicle) throws IOException, ValidationException {
         logger.info("Deleting vehicle at time {}.", Calendar.getInstance().getTime());
         validateJSON(vehicle,"vehicle.json");
         ObjectMapper mapper = new ObjectMapper();

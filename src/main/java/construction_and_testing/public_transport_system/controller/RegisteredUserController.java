@@ -17,7 +17,7 @@ import java.util.Calendar;
 import java.util.List;
 
 @RestController
-@RequestMapping("/registeredUser")
+@RequestMapping("/api/registeredUser")
 public class RegisteredUserController {
 
 
@@ -27,23 +27,27 @@ public class RegisteredUserController {
     private RegisteredUserService registeredUserService;
 
     /**
+     * GET /api/registeredUser
+     *
      * Getting all registered users
      * @return all users
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<RegisteredUser>> allRegisteredUsers() {
+    @GetMapping
+    public ResponseEntity<List<RegisteredUser>> findAll() {
         logger.info("Fetching all users...");
         List<RegisteredUser> allUsers = registeredUserService.getAll();
         return new ResponseEntity<>(allUsers, HttpStatus.OK);
     }
 
     /**
+     * GET /api/registeredUser/{id}
+     *
      * Getting registered user by id
      * @param id - id of registered user that we want to get
      * @return registered user with given id
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/getById/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<RegisteredUser> getById(@PathVariable Long id){
+    @GetMapping("{/id}")
+    public ResponseEntity<RegisteredUser> findById(@PathVariable Long id){
         logger.info("Fetching user by id " + id + ".");
         RegisteredUser user = registeredUserService.getById(id);
         if(user != null){
@@ -57,12 +61,15 @@ public class RegisteredUserController {
     }
 
     /**
+     * POST /api/registeredUser
+     *
      * Adding new registered user
      * @param newUser - user that we want to add
      * @return added user
      */
-    @RequestMapping(method = RequestMethod.POST, value = "/addNew", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<RegisteredUser> addNewUser(@RequestBody RegisteredUser newUser){
+    @PostMapping
+    //@PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<RegisteredUser> create (@RequestBody RegisteredUser newUser){
         boolean succeeded = registeredUserService.addNew(newUser);
         if(succeeded){
             logger.info("New user added.");
@@ -75,13 +82,16 @@ public class RegisteredUserController {
     }
 
     /**
+     * PUT /api/registeredUser/{id}
+     *
      * Modifiyng existing registered user
      * @param id - id of user with old information
      * @param user - new information
      * @return modified user
      */
-    @RequestMapping(method = RequestMethod.PUT, value = "/modify/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<RegisteredUser> modify(@PathVariable Long id, @RequestBody RegisteredUser user){
+    @PutMapping("/{id}")
+    //@PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<RegisteredUser> update (@PathVariable Long id, @RequestBody RegisteredUser user){
         user.setId(id);
         boolean succeeded = registeredUserService.modify(user);
         if(succeeded){
@@ -95,13 +105,15 @@ public class RegisteredUserController {
     }
 
     /**
+     * DELETE /api/registeredUser/{id}
+     *
      * Deleting existing user
      * @param user for removing
      * @return feedback message
      */
-    @RequestMapping(method = RequestMethod.DELETE, value = "/delete", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<String> deleteNews(@RequestBody RegisteredUser user) {
+    @DeleteMapping("/{id}")
+    //@PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<String> delete(@RequestBody RegisteredUser user) {
         logger.info("Deleting news with id {} at time {}.", user.getId(), Calendar.getInstance().getTime());
         try {
             registeredUserService.remove(user.getId());

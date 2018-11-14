@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
@@ -17,7 +18,7 @@ import java.util.Calendar;
 import java.util.List;
 
 @RestController
-@RequestMapping("/ticket")
+@RequestMapping("/api/ticket")
 public class TicketController {
 
     private static final Logger logger = LoggerFactory.getLogger(TicketController.class);
@@ -25,8 +26,15 @@ public class TicketController {
     @Autowired
     private TicketService ticketService;
 
-    @RequestMapping(method = RequestMethod.GET, value = "/saveTicket", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Ticket> saveTicket(@RequestBody Ticket ticket) {
+    /**
+     * POST /api/ticket
+     *
+     * Controller method for creating a new ticket.
+     *
+     * @return ticket that is created
+     */
+    @PostMapping
+    public ResponseEntity<Ticket> create(@RequestBody Ticket ticket) {
         logger.info("Adding ticket at time {}.", Calendar.getInstance().getTime());
         Ticket t = this.ticketService.saveTicket(ticket);
         if( t != null){
@@ -36,14 +44,33 @@ public class TicketController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/findAllTickets", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Ticket>> findAllTickets() {
+    /**
+     * GET /rest/ticket
+     *
+     * Controller method for finding all tickets.
+     *
+     * @return all tickets
+     */
+
+    //@PreAuhtorized("isAuthenticated()")
+    @GetMapping
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<List<Ticket>> findAll() {
         List<Ticket> tickets = this.ticketService.findAllTickets();
         return new ResponseEntity<>(tickets, HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/findTicketById/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Ticket> findTicketById(@PathVariable("id") String id) {
+
+    /**
+     * GET /api/ticket/{id}
+     *
+     * Controller method for finding ticket with a given id.
+     *
+     * @return ticket with the given id
+     */
+    @GetMapping("/{id}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Ticket> findById(@PathVariable("id") String id) {
         logger.info("Requesting ticket with id {} at time {}.", id, Calendar.getInstance().getTime());
         try {
             Ticket ticket = this.ticketService.findTicketById(Long.parseLong(id));

@@ -539,7 +539,7 @@ if(false) {}
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\stefk\Desktop\FTN-SIIT\7.semestar\Napredne web tehnologije\projekat\src\styles.css */"./src/styles.css");
+module.exports = __webpack_require__(/*! C:\Users\Filip-PC\Desktop\IV godina\I semestar\public-transport-system-front\public-transport-system-frontend\src\styles.css */"./src/styles.css");
 
 
 /***/ })

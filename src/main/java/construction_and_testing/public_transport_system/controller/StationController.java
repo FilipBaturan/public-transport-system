@@ -19,7 +19,7 @@ import java.util.Calendar;
 import java.util.List;
 
 @RestController
-@RequestMapping("/station")
+@RequestMapping("/api/station")
 public class StationController extends ValidationController {
 
     private static final Logger logger = LoggerFactory.getLogger(StationController.class);
@@ -28,9 +28,11 @@ public class StationController extends ValidationController {
     private StationService stationService;
 
     /**
+     * GET /rest/station
+     *
      * @return all available stations
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping
     public ResponseEntity<List<StationDTO>> getAll() {
         logger.info("Requesting all available stations at time {}.", Calendar.getInstance().getTime());
         return new ResponseEntity<>(StationConverter.fromEntityList(stationService.getAll(), StationDTO::new),
@@ -38,23 +40,25 @@ public class StationController extends ValidationController {
     }
 
     /**
+     * GET /rest/station/{id}
+     *
      * @param id of requested station
      * @return station with requested id
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/get/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<StationDTO> getById(@PathVariable String id) {
+    @GetMapping("{/id}")
+    public ResponseEntity<StationDTO> findById(@PathVariable String id) {
         logger.info("Requesting station with id {} at time {}.", id, Calendar.getInstance().getTime());
         return new ResponseEntity<>(new StationDTO(stationService.findById(Long.parseLong(id))), HttpStatus.FOUND);
     }
 
     /**
+     * POST /api/station
+     *
      * @param station that needs to be added
      * @return added station
      */
-    @RequestMapping(method = RequestMethod.POST, value = "/save", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<StationDTO> saveStation(@RequestBody String station) throws IOException, ValidationException {
+    @PostMapping
+    public ResponseEntity<StationDTO> create (@RequestBody String station) throws IOException, ValidationException {
         logger.info("Saving station at time {}.", Calendar.getInstance().getTime());
         validateJSON(station,"station.json");
         ObjectMapper mapper = new ObjectMapper();
@@ -63,12 +67,13 @@ public class StationController extends ValidationController {
     }
 
     /**
+     * DELETE /api/station/{id}
+     *
      * @param station that needs to be deleted
      * @return message about action results
      */
-    @RequestMapping(method = RequestMethod.DELETE, value = "/delete", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<String> deleteStation(@RequestBody String station) throws IOException, ValidationException {
+    @DeleteMapping("{/id}")
+    public ResponseEntity<String> delete (@RequestBody String station) throws IOException, ValidationException {
         logger.info("Deleting station at time {}.", Calendar.getInstance().getTime());
         validateJSON(station,"station.json");
         ObjectMapper mapper = new ObjectMapper();

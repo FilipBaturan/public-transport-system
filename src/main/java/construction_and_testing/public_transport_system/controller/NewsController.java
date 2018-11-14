@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
@@ -17,7 +18,7 @@ import java.util.Calendar;
 import java.util.List;
 
 @RestController
-@RequestMapping("/news")
+@RequestMapping("/api/news")
 public class NewsController {
 
     private static final Logger logger = LoggerFactory.getLogger(NewsController.class);
@@ -26,10 +27,13 @@ public class NewsController {
     private NewsService newsService;
 
     /**
+     * GET /api/news
+     *
      * Getting all news
      * @return all news
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<News>> getAll(){
         logger.info("Fetching all news...");
         List<News> allNews = newsService.getAll();
@@ -37,11 +41,14 @@ public class NewsController {
     }
 
     /**
+     * GET /api/news/{id}
+     *
      * Getting news news by given id
      * @param id - id of news
      * @return news with given id
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/getById/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping("{id}")
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<News> getById(@PathVariable Long id){
         logger.info("Trying to get news with id " + id + ".");
         News news = newsService.getById(id);
@@ -56,12 +63,15 @@ public class NewsController {
     }
 
     /**
+     * POST /api/news
+     *
      * Adding new news
      * @param news - new news for adding
      * @return added news
      */
-    @RequestMapping(method = RequestMethod.POST, value = "/addNew", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<News> addNewUser(@RequestBody News news){
+    @PostMapping
+    //@PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<News> create(@RequestBody News news){
         boolean succeeded = newsService.addNew(news);
         if(succeeded){
             logger.info("News added.");
@@ -74,13 +84,16 @@ public class NewsController {
     }
 
     /**
+     * PUT /api/news/{id}
+     *
      * Modifiyng existing news
      * @param id - id of news for modifiyng
      * @param news - news with new information
      * @return modified news
      */
-    @RequestMapping(method = RequestMethod.PUT, value = "/modify/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<News> modify(@PathVariable Long id, @RequestBody News news){
+    @PutMapping("/{id}")
+    //@PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<News> update(@PathVariable Long id, @RequestBody News news){
         news.setId(id);
         boolean succeeded = newsService.modify(news);
         if(succeeded){
@@ -94,13 +107,15 @@ public class NewsController {
     }
 
     /**
+     * DELETE /api/news/{id}
+     *
      * Deleting existing news
      * @param news for removing
      * @return feedback message
      */
-    @RequestMapping(method = RequestMethod.DELETE, value = "/delete", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<String> deleteNews(@RequestBody News news) {
+    @DeleteMapping("/{id}")
+    //@PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<String> delete(@RequestBody News news) {
         logger.info("Deleting news with id {} at time {}.", news.getId(), Calendar.getInstance().getTime());
         try {
             newsService.remove(news.getId());

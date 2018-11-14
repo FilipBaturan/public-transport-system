@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -21,7 +22,7 @@ import java.util.Calendar;
 import java.util.List;
 
 @RestController
-@RequestMapping("/schedule")
+@RequestMapping("/api/schedule")
 public class ScheduleController extends ValidationController {
 
     private static final Logger logger = LoggerFactory.getLogger(ScheduleController.class);
@@ -33,9 +34,11 @@ public class ScheduleController extends ValidationController {
     private TransportLineService transportLineService;
 
     /**
+     * GET /api/schedule
+     *
      * @return all available schedules
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping
     public ResponseEntity<List<ScheduleDTO>> getAll() {
         logger.info("Requesting all available schedules at time {}.", Calendar.getInstance().getTime());
         return new ResponseEntity<>(ScheduleConverter.fromEntityList(scheduleService.getAll(), ScheduleDTO::new),
@@ -43,23 +46,25 @@ public class ScheduleController extends ValidationController {
     }
 
     /**
+     * GET /api/schedule/{id}
+     *
      * @param id of requested schedule
      * @return schedule with requested id
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/get/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<ScheduleDTO> getById(@PathVariable String id) {
+    @GetMapping("{/id}")
+    public ResponseEntity<ScheduleDTO> findById(@PathVariable String id) {
         logger.info("Requesting station with id {} at time {}.", id, Calendar.getInstance().getTime());
         return new ResponseEntity<>(new ScheduleDTO(scheduleService.findById(Long.parseLong(id))), HttpStatus.FOUND);
     }
 
     /**
+     * POST /api/schedule
+     *
      * @param schedule that needs to be saved
      * @return saved schedule
      */
-    @RequestMapping(method = RequestMethod.POST, value = "/save", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<ScheduleDTO> saveStation(@RequestBody String schedule) throws IOException, ValidationException {
+    @PostMapping()
+    public ResponseEntity<ScheduleDTO> create(@RequestBody String schedule) throws IOException, ValidationException {
         logger.info("Saving schedule at time {}.", Calendar.getInstance().getTime());
         validateJSON(schedule,"schedule.json");
         ObjectMapper mapper = new ObjectMapper();
@@ -70,12 +75,14 @@ public class ScheduleController extends ValidationController {
     }
 
     /**
+     * DELETE /api/schedule/{id}
+     *
      * @param schedule that needs to be deleted
      * @return message about action results
      */
-    @RequestMapping(method = RequestMethod.DELETE, value = "/delete", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<String> deleteStation(@RequestBody String schedule) throws IOException, ValidationException {
+    @DeleteMapping("{/id}")
+    //@PreAuthorize("")
+    public ResponseEntity<String> delete(@RequestBody String schedule) throws IOException, ValidationException {
         logger.info("Deleting station at time {}.", Calendar.getInstance().getTime());
         validateJSON(schedule,"schedule.json");
         ObjectMapper mapper = new ObjectMapper();
