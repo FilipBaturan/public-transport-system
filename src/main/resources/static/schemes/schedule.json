@@ -1,0 +1,75 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://public_transport_system/schemes/schedule.json",
+  "type": "object",
+  "title": "Schedule",
+  "description": "Represents the schedule for transport lines by days",
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "startTime",
+    "transportLine",
+    "day",
+    "active"
+  ],
+  "properties": {
+    "id": {
+      "$id": "#/properties/id",
+      "type": ["integer", "null"],
+      "title": "Id",
+      "description": "Schedule id",
+      "default": 0,
+      "examples": [
+        1
+      ],
+      "minimum": 0,
+      "multipleOf": 1
+    },
+    "startTime": {
+      "$id": "#/properties/startTime",
+      "type": "string",
+      "title": "Start Time",
+      "description": "Schedule start time",
+      "default": "00:00",
+      "pattern": "^(?:([01]?\\d|2[0-3]):([0-5]?\\d))$",
+      "examples": [
+        "8:15", "08:15", "23:17"
+      ]
+    },
+    "transportLine": {
+      "$id": "#/properties/transportLine",
+      "type": "integer",
+      "title": "Transport Line",
+      "description": "Schedule transport line",
+      "maxLength": 30,
+      "default": 0,
+      "examples": [
+        1
+      ],
+      "minimum": 0,
+      "multipleOf": 1
+    },
+    "day": {
+      "$id": "#/properties/day",
+      "type": "string",
+      "title": "Day",
+      "description": "Schedule day",
+      "default": "WORKDAY",
+      "enum": ["WORKDAY", "SATURDAY", "SUNDAY"],
+      "examples": [
+        "WORKDAY", "SATURDAY", "SUNDAY"
+      ]
+    },
+    "active": {
+      "$id": "#/properties/active",
+      "type": "boolean",
+      "title": "Active",
+      "description": "indicates is schedule exist in database",
+      "default": true,
+      "examples": [
+        true
+      ]
+    }
+  }
+}
