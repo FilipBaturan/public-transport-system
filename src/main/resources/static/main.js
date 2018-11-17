@@ -99,12 +99,23 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 /* harmony import */ var _components_welcome_welcome_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/welcome/welcome.component */ "./src/app/components/welcome/welcome.component.ts");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/platform-browser/animations */ "./node_modules/@angular/platform-browser/fesm5/animations.js");
+/* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
+/* harmony import */ var _components_schedule_schedule_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/schedule/schedule.component */ "./src/app/components/schedule/schedule.component.ts");
+/* harmony import */ var _components_auth_auth_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/auth/auth.component */ "./src/app/components/auth/auth.component.ts");
+/* harmony import */ var _components_map_map_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/map/map.component */ "./src/app/components/map/map.component.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
+
+
+
+
 
 
 
@@ -124,13 +135,34 @@ var AppModule = /** @class */ (function () {
                 _components_transport_line_transport_line_component__WEBPACK_IMPORTED_MODULE_3__["TransportLineComponent"],
                 _components_transport_line_list_transport_line_list_component__WEBPACK_IMPORTED_MODULE_4__["TransportLineListComponent"],
                 _components_welcome_welcome_component__WEBPACK_IMPORTED_MODULE_6__["WelcomeComponent"],
+                _components_schedule_schedule_component__WEBPACK_IMPORTED_MODULE_10__["ScheduleComponent"],
+                _components_auth_auth_component__WEBPACK_IMPORTED_MODULE_11__["AuthComponent"],
+                _components_map_map_component__WEBPACK_IMPORTED_MODULE_12__["MapComponent"],
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"],
                 _angular_common_http__WEBPACK_IMPORTED_MODULE_7__["HttpClientModule"],
+                _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_8__["BrowserAnimationsModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_9__["MatButtonModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_9__["MatCheckboxModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_9__["MatMenuModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_9__["MatIconModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_9__["MatTooltipModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_9__["MatToolbarModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_9__["MatButtonModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_9__["MatMenuModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_9__["MatIconModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_9__["MatCardModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_9__["MatSidenavModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_9__["MatFormFieldModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_9__["MatInputModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_9__["MatTooltipModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_9__["MatToolbarModule"],
+                _angular_material__WEBPACK_IMPORTED_MODULE_9__["MatListModule"],
                 _angular_router__WEBPACK_IMPORTED_MODULE_5__["RouterModule"].forRoot([
                     { path: 'transportLineList', component: _components_transport_line_list_transport_line_list_component__WEBPACK_IMPORTED_MODULE_4__["TransportLineListComponent"] },
                     { path: 'transportLine', component: _components_transport_line_transport_line_component__WEBPACK_IMPORTED_MODULE_3__["TransportLineComponent"] },
+                    { path: 'editRoutes', component: _components_map_map_component__WEBPACK_IMPORTED_MODULE_12__["MapComponent"] },
                     { path: '**', component: _components_welcome_welcome_component__WEBPACK_IMPORTED_MODULE_6__["WelcomeComponent"], pathMatch: 'full' }
                 ])
             ],
@@ -139,6 +171,195 @@ var AppModule = /** @class */ (function () {
         })
     ], AppModule);
     return AppModule;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/components/auth/auth.component.css":
+/*!****************************************************!*\
+  !*** ./src/app/components/auth/auth.component.css ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ""
+
+/***/ }),
+
+/***/ "./src/app/components/auth/auth.component.html":
+/*!*****************************************************!*\
+  !*** ./src/app/components/auth/auth.component.html ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<p>\r\n  auth works!\r\n</p>\r\n"
+
+/***/ }),
+
+/***/ "./src/app/components/auth/auth.component.ts":
+/*!***************************************************!*\
+  !*** ./src/app/components/auth/auth.component.ts ***!
+  \***************************************************/
+/*! exports provided: AuthComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthComponent", function() { return AuthComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var AuthComponent = /** @class */ (function () {
+    function AuthComponent() {
+    }
+    AuthComponent.prototype.ngOnInit = function () {
+    };
+    AuthComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'app-auth',
+            template: __webpack_require__(/*! ./auth.component.html */ "./src/app/components/auth/auth.component.html"),
+            styles: [__webpack_require__(/*! ./auth.component.css */ "./src/app/components/auth/auth.component.css")]
+        }),
+        __metadata("design:paramtypes", [])
+    ], AuthComponent);
+    return AuthComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/components/map/map.component.css":
+/*!**************************************************!*\
+  !*** ./src/app/components/map/map.component.css ***!
+  \**************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ""
+
+/***/ }),
+
+/***/ "./src/app/components/map/map.component.html":
+/*!***************************************************!*\
+  !*** ./src/app/components/map/map.component.html ***!
+  \***************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<!DOCTYPE html>\r\n<meta http-equiv=\"Content-Type\" content=\"map/html; charset=utf-8\">\r\n<link rel=\"stylesheet\" href=\"../../lib/dist/lib/leaflet.css\" />\r\n<link rel=\"stylesheet\" href=\"../../lib/dist/lib/leaflet.draw.css\" />\r\n<script src=\"../../lib/dist/lib/leaflet.js\"></script>\r\n<script src=\"../../lib/dist/lib/leaflet.draw.js\"></script>\r\n\r\n<script src=\"../../lib/src/MapBBCode.js\"></script>\r\n<script src=\"../../lib/src/MapBBCodeUI.js\"></script>\r\n<script src=\"../../lib/src/MapBBCodeUI.Editor.js\"></script>\r\n<script src=\"../../lib/src/images/EditorSprites.js\"></script>\r\n<script src=\"../../lib/src/controls/FunctionButton.js\"></script>\r\n<script src=\"../../lib/src/controls/LetterIcon.js\"></script>\r\n<script src=\"../../lib/src/controls/PopupIcon.js\"></script>\r\n<script src=\"../../lib/src/controls/Leaflet.Search.js\"></script>\r\n<script src=\"../../lib/src/controls/PermalinkAttribution.js\"></script>\r\n<script src=\"../../lib/src/controls/StaticLayerSwitcher.js\"></script>\r\n<script src=\"../../lib/src/handlers/Handler.Text.js\"></script>\r\n<script src=\"../../lib/src/handlers/Handler.Color.js\"></script>\r\n<script src=\"../../lib/src/handlers/Handler.Width.js\"></script>\r\n<script src=\"../../lib/src/handlers/Handler.Measure.js\"></script>\r\n<script src=\"../../lib/src/strings/English.js\"></script>    \r\n\r\n<p>This is the main example. It tests viewing and editing bbcode from textarea,\r\n     updating it without recreating a panel, search in editing,\r\n      permalinkAttribution (see MapSurfer), text icon types, Width and Measure handlers,\r\n       <i>createLayers</i> and <i>preferStandardLayerSwitcher</i> options.</p>\r\n<textarea id=\"code\" style=\"width: 50%; height: 6em; display: none;\">[map=45.2519,19.837][/map]</textarea>\r\n<input type=\"button\" value=\"Update\" onclick=\"javascript:update();\">\r\n<!-- <input type=\"button\" value=\"Edit\" onclick=\"javascript:edit();\"> -->\r\n<input type=\"button\" value=\"Edit\" onclick=\"javascript:edit()\">\r\n<input type=\"button\" value=\"Move\" onclick=\"javascript:move()\">\r\n<div id=\"edit\"></div>\r\n<div id=\"test\"></div>\r\n<script>\r\nvar mapBB = new MapBBCode({\r\n    defaultPosition: [45.2519,19.837],\r\n    defaultZoom: 15,\r\n\tpreferStandardLayerSwitcher: false,\r\n    createLayers: function(L) { return [\r\n        MapBBCode.prototype.createOpenStreetMapLayer(),\r\n        L.tileLayer('http://{s}.tile.opencyclemap.org/cycle/{z}/{x}/{y}.png', { name: 'CycleMap' })\r\n    ]}\r\n});\r\nvar bbCode = \"[map]45.24166,19.84264(S6); 45.23876,19.83273(S5); 45.24395,19.82509(S4); 45.24948,19.83839(S7); 45.25833,19.83341(S8); 45.26389,19.82882(S1); 45.26021,19.822(S2); 45.2529,19.82431(S3); 45.26377,19.82895 45.26407,19.82122 45.26274,19.81878 45.26015,19.82195 45.25761,19.82431 45.2529,19.82431 45.24867,19.82466 45.24398,19.82504 45.23972,19.82552 45.23712,19.82655 45.23879,19.83264 45.24166,19.84268 45.24565,19.84045 45.24951,19.83839 45.25229,19.83685 45.25833,19.83341 45.26154,19.83174 45.26419,19.83028 45.26377,19.82891 (red|R1)[/map]\"\r\nvar positions = [\"45.26377,19.82895\", \"45.26407,19.82122\", \"45.26274,19.81878\", \r\n                 \"45.26015,19.82195\", \"45.25761,19.82431\", \"45.2529,19.82431\", \r\n                 \"45.24867,19.82466\", \"45.24398,19.82504\", \"45.23972,19.82552\", \r\n                 \"45.23712,19.82655\", \"45.23879,19.83264\", \"45.24166,19.84268\", \r\n                 \"45.24565,19.84045\", \"45.24951,19.83839\", \"45.25229,19.83685\", \r\n                 \"45.25833,19.83341\", \"45.26154,19.83174\", \"45.26419,19.83028\", \r\n                 \"45.26377,19.82891\"];\r\n//var bbCode = document.getElementById('code').value;\r\nvar bus1PositionIndex = 0;\r\nvar bus2PositionIndex = 10;\r\nvar newCode = bbCode.replace(\"[/map]\", positions[bus1PositionIndex] + \"(bus1 <>); \" + \r\n                positions[bus2PositionIndex]+ \"(bus2 <>)[/map]\");\r\nconsole.log(bbCode);\r\nconsole.log(newCode);\r\nvar show = mapBB.show('test', newCode);\r\n\r\nfunction move(){\r\n    show.updateBBCode( bbCode.replace(\"[/map]\", positions[(++bus1PositionIndex) % positions.length] + \r\n                    \"(bus1 <>); \" + positions[(++bus2PositionIndex) % positions.length]+ \"(bus2 <>)[/map]\"));\r\n}\r\n\r\nfunction update() {\r\n    // show.updateBBCode(document.getElementById('code').value);\r\n    show.updateBBCode(bbCode);\r\n}\r\nfunction edit() {\r\n    // mapBB.editor('edit', document.getElementById('code'), function(res) {\r\n    //     if( res !== null )\r\n    //         update();\r\n    // });\r\n    mapBB.editor('edit', bbCode, function(res) {\r\n        bbCode = res;\r\n        if( res !== null )\r\n            update();\r\n    });\r\n}\r\n\r\n// function editorWindow(){\r\n//     mapBB.editorWindow(document.getElementById('code').value, function(res){\r\n//         console.log(res);\r\n//     });\r\n// }\r\n\r\n</script>"
+
+/***/ }),
+
+/***/ "./src/app/components/map/map.component.ts":
+/*!*************************************************!*\
+  !*** ./src/app/components/map/map.component.ts ***!
+  \*************************************************/
+/*! exports provided: MapComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "MapComponent", function() { return MapComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var MapComponent = /** @class */ (function () {
+    function MapComponent() {
+    }
+    MapComponent.prototype.ngOnInit = function () {
+    };
+    MapComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'app-map',
+            template: __webpack_require__(/*! ./map.component.html */ "./src/app/components/map/map.component.html"),
+            styles: [__webpack_require__(/*! ./map.component.css */ "./src/app/components/map/map.component.css")]
+        }),
+        __metadata("design:paramtypes", [])
+    ], MapComponent);
+    return MapComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/components/schedule/schedule.component.css":
+/*!************************************************************!*\
+  !*** ./src/app/components/schedule/schedule.component.css ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ""
+
+/***/ }),
+
+/***/ "./src/app/components/schedule/schedule.component.html":
+/*!*************************************************************!*\
+  !*** ./src/app/components/schedule/schedule.component.html ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<p>\r\n  schedule works!\r\n</p>\r\n"
+
+/***/ }),
+
+/***/ "./src/app/components/schedule/schedule.component.ts":
+/*!***********************************************************!*\
+  !*** ./src/app/components/schedule/schedule.component.ts ***!
+  \***********************************************************/
+/*! exports provided: ScheduleComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ScheduleComponent", function() { return ScheduleComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var ScheduleComponent = /** @class */ (function () {
+    function ScheduleComponent() {
+    }
+    ScheduleComponent.prototype.ngOnInit = function () {
+    };
+    ScheduleComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'app-schedule',
+            template: __webpack_require__(/*! ./schedule.component.html */ "./src/app/components/schedule/schedule.component.html"),
+            styles: [__webpack_require__(/*! ./schedule.component.css */ "./src/app/components/schedule/schedule.component.css")]
+        }),
+        __metadata("design:paramtypes", [])
+    ], ScheduleComponent);
+    return ScheduleComponent;
 }());
 
 
@@ -370,8 +591,8 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 var TransportLineService = /** @class */ (function () {
     function TransportLineService(http) {
         this.http = http;
-        this.transportLineUrl = '/server/transportLine/get/1';
-        this.allTransportLinesUrl = '/server/transportLine/all';
+        this.transportLineUrl = '/transportLine/get/1';
+        this.allTransportLinesUrl = '/transportLine/all';
     }
     TransportLineService.prototype.getTransportLines = function () {
         var qwe;
@@ -457,7 +678,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_1__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\stefk\Desktop\FTN-SIIT\7.semestar\Napredne web tehnologije\projekat\src\main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! D:\Faks\Semestar VII\Napredne Veb Tehnologije\Projekat\public-transport-system-frontend\src\main.ts */"./src/main.ts");
 
 
 /***/ })

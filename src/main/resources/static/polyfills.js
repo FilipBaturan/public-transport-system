@@ -5473,7 +5473,7 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\stefk\Desktop\FTN-SIIT\7.semestar\Napredne web tehnologije\projekat\src\polyfills.ts */"./src/polyfills.ts");
+module.exports = __webpack_require__(/*! D:\Faks\Semestar VII\Napredne Veb Tehnologije\Projekat\public-transport-system-frontend\src\polyfills.ts */"./src/polyfills.ts");
 
 
 /***/ })
