@@ -21,7 +21,7 @@ import java.util.Calendar;
 import java.util.List;
 
 @RestController
-@RequestMapping("/transportLine")
+@RequestMapping("/api/transportLine")
 public class TransportLineController extends ValidationController {
 
     private static final Logger logger = LoggerFactory.getLogger(TransportLineController.class);
@@ -30,34 +30,38 @@ public class TransportLineController extends ValidationController {
     private TransportLineService transportLineService;
 
     /**
+     * GET /api/transportLine
+     *
      * @return all available transport lines
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<TransportLineDTO>> getAll() {
+    @GetMapping
+    public ResponseEntity<List<TransportLineDTO>> findAll() {
         logger.info("Requesting all available transport lines at time {}.", Calendar.getInstance().getTime());
         return new ResponseEntity<>(TransportLineConverter.fromEntityList(transportLineService.getAll(),
                 TransportLineDTO::new), HttpStatus.OK);
     }
 
     /**
+     * GET /api/transportLine/{id}
+     *
      * @param id of requested transport line
      * @return transport line with requested id
      */
-    @RequestMapping(method = RequestMethod.GET, value = "/get/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<TransportLineDTO> getById(@PathVariable String id) {
+    @GetMapping("{/id}")
+    public ResponseEntity<TransportLineDTO> findById(@PathVariable String id) {
         logger.info("Requesting transport line with id {} at time {}.", id, Calendar.getInstance().getTime());
         return new ResponseEntity<>(new TransportLineDTO(transportLineService.findById(Long.parseLong(id))),
                 HttpStatus.FOUND);
     }
 
     /**
+     *  POST /api/transportLine
+     *
      * @param transportLine that needs to be saved
      * @return saved transportLine
      */
-    @RequestMapping(method = RequestMethod.POST, value = "/save", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<TransportLineDTO> saveTransportLine(@RequestBody String transportLine) throws IOException,
+    @PostMapping()
+    public ResponseEntity<TransportLineDTO> create(@RequestBody String transportLine) throws IOException,
             ValidationException {
         logger.info("Saving transport line with at time {}.", Calendar.getInstance().getTime());
         validateJSON(transportLine, "transportLine.json");
@@ -67,12 +71,13 @@ public class TransportLineController extends ValidationController {
     }
 
     /**
+     * DELETE /api/transportLine/{id}
+     *
      * @param transportLine that needs to be deleted
      * @return message about action results
      */
-    @RequestMapping(method = RequestMethod.DELETE, value = "/delete", produces = MediaType.APPLICATION_JSON_VALUE)
-    @ResponseBody
-    public ResponseEntity<String> deleteTransportLine(@RequestBody String transportLine) throws IOException,
+    @DeleteMapping("{/id}")
+    public ResponseEntity<String> delete (@RequestBody String transportLine) throws IOException,
             ValidationException {
         logger.info("Deleting transportLine with id at time {}.", Calendar.getInstance().getTime());
         validateJSON(transportLine, "transportLine.json");

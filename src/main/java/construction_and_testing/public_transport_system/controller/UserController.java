@@ -24,7 +24,7 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/api/user")
 public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
@@ -50,19 +50,28 @@ public class UserController {
         this.tokenUtils = tokenUtils;
     }*/
 
-    @RequestMapping(method = RequestMethod.GET, value = "/all", produces = MediaType.APPLICATION_JSON_VALUE)
+    /**
+     * GET /api/user
+     *
+     * Gets all users.
+     *
+     * @return all users
+     */
+    @GetMapping
     public void getAll() {
         //add implementation later
     }
 
     /**
+     * POST /api/user/auth
+     *
      * Authenticates a user in the system.
      *
      * @param authenticationRequest DTO with user's login credentials
      * @return ResponseEntity with a AuthenticationResponseDTO, containing user data and his JSON Web Token
      */
-    @RequestMapping(method = RequestMethod.POST, value = "/login", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> loginUser(@Valid @RequestBody AuthenticationRequestDTO authenticationRequest) {
+    @PostMapping("/auth")
+    public ResponseEntity<Object> login(@Valid @RequestBody AuthenticationRequestDTO authenticationRequest) {
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
                         authenticationRequest.getUsername(),
@@ -88,7 +97,8 @@ public class UserController {
     }
 
     /**
-     * GET /api/auth/me
+     * GET /api/user/currentUser
+     *
      * Gets User object of user that's sending the request.
      *
      * @return User
@@ -99,13 +109,14 @@ public class UserController {
     }
 
     /**
+     * POST /api/user
+     *
      * Registering new user
      * @param regUser new user which is trying to register
      * @return response with success flag, true and 201(CREATED) if registered, false and 409(CONFLICT) if false
      */
-    @RequestMapping(method = RequestMethod.POST, value = "/addUser", produces = MediaType.APPLICATION_JSON_VALUE,
-                    consumes = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Boolean> add(@RequestBody RegisteringUserDTO regUser){
+    @PostMapping()
+    public ResponseEntity<Boolean> create (@RequestBody RegisteringUserDTO regUser){
         logger.info("Trying to register new user...");
         Boolean registered = userService.addUser(RegisteredUserConverter.fromRegisteringUserDTO(regUser));
         if(registered){
@@ -114,16 +125,5 @@ public class UserController {
         }
         logger.info("Failed to register user, user with given username already exists!");
         return new ResponseEntity<>(false, HttpStatus.CONFLICT);
-    }
- 
-    /**
-     * Logging out
-     * @param session - session to invalidate
-     * @return http status ok
-     */
-    @RequestMapping(method = RequestMethod.GET, value="/logout", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Object> logout(HttpSession session){
-        session.invalidate();
-        return new ResponseEntity<Object>("Successfully logged out", HttpStatus.OK);
     }
 }

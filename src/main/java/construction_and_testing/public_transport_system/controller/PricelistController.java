@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.parameters.P;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
@@ -17,7 +19,7 @@ import java.util.Calendar;
 import java.util.List;
 
 @RestController
-@RequestMapping("/pricelist")
+@RequestMapping("/api/pricelist")
 public class PricelistController {
 
     private static final Logger logger = LoggerFactory.getLogger(PricelistController.class);
@@ -25,8 +27,16 @@ public class PricelistController {
     @Autowired
     private PricelistService pricelistService;
 
-    @RequestMapping(method = RequestMethod.GET, value = "/savePricelist", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Pricelist> savePricelist(@RequestBody Pricelist pricelist) {
+
+    /**
+     * POST /api/pricelist
+     *
+     * Controller method for adding new pricelists
+     * @param pricelist - pricelist that we want to add
+     * @return added pricelist
+     */
+    @PostMapping
+    public ResponseEntity<Pricelist> create(@RequestBody Pricelist pricelist) {
         logger.info("Adding pricelist at time {}.", Calendar.getInstance().getTime());
         Pricelist p = this.pricelistService.savePricelist(pricelist);
         if( p != null){
@@ -36,15 +46,32 @@ public class PricelistController {
         }
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/findAllPricelists", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Pricelist>> findAllPricelists() {
+    /**
+     * GET /api/pricelist
+     *
+     * Getting all pricelists
+     *
+     * @return all pricelists
+     */
+    @GetMapping
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<List<Pricelist>> findAll() {
         logger.info("Requesting all available pricelists at time {}.", Calendar.getInstance().getTime());
         List<Pricelist> pricelists = this.pricelistService.findAllPricelists();
         return new ResponseEntity<>(pricelists, HttpStatus.OK);
     }
 
-    @RequestMapping(method = RequestMethod.GET, value = "/findPricelistById/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Pricelist> findPricelistById(@PathVariable("id") String id) {
+    /**
+     * GET /api/pricelist/{id}
+     *
+     * Getting pricelist by given id
+     *
+     * @param id - id of pricelist
+     * @return pricelist with given id
+     */
+    @GetMapping("{id}")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<Pricelist> findById(@PathVariable("id") String id) {
         logger.info("Requesting pricelist with id {} at time {}.", id, Calendar.getInstance().getTime());
         try {
             Pricelist pricelist = this.pricelistService.findPricelistById(Long.parseLong(id));

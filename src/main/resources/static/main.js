@@ -99,12 +99,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 /* harmony import */ var _components_welcome_welcome_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/welcome/welcome.component */ "./src/app/components/welcome/welcome.component.ts");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+/* harmony import */ var _components_schedule_schedule_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/schedule/schedule.component */ "./src/app/components/schedule/schedule.component.ts");
+/* harmony import */ var _components_auth_auth_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/auth/auth.component */ "./src/app/components/auth/auth.component.ts");
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
+
+
 
 
 
@@ -124,6 +128,8 @@ var AppModule = /** @class */ (function () {
                 _components_transport_line_transport_line_component__WEBPACK_IMPORTED_MODULE_3__["TransportLineComponent"],
                 _components_transport_line_list_transport_line_list_component__WEBPACK_IMPORTED_MODULE_4__["TransportLineListComponent"],
                 _components_welcome_welcome_component__WEBPACK_IMPORTED_MODULE_6__["WelcomeComponent"],
+                _components_schedule_schedule_component__WEBPACK_IMPORTED_MODULE_8__["ScheduleComponent"],
+                _components_auth_auth_component__WEBPACK_IMPORTED_MODULE_9__["AuthComponent"],
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"],
@@ -139,6 +145,131 @@ var AppModule = /** @class */ (function () {
         })
     ], AppModule);
     return AppModule;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/components/auth/auth.component.css":
+/*!****************************************************!*\
+  !*** ./src/app/components/auth/auth.component.css ***!
+  \****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ""
+
+/***/ }),
+
+/***/ "./src/app/components/auth/auth.component.html":
+/*!*****************************************************!*\
+  !*** ./src/app/components/auth/auth.component.html ***!
+  \*****************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<p>\n  auth works!\n</p>\n"
+
+/***/ }),
+
+/***/ "./src/app/components/auth/auth.component.ts":
+/*!***************************************************!*\
+  !*** ./src/app/components/auth/auth.component.ts ***!
+  \***************************************************/
+/*! exports provided: AuthComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "AuthComponent", function() { return AuthComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var AuthComponent = /** @class */ (function () {
+    function AuthComponent() {
+    }
+    AuthComponent.prototype.ngOnInit = function () { };
+    AuthComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'app-auth',
+            template: __webpack_require__(/*! ./auth.component.html */ "./src/app/components/auth/auth.component.html"),
+            styles: [__webpack_require__(/*! ./auth.component.css */ "./src/app/components/auth/auth.component.css")]
+        }),
+        __metadata("design:paramtypes", [])
+    ], AuthComponent);
+    return AuthComponent;
+}());
+
+
+
+/***/ }),
+
+/***/ "./src/app/components/schedule/schedule.component.css":
+/*!************************************************************!*\
+  !*** ./src/app/components/schedule/schedule.component.css ***!
+  \************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = ""
+
+/***/ }),
+
+/***/ "./src/app/components/schedule/schedule.component.html":
+/*!*************************************************************!*\
+  !*** ./src/app/components/schedule/schedule.component.html ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+module.exports = "<p>\n  schedule works!\n</p>\n"
+
+/***/ }),
+
+/***/ "./src/app/components/schedule/schedule.component.ts":
+/*!***********************************************************!*\
+  !*** ./src/app/components/schedule/schedule.component.ts ***!
+  \***********************************************************/
+/*! exports provided: ScheduleComponent */
+/***/ (function(module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, "ScheduleComponent", function() { return ScheduleComponent; });
+/* harmony import */ var _angular_core__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @angular/core */ "./node_modules/@angular/core/fesm5/core.js");
+var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
+    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
+    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
+    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
+    return c > 3 && r && Object.defineProperty(target, key, r), r;
+};
+var __metadata = (undefined && undefined.__metadata) || function (k, v) {
+    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
+};
+
+var ScheduleComponent = /** @class */ (function () {
+    function ScheduleComponent() {
+    }
+    ScheduleComponent.prototype.ngOnInit = function () {
+    };
+    ScheduleComponent = __decorate([
+        Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
+            selector: 'app-schedule',
+            template: __webpack_require__(/*! ./schedule.component.html */ "./src/app/components/schedule/schedule.component.html"),
+            styles: [__webpack_require__(/*! ./schedule.component.css */ "./src/app/components/schedule/schedule.component.css")]
+        }),
+        __metadata("design:paramtypes", [])
+    ], ScheduleComponent);
+    return ScheduleComponent;
 }());
 
 
@@ -370,8 +501,8 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 var TransportLineService = /** @class */ (function () {
     function TransportLineService(http) {
         this.http = http;
-        this.transportLineUrl = '/server/transportLine/get/1';
-        this.allTransportLinesUrl = '/server/transportLine/all';
+        this.transportLineUrl = 'transportLine/get/1';
+        this.allTransportLinesUrl = 'transportLine/all';
     }
     TransportLineService.prototype.getTransportLines = function () {
         var qwe;
@@ -457,7 +588,7 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_1__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__(/*! C:\Users\stefk\Desktop\FTN-SIIT\7.semestar\Napredne web tehnologije\projekat\src\main.ts */"./src/main.ts");
+module.exports = __webpack_require__(/*! C:\Users\Filip-PC\Desktop\IV godina\I semestar\public-transport-system-front\public-transport-system-frontend\src\main.ts */"./src/main.ts");
 
 
 /***/ })
