@@ -4,6 +4,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import construction_and_testing.public_transport_system.converter.StationConverter;
 import construction_and_testing.public_transport_system.domain.DTO.StationDTO;
 import construction_and_testing.public_transport_system.domain.Station;
+import construction_and_testing.public_transport_system.domain.StationPosition;
+import construction_and_testing.public_transport_system.service.definition.StationPositionService;
 import construction_and_testing.public_transport_system.service.definition.StationService;
 import org.everit.json.schema.ValidationException;
 import org.slf4j.Logger;
@@ -26,6 +28,9 @@ public class StationController extends ValidationController {
 
     @Autowired
     private StationService stationService;
+
+    @Autowired
+    private StationPositionService stationPositionService;
 
     /**
      * @return all available stations
@@ -58,8 +63,9 @@ public class StationController extends ValidationController {
         logger.info("Saving station at time {}.", Calendar.getInstance().getTime());
         validateJSON(station,"station.json");
         ObjectMapper mapper = new ObjectMapper();
-        return new ResponseEntity<>(new StationDTO(stationService.save(new Station(mapper.readValue(station,
-                StationDTO.class)))), HttpStatus.ACCEPTED);
+        Station temp = new Station(mapper.readValue(station, StationDTO.class));
+        temp.getPosition().setStation(temp);
+        return new ResponseEntity<>(new StationDTO(stationService.save(temp)), HttpStatus.ACCEPTED);
     }
 
     /**

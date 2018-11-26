@@ -9,8 +9,10 @@
     "id",
     "name",
     "type",
-    "stations",
+    "positions",
     "schedule",
+    "color",
+    "width",
     "active",
     "zone"
   ],
@@ -50,18 +52,18 @@
         "BUS", "METRO", "TRAM"
       ]
     },
-    "stations": {
-      "$id": "#/properties/stations",
+    "positions": {
+      "$id": "#/properties/positions",
       "type": "array",
       "minItems": 2,
       "title": "Stations",
-      "description": "Transport line stations",
+      "description": "Transport line positions",
       "items": {
         "$id": "#/properties/stations/items",
         "type": "object",
         "title": "Station",
         "description": "Transport line station",
-        "$ref": "http://localhost:8080/schemes/station.json"
+        "$ref": "http://localhost:8080/schemes/transportLinePosition.json"
       }
     },
     "schedule": {
@@ -69,13 +71,37 @@
       "type": "array",
       "title": "Schedule",
       "description": "Transport line schedule",
-      "minItems": 1,
+      "minItems": 0,
       "items": {
         "$id": "#/properties/schedule/items",
         "type": "object",
         "title": "Schedule item",
         "$ref": "http://localhost:8080/schemes/schedule.json"
       }
+    },
+    "color": {
+      "$id": "#/properties/color",
+      "type": "string",
+      "title": "Color",
+      "description": "Transport line color",
+      "default": "blue",
+      "enum": ["blue", "red", "brown", "purple", "black", "green"],
+      "maxLength": 30,
+      "examples": [
+        "blue", "red", "brown", "purple", "black", "green"
+      ]
+    },
+    "width": {
+      "$id": "#/properties/width",
+      "type": "string",
+      "title": "Width",
+      "description": "Transport line width",
+      "default": "",
+      "enum": ["", "w3", "w7", "w10"],
+      "maxLength": 30,
+      "examples": [
+        "", "w3", "w7", "w10"
+      ]
     },
     "active": {
       "$id": "#/properties/active",
