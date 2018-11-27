@@ -5473,7 +5473,11 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+
 module.exports = __webpack_require__(/*! D:\Faks\Semestar VII\Napredne Veb Tehnologije\Projekat\public-transport-system-frontend\src\polyfills.ts */"./src/polyfills.ts");
+//=======
+//module.exports = __webpack_require__(/*! C:\Users\Filip-PC\Desktop\IV godina\I semestar\public-transport-system-front\public-transport-system-frontend\src\polyfills.ts */"./src/polyfills.ts");
+//>>>>>>> 4bd7b2149f098d3f10ab853274be5c4028d1fd5c
 
 
 /***/ })

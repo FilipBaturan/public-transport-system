@@ -11,6 +11,8 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 public class UserServiceImpl implements UserService {
 
@@ -46,5 +48,11 @@ public class UserServiceImpl implements UserService {
 
         final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
         return findByUsername(userDetails.getUsername());
+    }
+
+    @Override
+    public List<User> getUnvalidatedUsers() {
+        List<User> lst =  this.userRepository.getUnvalidatedUsers();
+        return lst;
     }
 }

@@ -1,0 +1,62 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://public_transport_system/schemes/zone.json",
+  "type": "object",
+  "title": "Zone",
+  "required": [
+    "id",
+    "name",
+    "lines",
+    "active"
+  ],
+  "properties": {
+    "id": {
+      "$id": "#/properties/id",
+      "type": ["integer", "null"],
+      "title": "Id",
+      "description": "Zone id",
+      "default": 0,
+      "examples": [
+        1
+      ],
+      "minimum": 0,
+      "multipleOf": 1
+    },
+    "name": {
+      "$id": "#/properties/name",
+      "type": "string",
+      "title": "Name",
+      "description": "Zone name",
+      "default": "",
+      "maxLength": 30,
+      "examples": [
+        "north"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "lines": {
+      "$id": "#/properties/lines",
+      "type": "array",
+      "title": "Lines",
+      "description": "Zone lines",
+      "minItems": 1,
+      "items": {
+        "$id": "#/properties/lines/items",
+        "type": "object",
+        "title": "Line",
+        "$ref": "http://localhost:8080/schemes/transportLine.json"
+      }
+    },
+    "active": {
+      "$id": "#/properties/active",
+      "type": "boolean",
+      "title": "Active",
+      "description": "indicates is transport line exist in database",
+      "default": true,
+      "examples": [
+        true
+      ]
+    }
+  }
+}

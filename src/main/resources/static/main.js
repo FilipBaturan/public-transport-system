@@ -99,11 +99,16 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var _angular_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @angular/router */ "./node_modules/@angular/router/fesm5/router.js");
 /* harmony import */ var _components_welcome_welcome_component__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./components/welcome/welcome.component */ "./src/app/components/welcome/welcome.component.ts");
 /* harmony import */ var _angular_common_http__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @angular/common/http */ "./node_modules/@angular/common/fesm5/http.js");
+<<<<<<< HEAD
 /* harmony import */ var _angular_platform_browser_animations__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @angular/platform-browser/animations */ "./node_modules/@angular/platform-browser/fesm5/animations.js");
 /* harmony import */ var _angular_material__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @angular/material */ "./node_modules/@angular/material/esm5/material.es5.js");
 /* harmony import */ var _components_schedule_schedule_component__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./components/schedule/schedule.component */ "./src/app/components/schedule/schedule.component.ts");
 /* harmony import */ var _components_auth_auth_component__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ./components/auth/auth.component */ "./src/app/components/auth/auth.component.ts");
 /* harmony import */ var _components_map_map_component__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./components/map/map.component */ "./src/app/components/map/map.component.ts");
+=======
+/* harmony import */ var _components_schedule_schedule_component__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ./components/schedule/schedule.component */ "./src/app/components/schedule/schedule.component.ts");
+/* harmony import */ var _components_auth_auth_component__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./components/auth/auth.component */ "./src/app/components/auth/auth.component.ts");
+>>>>>>> 4bd7b2149f098d3f10ab853274be5c4028d1fd5c
 var __decorate = (undefined && undefined.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
     if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -120,10 +125,13 @@ var __decorate = (undefined && undefined.__decorate) || function (decorators, ta
 
 
 
+<<<<<<< HEAD
 
 
 
 
+=======
+>>>>>>> 4bd7b2149f098d3f10ab853274be5c4028d1fd5c
 var AppModule = /** @class */ (function () {
     function AppModule() {
     }
@@ -138,6 +146,8 @@ var AppModule = /** @class */ (function () {
                 _components_schedule_schedule_component__WEBPACK_IMPORTED_MODULE_10__["ScheduleComponent"],
                 _components_auth_auth_component__WEBPACK_IMPORTED_MODULE_11__["AuthComponent"],
                 _components_map_map_component__WEBPACK_IMPORTED_MODULE_12__["MapComponent"],
+                _components_schedule_schedule_component__WEBPACK_IMPORTED_MODULE_8__["ScheduleComponent"],
+                _components_auth_auth_component__WEBPACK_IMPORTED_MODULE_9__["AuthComponent"],
             ],
             imports: [
                 _angular_platform_browser__WEBPACK_IMPORTED_MODULE_0__["BrowserModule"],
@@ -195,7 +205,11 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
+<<<<<<< HEAD
 module.exports = "<p>\r\n  auth works!\r\n</p>\r\n"
+=======
+module.exports = "<p>\n  auth works!\n</p>\n"
+>>>>>>> 4bd7b2149f098d3f10ab853274be5c4028d1fd5c
 
 /***/ }),
 
@@ -223,8 +237,12 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 var AuthComponent = /** @class */ (function () {
     function AuthComponent() {
     }
+<<<<<<< HEAD
     AuthComponent.prototype.ngOnInit = function () {
     };
+=======
+    AuthComponent.prototype.ngOnInit = function () { };
+>>>>>>> 4bd7b2149f098d3f10ab853274be5c4028d1fd5c
     AuthComponent = __decorate([
         Object(_angular_core__WEBPACK_IMPORTED_MODULE_0__["Component"])({
             selector: 'app-auth',
@@ -240,6 +258,7 @@ var AuthComponent = /** @class */ (function () {
 
 /***/ }),
 
+<<<<<<< HEAD
 /***/ "./src/app/components/map/map.component.css":
 /*!**************************************************!*\
   !*** ./src/app/components/map/map.component.css ***!
@@ -303,6 +322,8 @@ var MapComponent = /** @class */ (function () {
 
 /***/ }),
 
+=======
+>>>>>>> 4bd7b2149f098d3f10ab853274be5c4028d1fd5c
 /***/ "./src/app/components/schedule/schedule.component.css":
 /*!************************************************************!*\
   !*** ./src/app/components/schedule/schedule.component.css ***!
@@ -321,7 +342,11 @@ module.exports = ""
 /*! no static exports found */
 /***/ (function(module, exports) {
 
+<<<<<<< HEAD
 module.exports = "<p>\r\n  schedule works!\r\n</p>\r\n"
+=======
+module.exports = "<p>\n  schedule works!\n</p>\n"
+>>>>>>> 4bd7b2149f098d3f10ab853274be5c4028d1fd5c
 
 /***/ }),
 
@@ -591,8 +616,13 @@ var __metadata = (undefined && undefined.__metadata) || function (k, v) {
 var TransportLineService = /** @class */ (function () {
     function TransportLineService(http) {
         this.http = http;
+<<<<<<< HEAD
         this.transportLineUrl = '/transportLine/get/1';
         this.allTransportLinesUrl = '/transportLine/all';
+=======
+        this.transportLineUrl = 'transportLine/get/1';
+        this.allTransportLinesUrl = 'transportLine/all';
+>>>>>>> 4bd7b2149f098d3f10ab853274be5c4028d1fd5c
     }
     TransportLineService.prototype.getTransportLines = function () {
         var qwe;
@@ -678,7 +708,11 @@ Object(_angular_platform_browser_dynamic__WEBPACK_IMPORTED_MODULE_1__["platformB
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+<<<<<<< HEAD
 module.exports = __webpack_require__(/*! D:\Faks\Semestar VII\Napredne Veb Tehnologije\Projekat\public-transport-system-frontend\src\main.ts */"./src/main.ts");
+=======
+module.exports = __webpack_require__(/*! C:\Users\Filip-PC\Desktop\IV godina\I semestar\public-transport-system-front\public-transport-system-frontend\src\main.ts */"./src/main.ts");
+>>>>>>> 4bd7b2149f098d3f10ab853274be5c4028d1fd5c
 
 
 /***/ })

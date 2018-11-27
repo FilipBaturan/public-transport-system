@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/operator")
+@RequestMapping("/api/operator")
 public class OperatorController {
 
     private static final Logger logger = LoggerFactory.getLogger(AdminController.class);

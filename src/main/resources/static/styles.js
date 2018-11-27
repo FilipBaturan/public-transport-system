@@ -539,7 +539,11 @@ if(false) {}
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
+<<<<<<< HEAD
 module.exports = __webpack_require__(/*! D:\Faks\Semestar VII\Napredne Veb Tehnologije\Projekat\public-transport-system-frontend\src\styles.css */"./src/styles.css");
+=======
+module.exports = __webpack_require__(/*! C:\Users\Filip-PC\Desktop\IV godina\I semestar\public-transport-system-front\public-transport-system-frontend\src\styles.css */"./src/styles.css");
+>>>>>>> 4bd7b2149f098d3f10ab853274be5c4028d1fd5c
 
 
 /***/ })

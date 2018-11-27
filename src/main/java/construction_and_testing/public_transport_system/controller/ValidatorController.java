@@ -8,7 +8,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/validator")
+@RequestMapping("/api/validator")
 public class ValidatorController {
 
     private static final Logger logger = LoggerFactory.getLogger(ValidatorController.class);
