@@ -1,6 +1,7 @@
 package construction_and_testing.public_transport_system.domain.DTO;
 
 import construction_and_testing.public_transport_system.domain.Station;
+import construction_and_testing.public_transport_system.domain.StationPosition;
 
 import java.io.Serializable;
 
@@ -12,24 +13,24 @@ public class StationDTO implements Serializable {
 
     private String name;
 
-    private double coordinates;
+    private StationPositionDTO position;
 
     private boolean active;
 
     public StationDTO() {
     }
 
-    public StationDTO(Long id, String name, double coordinates, boolean active) {
+    public StationDTO(Long id, String name, StationPositionDTO position, boolean active) {
         this.id = id;
         this.name = name;
-        this.coordinates = coordinates;
+        this.position = position;
         this.active = active;
     }
 
     public StationDTO(Station station){
         this.id = station.getId();
         this.name = station.getName();
-        this.coordinates = station.getCoordinates();
+        this.position = new StationPositionDTO(station.getPosition());
         this.active = station.isActive();
     }
 
@@ -53,19 +54,19 @@ public class StationDTO implements Serializable {
         this.name = name;
     }
 
-    public double getCoordinates() {
-        return coordinates;
-    }
-
-    public void setCoordinates(double coordinates) {
-        this.coordinates = coordinates;
-    }
-
     public boolean isActive() {
         return active;
     }
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public StationPositionDTO getPosition() {
+        return position;
+    }
+
+    public void setPosition(StationPositionDTO position) {
+        this.position = position;
     }
 }

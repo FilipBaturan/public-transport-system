@@ -37,9 +37,8 @@ public class TransportLineController extends ValidationController {
     @GetMapping
     public ResponseEntity<List<TransportLineDTO>> findAll() {
         logger.info("Requesting all available transport lines at time {}.", Calendar.getInstance().getTime());
-        List<TransportLineDTO> temp = TransportLineConverter.fromEntityList(transportLineService.getAll(),
-                TransportLineDTO::new);
-        return new ResponseEntity<>(temp, HttpStatus.OK);
+        return new ResponseEntity<>(TransportLineConverter.fromEntityList(transportLineService.getAll(),
+                TransportLineDTO::new), HttpStatus.OK);
     }
 
     /**

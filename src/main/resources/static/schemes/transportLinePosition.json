@@ -1,0 +1,62 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://public_transport_system/schemes/transportLinePosition.json",
+  "type": "object",
+  "title": "Station",
+  "description": "Represents the transport line position available in public transport system",
+  "minProperties": 0,
+  "additionalProperties": false,
+  "required": [
+    "id",
+    "latitude",
+    "longitude",
+    "active"
+  ],
+  "properties": {
+    "id": {
+      "$id": "#/properties/id",
+      "type": ["integer", "null"],
+      "title": "Id",
+      "description": "Transport line position id",
+      "default": 0,
+      "examples": [
+        1
+      ],
+      "multipleOf": 1,
+      "minimum": 0
+    },
+    "latitude": {
+      "$id": "#/properties/latitude",
+      "type": "number",
+      "title": "Latitude",
+      "description": "Transport line position latitude",
+      "default": 0.0,
+      "examples": [
+        45.26134
+      ],
+      "minimum": 0.0
+    },
+    "longitude": {
+      "$id": "#/properties/longitude",
+      "type": "number",
+      "title": "Longitude",
+      "description": "Transport line position longitude",
+      "default": 0.0,
+      "examples": [
+        28.35742
+      ],
+      "minimum": 0.0
+    },
+    "active": {
+      "$id": "#/properties/active",
+      "type": "boolean",
+      "title": "Active",
+      "description": "indicates is station position exist in database",
+      "default": true,
+      "examples": [
+        true
+      ]
+    }
+  }
+}

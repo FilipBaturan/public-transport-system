@@ -20,8 +20,8 @@ public class Station implements Serializable {
     @Column(nullable = false)
     private String name;
 
-    @Column
-    private double coordinates;
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "station")
+    private StationPosition position;
 
     @Column(nullable = false, name = "active")
     private boolean active;
@@ -30,17 +30,22 @@ public class Station implements Serializable {
         this.active = true;
     }
 
-    public Station(long id, String name, double coordinates, TransportLine lines, boolean active) {
+    public Station(long id){
+        this.id = id;
+        this.active = true;
+    }
+
+    public Station(long id, String name, StationPosition position, boolean active) {
         this.id = id;
         this.name = name;
-        this.coordinates = coordinates;
+        this.position = position;
         this.active = active;
     }
 
     public Station(StationDTO station){
         this.id = station.getId();
         this.name = station.getName();
-        this.coordinates = station.getCoordinates();
+        this.position = new StationPosition(station.getPosition());
         this.active = station.isActive();
     }
 
@@ -64,14 +69,6 @@ public class Station implements Serializable {
         this.name = name;
     }
 
-    public double getCoordinates() {
-        return coordinates;
-    }
-
-    public void setCoordinates(double coordinates) {
-        this.coordinates = coordinates;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -91,5 +88,13 @@ public class Station implements Serializable {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public StationPosition getPosition() {
+        return position;
+    }
+
+    public void setPosition(StationPosition position) {
+        this.position = position;
     }
 }
