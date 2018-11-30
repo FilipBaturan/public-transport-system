@@ -115,9 +115,10 @@ public class UserController {
      * @param regUser new user which is trying to register
      * @return response with success flag, true and 201(CREATED) if registered, false and 409(CONFLICT) if false
      */
-    @PostMapping()
+    @PostMapping(path = "/add")
     public ResponseEntity<Boolean> create (@RequestBody RegisteringUserDTO regUser){
         logger.info("Trying to register new user...");
+        System.out.println(regUser.getTelephone());
         Boolean registered = userService.addUser(RegisteredUserConverter.fromRegisteringUserDTO(regUser));
         if(registered){
             logger.info("Successfully registered user.");

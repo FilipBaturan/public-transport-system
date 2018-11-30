@@ -2,6 +2,7 @@ package construction_and_testing.public_transport_system.converter;
 
 import construction_and_testing.public_transport_system.domain.DTO.RegisteringUserDTO;
 import construction_and_testing.public_transport_system.domain.RegisteredUser;
+import construction_and_testing.public_transport_system.domain.enums.AuthorityType;
 
 public class RegisteredUserConverter extends AbstractConverter {
     public static RegisteringUserDTO toRegisteringUserDTO(RegisteredUser registeredUser){
@@ -26,6 +27,7 @@ public class RegisteredUserConverter extends AbstractConverter {
         entity.setConfirmation(false);
         entity.setActive(false);
         entity.setBalance(0);
+        entity.setAuthorityType(AuthorityType.REGISTERED_USER);
         return entity;
     }
 }
