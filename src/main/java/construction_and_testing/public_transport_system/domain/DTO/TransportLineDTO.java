@@ -17,7 +17,7 @@ public class TransportLineDTO implements Serializable {
 
     private VehicleType type;
 
-    private Set<TransportLinePositionDTO> positions;
+    private TransportLinePositionDTO positions;
 
     private Set<ScheduleDTO> schedule;
 
@@ -25,19 +25,13 @@ public class TransportLineDTO implements Serializable {
 
     private Long zone;
 
-    private String color;
-
-    private String width;
-
     public TransportLineDTO() {
-        this.color = "blue";
-        this.width = "";
         this.active = true;
 
     }
 
-    public TransportLineDTO(Long id, String name, VehicleType type, Set<TransportLinePositionDTO> positions,
-                            Set<ScheduleDTO> schedule, boolean active, Long zone, String color, String width) {
+    public TransportLineDTO(Long id, String name, VehicleType type, TransportLinePositionDTO positions,
+                            Set<ScheduleDTO> schedule, boolean active, Long zone) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -45,8 +39,6 @@ public class TransportLineDTO implements Serializable {
         this.schedule = schedule;
         this.active = active;
         this.zone = zone;
-        this.color = color;
-        this.width = width;
     }
 
     public TransportLineDTO(TransportLine transportLine){
@@ -54,10 +46,8 @@ public class TransportLineDTO implements Serializable {
         this.name = transportLine.getName();
         this.type = transportLine.getType();
         this.active = transportLine.isActive();
-        this.color = transportLine.getColor();
-        this.width = transportLine.getWidth();
         this.schedule = transportLine.getSchedule().stream().map(ScheduleDTO::new).collect(Collectors.toSet());
-        this.positions = transportLine.getPositions().stream().map(TransportLinePositionDTO::new).collect(Collectors.toSet());
+        this.positions = new TransportLinePositionDTO(transportLine.getPositions());
         this.zone = transportLine.getZone().getId();
     }
 
@@ -113,28 +103,11 @@ public class TransportLineDTO implements Serializable {
         this.zone = zone;
     }
 
-
-    public Set<TransportLinePositionDTO> getPositions() {
+    public TransportLinePositionDTO getPositions() {
         return positions;
     }
 
-    public void setPositions(Set<TransportLinePositionDTO> positions) {
+    public void setPositions(TransportLinePositionDTO positions) {
         this.positions = positions;
-    }
-
-    public String getColor() {
-        return color;
-    }
-
-    public void setColor(String color) {
-        this.color = color;
-    }
-
-    public String getWidth() {
-        return width;
-    }
-
-    public void setWidth(String width) {
-        this.width = width;
     }
 }

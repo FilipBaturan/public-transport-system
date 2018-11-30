@@ -2,6 +2,7 @@ package construction_and_testing.public_transport_system.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import construction_and_testing.public_transport_system.converter.TransportLineConverter;
+import construction_and_testing.public_transport_system.domain.DTO.TransportLineColletionDTO;
 import construction_and_testing.public_transport_system.domain.DTO.TransportLineDTO;
 import construction_and_testing.public_transport_system.domain.TransportLine;
 import construction_and_testing.public_transport_system.domain.util.GeneralException;
@@ -55,7 +56,7 @@ public class TransportLineController extends ValidationController {
     }
 
     /**
-     *  POST /api/transportLine
+     * POST /api/transportLine
      *
      * @param transportLine that needs to be saved
      * @return saved transportLine
@@ -71,16 +72,34 @@ public class TransportLineController extends ValidationController {
     }
 
     /**
+     * POST /api/transportLine/replace
+     *
+     * @param transportLines that need to be added
+     * @return added transport lines
+     */
+    @PostMapping("/replace")
+    public ResponseEntity<List<TransportLineDTO>> replaceAll(@RequestBody String transportLines) throws
+            IOException, ValidationException {
+        logger.info("Replacing all transport lines at time {}.", Calendar.getInstance().getTime());
+        validateJSON(transportLines, "transportLineCollection.json");
+        ObjectMapper mapper = new ObjectMapper();
+        return new ResponseEntity<>(TransportLineConverter.fromEntityList(transportLineService
+                .replaceAll(TransportLineConverter.toEntityList(
+                        mapper.readValue(transportLines, TransportLineColletionDTO.class).getTransportLines(),
+                        TransportLine::new)), TransportLineDTO::new), HttpStatus.ACCEPTED);
+    }
+
+    /**
      * DELETE /api/transportLine/{id}
      *
      * @param transportLine that needs to be deleted
      * @return message about action results
      */
     @DeleteMapping("{/id}")
-    public ResponseEntity<String> delete (@RequestBody String transportLine) throws IOException,
+    public ResponseEntity<String> delete(@RequestBody String transportLine) throws IOException,
             ValidationException {
         logger.info("Deleting transportLine with id at time {}.", Calendar.getInstance().getTime());
-        validateJSON(transportLine, "transportLine.json");
+        validateJSON(transportLine, "transportLineCollection.json");
         ObjectMapper mapper = new ObjectMapper();
         transportLineService.remove((new TransportLine(mapper.readValue(transportLine,
                 TransportLineDTO.class))).getId());

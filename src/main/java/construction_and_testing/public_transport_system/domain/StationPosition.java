@@ -27,6 +27,14 @@ public class StationPosition extends Position {
         setActive(position.isActive());
     }
 
+    public StationPosition(StationPositionDTO position, Station station){
+        setId(position.getId());
+        setLatitude(position.getLatitude());
+        setLongitude(position.getLongitude());
+        setActive(position.isActive());
+        this.station = station;
+    }
+
     public Station getStation() {
         return station;
     }

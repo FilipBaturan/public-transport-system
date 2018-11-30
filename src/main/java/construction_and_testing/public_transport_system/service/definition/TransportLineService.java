@@ -28,4 +28,10 @@ public interface TransportLineService {
      * @param id of transport line that needs to be removed
      */
     void remove(Long id);
+
+    /**
+     * @param transportLines that need to be saved
+     * @return saved transportLines in database
+     */
+    List<TransportLine> replaceAll(Iterable<TransportLine> transportLines);
 }
