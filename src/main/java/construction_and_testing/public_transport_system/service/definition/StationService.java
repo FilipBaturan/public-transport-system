@@ -27,5 +27,11 @@ public interface StationService {
      * @param id of station that needs to be removed
      */
     void remove(Long id);
+
+    /**
+     * @param stations that need to be saved
+     * @return saved stations in database
+     */
+    List<Station> replaceAll(Iterable<Station> stations);
 }
 

@@ -9,7 +9,7 @@
     "id",
     "name",
     "type",
-    "stations",
+    "positions",
     "schedule",
     "active",
     "zone"
@@ -50,18 +50,16 @@
         "BUS", "METRO", "TRAM"
       ]
     },
-    "stations": {
-      "$id": "#/properties/stations",
-      "type": "array",
-      "minItems": 2,
-      "title": "Stations",
-      "description": "Transport line stations",
+    "positions": {
+      "$id": "#/properties/positions",
+      "type": "object",
+      "title": "Positions",
+      "description": "Transport line positions",
       "items": {
-        "$id": "#/properties/stations/items",
+        "$id": "#/properties/positions/items",
         "type": "object",
-        "title": "Station",
-        "description": "Transport line station",
-        "$ref": "http://localhost:8080/schemes/station.json"
+        "title": "Transport line positions item",
+        "$ref": "http://localhost:8080/schemes/transportLinePosition.json"
       }
     },
     "schedule": {
@@ -69,7 +67,7 @@
       "type": "array",
       "title": "Schedule",
       "description": "Transport line schedule",
-      "minItems": 1,
+      "minItems": 0,
       "items": {
         "$id": "#/properties/schedule/items",
         "type": "object",

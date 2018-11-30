@@ -10,7 +10,8 @@
   "required": [
     "id",
     "name",
-    "coordinates",
+    "position",
+    "type",
     "active"
   ],
   "properties": {
@@ -38,16 +39,23 @@
       "maxLength": 30,
       "pattern": "^(.*)$"
     },
-    "coordinates": {
-      "$id": "#/properties/coordinates",
-      "type": "number",
-      "title": "Coordinates",
-      "description": "Station coordinates",
-      "default": 0.0,
+    "position": {
+      "$id": "#/properties/position",
+      "type": "object",
+      "title": "Position",
+      "description": "Station position",
+      "$ref": "http://localhost:8080/schemes/stationPosition.json"
+    },
+    "type": {
+      "$id": "#/properties/type",
+      "type": "string",
+      "title": "Type",
+      "description": "Vehicle type",
+      "default": "BUS",
+      "enum": ["BUS", "METRO", "TRAM"],
       "examples": [
-        53.26
-      ],
-      "minimum": 0.0
+        "BUS", "METRO", "TRAM"
+      ]
     },
     "active": {
       "$id": "#/properties/active",

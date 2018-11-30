@@ -51,4 +51,15 @@ public class TransportLineServiceImpl implements TransportLineService {
         }
     }
 
+    @Override
+    public List<TransportLine> replaceAll(Iterable<TransportLine> transportLines) {
+        try{
+            transportLineRepository.deleteAll();
+            return transportLineRepository.saveAll(transportLines);
+        }catch (DataIntegrityViolationException e){
+            throw new GeneralException("Transport line with given name already exist!", HttpStatus.BAD_REQUEST);
+        }
+
+    }
+
 }

@@ -46,4 +46,10 @@ public class StationServiceImpl implements StationService {
         }
     }
 
+    @Override
+    public List<Station> replaceAll(Iterable<Station> stations) {
+        stationRepository.deleteAll();
+        return stationRepository.saveAll(stations);
+    }
+
 }

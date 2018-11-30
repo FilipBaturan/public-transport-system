@@ -1,6 +1,7 @@
 package construction_and_testing.public_transport_system.domain;
 
 import construction_and_testing.public_transport_system.domain.DTO.StationDTO;
+import construction_and_testing.public_transport_system.domain.enums.VehicleType;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -20,8 +21,12 @@ public class Station implements Serializable {
     @Column(nullable = false)
     private String name;
 
-    @Column
-    private double coordinates;
+    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "station")
+    private StationPosition position;
+
+    @Column(nullable = false)
+    @Enumerated(EnumType.ORDINAL)
+    private VehicleType type;
 
     @Column(nullable = false, name = "active")
     private boolean active;
@@ -30,17 +35,24 @@ public class Station implements Serializable {
         this.active = true;
     }
 
-    public Station(long id, String name, double coordinates, TransportLine lines, boolean active) {
+    public Station(long id){
+        this.id = id;
+        this.active = true;
+    }
+
+    public Station(long id, String name, StationPosition position, VehicleType type, boolean active) {
         this.id = id;
         this.name = name;
-        this.coordinates = coordinates;
+        this.position = position;
+        this.type = type;
         this.active = active;
     }
 
     public Station(StationDTO station){
         this.id = station.getId();
         this.name = station.getName();
-        this.coordinates = station.getCoordinates();
+        this.position = new StationPosition(station.getPosition(), this);
+        this.type = station.getType();
         this.active = station.isActive();
     }
 
@@ -64,14 +76,6 @@ public class Station implements Serializable {
         this.name = name;
     }
 
-    public double getCoordinates() {
-        return coordinates;
-    }
-
-    public void setCoordinates(double coordinates) {
-        this.coordinates = coordinates;
-    }
-
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -91,5 +95,21 @@ public class Station implements Serializable {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public StationPosition getPosition() {
+        return position;
+    }
+
+    public void setPosition(StationPosition position) {
+        this.position = position;
+    }
+
+    public VehicleType getType() {
+        return type;
+    }
+
+    public void setType(VehicleType type) {
+        this.type = type;
     }
 }

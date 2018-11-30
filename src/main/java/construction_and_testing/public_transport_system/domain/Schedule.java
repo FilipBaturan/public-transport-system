@@ -1,11 +1,13 @@
 package construction_and_testing.public_transport_system.domain;
 
 import construction_and_testing.public_transport_system.domain.DTO.ScheduleDTO;
-import construction_and_testing.public_transport_system.domain.enums.Days;
+import construction_and_testing.public_transport_system.domain.enums.DayOfWeek;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -26,10 +28,12 @@ public class Schedule implements Serializable {
 
     @Column(nullable = false)
     @Enumerated(EnumType.ORDINAL)
-    private Days day;
+    private DayOfWeek dayOfWeek;
 
-    @Column(nullable = false)
-    private String startTime;
+    @ElementCollection(targetClass=String.class)
+    @CollectionTable(name = "schedule_departures" )
+    @Column(name = "departure", nullable = false)
+    private List<String> departures;
 
     @Column(nullable = false, name = "active")
     private boolean active;
@@ -38,28 +42,28 @@ public class Schedule implements Serializable {
         this.active = true;
     }
 
-    public Schedule(Long id, TransportLine transportLine, Days day, String startTime, boolean active) {
+    public Schedule(Long id, TransportLine transportLine, DayOfWeek dayOfWeek, ArrayList<String> departures, boolean active) {
         this.id = id;
         this.transportLine = transportLine;
-        this.day = day;
-        this.startTime = startTime;
+        this.dayOfWeek = dayOfWeek;
+        this.departures = departures;
         this.active = active;
     }
 
     public Schedule(ScheduleDTO schedule){
         this.id = schedule.getId();
-        this.transportLine = new TransportLine(schedule.getTransportLine());
-        this.startTime = schedule.getStartTime();
+        this.transportLine = new TransportLine(schedule.getTransportLine().getId());
+        this.departures = schedule.getDepartures();
         this.active = schedule.isActive();
-        this.day = schedule.getDay();
+        this.dayOfWeek = schedule.getDayOfWeek();
     }
 
     public Schedule(ScheduleDTO schedule, TransportLine transportLine){
         this.id = schedule.getId();
         this.transportLine = transportLine;
-        this.startTime = schedule.getStartTime();
+        this.departures = schedule.getDepartures();
         this.active = schedule.isActive();
-        this.day = schedule.getDay();
+        this.dayOfWeek = schedule.getDayOfWeek();
     }
 
     public static long getSerialVersionUID() {
@@ -82,12 +86,12 @@ public class Schedule implements Serializable {
         this.transportLine = transportLine;
     }
 
-    public String getStartTime() {
-        return startTime;
+    public List<String> getDepartures() {
+        return departures;
     }
 
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
+    public void setDepartures(List<String> departures) {
+        this.departures = departures;
     }
 
     public boolean isActive() {
@@ -111,11 +115,11 @@ public class Schedule implements Serializable {
         return Objects.hash(id);
     }
 
-    public Days getDay() {
-        return day;
+    public DayOfWeek getDayOfWeek() {
+        return dayOfWeek;
     }
 
-    public void setDay(Days day) {
-        this.day = day;
+    public void setDayOfWeek(DayOfWeek dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
     }
 }

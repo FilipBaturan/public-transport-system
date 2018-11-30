@@ -17,7 +17,7 @@ public class TransportLineDTO implements Serializable {
 
     private VehicleType type;
 
-    private Set<StationDTO> stations;
+    private TransportLinePositionDTO positions;
 
     private Set<ScheduleDTO> schedule;
 
@@ -27,14 +27,15 @@ public class TransportLineDTO implements Serializable {
 
     public TransportLineDTO() {
         this.active = true;
+
     }
 
-    public TransportLineDTO(Long id, String name, VehicleType type, Set<StationDTO> stations, Set<ScheduleDTO> schedule,
-                            boolean active, Long zone) {
+    public TransportLineDTO(Long id, String name, VehicleType type, TransportLinePositionDTO positions,
+                            Set<ScheduleDTO> schedule, boolean active, Long zone) {
         this.id = id;
         this.name = name;
         this.type = type;
-        this.stations = stations;
+        this.positions = positions;
         this.schedule = schedule;
         this.active = active;
         this.zone = zone;
@@ -45,8 +46,8 @@ public class TransportLineDTO implements Serializable {
         this.name = transportLine.getName();
         this.type = transportLine.getType();
         this.active = transportLine.isActive();
-        this.stations = transportLine.getStations().stream().map(StationDTO::new).collect(Collectors.toSet());
         this.schedule = transportLine.getSchedule().stream().map(ScheduleDTO::new).collect(Collectors.toSet());
+        this.positions = new TransportLinePositionDTO(transportLine.getPositions());
         this.zone = transportLine.getZone().getId();
     }
 
@@ -78,14 +79,6 @@ public class TransportLineDTO implements Serializable {
         this.type = type;
     }
 
-    public Set<StationDTO> getStations() {
-        return stations;
-    }
-
-    public void setStations(Set<StationDTO> stations) {
-        this.stations = stations;
-    }
-
     public Set<ScheduleDTO> getSchedule() {
         return schedule;
     }
@@ -108,5 +101,13 @@ public class TransportLineDTO implements Serializable {
 
     public void setZone(Long zone) {
         this.zone = zone;
+    }
+
+    public TransportLinePositionDTO getPositions() {
+        return positions;
+    }
+
+    public void setPositions(TransportLinePositionDTO positions) {
+        this.positions = positions;
     }
 }

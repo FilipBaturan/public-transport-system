@@ -1,9 +1,13 @@
 package construction_and_testing.public_transport_system.controller;
 
+import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import construction_and_testing.public_transport_system.converter.StationConverter;
+import construction_and_testing.public_transport_system.domain.DTO.StationCollectionDTO;
 import construction_and_testing.public_transport_system.domain.DTO.StationDTO;
 import construction_and_testing.public_transport_system.domain.Station;
+import construction_and_testing.public_transport_system.domain.StationPosition;
+import construction_and_testing.public_transport_system.service.definition.StationPositionService;
 import construction_and_testing.public_transport_system.service.definition.StationService;
 import org.everit.json.schema.ValidationException;
 import org.slf4j.Logger;
@@ -15,6 +19,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -26,6 +31,9 @@ public class StationController extends ValidationController {
 
     @Autowired
     private StationService stationService;
+
+    @Autowired
+    private StationPositionService stationPositionService;
 
     /**
      * GET /rest/station
@@ -62,8 +70,26 @@ public class StationController extends ValidationController {
         logger.info("Saving station at time {}.", Calendar.getInstance().getTime());
         validateJSON(station,"station.json");
         ObjectMapper mapper = new ObjectMapper();
-        return new ResponseEntity<>(new StationDTO(stationService.save(new Station(mapper.readValue(station,
-                StationDTO.class)))), HttpStatus.ACCEPTED);
+        Station temp = new Station(mapper.readValue(station, StationDTO.class));
+        temp.getPosition().setStation(temp);
+        return new ResponseEntity<>(new StationDTO(stationService.save(temp)), HttpStatus.ACCEPTED);
+    }
+
+    /**
+     * POST /api/station/replace
+     *
+     * @param stations that need to be added
+     * @return added station
+     */
+    @PostMapping("/replace")
+    public ResponseEntity<List<StationDTO>> replaceAll (@RequestBody String stations) throws
+            IOException, ValidationException {
+        logger.info("Replacing all stations at time {}.", Calendar.getInstance().getTime());
+        validateJSON(stations,"stationCollection.json");
+        ObjectMapper mapper = new ObjectMapper();
+        return new ResponseEntity<>(StationConverter.fromEntityList(stationService
+                .replaceAll(StationConverter.toEntityList( mapper.readValue(stations, StationCollectionDTO.class)
+                        .getStations(), Station::new)), StationDTO::new), HttpStatus.ACCEPTED);
     }
 
     /**

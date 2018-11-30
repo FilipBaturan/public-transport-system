@@ -39,7 +39,8 @@
     "type": {
       "$id": "#/properties/type",
       "type": "string",
-      "title": "The Type Schema",
+      "title": "Type",
+      "description": "Vehicle type",
       "default": "BUS",
       "enum": ["BUS", "METRO", "TRAM"],
       "examples": [
