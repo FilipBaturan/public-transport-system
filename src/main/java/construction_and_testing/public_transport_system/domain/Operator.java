@@ -1,5 +1,7 @@
 package construction_and_testing.public_transport_system.domain;
 
+import construction_and_testing.public_transport_system.domain.enums.UsersDocumentsStatus;
+
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -23,7 +25,7 @@ public class Operator extends User implements Serializable {
     }
 
     public Operator(Long id, String name, String lastName, String username, String password, String email,
-                    String telephone, boolean confirmation, Set<News> news) {
+                    String telephone, UsersDocumentsStatus confirmation, Set<News> news) {
         super(id, name, lastName, username, password, email, telephone, confirmation);
         this.news = news;
     }

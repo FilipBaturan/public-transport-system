@@ -36,3 +36,10 @@ INSERT INTO `public_transport`.`zone` (`id`, `active`, `name`) VALUES ('5', TRUE
 
 INSERT INTO `public_transport`.`vehicle` (`id`, `active`, `name`, `type`, `current_line_id`) VALUES ('1', TRUE, 'bus1', '0', '1');
 INSERT INTO `public_transport`.`vehicle` (`id`, `active`, `name`, `type`, `current_line_id`) VALUES ('2', TRUE, 'bus2', '0', '1');
+
+
+INSERT INTO `public_transport`.`item` (`id`, `active`, `age`, `cost`, `type`, `zone_id`) VALUES ('1', TRUE, '13', '150', '1', '1');
+INSERT INTO `public_transport`.`pricelist` (`id`, `active`, `end_date`, `start_date`) VALUES ('1', TRUE, '2020-01-22', '2010-01-22');
+INSERT INTO `public_transport`.`pricelist_item` (`id`, `active`, `item_id`, `pricelist_id`) VALUES ('1', TRUE, '1', '1');
+INSERT INTO `public_transport`.`reservation` (`id`, `active`, `owner_id`) VALUES ('1', TRUE, '1');
+INSERT INTO `public_transport`.`ticket` (`id`, `active`, `expiry_date`, `purchase_date`, `token`, `line_id`, `price_list_id`, `reservation_id`) VALUES ('1', TRUE, '2018-02-01', '2018-03-01', 'qweqwe', '1', '1', '1');

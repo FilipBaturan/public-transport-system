@@ -2,6 +2,7 @@ package construction_and_testing.public_transport_system.service.definition;
 
 import construction_and_testing.public_transport_system.domain.RegisteredUser;
 import construction_and_testing.public_transport_system.domain.User;
+import construction_and_testing.public_transport_system.domain.Validator;
 import construction_and_testing.public_transport_system.domain.enums.AuthorityType;
 
 import java.util.List;
@@ -49,4 +50,25 @@ public interface UserService {
      * @return list of unvalidated users
      */
     List<User> getUnvalidatedUsers();
+
+    /**
+     *
+     * @param id
+     * @return user with given id
+     */
+    User findById(long id);
+
+    /**
+     *
+     * @param u
+     * @return saved user
+     */
+    User save(User u);
+
+    /**
+     *
+     * @return list of all validators
+     */
+    List<Validator> getValidators();
+
 }

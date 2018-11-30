@@ -10,7 +10,7 @@ public class UserConverter extends AbstractConverter {
     }
 
     public static User toEntity(UserDTO dto){
-        return new User();
+        return new User(dto);
     }
 
 }

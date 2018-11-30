@@ -1,5 +1,7 @@
 package construction_and_testing.public_transport_system.domain;
 
+import construction_and_testing.public_transport_system.domain.enums.UsersDocumentsStatus;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
@@ -22,12 +24,14 @@ public class RegisteredUser extends User implements Serializable {
     @Column
     private String document;
 
+
     public RegisteredUser() {
         balance = 0.0;
     }
 
     public RegisteredUser(Long id, String name, String lastName, String username, String password, String email,
-                          String telephone, boolean confirmation, Set<Reservation> reservations, double balance, String document) {
+                          String telephone, UsersDocumentsStatus confirmation, Set<Reservation> reservations,
+                          double balance, String document) {
         super(id, name, lastName, username, password, email, telephone, confirmation);
         this.reservations = reservations;
         this.balance = balance;

@@ -91,6 +91,11 @@
 			<artifactId>jjwt</artifactId>
 			<version>LATEST</version>
 		</dependency>
+		<dependency>
+			<groupId>org.modelmapper</groupId>
+			<artifactId>modelmapper</artifactId>
+			<version> LATEST</version>
+		</dependency>
 	</dependencies>
 
 	<repositories>
