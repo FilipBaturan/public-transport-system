@@ -1,5 +1,6 @@
 package construction_and_testing.public_transport_system.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import construction_and_testing.public_transport_system.domain.DTO.ScheduleDTO;
 import construction_and_testing.public_transport_system.domain.DTO.TransportLineDTO;
 import construction_and_testing.public_transport_system.domain.DTO.TransportLinePositionDTO;
@@ -33,9 +34,11 @@ public class TransportLine implements Serializable {
     @Enumerated(EnumType.ORDINAL)
     private VehicleType type;
 
+    @JsonIgnore
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "transportLine")
     private TransportLinePosition positions;
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "transportLine")
     private Set<Schedule> schedule;
 

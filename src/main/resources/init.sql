@@ -21,3 +21,12 @@ INSERT INTO `public_transport`.`transport_line_position` (`id`, `active`, `conte
 
 INSERT INTO `public_transport`.`vehicle` (`id`, `active`, `name`, `type`, `current_line_id`) VALUES ('1', TRUE, 'bus1', '0', '1');
 INSERT INTO `public_transport`.`vehicle` (`id`, `active`, `name`, `type`, `current_line_id`) VALUES ('2', TRUE, 'bus2', '0', '1');
+
+
+INSERT INTO `public_transport`.`schedule` (`id`, `active`, `transport_line_id`, `day_of_week`) VALUES (100, TRUE, 1, 0);
+
+INSERT INTO `public_transport`.`schedule_departures` (`schedule_id`, `departure`) VALUES (100, '08:00');
+INSERT INTO `public_transport`.`schedule_departures` (`schedule_id`, `departure`) VALUES (100, '08:15');
+INSERT INTO `public_transport`.`schedule_departures` (`schedule_id`, `departure`) VALUES (100, '08:30');
+INSERT INTO `public_transport`.`schedule_departures` (`schedule_id`, `departure`) VALUES (100, '08:45');
+INSERT INTO `public_transport`.`schedule_departures` (`schedule_id`, `departure`) VALUES (100, '09:00');
