@@ -1,7 +1,9 @@
 package construction_and_testing.public_transport_system.service.definition;
 
 import construction_and_testing.public_transport_system.domain.Schedule;
+import construction_and_testing.public_transport_system.domain.enums.DayOfWeek;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public interface ScheduleService {
@@ -27,4 +29,12 @@ public interface ScheduleService {
      * @param id of schedule that needs to be removed
      */
     void remove(Long id);
+
+    /**
+     *
+     * @param id id of a transport line
+     * @param dayOfWeek that the schedule is requested for
+     * @return schedule for the request transport line and day of week
+     */
+    Schedule findByTransportLineIdAndDayOfWeek(Long id, Integer dayOfWeek);
 }

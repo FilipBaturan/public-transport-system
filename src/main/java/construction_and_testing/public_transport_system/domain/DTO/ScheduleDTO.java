@@ -10,7 +10,7 @@ import java.util.List;
 
 public class ScheduleDTO implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 111L;
 
     private Long id;
 
@@ -84,5 +84,16 @@ public class ScheduleDTO implements Serializable {
 
     public void setDayOfWeek(DayOfWeek dayOfWeek) {
         this.dayOfWeek = dayOfWeek;
+    }
+
+    @Override
+    public String toString() {
+        return "ScheduleDTO{" +
+                "id=" + id +
+                ", departures=" + departures +
+                ", transportLine=" + transportLine +
+                ", dayOfWeek=" + dayOfWeek +
+                ", active=" + active +
+                '}';
     }
 }

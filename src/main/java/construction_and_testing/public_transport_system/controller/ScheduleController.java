@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import construction_and_testing.public_transport_system.converter.ScheduleConverter;
 import construction_and_testing.public_transport_system.domain.DTO.ScheduleDTO;
 import construction_and_testing.public_transport_system.domain.Schedule;
+import construction_and_testing.public_transport_system.domain.enums.DayOfWeek;
 import construction_and_testing.public_transport_system.service.definition.ScheduleService;
 import construction_and_testing.public_transport_system.service.definition.TransportLineService;
 import org.everit.json.schema.ValidationException;
@@ -11,13 +12,12 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
@@ -53,8 +53,23 @@ public class ScheduleController extends ValidationController {
      */
     @GetMapping("{/id}")
     public ResponseEntity<ScheduleDTO> findById(@PathVariable String id) {
-        logger.info("Requesting station with id {} at time {}.", id, Calendar.getInstance().getTime());
+        logger.info("Requesting schedule with id {} at time {}.", id, Calendar.getInstance().getTime());
         return new ResponseEntity<>(new ScheduleDTO(scheduleService.findById(Long.parseLong(id))), HttpStatus.FOUND);
+    }
+
+
+    /**
+     * GET /api/schedule/findByTransportLines/{id}
+     *
+     * @param id of a transport lines for which a schedule is requested
+     * @param dayOfWeek  day of week for which the schedule is requested
+     * @return schedule for a transport line with requested id
+     */
+    @GetMapping("/findByTransportLine/{id}")
+    public ResponseEntity<ScheduleDTO> findByTransportLineIdAndDayOfWeek(@PathVariable Long id, @RequestParam String dayOfWeek) {
+        logger.info("Requesting schedule for transprot line with  {} at time {}.", id, Calendar.getInstance().getTime());
+        Schedule schedule = scheduleService.findByTransportLineIdAndDayOfWeek(id, Integer.parseInt(dayOfWeek));
+        return new ResponseEntity<>(new ScheduleDTO(schedule), HttpStatus.OK);
     }
 
     /**
