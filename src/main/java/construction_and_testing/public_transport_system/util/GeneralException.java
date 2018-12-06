@@ -1,4 +1,4 @@
-package construction_and_testing.public_transport_system.domain.util;
+package construction_and_testing.public_transport_system.util;
 
 import org.springframework.http.HttpStatus;
 

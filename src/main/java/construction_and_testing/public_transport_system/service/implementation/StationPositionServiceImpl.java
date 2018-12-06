@@ -1,7 +1,7 @@
 package construction_and_testing.public_transport_system.service.implementation;
 
 import construction_and_testing.public_transport_system.domain.StationPosition;
-import construction_and_testing.public_transport_system.domain.util.GeneralException;
+import construction_and_testing.public_transport_system.util.GeneralException;
 import construction_and_testing.public_transport_system.repository.StationPositionRepository;
 import construction_and_testing.public_transport_system.service.definition.StationPositionService;
 import org.springframework.beans.factory.annotation.Autowired;

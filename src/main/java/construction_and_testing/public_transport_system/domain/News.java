@@ -1,6 +1,6 @@
 package construction_and_testing.public_transport_system.domain;
 
-import construction_and_testing.public_transport_system.domain.util.LocalDateTimeConverter;
+import construction_and_testing.public_transport_system.util.LocalDateTimeConverter;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;

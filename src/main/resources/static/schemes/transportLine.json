@@ -70,9 +70,10 @@
       "minItems": 0,
       "items": {
         "$id": "#/properties/schedule/items",
-        "type": "object",
+        "type": "number",
         "title": "Schedule item",
-        "$ref": "http://localhost:8080/schemes/schedule.json"
+        "minimum": 0,
+        "multipleOf": 1
       }
     },
     "active": {

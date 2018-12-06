@@ -1,7 +1,7 @@
 package construction_and_testing.public_transport_system.service.implementation;
 
 import construction_and_testing.public_transport_system.domain.Zone;
-import construction_and_testing.public_transport_system.domain.util.GeneralException;
+import construction_and_testing.public_transport_system.util.GeneralException;
 import construction_and_testing.public_transport_system.repository.ZoneRepository;
 import construction_and_testing.public_transport_system.service.definition.ZoneService;
 import org.springframework.beans.factory.annotation.Autowired;

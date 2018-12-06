@@ -39,7 +39,7 @@ public class TransportLine implements Serializable {
     private TransportLinePosition positions;
 
     @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "transportLine")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.MERGE, mappedBy = "transportLine")
     private Set<Schedule> schedule;
 
     @ManyToOne(optional = false)
@@ -72,7 +72,7 @@ public class TransportLine implements Serializable {
         this.id = transportLine.getId();
         this.name = transportLine.getName();
         this.type = transportLine.getType();
-        this.schedule = transportLine.getSchedule().stream().map((ScheduleDTO s) -> new Schedule(s,this))
+        this.schedule = transportLine.getSchedule().stream().map((Long s) -> new Schedule(s,this))
                 .collect(Collectors.toSet());
         this.positions = new TransportLinePosition(transportLine.getPositions(), this);
         this.zone = new Zone(transportLine.getZone());
@@ -83,7 +83,7 @@ public class TransportLine implements Serializable {
         this.id = transportLine.getId();
         this.name = transportLine.getName();
         this.type = transportLine.getType();
-        this.schedule = transportLine.getSchedule().stream().map((ScheduleDTO s) -> new Schedule(s,this))
+        this.schedule = transportLine.getSchedule().stream().map((Long s) -> new Schedule(s,this))
                 .collect(Collectors.toSet());
         this.positions =  new TransportLinePosition(transportLine.getPositions(), this);
         this.zone = zone;

@@ -1,8 +1,8 @@
 package construction_and_testing.public_transport_system.service.implementation;
 
 import construction_and_testing.public_transport_system.domain.Schedule;
-import construction_and_testing.public_transport_system.domain.util.GeneralException;
-import construction_and_testing.public_transport_system.repository.ScheduelRepository;
+import construction_and_testing.public_transport_system.util.GeneralException;
+import construction_and_testing.public_transport_system.repository.ScheduleRepository;
 import construction_and_testing.public_transport_system.repository.TransportLineRepository;
 import construction_and_testing.public_transport_system.service.definition.ScheduleService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,34 +16,34 @@ import java.util.Optional;
 public class ScheduleServiceImpl implements ScheduleService {
 
     @Autowired
-    private ScheduelRepository scheduelRepository;
+    private ScheduleRepository scheduleRepository;
 
     @Autowired
     private TransportLineRepository transportLineRepository;
 
     @Override
     public List<Schedule> getAll() {
-        return scheduelRepository.findAll();
+        return scheduleRepository.findAll();
     }
 
     @Override
     public Schedule findById(Long id) {
-        return scheduelRepository.findById(id).orElseThrow(() ->
+        return scheduleRepository.findById(id).orElseThrow(() ->
                 new GeneralException("Requested schedule does not exist!", HttpStatus.BAD_REQUEST));
     }
 
     @Override
     public Schedule save(Schedule schedule) {
-        return scheduelRepository.save(schedule);
+        return scheduleRepository.save(schedule);
     }
 
     @Override
     public void remove(Long id) {
-        Optional<Schedule> entity = scheduelRepository.findById(id);
+        Optional<Schedule> entity = scheduleRepository.findById(id);
         if(entity.isPresent()){
             Schedule schedule = entity.get();
             schedule.setActive(false);
-            scheduelRepository.save(schedule);
+            scheduleRepository.save(schedule);
         }else{
             throw new GeneralException("Schedule with id:" + id + " does not exist!", HttpStatus.BAD_REQUEST);
         }

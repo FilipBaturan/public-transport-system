@@ -1,6 +1,6 @@
 package construction_and_testing.public_transport_system.controller;
 
-import construction_and_testing.public_transport_system.domain.util.GeneralException;
+import construction_and_testing.public_transport_system.util.GeneralException;
 import org.everit.json.schema.ValidationException;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;

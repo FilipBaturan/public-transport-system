@@ -42,6 +42,12 @@ public class Schedule implements Serializable {
         this.active = true;
     }
 
+    public Schedule(Long id, TransportLine transportLine){
+        this.id = id;
+        this.transportLine = transportLine;
+        this.active = true;
+    }
+
     public Schedule(Long id, TransportLine transportLine, DayOfWeek dayOfWeek, ArrayList<String> departures, boolean active) {
         this.id = id;
         this.transportLine = transportLine;
