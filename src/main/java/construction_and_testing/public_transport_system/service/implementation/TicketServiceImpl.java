@@ -21,7 +21,7 @@ public class TicketServiceImpl implements TicketService {
     public Ticket saveTicket(Ticket t) {
         try {
             return this.ticketRepository.save(t);
-        } catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             return null;
         }
     }
@@ -29,11 +29,11 @@ public class TicketServiceImpl implements TicketService {
     @Override
     public void remove(Long id) {
         Optional<Ticket> entity = ticketRepository.findById(id);
-        if(entity.isPresent()){
+        if (entity.isPresent()) {
             Ticket ticket = entity.get();
             ticket.setActive(false);
             ticketRepository.save(ticket);
-        }else {
+        } else {
             throw new EntityNotFoundException();
         }
     }

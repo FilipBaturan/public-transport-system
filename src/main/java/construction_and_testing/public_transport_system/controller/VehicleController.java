@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import construction_and_testing.public_transport_system.converter.VehicleConverter;
 import construction_and_testing.public_transport_system.domain.DTO.VehicleDTO;
 import construction_and_testing.public_transport_system.domain.Vehicle;
-import construction_and_testing.public_transport_system.util.GeneralException;
 import construction_and_testing.public_transport_system.service.definition.TransportLineService;
 import construction_and_testing.public_transport_system.service.definition.VehicleService;
 import org.everit.json.schema.ValidationException;
@@ -39,7 +38,7 @@ public class VehicleController extends ValidationController {
     @GetMapping
     public ResponseEntity<List<VehicleDTO>> findAll() {
         logger.info("Requesting all available vehicles at time {}.", Calendar.getInstance().getTime());
-        return new ResponseEntity<>(VehicleConverter.fromEntityList(vehicleService.getAll(),VehicleDTO::new),
+        return new ResponseEntity<>(VehicleConverter.fromEntityList(vehicleService.getAll(), VehicleDTO::new),
                 HttpStatus.OK);
     }
 
@@ -62,11 +61,11 @@ public class VehicleController extends ValidationController {
      * @return added vehicle
      */
     @PostMapping()
-    public ResponseEntity<VehicleDTO> create (@RequestBody String vehicle) throws IOException, ValidationException {
+    public ResponseEntity<VehicleDTO> create(@RequestBody String vehicle) throws IOException, ValidationException {
         logger.info("Adding vehicle with at time {}.", Calendar.getInstance().getTime());
         validateJSON(vehicle, "vehicle.json");
         ObjectMapper mapper = new ObjectMapper();
-        Vehicle temp = new Vehicle(mapper.readValue(vehicle,VehicleDTO.class));
+        Vehicle temp = new Vehicle(mapper.readValue(vehicle, VehicleDTO.class));
         temp.setCurrentLine(transportLineService.findById(temp.getCurrentLine().getId()));
         return new ResponseEntity<>(new VehicleDTO(vehicleService.save(temp)), HttpStatus.OK);
     }
@@ -78,9 +77,9 @@ public class VehicleController extends ValidationController {
      * @return message about action results
      */
     @DeleteMapping("{id}")
-    public ResponseEntity<String> delete (@RequestBody String vehicle) throws IOException, ValidationException {
+    public ResponseEntity<String> delete(@RequestBody String vehicle) throws IOException, ValidationException {
         logger.info("Deleting vehicle at time {}.", Calendar.getInstance().getTime());
-        validateJSON(vehicle,"vehicle.json");
+        validateJSON(vehicle, "vehicle.json");
         ObjectMapper mapper = new ObjectMapper();
         vehicleService.remove((mapper.readValue(vehicle, VehicleDTO.class)).getId());
         return new ResponseEntity<>("Vehicle successfully deleted!", HttpStatus.OK);

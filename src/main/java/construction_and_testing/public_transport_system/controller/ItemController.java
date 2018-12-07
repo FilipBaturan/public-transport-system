@@ -1,8 +1,8 @@
 package construction_and_testing.public_transport_system.controller;
 
 import construction_and_testing.public_transport_system.domain.Item;
-import construction_and_testing.public_transport_system.util.GeneralException;
 import construction_and_testing.public_transport_system.service.definition.ItemService;
+import construction_and_testing.public_transport_system.util.GeneralException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class ItemController {
 
     /**
      * POST /api/item/{id}
-     *
+     * <p>
      * Controller method for adding new items
      *
      * @param item - item that we want to add
@@ -36,16 +36,16 @@ public class ItemController {
     public ResponseEntity<Item> create(@RequestBody Item item) {
         logger.info("Adding item at time {}.", Calendar.getInstance().getTime());
         Item i = this.itemService.saveItem(item);
-        if( i != null){
+        if (i != null) {
             return new ResponseEntity<>(i, HttpStatus.CREATED);
-        }else{
+        } else {
             throw new GeneralException("Item with given name already exist!", HttpStatus.BAD_REQUEST);
         }
     }
 
     /**
      * GET /api/item
-     *
+     * <p>
      * Finds all items
      *
      * @return all items
@@ -60,7 +60,7 @@ public class ItemController {
 
     /**
      * GET /api/item/{id}
-     *
+     * <p>
      * Finds an item by given id
      *
      * @return item with given id

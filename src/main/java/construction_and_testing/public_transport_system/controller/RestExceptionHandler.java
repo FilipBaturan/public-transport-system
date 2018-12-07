@@ -19,22 +19,22 @@ import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExcep
 public class RestExceptionHandler extends ResponseEntityExceptionHandler {
 
     @ExceptionHandler(ValidationException.class)
-    public ResponseEntity<String> handleValidationException(ValidationException e){
+    public ResponseEntity<String> handleValidationException(ValidationException e) {
         return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(GeneralException.class)
-    public ResponseEntity<String> handleGeneralException(GeneralException e){
+    public ResponseEntity<String> handleGeneralException(GeneralException e) {
         return new ResponseEntity<>(e.getMessage(), e.getHttpStatus());
     }
 
     @ExceptionHandler(NumberFormatException.class)
-    public ResponseEntity<String> handleNumberFormatException(NumberFormatException e){
+    public ResponseEntity<String> handleNumberFormatException(NumberFormatException e) {
         return new ResponseEntity<>("Bad number format " + e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 
     @ExceptionHandler(MultipartException.class)
-    public ResponseEntity<String> handleFileToLargeException(MultipartException e){
+    public ResponseEntity<String> handleFileToLargeException(MultipartException e) {
         return new ResponseEntity<>("File is too large", HttpStatus.BAD_REQUEST);
     }
 

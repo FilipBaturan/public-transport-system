@@ -14,7 +14,10 @@
   "properties": {
     "id": {
       "$id": "#/properties/id",
-      "type": ["integer", "null"],
+      "type": [
+        "integer",
+        "null"
+      ],
       "title": "Id",
       "description": "Vehicle id",
       "default": 0,
@@ -42,9 +45,15 @@
       "title": "Type",
       "description": "Vehicle type",
       "default": "BUS",
-      "enum": ["BUS", "METRO", "TRAM"],
+      "enum": [
+        "BUS",
+        "METRO",
+        "TRAM"
+      ],
       "examples": [
-        "BUS", "METRO", "TRAM"
+        "BUS",
+        "METRO",
+        "TRAM"
       ]
     },
     "currentLine": {

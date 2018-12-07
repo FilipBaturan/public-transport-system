@@ -1,9 +1,7 @@
 package construction_and_testing.public_transport_system.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import construction_and_testing.public_transport_system.domain.DTO.ScheduleDTO;
 import construction_and_testing.public_transport_system.domain.DTO.TransportLineDTO;
-import construction_and_testing.public_transport_system.domain.DTO.TransportLinePositionDTO;
 import construction_and_testing.public_transport_system.domain.enums.VehicleType;
 import org.hibernate.annotations.Where;
 
@@ -52,7 +50,7 @@ public class TransportLine implements Serializable {
         this.active = true;
     }
 
-    public TransportLine(long id){
+    public TransportLine(long id) {
         this.id = id;
         this.active = true;
     }
@@ -68,24 +66,24 @@ public class TransportLine implements Serializable {
         this.active = active;
     }
 
-    public TransportLine(TransportLineDTO transportLine){
+    public TransportLine(TransportLineDTO transportLine) {
         this.id = transportLine.getId();
         this.name = transportLine.getName();
         this.type = transportLine.getType();
-        this.schedule = transportLine.getSchedule().stream().map((Long s) -> new Schedule(s,this))
+        this.schedule = transportLine.getSchedule().stream().map((Long s) -> new Schedule(s, this))
                 .collect(Collectors.toSet());
         this.positions = new TransportLinePosition(transportLine.getPositions(), this);
         this.zone = new Zone(transportLine.getZone());
         this.active = transportLine.isActive();
     }
 
-    public TransportLine(TransportLineDTO transportLine, Zone zone){
+    public TransportLine(TransportLineDTO transportLine, Zone zone) {
         this.id = transportLine.getId();
         this.name = transportLine.getName();
         this.type = transportLine.getType();
-        this.schedule = transportLine.getSchedule().stream().map((Long s) -> new Schedule(s,this))
+        this.schedule = transportLine.getSchedule().stream().map((Long s) -> new Schedule(s, this))
                 .collect(Collectors.toSet());
-        this.positions =  new TransportLinePosition(transportLine.getPositions(), this);
+        this.positions = new TransportLinePosition(transportLine.getPositions(), this);
         this.zone = zone;
         this.active = transportLine.isActive();
     }

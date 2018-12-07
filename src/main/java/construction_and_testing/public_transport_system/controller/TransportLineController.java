@@ -5,7 +5,6 @@ import construction_and_testing.public_transport_system.converter.TransportLineC
 import construction_and_testing.public_transport_system.domain.DTO.TransportLineColletionDTO;
 import construction_and_testing.public_transport_system.domain.DTO.TransportLineDTO;
 import construction_and_testing.public_transport_system.domain.TransportLine;
-import construction_and_testing.public_transport_system.util.GeneralException;
 import construction_and_testing.public_transport_system.service.definition.TransportLineService;
 import org.everit.json.schema.ValidationException;
 import org.slf4j.Logger;

@@ -42,7 +42,7 @@ public class TransportLineDTO implements Serializable {
         this.zone = zone;
     }
 
-    public TransportLineDTO(TransportLine transportLine){
+    public TransportLineDTO(TransportLine transportLine) {
         this.id = transportLine.getId();
         this.name = transportLine.getName();
         this.type = transportLine.getType();

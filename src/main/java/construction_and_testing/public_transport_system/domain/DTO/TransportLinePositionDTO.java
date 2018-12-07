@@ -2,7 +2,7 @@ package construction_and_testing.public_transport_system.domain.DTO;
 
 import construction_and_testing.public_transport_system.domain.TransportLinePosition;
 
-public class TransportLinePositionDTO  {
+public class TransportLinePositionDTO {
 
     private Long id;
 
@@ -20,7 +20,7 @@ public class TransportLinePositionDTO  {
         this.active = active;
     }
 
-    public TransportLinePositionDTO(TransportLinePosition transportLinePosition){
+    public TransportLinePositionDTO(TransportLinePosition transportLinePosition) {
         this.id = transportLinePosition.getId();
         this.content = transportLinePosition.getContent();
         this.active = transportLinePosition.isActive();

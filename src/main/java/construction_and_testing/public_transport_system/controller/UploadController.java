@@ -1,7 +1,7 @@
 package construction_and_testing.public_transport_system.controller;
 
-import construction_and_testing.public_transport_system.util.Image;
 import construction_and_testing.public_transport_system.service.upload.ImageService;
+import construction_and_testing.public_transport_system.util.Image;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

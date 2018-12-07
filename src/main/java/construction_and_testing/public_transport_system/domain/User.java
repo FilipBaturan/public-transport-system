@@ -67,7 +67,7 @@ public class User implements Serializable {
     }
 
     public User(Long id, String name, String lastName, String username, String password, String email, String telephone,
-                 boolean confirmation, AuthorityType authorityType) {
+                boolean confirmation, AuthorityType authorityType) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
@@ -147,13 +147,21 @@ public class User implements Serializable {
         this.confirmation = confirmation;
     }
 
-    public AuthorityType getAuthorityType() { return authorityType; }
+    public AuthorityType getAuthorityType() {
+        return authorityType;
+    }
 
-    public void setAuthorityType(AuthorityType authorityType) { this.authorityType = authorityType; }
+    public void setAuthorityType(AuthorityType authorityType) {
+        this.authorityType = authorityType;
+    }
 
-    public boolean isActive() { return active; }
+    public boolean isActive() {
+        return active;
+    }
 
-    public void setActive(boolean active) { this.active = active; }
+    public void setActive(boolean active) {
+        this.active = active;
+    }
 
     @Override
     public boolean equals(Object o) {

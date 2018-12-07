@@ -23,7 +23,7 @@ public class RegisteredUserServiceImpl implements RegisteredUserService {
 
     @Override
     public RegisteredUser getById(Long id) {
-        if(registeredUserRepository.findById(id).isPresent()){
+        if (registeredUserRepository.findById(id).isPresent()) {
             RegisteredUser user = registeredUserRepository.findById(id).get();
             return user;
         }
@@ -35,14 +35,14 @@ public class RegisteredUserServiceImpl implements RegisteredUserService {
         try {
             registeredUserRepository.saveAndFlush(user);
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
 
     @Override
     public boolean modify(RegisteredUser user) {
-        if(registeredUserRepository.findById(user.getId()).isPresent()){
+        if (registeredUserRepository.findById(user.getId()).isPresent()) {
             registeredUserRepository.saveAndFlush(user);
             return true;
         }
@@ -52,15 +52,14 @@ public class RegisteredUserServiceImpl implements RegisteredUserService {
     @Override
     public void remove(Long id) {
         Optional<RegisteredUser> entity = registeredUserRepository.findById(id);
-        if(entity.isPresent()){
+        if (entity.isPresent()) {
             RegisteredUser user = entity.get();
             user.setActive(false);
             registeredUserRepository.save(user);
-        }else {
+        } else {
             throw new EntityNotFoundException();
         }
     }
-
 
 
 }

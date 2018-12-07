@@ -5,7 +5,7 @@ import org.springframework.http.HttpStatus;
 /**
  * General error exception
  */
-public class GeneralException extends RuntimeException{
+public class GeneralException extends RuntimeException {
 
     private HttpStatus httpStatus;
 

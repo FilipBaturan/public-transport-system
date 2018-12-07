@@ -32,9 +32,9 @@ public class ImageService {
      */
     private String getExtension(String imageFile) {
         String[] tokens = imageFile.split("\\.");
-        if (imageFormats.contains(tokens[tokens.length - 1].toUpperCase())){
-            return tokens[tokens.length-1];
-        }else{
+        if (imageFormats.contains(tokens[tokens.length - 1].toUpperCase())) {
+            return tokens[tokens.length - 1];
+        } else {
             return null;
         }
     }
@@ -102,7 +102,7 @@ public class ImageService {
 //                        "." + tokens[tokens.length - 1]).toString(),
 //                        Paths.get(path, "img_" + count + "_" + count + "."
 //                                + tokens[tokens.length - 1]).toString());
-                return new UploadResponse(Paths.get( "img_" + ++count + "_" + count +
+                return new UploadResponse(Paths.get("img_" + ++count + "_" + count +
                         "." + tokens[tokens.length - 1]).toString(),
                         Paths.get(path, "img_" + count + "_" + count + "."
                                 + tokens[tokens.length - 1]).toString());

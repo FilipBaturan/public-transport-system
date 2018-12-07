@@ -21,7 +21,7 @@ public class PricelistServiceImpl implements PricelistService {
     public Pricelist savePricelist(Pricelist p) {
         try {
             return this.pricelistRepository.save(p);
-        } catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             return null;
         }
     }
@@ -29,11 +29,11 @@ public class PricelistServiceImpl implements PricelistService {
     @Override
     public void remove(Long id) {
         Optional<Pricelist> entity = pricelistRepository.findById(id);
-        if(entity.isPresent()){
+        if (entity.isPresent()) {
             Pricelist pricelist = entity.get();
             pricelist.setActive(false);
             pricelistRepository.save(pricelist);
-        }else {
+        } else {
             throw new EntityNotFoundException();
         }
     }

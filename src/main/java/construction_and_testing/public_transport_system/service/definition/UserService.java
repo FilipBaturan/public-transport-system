@@ -11,6 +11,7 @@ public interface UserService {
 
     /**
      * Service method for getting user by given username
+     *
      * @param username - given username for expected user
      * @return - user with given username
      */
@@ -18,6 +19,7 @@ public interface UserService {
 
     /**
      * Method for getting user authority by given username
+     *
      * @param username - given username for expected user's authority
      * @return authority of user with given username
      */
@@ -25,6 +27,7 @@ public interface UserService {
 
     /**
      * Method for saving new registered user
+     *
      * @param user - user which is just registered
      * @return - indicator of registration success, true for successful, false for unsuccessful
      */
