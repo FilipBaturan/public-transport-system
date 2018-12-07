@@ -31,11 +31,11 @@ public class Station implements Serializable {
     @Column(nullable = false, name = "active")
     private boolean active;
 
-    public Station(){
+    public Station() {
         this.active = true;
     }
 
-    public Station(long id){
+    public Station(long id) {
         this.id = id;
         this.active = true;
     }
@@ -48,7 +48,7 @@ public class Station implements Serializable {
         this.active = active;
     }
 
-    public Station(StationDTO station){
+    public Station(StationDTO station) {
         this.id = station.getId();
         this.name = station.getName();
         this.position = new StationPosition(station.getPosition(), this);

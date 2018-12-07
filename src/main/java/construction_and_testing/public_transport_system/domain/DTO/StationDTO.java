@@ -30,7 +30,7 @@ public class StationDTO implements Serializable {
         this.active = active;
     }
 
-    public StationDTO(Station station){
+    public StationDTO(Station station) {
         this.id = station.getId();
         this.name = station.getName();
         this.position = new StationPositionDTO(station.getPosition());

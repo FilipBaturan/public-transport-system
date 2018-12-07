@@ -22,16 +22,20 @@ public class RegisteredUser extends User implements Serializable {
     @Column
     private String document;
 
+    @Column
+    private String image;
+
     public RegisteredUser() {
         balance = 0.0;
     }
 
     public RegisteredUser(Long id, String name, String lastName, String username, String password, String email,
-                          String telephone, boolean confirmation, Set<Reservation> reservations, double balance, String document) {
+                          String telephone, boolean confirmation, Set<Reservation> reservations, double balance, String document, String image) {
         super(id, name, lastName, username, password, email, telephone, confirmation);
         this.reservations = reservations;
         this.balance = balance;
         this.document = document;
+        this.image = image;
     }
 
     public static long getSerialVersionUID() {
@@ -60,5 +64,13 @@ public class RegisteredUser extends User implements Serializable {
 
     public void setBalance(double balance) {
         this.balance = balance;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }

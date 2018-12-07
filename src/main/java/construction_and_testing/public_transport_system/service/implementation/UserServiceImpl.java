@@ -29,7 +29,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean addUser(RegisteredUser user) {
-        if(userRepository.findByUsername(user.getUsername()) == null){
+        if (userRepository.findByUsername(user.getUsername()) == null) {
             userRepository.saveAndFlush(user);
             return true;
         }

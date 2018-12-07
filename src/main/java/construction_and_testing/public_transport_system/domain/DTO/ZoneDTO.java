@@ -29,7 +29,7 @@ public class ZoneDTO implements Serializable {
         this.active = active;
     }
 
-    public ZoneDTO(Zone zone){
+    public ZoneDTO(Zone zone) {
         this.id = zone.getId();
         this.name = zone.getName();
         this.active = zone.isActive();

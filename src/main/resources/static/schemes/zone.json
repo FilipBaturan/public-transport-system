@@ -13,7 +13,10 @@
   "properties": {
     "id": {
       "$id": "#/properties/id",
-      "type": ["integer", "null"],
+      "type": [
+        "integer",
+        "null"
+      ],
       "title": "Id",
       "description": "Zone id",
       "default": 0,

@@ -1,14 +1,13 @@
 package construction_and_testing.public_transport_system.service.implementation;
 
 import construction_and_testing.public_transport_system.domain.Station;
-import construction_and_testing.public_transport_system.domain.util.GeneralException;
 import construction_and_testing.public_transport_system.repository.StationRepository;
 import construction_and_testing.public_transport_system.service.definition.StationService;
+import construction_and_testing.public_transport_system.util.GeneralException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -37,11 +36,11 @@ public class StationServiceImpl implements StationService {
     @Override
     public void remove(Long id) {
         Optional<Station> entity = stationRepository.findById(id);
-        if(entity.isPresent()){
+        if (entity.isPresent()) {
             Station station = entity.get();
             station.setActive(false);
             stationRepository.save(station);
-        }else {
+        } else {
             throw new GeneralException("Station with id:" + id + " does not exist!", HttpStatus.BAD_REQUEST);
         }
     }

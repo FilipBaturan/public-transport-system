@@ -31,7 +31,7 @@ public class NewsDTO implements Serializable {
         this.active = true;
     }
 
-    public NewsDTO(News news){
+    public NewsDTO(News news) {
         this.id = news.getId();
         this.title = news.getTitle();
         this.content = news.getContent();

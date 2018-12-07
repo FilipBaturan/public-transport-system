@@ -3,7 +3,6 @@ package construction_and_testing.public_transport_system.service.definition;
 import construction_and_testing.public_transport_system.domain.Vehicle;
 
 import java.util.List;
-import java.util.Optional;
 
 public interface VehicleService {
 

@@ -1,5 +1,6 @@
 package construction_and_testing.public_transport_system.domain.DTO;
 
+import construction_and_testing.public_transport_system.domain.Schedule;
 import construction_and_testing.public_transport_system.domain.TransportLine;
 import construction_and_testing.public_transport_system.domain.enums.VehicleType;
 
@@ -19,7 +20,7 @@ public class TransportLineDTO implements Serializable {
 
     private TransportLinePositionDTO positions;
 
-    private Set<ScheduleDTO> schedule;
+    private Set<Long> schedule;
 
     private boolean active;
 
@@ -31,7 +32,7 @@ public class TransportLineDTO implements Serializable {
     }
 
     public TransportLineDTO(Long id, String name, VehicleType type, TransportLinePositionDTO positions,
-                            Set<ScheduleDTO> schedule, boolean active, Long zone) {
+                            Set<Long> schedule, boolean active, Long zone) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -41,12 +42,12 @@ public class TransportLineDTO implements Serializable {
         this.zone = zone;
     }
 
-    public TransportLineDTO(TransportLine transportLine){
+    public TransportLineDTO(TransportLine transportLine) {
         this.id = transportLine.getId();
         this.name = transportLine.getName();
         this.type = transportLine.getType();
         this.active = transportLine.isActive();
-        this.schedule = transportLine.getSchedule().stream().map(ScheduleDTO::new).collect(Collectors.toSet());
+        this.schedule = transportLine.getSchedule().stream().map(Schedule::getId).collect(Collectors.toSet());
         this.positions = new TransportLinePositionDTO(transportLine.getPositions());
         this.zone = transportLine.getZone().getId();
     }
@@ -79,11 +80,11 @@ public class TransportLineDTO implements Serializable {
         this.type = type;
     }
 
-    public Set<ScheduleDTO> getSchedule() {
+    public Set<Long> getSchedule() {
         return schedule;
     }
 
-    public void setSchedule(Set<ScheduleDTO> schedule) {
+    public void setSchedule(Set<Long> schedule) {
         this.schedule = schedule;
     }
 

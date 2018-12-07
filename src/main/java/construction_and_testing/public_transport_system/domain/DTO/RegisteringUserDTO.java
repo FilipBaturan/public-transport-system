@@ -9,7 +9,8 @@ public class RegisteringUserDTO {
     private String email;
     private String telephone;
 
-    public RegisteringUserDTO() { }
+    public RegisteringUserDTO() {
+    }
 
     public RegisteringUserDTO(String name, String lastName, String username, String password, String email, String telephone) {
         this.name = name;

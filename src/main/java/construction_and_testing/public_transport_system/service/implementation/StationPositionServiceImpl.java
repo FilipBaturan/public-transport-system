@@ -1,9 +1,9 @@
 package construction_and_testing.public_transport_system.service.implementation;
 
 import construction_and_testing.public_transport_system.domain.StationPosition;
-import construction_and_testing.public_transport_system.domain.util.GeneralException;
 import construction_and_testing.public_transport_system.repository.StationPositionRepository;
 import construction_and_testing.public_transport_system.service.definition.StationPositionService;
+import construction_and_testing.public_transport_system.util.GeneralException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,7 @@ public class StationPositionServiceImpl implements StationPositionService {
         try {
             return stationPositionRepository.findById(id).orElseThrow(() ->
                     new GeneralException("Requested station position does not exist!", HttpStatus.BAD_REQUEST));
-        } catch (IllegalArgumentException e){ // invoked when id is null
+        } catch (IllegalArgumentException e) { // invoked when id is null
             return null;
         }
 
@@ -41,11 +41,11 @@ public class StationPositionServiceImpl implements StationPositionService {
     @Override
     public void remove(Long id) {
         Optional<StationPosition> entity = stationPositionRepository.findById(id);
-        if(entity.isPresent()){
+        if (entity.isPresent()) {
             StationPosition stationPosition = entity.get();
             stationPosition.setActive(false);
             stationPositionRepository.save(stationPosition);
-        }else {
+        } else {
             throw new GeneralException("Station position with id:" + id + " does not exist!", HttpStatus.BAD_REQUEST);
         }
     }

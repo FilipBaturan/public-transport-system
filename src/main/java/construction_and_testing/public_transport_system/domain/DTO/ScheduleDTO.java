@@ -5,12 +5,11 @@ import construction_and_testing.public_transport_system.domain.TransportLine;
 import construction_and_testing.public_transport_system.domain.enums.DayOfWeek;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.List;
 
 public class ScheduleDTO implements Serializable {
 
-    private static final long serialVersionUID = 1L;
+    private static final long serialVersionUID = 111L;
 
     private Long id;
 
@@ -34,7 +33,7 @@ public class ScheduleDTO implements Serializable {
         this.active = active;
     }
 
-    public ScheduleDTO(Schedule schedule){
+    public ScheduleDTO(Schedule schedule) {
         this.id = schedule.getId();
         this.departures = schedule.getDepartures();
         this.transportLine = schedule.getTransportLine();
@@ -84,5 +83,16 @@ public class ScheduleDTO implements Serializable {
 
     public void setDayOfWeek(DayOfWeek dayOfWeek) {
         this.dayOfWeek = dayOfWeek;
+    }
+
+    @Override
+    public String toString() {
+        return "ScheduleDTO{" +
+                "id=" + id +
+                ", departures=" + departures +
+                ", transportLine=" + transportLine +
+                ", dayOfWeek=" + dayOfWeek +
+                ", active=" + active +
+                '}';
     }
 }

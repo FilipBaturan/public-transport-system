@@ -38,7 +38,7 @@ public class Zone implements Serializable {
         this.active = true;
     }
 
-    public Zone(long id){
+    public Zone(long id) {
         this.id = id;
         this.active = true;
     }
@@ -50,11 +50,11 @@ public class Zone implements Serializable {
         this.active = active;
     }
 
-    public Zone(ZoneDTO zone){
+    public Zone(ZoneDTO zone) {
         this.id = zone.getId();
         this.name = zone.getName();
         this.active = zone.isActive();
-        this.lines = zone.getLines().stream().map((TransportLineDTO t) -> new TransportLine(t,this)).
+        this.lines = zone.getLines().stream().map((TransportLineDTO t) -> new TransportLine(t, this)).
                 collect(Collectors.toSet());
     }
 

@@ -8,12 +8,14 @@ public interface RegisteredUserService {
 
     /**
      * Method for getting all registered users
+     *
      * @return list of registered users
      */
     List<RegisteredUser> getAll();
 
     /**
      * Method for getting one registered user, found by its id
+     *
      * @param id - id from database
      * @return registered user with given id
      */
@@ -21,6 +23,7 @@ public interface RegisteredUserService {
 
     /**
      * Method for adding new registered user
+     *
      * @param user - new user
      * @return success flag (true if added, false if not)
      */
@@ -28,6 +31,7 @@ public interface RegisteredUserService {
 
     /**
      * Method for changing user's information
+     *
      * @param user - user with modified information
      * @return success flag (true if added, false if not)
      */
@@ -35,6 +39,7 @@ public interface RegisteredUserService {
 
     /**
      * Method for removing existing user
+     *
      * @param id - id of user for deleting
      */
     void remove(Long id);

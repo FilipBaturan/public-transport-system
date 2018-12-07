@@ -15,7 +15,10 @@
   "properties": {
     "id": {
       "$id": "#/properties/id",
-      "type": ["integer", "null"],
+      "type": [
+        "integer",
+        "null"
+      ],
       "title": "Id",
       "description": "Transport line position id",
       "default": 0,

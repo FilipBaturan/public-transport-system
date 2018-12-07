@@ -5,18 +5,15 @@ import construction_and_testing.public_transport_system.converter.TransportLineC
 import construction_and_testing.public_transport_system.domain.DTO.TransportLineColletionDTO;
 import construction_and_testing.public_transport_system.domain.DTO.TransportLineDTO;
 import construction_and_testing.public_transport_system.domain.TransportLine;
-import construction_and_testing.public_transport_system.domain.util.GeneralException;
 import construction_and_testing.public_transport_system.service.definition.TransportLineService;
 import org.everit.json.schema.ValidationException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
@@ -48,7 +45,7 @@ public class TransportLineController extends ValidationController {
      * @param id of requested transport line
      * @return transport line with requested id
      */
-    @GetMapping("{/id}")
+    @GetMapping("{id}")
     public ResponseEntity<TransportLineDTO> findById(@PathVariable String id) {
         logger.info("Requesting transport line with id {} at time {}.", id, Calendar.getInstance().getTime());
         return new ResponseEntity<>(new TransportLineDTO(transportLineService.findById(Long.parseLong(id))),
@@ -81,7 +78,7 @@ public class TransportLineController extends ValidationController {
     public ResponseEntity<List<TransportLineDTO>> replaceAll(@RequestBody String transportLines) throws
             IOException, ValidationException {
         logger.info("Replacing all transport lines at time {}.", Calendar.getInstance().getTime());
-        validateJSON(transportLines, "transportLineCollection.json");
+        //validateJSON(transportLines, "transportLineCollection.json");
         ObjectMapper mapper = new ObjectMapper();
         return new ResponseEntity<>(TransportLineConverter.fromEntityList(transportLineService
                 .replaceAll(TransportLineConverter.toEntityList(
@@ -95,7 +92,7 @@ public class TransportLineController extends ValidationController {
      * @param transportLine that needs to be deleted
      * @return message about action results
      */
-    @DeleteMapping("{/id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<String> delete(@RequestBody String transportLine) throws IOException,
             ValidationException {
         logger.info("Deleting transportLine with id at time {}.", Calendar.getInstance().getTime());
