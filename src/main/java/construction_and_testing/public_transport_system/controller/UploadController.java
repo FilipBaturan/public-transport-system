@@ -45,12 +45,4 @@ public class UploadController {
         return new ResponseEntity<>(imageService.uploadImage(image), HttpStatus.OK);
     }
 
-
-
-    @GetMapping()
-    public ResponseEntity<String> getImage() {
-
-        return new ResponseEntity<>("nesto", HttpStatus.OK);
-
-    }
 }

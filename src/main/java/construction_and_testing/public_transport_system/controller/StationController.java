@@ -53,7 +53,7 @@ public class StationController extends ValidationController {
      * @param id of requested station
      * @return station with requested id
      */
-    @GetMapping("{/id}")
+    @GetMapping("{id}")
     public ResponseEntity<StationDTO> findById(@PathVariable String id) {
         logger.info("Requesting station with id {} at time {}.", id, Calendar.getInstance().getTime());
         return new ResponseEntity<>(new StationDTO(stationService.findById(Long.parseLong(id))), HttpStatus.FOUND);
@@ -98,7 +98,7 @@ public class StationController extends ValidationController {
      * @param station that needs to be deleted
      * @return message about action results
      */
-    @DeleteMapping("{/id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<String> delete (@RequestBody String station) throws IOException, ValidationException {
         logger.info("Deleting station at time {}.", Calendar.getInstance().getTime());
         validateJSON(station,"station.json");

@@ -93,7 +93,7 @@ public class TransportLineController extends ValidationController {
      * @param transportLine that needs to be deleted
      * @return message about action results
      */
-    @DeleteMapping("{/id}")
+    @DeleteMapping("{id}")
     public ResponseEntity<String> delete(@RequestBody String transportLine) throws IOException,
             ValidationException {
         logger.info("Deleting transportLine with id at time {}.", Calendar.getInstance().getTime());
