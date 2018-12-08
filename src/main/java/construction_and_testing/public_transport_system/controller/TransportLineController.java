@@ -18,6 +18,9 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 
+/**
+ * API for transport line
+ */
 @RestController
 @RequestMapping("/api/transportLine")
 public class TransportLineController extends ValidationController {

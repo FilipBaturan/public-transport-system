@@ -18,6 +18,9 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 
+/**
+ * API for vehicle
+ */
 @RestController
 @RequestMapping("/api/vehicle")
 public class VehicleController extends ValidationController {

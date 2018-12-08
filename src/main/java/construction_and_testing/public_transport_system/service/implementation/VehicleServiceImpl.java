@@ -35,7 +35,7 @@ public class VehicleServiceImpl implements VehicleService {
     @Override
     public Vehicle save(Vehicle vehicle) {
         vehicle.setCurrentLine(transportLineRepository.findById(vehicle.getCurrentLine().getId())
-                .orElseThrow(() -> new GeneralException("Bad transport line data associated", HttpStatus.BAD_REQUEST)));
+                .orElseThrow(() -> new GeneralException("Bad transport line data associated!", HttpStatus.BAD_REQUEST)));
         return vehicleRepository.save(vehicle);
     }
 

@@ -19,6 +19,9 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 
+/**
+ * API for station
+ */
 @RestController
 @RequestMapping("/api/station")
 public class StationController extends ValidationController {

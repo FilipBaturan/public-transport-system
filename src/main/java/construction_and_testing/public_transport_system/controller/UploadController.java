@@ -12,6 +12,9 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Calendar;
 
+/**
+ * API for upload
+ */
 @RestController
 @RequestMapping("/api/image")
 public class UploadController {

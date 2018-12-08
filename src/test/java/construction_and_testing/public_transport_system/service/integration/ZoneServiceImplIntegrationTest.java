@@ -26,7 +26,7 @@ public class ZoneServiceImplIntegrationTest {
 
 
     /**
-     * Test get all zone in database
+     * Test get all zone from database
      */
     @Test
     public void getAll() {
@@ -35,7 +35,7 @@ public class ZoneServiceImplIntegrationTest {
     }
 
     /**
-     * Test find by valid id
+     * Test with valid id
      */
     @Test
     public void findById() {
@@ -49,7 +49,15 @@ public class ZoneServiceImplIntegrationTest {
     }
 
     /**
-     * Test find by null id
+     * Test with invalid id
+     */
+    @Test(expected = GeneralException.class)
+    public void findByInvalidId() {
+        zoneService.findById(DB_ID_INVALID);
+    }
+
+    /**
+     * Test with null id
      */
     @Test(expected = GeneralException.class)
     public void findByNullId() {
