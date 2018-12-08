@@ -1,5 +1,6 @@
 package construction_and_testing.public_transport_system.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import construction_and_testing.public_transport_system.domain.DTO.TransportLineDTO;
 import construction_and_testing.public_transport_system.domain.DTO.ZoneDTO;
 import org.hibernate.annotations.Where;
@@ -26,6 +27,7 @@ public class Zone implements Serializable {
     @Column(nullable = false, unique = true)
     private String name;
 
+    @JsonIgnore
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "zone")
     private Set<TransportLine> lines;
 

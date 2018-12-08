@@ -1,9 +1,12 @@
 package construction_and_testing.public_transport_system.domain.DTO;
 
 import construction_and_testing.public_transport_system.domain.Schedule;
-import construction_and_testing.public_transport_system.domain.enums.Days;
+import construction_and_testing.public_transport_system.domain.TransportLine;
+import construction_and_testing.public_transport_system.domain.enums.DayOfWeek;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ScheduleDTO implements Serializable {
 
@@ -11,11 +14,11 @@ public class ScheduleDTO implements Serializable {
 
     private Long id;
 
-    private String startTime;
+    private List<String> departures;
 
-    private Long transportLine;
+    private TransportLine transportLine;
 
-    private Days day;
+    private DayOfWeek dayOfWeek;
 
     private boolean active;
 
@@ -23,20 +26,20 @@ public class ScheduleDTO implements Serializable {
         this.active = true;
     }
 
-    public ScheduleDTO(Long id, String startTime, Long transportLine, Days day, boolean active) {
+    public ScheduleDTO(Long id, List<String> departures, TransportLine transportLine, DayOfWeek dayOfWeek, boolean active) {
         this.id = id;
-        this.startTime = startTime;
+        this.departures = departures;
         this.transportLine = transportLine;
-        this.day = day;
+        this.dayOfWeek = dayOfWeek;
         this.active = active;
     }
 
     public ScheduleDTO(Schedule schedule){
         this.id = schedule.getId();
-        this.startTime = schedule.getStartTime();
-        this.transportLine = schedule.getId();
+        this.departures = schedule.getDepartures();
+        this.transportLine = schedule.getTransportLine();
         this.active = schedule.isActive();
-        this.day = schedule.getDay();
+        this.dayOfWeek = schedule.getDayOfWeek();
     }
 
     public static long getSerialVersionUID() {
@@ -51,12 +54,12 @@ public class ScheduleDTO implements Serializable {
         this.id = id;
     }
 
-    public String getStartTime() {
-        return startTime;
+    public List<String> getDepartures() {
+        return departures;
     }
 
-    public void setStartTime(String startTime) {
-        this.startTime = startTime;
+    public void setDepartures(List<String> departures) {
+        this.departures = departures;
     }
 
     public boolean isActive() {
@@ -67,19 +70,19 @@ public class ScheduleDTO implements Serializable {
         this.active = active;
     }
 
-    public Long getTransportLine() {
+    public TransportLine getTransportLine() {
         return transportLine;
     }
 
-    public void setTransportLine(Long transportLine) {
+    public void setTransportLine(TransportLine transportLine) {
         this.transportLine = transportLine;
     }
 
-    public Days getDay() {
-        return day;
+    public DayOfWeek getDayOfWeek() {
+        return dayOfWeek;
     }
 
-    public void setDay(Days day) {
-        this.day = day;
+    public void setDayOfWeek(DayOfWeek dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
     }
 }

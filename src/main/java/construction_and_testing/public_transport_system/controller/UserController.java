@@ -6,6 +6,7 @@ import construction_and_testing.public_transport_system.domain.DTO.Authenticatio
 import construction_and_testing.public_transport_system.domain.DTO.AuthenticationResponseDTO;
 import construction_and_testing.public_transport_system.domain.DTO.RegisteringUserDTO;
 import construction_and_testing.public_transport_system.domain.DTO.UserDTO;
+import construction_and_testing.public_transport_system.domain.RegisteredUser;
 import construction_and_testing.public_transport_system.domain.User;
 import construction_and_testing.public_transport_system.domain.Validator;
 import construction_and_testing.public_transport_system.domain.enums.AuthorityType;
@@ -125,9 +126,10 @@ public class UserController {
      * @param regUser new user which is trying to register
      * @return response with success flag, true and 201(CREATED) if registered, false and 409(CONFLICT) if false
      */
-    @PostMapping()
+    @PostMapping(path = "/add")
     public ResponseEntity<Boolean> create (@RequestBody RegisteringUserDTO regUser){
         logger.info("Trying to register new user...");
+        System.out.println(regUser.getTelephone());
         Boolean registered = userService.addUser(RegisteredUserConverter.fromRegisteringUserDTO(regUser));
         if(registered){
             logger.info("Successfully registered user.");
@@ -144,7 +146,7 @@ public class UserController {
      *
      * @return list if users
      */
-    @GetMapping("/UnvalidatedUsers")
+    @GetMapping("/unvalidatedUsers")
     public ResponseEntity<List<UserDTO>> getUnvalidatedUsers()
     {
         List<User> listOfUsers = userService.getUnvalidatedUsers();
@@ -240,6 +242,18 @@ public class UserController {
             this.userService.save(newValidator);
             return new ResponseEntity<>(true, HttpStatus.OK);
         }
+    }
+
+    @GetMapping("/registeredUsers")
+    public ResponseEntity<List<UserDTO>> getRegisteredUsers()
+    {
+        List<RegisteredUser> listOfUsers = userService.getRegisteredUsers();
+        List<UserDTO> listOfDTOUsers = new ArrayList<>();
+        for (RegisteredUser user: listOfUsers)
+            listOfDTOUsers.add(UserConverter.fromEntity(user));
+
+        return new ResponseEntity<>(listOfDTOUsers, HttpStatus.OK);
+
     }
 
 

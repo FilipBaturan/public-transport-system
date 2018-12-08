@@ -71,4 +71,10 @@ public interface UserService {
      */
     List<Validator> getValidators();
 
+    /**
+     *
+     * @returns all registered users in the system
+     */
+    List<RegisteredUser> getRegisteredUsers();
+
 }

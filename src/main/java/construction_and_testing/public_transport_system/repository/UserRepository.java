@@ -1,6 +1,7 @@
 package construction_and_testing.public_transport_system.repository;
 
 
+import construction_and_testing.public_transport_system.domain.RegisteredUser;
 import construction_and_testing.public_transport_system.domain.User;
 import construction_and_testing.public_transport_system.domain.Validator;
 import construction_and_testing.public_transport_system.domain.enums.AuthorityType;
@@ -26,4 +27,7 @@ public interface UserRepository extends JpaRepository<User, Long> {
 
     @Query( value = "SELECT * FROM User u WHERE u.active = true AND u.authority = 2", nativeQuery = true)
     List<Validator> getValidators();
+
+    @Query( value = "SELECT * FROM User u WHERE u.active = true AND u.authority = 0", nativeQuery = true)
+    List<RegisteredUser> getRegisteredUsers();
 }

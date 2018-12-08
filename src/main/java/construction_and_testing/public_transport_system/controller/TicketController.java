@@ -1,9 +1,16 @@
 package construction_and_testing.public_transport_system.controller;
 
 
+import construction_and_testing.public_transport_system.converter.TicketConverter;
+import construction_and_testing.public_transport_system.domain.DTO.TicketReportDTO;
+import construction_and_testing.public_transport_system.domain.Reservation;
 import construction_and_testing.public_transport_system.domain.Ticket;
+import construction_and_testing.public_transport_system.domain.enums.VehicleType;
 import construction_and_testing.public_transport_system.domain.util.GeneralException;
+import construction_and_testing.public_transport_system.service.definition.ReservationService;
 import construction_and_testing.public_transport_system.service.definition.TicketService;
+import org.joda.time.LocalDateTime;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +21,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.Calendar;
-import java.util.List;
+import java.time.LocalDate;
+import java.util.*;
 
 @RestController
 @RequestMapping("/api/ticket")
@@ -25,6 +32,9 @@ public class TicketController {
 
     @Autowired
     private TicketService ticketService;
+
+    @Autowired
+    private ReservationService reservationService;
 
     /**
      * POST /api/ticket
@@ -81,4 +91,57 @@ public class TicketController {
             throw new GeneralException("Requested ticket does not exist!", HttpStatus.NOT_FOUND);
         }
     }
+
+    @GetMapping("/getTicketsForUser/{id}")
+    public ResponseEntity<List<TicketReportDTO>> getTicketsForUser(@PathVariable("id") String id)
+    {
+        List<TicketReportDTO> ticketList = new ArrayList<TicketReportDTO>();
+
+        List<Reservation> reservationList;
+
+        try {
+           reservationList  =  reservationService.getReservationsForUser(Long.parseLong(id) );
+
+        } catch (NumberFormatException e) {
+            throw new GeneralException("Bad format of requested id!", HttpStatus.BAD_REQUEST);
+        }
+
+        for (Reservation r: reservationList) {
+            for (Ticket t: r.getTickets()) {
+                ticketList.add(TicketConverter.fromEntity(t));
+            }
+
+        }
+        return new ResponseEntity<>(ticketList, HttpStatus.OK);
+    }
+
+    @PutMapping("/updateTicket")
+    ResponseEntity<Boolean> updateValidator(@RequestBody TicketReportDTO ticketDTO){
+
+        Optional<Ticket> optionalTicket = Optional.of(this.ticketService.findTicketById(ticketDTO.getId()) );
+
+        if (!optionalTicket.isPresent())
+            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+        else
+        {
+            ModelMapper mapper = new ModelMapper();
+            mapper.map(ticketDTO, optionalTicket.get());
+            this.ticketService.saveTicket(optionalTicket.get());
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        }
+
+    }
+
+    @GetMapping("/reprot/{stringDate1}/{stringDate2}")
+    ResponseEntity<Map<VehicleType, Integer>> getReport(@PathVariable String stringDate1, @PathVariable String stringDate2)
+    {
+        LocalDate date1 = LocalDate.parse(stringDate1);
+        LocalDate date2 = LocalDate.parse(stringDate2);
+
+        Map<VehicleType, Integer> prices = this.ticketService.getReport(date1, date2);
+
+        return new ResponseEntity<>(prices, HttpStatus.OK);
+
+    }
+
 }

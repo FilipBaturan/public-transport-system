@@ -76,4 +76,9 @@ public class UserServiceImpl implements UserService {
     public List<Validator> getValidators() {
         return userRepository.getValidators();
     }
+
+    @Override
+    public List<RegisteredUser> getRegisteredUsers() {
+        return userRepository.getRegisteredUsers();
+    }
 }

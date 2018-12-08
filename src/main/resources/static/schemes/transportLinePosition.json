@@ -9,8 +9,7 @@
   "additionalProperties": false,
   "required": [
     "id",
-    "latitude",
-    "longitude",
+    "content",
     "active"
   ],
   "properties": {
@@ -26,27 +25,15 @@
       "multipleOf": 1,
       "minimum": 0
     },
-    "latitude": {
-      "$id": "#/properties/latitude",
-      "type": "number",
-      "title": "Latitude",
-      "description": "Transport line position latitude",
-      "default": 0.0,
+    "content": {
+      "$id": "#/properties/content",
+      "type": "string",
+      "title": "Content",
+      "description": "Transport line position content",
+      "default": "",
       "examples": [
-        45.26134
-      ],
-      "minimum": 0.0
-    },
-    "longitude": {
-      "$id": "#/properties/longitude",
-      "type": "number",
-      "title": "Longitude",
-      "description": "Transport line position longitude",
-      "default": 0.0,
-      "examples": [
-        28.35742
-      ],
-      "minimum": 0.0
+        "45.26134,26.74631 45.27534 25.64131 (RED|w10)"
+      ]
     },
     "active": {
       "$id": "#/properties/active",

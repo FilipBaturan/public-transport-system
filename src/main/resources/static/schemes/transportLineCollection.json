@@ -1,0 +1,29 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://public_transport_system/schemes/transportLineCollection.json",
+  "type": "object",
+  "title": "Transport Line Collection",
+  "description": "Represents the transport line collection available in public transport system",
+  "minProperties": 0,
+  "additionalProperties": false,
+  "required": [
+    "transportLines"
+  ],
+  "properties": {
+
+    "transportLines": {
+      "$id": "#/properties/transportLines",
+      "type": "array",
+      "title": "Transport Lines",
+      "description": "Transport lines",
+      "minItems": 0,
+      "items": {
+        "$id": "#/properties/transportLines/items",
+        "type": "object",
+        "title": "Transport line item",
+        "$ref": "http://localhost:8080/schemes/transportLine.json"
+      }
+    }
+  }
+}

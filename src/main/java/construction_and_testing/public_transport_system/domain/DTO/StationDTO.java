@@ -1,7 +1,7 @@
 package construction_and_testing.public_transport_system.domain.DTO;
 
 import construction_and_testing.public_transport_system.domain.Station;
-import construction_and_testing.public_transport_system.domain.StationPosition;
+import construction_and_testing.public_transport_system.domain.enums.VehicleType;
 
 import java.io.Serializable;
 
@@ -15,15 +15,18 @@ public class StationDTO implements Serializable {
 
     private StationPositionDTO position;
 
+    private VehicleType type;
+
     private boolean active;
 
     public StationDTO() {
     }
 
-    public StationDTO(Long id, String name, StationPositionDTO position, boolean active) {
+    public StationDTO(Long id, String name, StationPositionDTO position, VehicleType type, boolean active) {
         this.id = id;
         this.name = name;
         this.position = position;
+        this.type = type;
         this.active = active;
     }
 
@@ -31,6 +34,7 @@ public class StationDTO implements Serializable {
         this.id = station.getId();
         this.name = station.getName();
         this.position = new StationPositionDTO(station.getPosition());
+        this.type = station.getType();
         this.active = station.isActive();
     }
 
@@ -68,5 +72,13 @@ public class StationDTO implements Serializable {
 
     public void setPosition(StationPositionDTO position) {
         this.position = position;
+    }
+
+    public VehicleType getType() {
+        return type;
+    }
+
+    public void setType(VehicleType type) {
+        this.type = type;
     }
 }

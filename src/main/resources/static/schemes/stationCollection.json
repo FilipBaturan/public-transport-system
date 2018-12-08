@@ -1,0 +1,29 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://public_transport_system/schemes/stationCollection.json",
+  "type": "object",
+  "title": "Station Collection",
+  "description": "Represents the station collection available in public transport system",
+  "minProperties": 0,
+  "additionalProperties": false,
+  "required": [
+    "stations"
+  ],
+  "properties": {
+
+    "stations": {
+      "$id": "#/properties/stations",
+      "type": "array",
+      "title": "Stations",
+      "description": "Stations",
+      "minItems": 0,
+      "items": {
+        "$id": "#/properties/stations/items",
+        "type": "object",
+        "title": "Station item",
+        "$ref": "http://localhost:8080/schemes/station.json"
+      }
+    }
+  }
+}
