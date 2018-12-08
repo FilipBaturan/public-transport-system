@@ -1,16 +1,22 @@
 package construction_and_testing.public_transport_system.service.implementation;
 
+import construction_and_testing.public_transport_system.domain.TransportLine;
 import construction_and_testing.public_transport_system.domain.Zone;
+import construction_and_testing.public_transport_system.repository.TransportLineRepository;
 import construction_and_testing.public_transport_system.repository.ZoneRepository;
 import construction_and_testing.public_transport_system.service.definition.ZoneService;
 import construction_and_testing.public_transport_system.util.GeneralException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Interface that provides service for zones
@@ -21,6 +27,9 @@ public class ZoneServiceImpl implements ZoneService {
     @Autowired
     private ZoneRepository zoneRepository;
 
+    @Autowired
+    private TransportLineRepository transportLineRepository;
+
     @Override
     public List<Zone> getAll() {
         return zoneRepository.findAll();
@@ -28,13 +37,24 @@ public class ZoneServiceImpl implements ZoneService {
 
     @Override
     public Zone findById(Long id) {
-        return zoneRepository.findById(id).orElseThrow(() -> new GeneralException("Requested zone does not exist!",
-                HttpStatus.BAD_REQUEST));
+        try {
+            return zoneRepository.findById(id).orElseThrow(() -> new GeneralException("Requested zone does not exist!",
+                    HttpStatus.BAD_REQUEST));
+        } catch (InvalidDataAccessApiUsageException e) { // null id
+            throw new GeneralException("Invalid id.", HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     @Override
     public Zone save(Zone zone) {
         try {
+            Set<TransportLine> temp = new HashSet<>(transportLineRepository.findAllById(zone.getLines().stream()
+                    .map((TransportLine::getId)).collect(Collectors.toList())));
+            if (temp.size() != zone.getLines().size()) {
+                throw new GeneralException("Invalid transport line data associated.", HttpStatus.BAD_REQUEST);
+            }
+            zone.setLines(temp);
             return zoneRepository.save(zone);
         } catch (DataIntegrityViolationException e) {
             throw new GeneralException("Zone with given name already exist!", HttpStatus.BAD_REQUEST);
@@ -44,10 +64,16 @@ public class ZoneServiceImpl implements ZoneService {
 
     @Override
     public void remove(Long id) {
+        if (id == 1) {
+            throw new GeneralException("Zone can not be removed.", HttpStatus.BAD_REQUEST);
+        }
         Optional<Zone> entity = zoneRepository.findById(id);
         if (entity.isPresent()) {
             Zone zone = entity.get();
             zone.setActive(false);
+            Zone defaultZone = zoneRepository.findById(1L).orElseThrow(
+                    () -> new GeneralException("Default zone does not exist.", HttpStatus.INTERNAL_SERVER_ERROR));
+            zone.getLines().forEach((transportLine -> transportLine.setZone(defaultZone)));
             zoneRepository.save(zone);
         } else {
             throw new GeneralException("Requested zone does not exist!", HttpStatus.BAD_REQUEST);

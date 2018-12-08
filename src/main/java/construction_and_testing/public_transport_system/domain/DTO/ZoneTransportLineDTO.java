@@ -1,12 +1,11 @@
 package construction_and_testing.public_transport_system.domain.DTO;
 
-import construction_and_testing.public_transport_system.domain.Zone;
+import construction_and_testing.public_transport_system.domain.TransportLine;
+import construction_and_testing.public_transport_system.domain.enums.VehicleType;
 
 import java.io.Serializable;
-import java.util.Set;
-import java.util.stream.Collectors;
 
-public class ZoneDTO implements Serializable {
+public class ZoneTransportLineDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -14,26 +13,24 @@ public class ZoneDTO implements Serializable {
 
     private String name;
 
-    private Set<ZoneTransportLineDTO> lines;
+    private VehicleType type;
 
     private boolean active;
 
-    public ZoneDTO() {
-        this.active = true;
+    public ZoneTransportLineDTO() {
     }
 
-    public ZoneDTO(Long id, String name, Set<ZoneTransportLineDTO> lines, boolean active) {
+    public ZoneTransportLineDTO(Long id, String name, VehicleType type, boolean active) {
         this.id = id;
         this.name = name;
-        this.lines = lines;
+        this.type = type;
         this.active = active;
     }
 
-    public ZoneDTO(Zone zone) {
-        this.id = zone.getId();
-        this.name = zone.getName();
-        this.active = zone.isActive();
-        this.lines = zone.getLines().stream().map(ZoneTransportLineDTO::new).collect(Collectors.toSet());
+    public ZoneTransportLineDTO(TransportLine transportLine) {
+        this.id = transportLine.getId();
+        this.name = transportLine.getName();
+        this.type = transportLine.getType();
     }
 
     public static long getSerialVersionUID() {
@@ -56,12 +53,12 @@ public class ZoneDTO implements Serializable {
         this.name = name;
     }
 
-    public Set<ZoneTransportLineDTO> getLines() {
-        return lines;
+    public VehicleType getType() {
+        return type;
     }
 
-    public void setLines(Set<ZoneTransportLineDTO> lines) {
-        this.lines = lines;
+    public void setType(VehicleType type) {
+        this.type = type;
     }
 
     public boolean isActive() {

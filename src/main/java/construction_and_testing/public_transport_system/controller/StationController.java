@@ -62,7 +62,7 @@ public class StationController extends ValidationController {
      * @return added station
      */
     @PostMapping
-    public ResponseEntity<StationDTO> create(@RequestBody String station) throws IOException, ValidationException {
+    public ResponseEntity<StationDTO> save(@RequestBody String station) throws IOException, ValidationException {
         logger.info("Saving station at time {}.", Calendar.getInstance().getTime());
         validateJSON(station, "station.json");
         ObjectMapper mapper = new ObjectMapper();
@@ -89,12 +89,12 @@ public class StationController extends ValidationController {
     }
 
     /**
-     * DELETE /api/station/{id}
+     * DELETE /api/station
      *
      * @param station that needs to be deleted
      * @return message about action results
      */
-    @DeleteMapping("{id}")
+    @DeleteMapping()
     public ResponseEntity<String> delete(@RequestBody String station) throws IOException, ValidationException {
         logger.info("Deleting station at time {}.", Calendar.getInstance().getTime());
         validateJSON(station, "station.json");

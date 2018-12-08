@@ -1,6 +1,7 @@
 package construction_and_testing.public_transport_system.service.implementation;
 
 import construction_and_testing.public_transport_system.domain.Vehicle;
+import construction_and_testing.public_transport_system.repository.TransportLineRepository;
 import construction_and_testing.public_transport_system.repository.VehicleRepository;
 import construction_and_testing.public_transport_system.service.definition.VehicleService;
 import construction_and_testing.public_transport_system.util.GeneralException;
@@ -17,6 +18,9 @@ public class VehicleServiceImpl implements VehicleService {
     @Autowired
     private VehicleRepository vehicleRepository;
 
+    @Autowired
+    private TransportLineRepository transportLineRepository;
+
     @Override
     public List<Vehicle> getAll() {
         return vehicleRepository.findAll();
@@ -30,6 +34,8 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public Vehicle save(Vehicle vehicle) {
+        vehicle.setCurrentLine(transportLineRepository.findById(vehicle.getCurrentLine().getId())
+                .orElseThrow(() -> new GeneralException("Bad transport line data associated", HttpStatus.BAD_REQUEST)));
         return vehicleRepository.save(vehicle);
     }
 
