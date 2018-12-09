@@ -2,9 +2,17 @@ package construction_and_testing.public_transport_system.converter;
 
 import construction_and_testing.public_transport_system.domain.DTO.RegisteringUserDTO;
 import construction_and_testing.public_transport_system.domain.RegisteredUser;
+import construction_and_testing.public_transport_system.domain.enums.UsersDocumentsStatus;
 import construction_and_testing.public_transport_system.domain.enums.AuthorityType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
+
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
 
 public class RegisteredUserConverter extends AbstractConverter {
+
     public static RegisteringUserDTO toRegisteringUserDTO(RegisteredUser registeredUser) {
         RegisteringUserDTO dto = new RegisteringUserDTO();
         dto.setName(registeredUser.getName());
@@ -24,7 +32,7 @@ public class RegisteredUserConverter extends AbstractConverter {
         entity.setPassword(registeringUserDTO.getPassword());
         entity.setEmail(registeringUserDTO.getEmail());
         entity.setTelephone(registeringUserDTO.getTelephone());
-        entity.setConfirmation(false);
+        entity.setConfirmation(UsersDocumentsStatus.UNCHECKED);
         entity.setActive(false);
         entity.setBalance(0);
         entity.setAuthorityType(AuthorityType.REGISTERED_USER);
