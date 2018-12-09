@@ -5,6 +5,7 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Objects;
 
 /**
@@ -46,8 +47,12 @@ public class User implements Serializable {
     @Column(nullable = false, name = "active")
     private boolean active;
 
+    @ElementCollection(targetClass = AuthorityType.class, fetch = FetchType.EAGER)
+    @JoinTable(name = "user_role",
+            joinColumns = @JoinColumn(name = "user_id"))
     @Column(nullable = false, name = "authority")
-    private AuthorityType authorityType;
+    @Enumerated(EnumType.STRING)
+    private Collection<AuthorityType> authorityType;
 
     public User() {
         this.confirmation = false;
@@ -67,7 +72,7 @@ public class User implements Serializable {
     }
 
     public User(Long id, String name, String lastName, String username, String password, String email, String telephone,
-                boolean confirmation, AuthorityType authorityType) {
+                boolean confirmation, Collection<AuthorityType> authorityType) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
@@ -147,11 +152,11 @@ public class User implements Serializable {
         this.confirmation = confirmation;
     }
 
-    public AuthorityType getAuthorityType() {
+    public Collection<AuthorityType> getAuthorityType() {
         return authorityType;
     }
 
-    public void setAuthorityType(AuthorityType authorityType) {
+    public void setAuthorityType(Collection<AuthorityType> authorityType) {
         this.authorityType = authorityType;
     }
 

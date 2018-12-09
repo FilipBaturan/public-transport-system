@@ -8,6 +8,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Factory for creating instance of {@link UserDetailsImpl}.
@@ -27,8 +28,9 @@ public class UserDetailsFactory {
         Collection<? extends GrantedAuthority> authorities;
         List auth = new ArrayList<String>();
         try {
-            auth.add(new SimpleGrantedAuthority(user.getAuthorityType().toString()));
-            authorities = auth; //.map(a -> new SimpleGrantedAuthority(a.toString())).collect(Collectors.toList());
+            //auth.add(new SimpleGrantedAuthority(user.getAuthorityType().toString()));
+            //authorities = auth; //.map(a -> new SimpleGrantedAuthority(a.toString())).collect(Collectors.toList());
+            authorities = user.getAuthorityType().stream().map(a -> new SimpleGrantedAuthority(a.toString())).collect(Collectors.toList());
         } catch (Exception e) {
             authorities = null;
         }

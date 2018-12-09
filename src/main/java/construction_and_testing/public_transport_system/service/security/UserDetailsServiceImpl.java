@@ -1,11 +1,21 @@
 package construction_and_testing.public_transport_system.service.security;
 
 import construction_and_testing.public_transport_system.domain.User;
+import construction_and_testing.public_transport_system.domain.enums.AuthorityType;
 import construction_and_testing.public_transport_system.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
 
 /**
  * Implementation of {@link UserDetailsService}.
@@ -24,6 +34,28 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     public UserDetails loadUserByUsername(String username) {
         final User user = userRepository.findByUsername(username);
         // .orElseThrow(() -> new UsernameNotFoundException(String.format("No user with username %s found!", username)));
-        return UserDetailsFactory.create(user);
+        //return UserDetailsFactory.create(user);
+
+        if (user == null) {
+            throw new UsernameNotFoundException(
+                    "User '" + username + "' not found"
+            );
+        }
+
+        AuthorityType type = AuthorityType.REGISTERED_USER;
+
+        return org.springframework.security.core.userdetails.User//
+                .withUsername(username)//+
+                .password(user.getPassword())
+                //.passwordEncoder(new BCryptPasswordEncoder()::encode)//
+                .authorities(type)//
+                .accountExpired(false)//
+                .accountLocked(false)//
+                .credentialsExpired(false)//
+                .disabled(false)//
+                .build();
+
+        //return UserDetailsFactory.create(user);
     }
+
 }

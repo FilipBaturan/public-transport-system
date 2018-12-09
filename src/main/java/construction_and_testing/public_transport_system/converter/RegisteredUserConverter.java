@@ -4,6 +4,10 @@ import construction_and_testing.public_transport_system.domain.DTO.RegisteringUs
 import construction_and_testing.public_transport_system.domain.RegisteredUser;
 import construction_and_testing.public_transport_system.domain.enums.AuthorityType;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+
 public class RegisteredUserConverter extends AbstractConverter {
     public static RegisteringUserDTO toRegisteringUserDTO(RegisteredUser registeredUser) {
         RegisteringUserDTO dto = new RegisteringUserDTO();
@@ -18,6 +22,8 @@ public class RegisteredUserConverter extends AbstractConverter {
 
     public static RegisteredUser fromRegisteringUserDTO(RegisteringUserDTO registeringUserDTO) {
         RegisteredUser entity = new RegisteredUser();
+        Collection<AuthorityType> authorityTypeCollection = new ArrayList<>();
+        ((ArrayList<AuthorityType>) authorityTypeCollection).add(AuthorityType.REGISTERED_USER);
         entity.setName(registeringUserDTO.getName());
         entity.setLastName(registeringUserDTO.getLastName());
         entity.setUsername(registeringUserDTO.getUsername());
@@ -27,7 +33,7 @@ public class RegisteredUserConverter extends AbstractConverter {
         entity.setConfirmation(false);
         entity.setActive(false);
         entity.setBalance(0);
-        entity.setAuthorityType(AuthorityType.REGISTERED_USER);
+        entity.setAuthorityType(authorityTypeCollection);
         return entity;
     }
 }

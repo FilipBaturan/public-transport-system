@@ -16,11 +16,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/user")
@@ -28,26 +32,26 @@ public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    @Autowired
-    private AuthenticationManager authenticationManager;
+    //@Autowired
+    private final AuthenticationManager authenticationManager;
+
+    //@Autowired
+    private final UserDetailsService userDetailsService;
+
+    //@Autowired
+    private final UserService userService;
+
+    //@Autowired
+    private final TokenUtils tokenUtils;
 
     @Autowired
-    private UserDetailsService userDetailsService;
-
-    @Autowired
-    private UserService userService;
-
-    @Autowired
-    private TokenUtils tokenUtils;
-
-    /*@Autowired
     public UserController(AuthenticationManager authenticationManager, UserDetailsService userDetailsService,
                                     UserService userService, TokenUtils tokenUtils) {
         this.authenticationManager = authenticationManager;
         this.userDetailsService = userDetailsService;
         this.userService = userService;
         this.tokenUtils = tokenUtils;
-    }*/
+    }
 
     /**
      * GET /api/user
@@ -71,28 +75,21 @@ public class UserController {
      */
     @PostMapping("/auth")
     public ResponseEntity<Object> login(@Valid @RequestBody AuthenticationRequestDTO authenticationRequest) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        authenticationRequest.getUsername(),
-                        authenticationRequest.getPassword()
-                )
-        );
+        UsernamePasswordAuthenticationToken authToken =
+                new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+
+        Authentication authentication = authenticationManager.authenticate(authToken);
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         User user = userService.findByUsername(userDetails.getUsername());
         String token = tokenUtils.generateToken(userDetails);
 
-        AuthorityType type = userService.getAuthority(user.getUsername());
-
-        if (user.getPassword().equals(authenticationRequest.getPassword())) {
-            if (type == AuthorityType.REGISTERED_USER && user.isActive()) {
-                logger.info("Successfully logged in.");
-                return new ResponseEntity<>(new AuthenticationResponseDTO(user, token), HttpStatus.OK);
-            }
-        }
-        logger.info("Failed to login, incorrect combination od username and password");
+        logger.info("Successfully logged in.");
+        return new ResponseEntity<>(new AuthenticationResponseDTO(user, token), HttpStatus.OK);
+        //}
+        /*logger.info("Failed to login, incorrect combination od username and password");
         return new ResponseEntity<Object>("Incorrect username or password, or user is not activated.",
-                HttpStatus.BAD_REQUEST);
+                HttpStatus.BAD_REQUEST);*/
     }
 
     /**
