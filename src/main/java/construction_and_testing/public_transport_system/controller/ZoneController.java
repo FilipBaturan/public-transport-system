@@ -18,7 +18,7 @@ import java.util.Calendar;
 import java.util.List;
 
 /**
- * API for zones
+ * API for zone
  */
 @RestController
 @RequestMapping("/api/zone")

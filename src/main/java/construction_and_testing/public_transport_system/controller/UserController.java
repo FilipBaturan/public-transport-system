@@ -22,8 +22,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -49,7 +52,6 @@ public class UserController {
     @Autowired
     private TokenUtils tokenUtils;
 
-
     /*@Autowired
     public UserController(AuthenticationManager authenticationManager, UserDetailsService userDetailsService,
                                     UserService userService, TokenUtils tokenUtils) {
@@ -58,6 +60,11 @@ public class UserController {
         this.userService = userService;
         this.tokenUtils = tokenUtils;
     }*/
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+
 
     /**
      * GET /api/user
@@ -81,28 +88,21 @@ public class UserController {
      */
     @PostMapping("/auth")
     public ResponseEntity<Object> login(@Valid @RequestBody AuthenticationRequestDTO authenticationRequest) {
-        authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        authenticationRequest.getUsername(),
-                        authenticationRequest.getPassword()
-                )
-        );
+        UsernamePasswordAuthenticationToken authToken =
+                new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+
+        Authentication authentication = authenticationManager.authenticate(authToken);
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
         User user = userService.findByUsername(userDetails.getUsername());
         String token = tokenUtils.generateToken(userDetails);
 
-        AuthorityType type = userService.getAuthority(user.getUsername());
-
-        if (user.getPassword().equals(authenticationRequest.getPassword())) {
-            if (type == AuthorityType.REGISTERED_USER && user.isActive()) {
-                logger.info("Successfully logged in.");
-                return new ResponseEntity<>(new AuthenticationResponseDTO(user, token), HttpStatus.OK);
-            }
-        }
-        logger.info("Failed to login, incorrect combination od username and password");
+        logger.info("Successfully logged in.");
+        return new ResponseEntity<>(new AuthenticationResponseDTO(user, token), HttpStatus.OK);
+        //}
+        /*logger.info("Failed to login, incorrect combination od username and password");
         return new ResponseEntity<Object>("Incorrect username or password, or user is not activated.",
-                HttpStatus.BAD_REQUEST);
+                HttpStatus.BAD_REQUEST);*/
     }
 
     /**
@@ -128,7 +128,7 @@ public class UserController {
     @PostMapping(path = "/add")
     public ResponseEntity<Boolean> create(@RequestBody RegisteringUserDTO regUser) {
         logger.info("Trying to register new user...");
-        System.out.println(regUser.getTelephone());
+        regUser.setPassword(passwordEncoder.encode(regUser.getPassword()));
         Boolean registered = userService.addUser(RegisteredUserConverter.fromRegisteringUserDTO(regUser));
         if (registered) {
             logger.info("Successfully registered user.");

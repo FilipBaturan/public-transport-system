@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
@@ -26,7 +27,7 @@ public class ZoneServiceImplIntegrationTest {
 
 
     /**
-     * Test get all zone in database
+     * Test get all zone from database
      */
     @Test
     public void getAll() {
@@ -35,7 +36,7 @@ public class ZoneServiceImplIntegrationTest {
     }
 
     /**
-     * Test find by valid id
+     * Test with valid id
      */
     @Test
     public void findById() {
@@ -49,7 +50,15 @@ public class ZoneServiceImplIntegrationTest {
     }
 
     /**
-     * Test find by null id
+     * Test with invalid id
+     */
+    @Test(expected = GeneralException.class)
+    public void findByInvalidId() {
+        zoneService.findById(DB_ID_INVALID);
+    }
+
+    /**
+     * Test with null id
      */
     @Test(expected = GeneralException.class)
     public void findByNullId() {
@@ -63,7 +72,7 @@ public class ZoneServiceImplIntegrationTest {
     }
 
     /**
-     * Test zone with no transport lines
+     * Test with no transport lines
      */
     @Test
     @Transactional
@@ -83,7 +92,7 @@ public class ZoneServiceImplIntegrationTest {
     }
 
     /**
-     * Test zone with transport lines
+     * Test with transport lines
      */
     @Test
     @Transactional
@@ -104,7 +113,7 @@ public class ZoneServiceImplIntegrationTest {
     }
 
     /**
-     * Test zone with invalid transport lines data associated
+     * Test with invalid transport lines data associated
      */
     @Test(expected = GeneralException.class)
     @Transactional
@@ -125,7 +134,47 @@ public class ZoneServiceImplIntegrationTest {
     }
 
     /**
-     * Test zone with not unique name
+     * Test with null transport lines data associated
+     */
+    @Test
+    @Transactional
+    public void saveWithNullLines() {
+        Zone zone = new Zone(null, NEW_NAME, null, true);
+        int countBefore = zoneService.getAll().size();
+
+        Zone dbZone = zoneService.save(zone);
+        assertThat(dbZone).isNotNull();
+
+        assertThat(zoneService.getAll()).hasSize(countBefore + 1);
+
+        assertThat(dbZone.getName()).isEqualTo(zone.getName());
+        assertThat(dbZone.isActive()).isEqualTo(zone.isActive());
+        assertThat(dbZone.getLines()).isEqualTo(zone.getLines());
+
+    }
+
+    /**
+     * Test with null values
+     */
+    @Test(expected = DataIntegrityViolationException.class)
+    @Transactional
+    public void saveWithNullValues() {
+        Zone zone = new Zone(null, null, NEW_LINES, true);
+        int countBefore = zoneService.getAll().size();
+
+        Zone dbZone = zoneService.save(zone);
+        assertThat(dbZone).isNotNull();
+
+        assertThat(zoneService.getAll()).hasSize(countBefore + 1);
+
+        assertThat(dbZone.getName()).isEqualTo(zone.getName());
+        assertThat(dbZone.isActive()).isEqualTo(zone.isActive());
+        assertThat(dbZone.getLines()).isEqualTo(zone.getLines());
+
+    }
+
+    /**
+     * Test with not unique name
      */
     @Test(expected = GeneralException.class)
     @Transactional

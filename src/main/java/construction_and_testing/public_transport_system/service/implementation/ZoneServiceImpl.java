@@ -41,7 +41,7 @@ public class ZoneServiceImpl implements ZoneService {
             return zoneRepository.findById(id).orElseThrow(() -> new GeneralException("Requested zone does not exist!",
                     HttpStatus.BAD_REQUEST));
         } catch (InvalidDataAccessApiUsageException e) { // null id
-            throw new GeneralException("Invalid id.", HttpStatus.BAD_REQUEST);
+            throw new GeneralException("Invalid id!", HttpStatus.BAD_REQUEST);
         }
 
     }
@@ -49,30 +49,33 @@ public class ZoneServiceImpl implements ZoneService {
     @Override
     public Zone save(Zone zone) {
         try {
-            Set<TransportLine> temp = new HashSet<>(transportLineRepository.findAllById(zone.getLines().stream()
-                    .map((TransportLine::getId)).collect(Collectors.toList())));
-            if (temp.size() != zone.getLines().size()) {
-                throw new GeneralException("Invalid transport line data associated.", HttpStatus.BAD_REQUEST);
+            if (zone.getLines() == null) {
+                zone.setLines(new HashSet<>());
+            } else {
+                Set<TransportLine> temp = new HashSet<>(transportLineRepository.findAllById(zone.getLines().stream()
+                        .map((TransportLine::getId)).collect(Collectors.toList())));
+                if (temp.size() != zone.getLines().size()) {
+                    throw new GeneralException("Invalid transport line data associated!", HttpStatus.BAD_REQUEST);
+                }
+                zone.setLines(temp);
             }
-            zone.setLines(temp);
             return zoneRepository.save(zone);
         } catch (DataIntegrityViolationException e) {
             throw new GeneralException("Zone with given name already exist!", HttpStatus.BAD_REQUEST);
         }
-
     }
 
     @Override
     public void remove(Long id) {
         if (id == 1) {
-            throw new GeneralException("Zone can not be removed.", HttpStatus.BAD_REQUEST);
+            throw new GeneralException("Zone can not be removed!", HttpStatus.BAD_REQUEST);
         }
         Optional<Zone> entity = zoneRepository.findById(id);
         if (entity.isPresent()) {
             Zone zone = entity.get();
             zone.setActive(false);
             Zone defaultZone = zoneRepository.findById(1L).orElseThrow(
-                    () -> new GeneralException("Default zone does not exist.", HttpStatus.INTERNAL_SERVER_ERROR));
+                    () -> new GeneralException("Default zone does not exist!", HttpStatus.INTERNAL_SERVER_ERROR));
             zone.getLines().forEach((transportLine -> transportLine.setZone(defaultZone)));
             zoneRepository.save(zone);
         } else {

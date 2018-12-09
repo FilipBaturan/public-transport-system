@@ -17,6 +17,7 @@ public class ZoneConstants {
     public static final String DB_NAME = "Liman";
     public static final boolean DB_ACTIVE = true;
     public static final int DB_TR_COUNT = 3;
+    public static final Long DB_ID_INVALID = 33L;
     public static final ArrayList<Long> DB_TR_ID = new ArrayList<Long>() {{
         add(21L);
         add(22L);
@@ -32,13 +33,15 @@ public class ZoneConstants {
                         new TransportLinePosition(), new HashSet<>(), null, true));
             }};
     public static final HashSet<TransportLine> DB_TR_SAT = new HashSet<>(DB_TR);
-    public static final Zone DB_ZONE = new Zone(DB_ID, DB_NAME, new HashSet<>(), DB_ACTIVE);
+
     public static final ArrayList<Zone> DB_ZONES = new ArrayList<Zone>() {{
         add(new Zone());
         add(new Zone());
         add(new Zone());
     }};
 
+
+    public static final Long NEW_ID = 55L;
     public static final String NEW_NAME = "Klisa";
     public static final HashSet<TransportLine> NEW_LINES = new HashSet<>(
             Arrays.asList(new TransportLine(2L), new TransportLine(3L))
@@ -51,9 +54,32 @@ public class ZoneConstants {
                             new TransportLinePosition(), new HashSet<>(), null, true))
     );
 
+
+    public static final ArrayList<Long> TR_ID_INVALID = new ArrayList<Long>() {{
+        add(31L);
+        add(32L);
+    }};
+    public static final HashSet<TransportLine> TR_INVALID = new HashSet<>(
+            Arrays.asList(
+                    new TransportLine(31L, "D5", VehicleType.METRO,
+                            new TransportLinePosition(), new HashSet<>(), null, true),
+                    new TransportLine(32L, "D7", VehicleType.METRO,
+                            new TransportLinePosition(), new HashSet<>(), null, true))
+    );
+
     public static final Long DEL_ID = 2L;
     public static final Long DEL_ID_INVALID = 77L;
+    public static final String DEL_NAME = "Futog";
 
     public static final Long DEFAULT_ZONE_ID = 1L;
+    public static final String NOT_UNIQUE_NAME = "Kamenica";
+
+    public static final Zone DB_ZONE = new Zone(DB_ID, DEL_NAME, new HashSet<>(Arrays.asList(
+            new TransportLine(81L, "N5", VehicleType.METRO,
+                    new TransportLinePosition(), new HashSet<>(), null, true),
+            new TransportLine(82L, "N7", VehicleType.METRO,
+                    new TransportLinePosition(), new HashSet<>(), null, true))), DB_ACTIVE);
+    public static Zone DEL_ZONE = DB_ZONE;
+
 
 }

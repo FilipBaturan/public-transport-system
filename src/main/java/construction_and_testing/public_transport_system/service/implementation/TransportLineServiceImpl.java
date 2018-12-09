@@ -42,7 +42,7 @@ public class TransportLineServiceImpl implements TransportLineService {
         } catch (DataIntegrityViolationException e) {
             throw new GeneralException("Transport line with given name already exist!", HttpStatus.BAD_REQUEST);
         } catch (RuntimeException e) {
-            throw new GeneralException("Transport lines contains bad formatted id data", HttpStatus.BAD_REQUEST);
+            throw new GeneralException("Transport lines contains bad formatted id data!", HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -74,7 +74,7 @@ public class TransportLineServiceImpl implements TransportLineService {
                 transportLine.getSchedule().forEach(schedule -> {
                     // corrupted schedule associated to transport line
                     if (schedule.getId() != null && (!schedules.contains(schedule))) {
-                        throw new GeneralException("Corrupted schedule data received.", HttpStatus.BAD_REQUEST);
+                        throw new GeneralException("Corrupted schedule data received!", HttpStatus.BAD_REQUEST);
                     } else if (schedule.getId() != null) { // valid schedule associated to transport line
                         Schedule temp = null;
                         for (Schedule s : schedules) {
@@ -111,7 +111,7 @@ public class TransportLineServiceImpl implements TransportLineService {
         } catch (DataIntegrityViolationException e) {
             throw new GeneralException("Transport line with given name already exist!", HttpStatus.BAD_REQUEST);
         } catch (RuntimeException e) { // PersistentObjectException handled
-            throw new GeneralException("Transport lines contains bad formatted id data", HttpStatus.BAD_REQUEST);
+            throw new GeneralException("Transport lines contains bad formatted id data!", HttpStatus.BAD_REQUEST);
         }
         // POSTO SE KORISTI KASKADA ALL OCEKUJE SE DA SVI ID-JEVI KOJE VIDI TRANSPORTLINE DA BUDU NULL
         // (U SUPROTNOM BACA PERZISTENCEOBJECTEXCEPTION) TJ. ID-JEVI OD TRANSPORTLINEPOSITION.

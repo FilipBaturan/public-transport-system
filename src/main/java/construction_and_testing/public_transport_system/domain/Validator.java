@@ -23,7 +23,7 @@ public class Validator extends User implements Serializable {
 
     public Validator(User user) {
         super(user.id, user.name, user.lastName, user.username, user.password, user.email, user.telephone, user.isActive());
-        this.setAuthorityType( AuthorityType.VALIDATOR);
+        this.setAuthorityType(AuthorityType.VALIDATOR);
     }
 
     public static long getSerialVersionUID() {
