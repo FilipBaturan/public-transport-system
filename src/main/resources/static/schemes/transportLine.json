@@ -17,7 +17,10 @@
   "properties": {
     "id": {
       "$id": "#/properties/id",
-      "type": ["integer", "null"],
+      "type": [
+        "integer",
+        "null"
+      ],
       "title": "Id",
       "description": "Transport line id",
       "default": 0,
@@ -45,9 +48,15 @@
       "title": "Type",
       "description": "Transport line type",
       "default": "BUS",
-      "enum": ["BUS", "METRO", "TRAM"],
+      "enum": [
+        "BUS",
+        "METRO",
+        "TRAM"
+      ],
       "examples": [
-        "BUS", "METRO", "TRAM"
+        "BUS",
+        "METRO",
+        "TRAM"
       ]
     },
     "positions": {
@@ -70,9 +79,10 @@
       "minItems": 0,
       "items": {
         "$id": "#/properties/schedule/items",
-        "type": "object",
+        "type": "number",
         "title": "Schedule item",
-        "$ref": "http://localhost:8080/schemes/schedule.json"
+        "minimum": 0,
+        "multipleOf": 1
       }
     },
     "active": {

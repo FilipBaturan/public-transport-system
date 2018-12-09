@@ -1,11 +1,11 @@
-package construction_and_testing.public_transport_system.domain.util;
+package construction_and_testing.public_transport_system.util;
 
 import org.springframework.http.HttpStatus;
 
 /**
  * General error exception
  */
-public class GeneralException extends RuntimeException{
+public class GeneralException extends RuntimeException {
 
     private HttpStatus httpStatus;
 

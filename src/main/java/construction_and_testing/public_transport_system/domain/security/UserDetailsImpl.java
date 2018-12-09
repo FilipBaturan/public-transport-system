@@ -51,7 +51,7 @@ public class UserDetailsImpl implements UserDetails {
 
     //Date lastPasswordReset,
     public UserDetailsImpl(Long id, String username, String password, String email, String phoneNumber,
-                            Collection<? extends GrantedAuthority> authorities) {
+                           Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
         this.username = username;
         this.password = password;
@@ -102,7 +102,7 @@ public class UserDetailsImpl implements UserDetails {
     }
 
     //public Date getLastPasswordReset() {
-        //return this.lastPasswordReset;
+    //return this.lastPasswordReset;
     //}
 
     //public void setLastPasswordReset(Date lastPasswordReset) {

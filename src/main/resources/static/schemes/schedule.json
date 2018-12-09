@@ -16,7 +16,10 @@
   "properties": {
     "id": {
       "$id": "#/properties/id",
-      "type": ["integer", "null"],
+      "type": [
+        "integer",
+        "null"
+      ],
       "title": "Id",
       "description": "Schedule id",
       "default": 0,
@@ -34,7 +37,9 @@
       "default": "00:00",
       "pattern": "^(?:([01]?\\d|2[0-3]):([0-5]?\\d))$",
       "examples": [
-        "8:15", "08:15", "23:17"
+        "8:15",
+        "08:15",
+        "23:17"
       ]
     },
     "transportLine": {
@@ -56,9 +61,15 @@
       "title": "Day",
       "description": "Schedule day",
       "default": "WORKDAY",
-      "enum": ["WORKDAY", "SATURDAY", "SUNDAY"],
+      "enum": [
+        "WORKDAY",
+        "SATURDAY",
+        "SUNDAY"
+      ],
       "examples": [
-        "WORKDAY", "SATURDAY", "SUNDAY"
+        "WORKDAY",
+        "SATURDAY",
+        "SUNDAY"
       ]
     },
     "active": {

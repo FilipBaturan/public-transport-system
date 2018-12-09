@@ -6,7 +6,7 @@ import construction_and_testing.public_transport_system.domain.enums.UsersDocume
 import construction_and_testing.public_transport_system.domain.enums.AuthorityType;
 
 public class RegisteredUserConverter extends AbstractConverter {
-    public static RegisteringUserDTO toRegisteringUserDTO(RegisteredUser registeredUser){
+    public static RegisteringUserDTO toRegisteringUserDTO(RegisteredUser registeredUser) {
         RegisteringUserDTO dto = new RegisteringUserDTO();
         dto.setName(registeredUser.getName());
         dto.setLastName(registeredUser.getLastName());
@@ -17,7 +17,7 @@ public class RegisteredUserConverter extends AbstractConverter {
         return dto;
     }
 
-    public static RegisteredUser fromRegisteringUserDTO(RegisteringUserDTO registeringUserDTO){
+    public static RegisteredUser fromRegisteringUserDTO(RegisteringUserDTO registeringUserDTO) {
         RegisteredUser entity = new RegisteredUser();
         entity.setName(registeringUserDTO.getName());
         entity.setLastName(registeringUserDTO.getLastName());

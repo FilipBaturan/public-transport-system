@@ -1,8 +1,8 @@
 package construction_and_testing.public_transport_system.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import construction_and_testing.public_transport_system.domain.DTO.TransportLineDTO;
 import construction_and_testing.public_transport_system.domain.DTO.ZoneDTO;
+import construction_and_testing.public_transport_system.domain.DTO.ZoneTransportLineDTO;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -28,7 +28,7 @@ public class Zone implements Serializable {
     private String name;
 
     @JsonIgnore
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "zone")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "zone", cascade = CascadeType.MERGE)
     private Set<TransportLine> lines;
 
     @Column(nullable = false, name = "active")
@@ -38,25 +38,26 @@ public class Zone implements Serializable {
         this.active = true;
     }
 
-    public Zone(long id){
+    public Zone(Long id) {
         this.id = id;
         this.active = true;
     }
 
-    public Zone(long id, String name, Set<TransportLine> lines, boolean active) {
+    public Zone(Long id, String name, Set<TransportLine> lines, boolean active) {
         this.id = id;
         this.name = name;
         this.lines = lines;
         this.active = active;
     }
 
-    public Zone(ZoneDTO zone){
+    public Zone(ZoneDTO zone) {
         this.id = zone.getId();
         this.name = zone.getName();
         this.active = zone.isActive();
-        this.lines = zone.getLines().stream().map((TransportLineDTO t) -> new TransportLine(t,this)).
+        this.lines = zone.getLines().stream().map((ZoneTransportLineDTO t) -> new TransportLine(t, this)).
                 collect(Collectors.toSet());
     }
+
 
     public static long getSerialVersionUID() {
         return serialVersionUID;

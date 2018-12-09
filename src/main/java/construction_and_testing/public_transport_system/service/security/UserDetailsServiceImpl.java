@@ -5,7 +5,6 @@ import construction_and_testing.public_transport_system.repository.UserRepositor
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 /**
@@ -24,7 +23,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     @Override
     public UserDetails loadUserByUsername(String username) {
         final User user = userRepository.findByUsername(username);
-               // .orElseThrow(() -> new UsernameNotFoundException(String.format("No user with username %s found!", username)));
+        // .orElseThrow(() -> new UsernameNotFoundException(String.format("No user with username %s found!", username)));
         return UserDetailsFactory.create(user);
     }
 }

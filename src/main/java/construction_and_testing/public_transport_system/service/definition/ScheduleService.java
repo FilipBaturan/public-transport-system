@@ -27,4 +27,11 @@ public interface ScheduleService {
      * @param id of schedule that needs to be removed
      */
     void remove(Long id);
+
+    /**
+     * @param id        id of a transport line
+     * @param dayOfWeek that the schedule is requested for
+     * @return schedule for the request transport line and day of week
+     */
+    Schedule findByTransportLineIdAndDayOfWeek(Long id, Integer dayOfWeek);
 }

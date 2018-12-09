@@ -17,7 +17,10 @@
   "properties": {
     "id": {
       "$id": "#/properties/id",
-      "type": ["integer", "null"],
+      "type": [
+        "integer",
+        "null"
+      ],
       "title": "Id",
       "description": "Station id",
       "default": 0,
@@ -34,7 +37,8 @@
       "description": "Station name",
       "default": "",
       "examples": [
-        "zone1", "zone2"
+        "zone1",
+        "zone2"
       ],
       "maxLength": 30,
       "pattern": "^(.*)$"
@@ -52,9 +56,15 @@
       "title": "Type",
       "description": "Vehicle type",
       "default": "BUS",
-      "enum": ["BUS", "METRO", "TRAM"],
+      "enum": [
+        "BUS",
+        "METRO",
+        "TRAM"
+      ],
       "examples": [
-        "BUS", "METRO", "TRAM"
+        "BUS",
+        "METRO",
+        "TRAM"
       ]
     },
     "active": {

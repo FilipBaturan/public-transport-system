@@ -11,11 +11,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
-
 
 import java.io.IOException;
 import java.util.Calendar;
@@ -53,8 +50,23 @@ public class ScheduleController extends ValidationController {
      */
     @GetMapping("{/id}")
     public ResponseEntity<ScheduleDTO> findById(@PathVariable String id) {
-        logger.info("Requesting station with id {} at time {}.", id, Calendar.getInstance().getTime());
+        logger.info("Requesting schedule with id {} at time {}.", id, Calendar.getInstance().getTime());
         return new ResponseEntity<>(new ScheduleDTO(scheduleService.findById(Long.parseLong(id))), HttpStatus.FOUND);
+    }
+
+
+    /**
+     * GET /api/schedule/findByTransportLines/{id}
+     *
+     * @param id        of a transport lines for which a schedule is requested
+     * @param dayOfWeek day of week for which the schedule is requested
+     * @return schedule for a transport line with requested id
+     */
+    @GetMapping("/findByTransportLine/{id}")
+    public ResponseEntity<ScheduleDTO> findByTransportLineIdAndDayOfWeek(@PathVariable Long id, @RequestParam String dayOfWeek) {
+        logger.info("Requesting schedule for transprot line with  {} at time {}.", id, Calendar.getInstance().getTime());
+        Schedule schedule = scheduleService.findByTransportLineIdAndDayOfWeek(id, Integer.parseInt(dayOfWeek));
+        return new ResponseEntity<>(new ScheduleDTO(schedule), HttpStatus.OK);
     }
 
     /**
@@ -66,7 +78,7 @@ public class ScheduleController extends ValidationController {
     @PostMapping()
     public ResponseEntity<ScheduleDTO> create(@RequestBody String schedule) throws IOException, ValidationException {
         logger.info("Saving schedule at time {}.", Calendar.getInstance().getTime());
-        validateJSON(schedule,"schedule.json");
+        validateJSON(schedule, "schedule.json");
         ObjectMapper mapper = new ObjectMapper();
         Schedule temp = new Schedule(mapper.readValue(schedule, ScheduleDTO.class));
         temp.setTransportLine(transportLineService.findById(temp.getTransportLine().getId()));
@@ -84,7 +96,7 @@ public class ScheduleController extends ValidationController {
     //@PreAuthorize("")
     public ResponseEntity<String> delete(@RequestBody String schedule) throws IOException, ValidationException {
         logger.info("Deleting station at time {}.", Calendar.getInstance().getTime());
-        validateJSON(schedule,"schedule.json");
+        validateJSON(schedule, "schedule.json");
         ObjectMapper mapper = new ObjectMapper();
         scheduleService.remove((new Schedule(mapper.readValue(schedule, ScheduleDTO.class))).getId());
         return new ResponseEntity<>("Schedule successfully deleted!", HttpStatus.OK);

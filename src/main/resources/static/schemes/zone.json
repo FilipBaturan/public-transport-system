@@ -13,7 +13,10 @@
   "properties": {
     "id": {
       "$id": "#/properties/id",
-      "type": ["integer", "null"],
+      "type": [
+        "integer",
+        "null"
+      ],
       "title": "Id",
       "description": "Zone id",
       "default": 0,
@@ -40,12 +43,12 @@
       "type": "array",
       "title": "Lines",
       "description": "Zone lines",
-      "minItems": 1,
+      "minItems": 0,
       "items": {
         "$id": "#/properties/lines/items",
         "type": "object",
         "title": "Line",
-        "$ref": "http://localhost:8080/schemes/transportLine.json"
+        "$ref": "http://localhost:8080/schemes/zoneTransportLine.json"
       }
     },
     "active": {

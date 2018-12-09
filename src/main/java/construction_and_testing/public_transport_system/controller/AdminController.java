@@ -17,5 +17,4 @@ public class AdminController {
     private AdminService adminService;
 
 
-
 }

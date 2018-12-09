@@ -39,7 +39,7 @@ public class TransportLinePosition implements Serializable {
         this.active = active;
     }
 
-    public TransportLinePosition(TransportLinePositionDTO position, TransportLine transportLine){
+    public TransportLinePosition(TransportLinePositionDTO position, TransportLine transportLine) {
         this.id = position.getId();
         this.content = position.getContent();
         this.active = position.isActive();

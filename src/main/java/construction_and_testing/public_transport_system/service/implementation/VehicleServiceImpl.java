@@ -1,15 +1,14 @@
 package construction_and_testing.public_transport_system.service.implementation;
 
 import construction_and_testing.public_transport_system.domain.Vehicle;
-import construction_and_testing.public_transport_system.domain.util.GeneralException;
+import construction_and_testing.public_transport_system.repository.TransportLineRepository;
 import construction_and_testing.public_transport_system.repository.VehicleRepository;
 import construction_and_testing.public_transport_system.service.definition.VehicleService;
+import construction_and_testing.public_transport_system.util.GeneralException;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import javax.persistence.EntityNotFoundException;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,6 +17,9 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Autowired
     private VehicleRepository vehicleRepository;
+
+    @Autowired
+    private TransportLineRepository transportLineRepository;
 
     @Override
     public List<Vehicle> getAll() {
@@ -32,17 +34,19 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public Vehicle save(Vehicle vehicle) {
+        vehicle.setCurrentLine(transportLineRepository.findById(vehicle.getCurrentLine().getId())
+                .orElseThrow(() -> new GeneralException("Bad transport line data associated", HttpStatus.BAD_REQUEST)));
         return vehicleRepository.save(vehicle);
     }
 
     @Override
     public void remove(Long id) {
         Optional<Vehicle> entity = vehicleRepository.findById(id);
-        if(entity.isPresent()){
+        if (entity.isPresent()) {
             Vehicle vehicle = entity.get();
             vehicle.setActive(false);
             vehicleRepository.save(vehicle);
-        }else {
+        } else {
             throw new GeneralException("Vehicle with id:" + id + " does not exist!", HttpStatus.BAD_REQUEST);
         }
     }

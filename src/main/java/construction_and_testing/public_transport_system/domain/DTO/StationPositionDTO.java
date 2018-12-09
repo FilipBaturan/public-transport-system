@@ -12,7 +12,7 @@ public class StationPositionDTO extends Position {
         super(id, latitude, longitude, active);
     }
 
-    public StationPositionDTO(StationPosition stationPosition){
+    public StationPositionDTO(StationPosition stationPosition) {
         this.setId(stationPosition.getId());
         this.setLatitude(stationPosition.getLatitude());
         this.setLongitude(stationPosition.getLongitude());

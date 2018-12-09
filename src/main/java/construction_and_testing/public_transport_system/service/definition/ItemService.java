@@ -1,8 +1,6 @@
 package construction_and_testing.public_transport_system.service.definition;
 
 import construction_and_testing.public_transport_system.domain.Item;
-import construction_and_testing.public_transport_system.domain.enums.AgeType;
-import construction_and_testing.public_transport_system.domain.enums.TicketType;
 
 import java.util.List;
 

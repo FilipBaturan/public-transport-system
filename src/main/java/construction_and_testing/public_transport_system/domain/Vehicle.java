@@ -47,7 +47,7 @@ public class Vehicle implements Serializable {
         this.active = active;
     }
 
-    public Vehicle(VehicleDTO vehicle){
+    public Vehicle(VehicleDTO vehicle) {
         this.id = vehicle.getId();
         this.name = vehicle.getName();
         this.type = vehicle.getType();

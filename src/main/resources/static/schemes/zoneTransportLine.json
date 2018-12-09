@@ -1,0 +1,70 @@
+{
+  "definitions": {},
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "http://public_transport_system/schemes/zoneTransportLine.json",
+  "type": "object",
+  "title": "Transport Line",
+  "description": "Represents the transport line available in public transport system",
+  "required": [
+    "id",
+    "name",
+    "type",
+    "active"
+  ],
+  "properties": {
+    "id": {
+      "$id": "#/properties/id",
+      "type": [
+        "integer",
+        "null"
+      ],
+      "title": "Id",
+      "description": "Transport line id",
+      "default": 0,
+      "examples": [
+        1
+      ],
+      "minimum": 0,
+      "multipleOf": 1
+    },
+    "name": {
+      "$id": "#/properties/name",
+      "type": "string",
+      "title": "Name",
+      "description": "Transport line name",
+      "default": "",
+      "maxLength": 30,
+      "examples": [
+        "test"
+      ],
+      "pattern": "^(.*)$"
+    },
+    "type": {
+      "$id": "#/properties/type",
+      "type": "string",
+      "title": "Type",
+      "description": "Transport line type",
+      "default": "BUS",
+      "enum": [
+        "BUS",
+        "METRO",
+        "TRAM"
+      ],
+      "examples": [
+        "BUS",
+        "METRO",
+        "TRAM"
+      ]
+    },
+    "active": {
+      "$id": "#/properties/active",
+      "type": "boolean",
+      "title": "Active",
+      "description": "indicates is transport line exist in database",
+      "default": true,
+      "examples": [
+        true
+      ]
+    }
+  }
+}

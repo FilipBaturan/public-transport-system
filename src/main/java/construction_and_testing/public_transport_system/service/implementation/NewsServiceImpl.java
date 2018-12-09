@@ -23,7 +23,7 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public News getById(Long id) {
-        if(newsRepository.findById(id).isPresent()){
+        if (newsRepository.findById(id).isPresent()) {
             News news = newsRepository.findById(id).get();
             return news;
         }
@@ -35,14 +35,14 @@ public class NewsServiceImpl implements NewsService {
         try {
             newsRepository.saveAndFlush(news);
             return true;
-        }catch (Exception e){
+        } catch (Exception e) {
             return false;
         }
     }
 
     @Override
     public boolean modify(News news) {
-        if(newsRepository.findById(news.getId()).isPresent()){
+        if (newsRepository.findById(news.getId()).isPresent()) {
             newsRepository.saveAndFlush(news);
             return true;
         }
@@ -52,11 +52,11 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public void remove(Long id) {
         Optional<News> entity = newsRepository.findById(id);
-        if(entity.isPresent()){
+        if (entity.isPresent()) {
             News news = entity.get();
             news.setActive(false);
             newsRepository.save(news);
-        }else {
+        } else {
             throw new EntityNotFoundException();
         }
     }

@@ -21,7 +21,7 @@ public class ItemServiceImpl implements ItemService {
     public Item saveItem(Item i) {
         try {
             return this.itemRepository.save(i);
-        } catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             return null;
         }
     }
@@ -29,11 +29,11 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public void remove(Long id) {
         Optional<Item> entity = itemRepository.findById(id);
-        if(entity.isPresent()){
+        if (entity.isPresent()) {
             Item item = entity.get();
             item.setActive(false);
             itemRepository.save(item);
-        }else {
+        } else {
             throw new EntityNotFoundException();
         }
     }

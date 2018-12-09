@@ -1,10 +1,10 @@
-package construction_and_testing.public_transport_system.domain.util;
+package construction_and_testing.public_transport_system.util;
 
 import javax.persistence.AttributeConverter;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
 
-public class LocalDateTimeConverter implements AttributeConverter< LocalDateTime, Timestamp > {
+public class LocalDateTimeConverter implements AttributeConverter<LocalDateTime, Timestamp> {
 
     @Override
 

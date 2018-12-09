@@ -4,9 +4,9 @@ import construction_and_testing.public_transport_system.domain.RegisteredUser;
 import construction_and_testing.public_transport_system.domain.User;
 import construction_and_testing.public_transport_system.domain.Validator;
 import construction_and_testing.public_transport_system.domain.enums.AuthorityType;
-import construction_and_testing.public_transport_system.domain.util.GeneralException;
 import construction_and_testing.public_transport_system.repository.UserRepository;
 import construction_and_testing.public_transport_system.service.definition.UserService;
+import construction_and_testing.public_transport_system.util.GeneralException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public Boolean addUser(RegisteredUser user) {
-        if(userRepository.findByUsername(user.getUsername()) == null){
+        if (userRepository.findByUsername(user.getUsername()) == null) {
             userRepository.saveAndFlush(user);
             return true;
         }

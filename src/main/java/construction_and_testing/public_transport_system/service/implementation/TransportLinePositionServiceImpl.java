@@ -1,9 +1,9 @@
 package construction_and_testing.public_transport_system.service.implementation;
 
 import construction_and_testing.public_transport_system.domain.TransportLinePosition;
-import construction_and_testing.public_transport_system.domain.util.GeneralException;
 import construction_and_testing.public_transport_system.repository.TransportLinePositionRepository;
 import construction_and_testing.public_transport_system.service.definition.TransportLinePositionService;
+import construction_and_testing.public_transport_system.util.GeneralException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -36,11 +36,11 @@ public class TransportLinePositionServiceImpl implements TransportLinePositionSe
     @Override
     public void remove(Long id) {
         Optional<TransportLinePosition> entity = transportLinePositionRepository.findById(id);
-        if(entity.isPresent()){
+        if (entity.isPresent()) {
             TransportLinePosition transportLinePosition = entity.get();
             transportLinePosition.setActive(false);
             transportLinePositionRepository.save(transportLinePosition);
-        }else {
+        } else {
             throw new GeneralException("Transport line position with id:" + id + " does not exist!", HttpStatus.BAD_REQUEST);
         }
     }

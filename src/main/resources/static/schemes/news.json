@@ -17,7 +17,10 @@
   "properties": {
     "id": {
       "$id": "#/properties/id",
-      "type": ["integer", "null"],
+      "type": [
+        "integer",
+        "null"
+      ],
       "title": "Id",
       "description": "News id",
       "default": 0,
@@ -60,7 +63,6 @@
       "examples": [
         "2018-11-08T00:00:00Z"
       ]
-
     },
     "active": {
       "$id": "#/properties/active",
