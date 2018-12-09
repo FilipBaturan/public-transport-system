@@ -1,10 +1,12 @@
 package construction_and_testing.public_transport_system.service.implementation;
 
 import construction_and_testing.public_transport_system.domain.Vehicle;
+import construction_and_testing.public_transport_system.repository.TransportLineRepository;
 import construction_and_testing.public_transport_system.repository.VehicleRepository;
 import construction_and_testing.public_transport_system.service.definition.VehicleService;
 import construction_and_testing.public_transport_system.util.GeneralException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +19,9 @@ public class VehicleServiceImpl implements VehicleService {
     @Autowired
     private VehicleRepository vehicleRepository;
 
+    @Autowired
+    private TransportLineRepository transportLineRepository;
+
     @Override
     public List<Vehicle> getAll() {
         return vehicleRepository.findAll();
@@ -24,13 +29,29 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public Vehicle findById(Long id) {
-        return vehicleRepository.findById(id).orElseThrow(() ->
-                new GeneralException("Requested vehicle does not exist!", HttpStatus.BAD_REQUEST));
+        try {
+            return vehicleRepository.findById(id).orElseThrow(() ->
+                    new GeneralException("Requested vehicle does not exist!", HttpStatus.BAD_REQUEST));
+        } catch (InvalidDataAccessApiUsageException e) { // null id
+            throw new GeneralException("Invalid id!", HttpStatus.BAD_REQUEST);
+
+        }
     }
 
     @Override
     public Vehicle save(Vehicle vehicle) {
-        return vehicleRepository.save(vehicle);
+        try {
+            vehicle.setCurrentLine(transportLineRepository.findById(vehicle.getCurrentLine().getId())
+                    .orElseThrow(() -> new GeneralException("Invalid transport line data associated!", HttpStatus.BAD_REQUEST)));
+            if (vehicle.getType() != vehicle.getCurrentLine().getType()) {
+                throw new GeneralException("Invalid transport line and vehicle types!", HttpStatus.BAD_REQUEST);
+            }
+            return vehicleRepository.save(vehicle);
+        } catch (NullPointerException e) {
+            throw new GeneralException("Invalid transport line and vehicle types!", HttpStatus.BAD_REQUEST);
+        }
+
+
     }
 
     @Override

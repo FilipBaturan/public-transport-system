@@ -18,6 +18,9 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 
+/**
+ * API for transport line
+ */
 @RestController
 @RequestMapping("/api/transportLine")
 public class TransportLineController extends ValidationController {
@@ -59,7 +62,7 @@ public class TransportLineController extends ValidationController {
      * @return saved transportLine
      */
     @PostMapping()
-    public ResponseEntity<TransportLineDTO> create(@RequestBody String transportLine) throws IOException,
+    public ResponseEntity<TransportLineDTO> save(@RequestBody String transportLine) throws IOException,
             ValidationException {
         logger.info("Saving transport line with at time {}.", Calendar.getInstance().getTime());
         validateJSON(transportLine, "transportLine.json");
@@ -78,7 +81,7 @@ public class TransportLineController extends ValidationController {
     public ResponseEntity<List<TransportLineDTO>> replaceAll(@RequestBody String transportLines) throws
             IOException, ValidationException {
         logger.info("Replacing all transport lines at time {}.", Calendar.getInstance().getTime());
-        //validateJSON(transportLines, "transportLineCollection.json");
+        validateJSON(transportLines, "transportLineCollection.json");
         ObjectMapper mapper = new ObjectMapper();
         return new ResponseEntity<>(TransportLineConverter.fromEntityList(transportLineService
                 .replaceAll(TransportLineConverter.toEntityList(
@@ -87,12 +90,12 @@ public class TransportLineController extends ValidationController {
     }
 
     /**
-     * DELETE /api/transportLine/{id}
+     * DELETE /api/transportLine
      *
      * @param transportLine that needs to be deleted
      * @return message about action results
      */
-    @DeleteMapping("{id}")
+    @DeleteMapping()
     public ResponseEntity<String> delete(@RequestBody String transportLine) throws IOException,
             ValidationException {
         logger.info("Deleting transportLine with id at time {}.", Calendar.getInstance().getTime());

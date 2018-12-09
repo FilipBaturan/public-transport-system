@@ -5,7 +5,6 @@ import construction_and_testing.public_transport_system.converter.StationConvert
 import construction_and_testing.public_transport_system.domain.DTO.StationCollectionDTO;
 import construction_and_testing.public_transport_system.domain.DTO.StationDTO;
 import construction_and_testing.public_transport_system.domain.Station;
-import construction_and_testing.public_transport_system.service.definition.StationPositionService;
 import construction_and_testing.public_transport_system.service.definition.StationService;
 import org.everit.json.schema.ValidationException;
 import org.slf4j.Logger;
@@ -19,6 +18,9 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 
+/**
+ * API for station
+ */
 @RestController
 @RequestMapping("/api/station")
 public class StationController extends ValidationController {
@@ -28,8 +30,6 @@ public class StationController extends ValidationController {
     @Autowired
     private StationService stationService;
 
-    @Autowired
-    private StationPositionService stationPositionService;
 
     /**
      * GET /rest/station
@@ -62,7 +62,7 @@ public class StationController extends ValidationController {
      * @return added station
      */
     @PostMapping
-    public ResponseEntity<StationDTO> create(@RequestBody String station) throws IOException, ValidationException {
+    public ResponseEntity<StationDTO> save(@RequestBody String station) throws IOException, ValidationException {
         logger.info("Saving station at time {}.", Calendar.getInstance().getTime());
         validateJSON(station, "station.json");
         ObjectMapper mapper = new ObjectMapper();
@@ -89,12 +89,12 @@ public class StationController extends ValidationController {
     }
 
     /**
-     * DELETE /api/station/{id}
+     * DELETE /api/station
      *
      * @param station that needs to be deleted
      * @return message about action results
      */
-    @DeleteMapping("{id}")
+    @DeleteMapping()
     public ResponseEntity<String> delete(@RequestBody String station) throws IOException, ValidationException {
         logger.info("Deleting station at time {}.", Calendar.getInstance().getTime());
         validateJSON(station, "station.json");

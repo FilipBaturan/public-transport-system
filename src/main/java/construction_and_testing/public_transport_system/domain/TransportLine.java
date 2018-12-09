@@ -2,6 +2,7 @@ package construction_and_testing.public_transport_system.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import construction_and_testing.public_transport_system.domain.DTO.TransportLineDTO;
+import construction_and_testing.public_transport_system.domain.DTO.ZoneTransportLineDTO;
 import construction_and_testing.public_transport_system.domain.enums.VehicleType;
 import org.hibernate.annotations.Where;
 
@@ -55,7 +56,7 @@ public class TransportLine implements Serializable {
         this.active = true;
     }
 
-    public TransportLine(long id, String name, VehicleType type, TransportLinePosition positions,
+    public TransportLine(Long id, String name, VehicleType type, TransportLinePosition positions,
                          Set<Schedule> schedule, Zone zone, boolean active) {
         this.id = id;
         this.name = name;
@@ -86,6 +87,13 @@ public class TransportLine implements Serializable {
         this.positions = new TransportLinePosition(transportLine.getPositions(), this);
         this.zone = zone;
         this.active = transportLine.isActive();
+    }
+
+    public TransportLine(ZoneTransportLineDTO transportLine, Zone zone) {
+        this.id = transportLine.getId();
+        this.name = transportLine.getName();
+        this.type = transportLine.getType();
+        this.zone = zone;
     }
 
     public static long getSerialVersionUID() {

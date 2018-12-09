@@ -18,6 +18,9 @@ import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
 
+/**
+ * API for vehicle
+ */
 @RestController
 @RequestMapping("/api/vehicle")
 public class VehicleController extends ValidationController {
@@ -61,22 +64,21 @@ public class VehicleController extends ValidationController {
      * @return added vehicle
      */
     @PostMapping()
-    public ResponseEntity<VehicleDTO> create(@RequestBody String vehicle) throws IOException, ValidationException {
+    public ResponseEntity<VehicleDTO> save(@RequestBody String vehicle) throws IOException, ValidationException {
         logger.info("Adding vehicle with at time {}.", Calendar.getInstance().getTime());
         validateJSON(vehicle, "vehicle.json");
         ObjectMapper mapper = new ObjectMapper();
-        Vehicle temp = new Vehicle(mapper.readValue(vehicle, VehicleDTO.class));
-        temp.setCurrentLine(transportLineService.findById(temp.getCurrentLine().getId()));
-        return new ResponseEntity<>(new VehicleDTO(vehicleService.save(temp)), HttpStatus.OK);
+        return new ResponseEntity<>(new VehicleDTO(vehicleService
+                .save(new Vehicle(mapper.readValue(vehicle, VehicleDTO.class)))), HttpStatus.OK);
     }
 
     /**
-     * DELETE /api/zone/{id}
+     * DELETE /api/vehicle
      *
      * @param vehicle that needs to be deleted
      * @return message about action results
      */
-    @DeleteMapping("{id}")
+    @DeleteMapping()
     public ResponseEntity<String> delete(@RequestBody String vehicle) throws IOException, ValidationException {
         logger.info("Deleting vehicle at time {}.", Calendar.getInstance().getTime());
         validateJSON(vehicle, "vehicle.json");
