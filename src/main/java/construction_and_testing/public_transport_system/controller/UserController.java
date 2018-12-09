@@ -19,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -31,26 +32,21 @@ public class UserController {
 
     private static final Logger logger = LoggerFactory.getLogger(UserController.class);
 
-    //@Autowired
-    private final AuthenticationManager authenticationManager;
-
-    //@Autowired
-    private final UserDetailsService userDetailsService;
-
-    //@Autowired
-    private final UserService userService;
-
-    //@Autowired
-    private final TokenUtils tokenUtils;
+    @Autowired
+    private AuthenticationManager authenticationManager;
 
     @Autowired
-    public UserController(AuthenticationManager authenticationManager, UserDetailsService userDetailsService,
-                                    UserService userService, TokenUtils tokenUtils) {
-        this.authenticationManager = authenticationManager;
-        this.userDetailsService = userDetailsService;
-        this.userService = userService;
-        this.tokenUtils = tokenUtils;
-    }
+    private UserDetailsService userDetailsService;
+
+    @Autowired
+    private UserService userService;
+
+    @Autowired
+    private TokenUtils tokenUtils;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
 
     /**
      * GET /api/user
@@ -114,7 +110,7 @@ public class UserController {
     @PostMapping(path = "/add")
     public ResponseEntity<Boolean> create(@RequestBody RegisteringUserDTO regUser) {
         logger.info("Trying to register new user...");
-        System.out.println(regUser.getTelephone());
+        regUser.setPassword(passwordEncoder.encode(regUser.getPassword()));
         Boolean registered = userService.addUser(RegisteredUserConverter.fromRegisteringUserDTO(regUser));
         if (registered) {
             logger.info("Successfully registered user.");
