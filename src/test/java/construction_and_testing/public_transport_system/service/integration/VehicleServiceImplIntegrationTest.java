@@ -146,7 +146,7 @@ public class VehicleServiceImplIntegrationTest {
     }
 
     /**
-     * Test with null transport line
+     * Test with null values
      */
     @Test(expected = GeneralException.class)
     @Transactional
