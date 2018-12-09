@@ -5,7 +5,6 @@ import construction_and_testing.public_transport_system.converter.StationConvert
 import construction_and_testing.public_transport_system.domain.DTO.StationCollectionDTO;
 import construction_and_testing.public_transport_system.domain.DTO.StationDTO;
 import construction_and_testing.public_transport_system.domain.Station;
-import construction_and_testing.public_transport_system.service.definition.StationPositionService;
 import construction_and_testing.public_transport_system.service.definition.StationService;
 import org.everit.json.schema.ValidationException;
 import org.slf4j.Logger;
@@ -31,8 +30,6 @@ public class StationController extends ValidationController {
     @Autowired
     private StationService stationService;
 
-    @Autowired
-    private StationPositionService stationPositionService;
 
     /**
      * GET /rest/station

@@ -49,12 +49,16 @@ public class ZoneServiceImpl implements ZoneService {
     @Override
     public Zone save(Zone zone) {
         try {
-            Set<TransportLine> temp = new HashSet<>(transportLineRepository.findAllById(zone.getLines().stream()
-                    .map((TransportLine::getId)).collect(Collectors.toList())));
-            if (temp.size() != zone.getLines().size()) {
-                throw new GeneralException("Invalid transport line data associated!", HttpStatus.BAD_REQUEST);
+            if (zone.getLines() == null) {
+                zone.setLines(new HashSet<>());
+            } else {
+                Set<TransportLine> temp = new HashSet<>(transportLineRepository.findAllById(zone.getLines().stream()
+                        .map((TransportLine::getId)).collect(Collectors.toList())));
+                if (temp.size() != zone.getLines().size()) {
+                    throw new GeneralException("Invalid transport line data associated!", HttpStatus.BAD_REQUEST);
+                }
+                zone.setLines(temp);
             }
-            zone.setLines(temp);
             return zoneRepository.save(zone);
         } catch (DataIntegrityViolationException e) {
             throw new GeneralException("Zone with given name already exist!", HttpStatus.BAD_REQUEST);

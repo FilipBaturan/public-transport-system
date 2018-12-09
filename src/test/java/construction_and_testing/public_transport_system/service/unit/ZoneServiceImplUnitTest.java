@@ -47,10 +47,9 @@ public class ZoneServiceImplUnitTest {
                 Zone zone = (Zone) arguments[0];
                 if (zone.getName().equals(NOT_UNIQUE_NAME)) {
                     throw new DataIntegrityViolationException(null);
-                }else if (zone.getName().equals(DEL_NAME)){
-                    zone.setActive(false);
+                } else if (zone.getName().equals(DEL_NAME)) {
                     DEL_ZONE = zone;
-                }else{
+                } else {
                     zone.setId(NEW_ID);
                     DB_ZONES.add(zone);
                 }
@@ -66,7 +65,7 @@ public class ZoneServiceImplUnitTest {
     }
 
     /**
-     * Test zone with transport lines
+     * Test with transport lines
      */
     @Test
     public void saveWithLines() {
@@ -87,7 +86,7 @@ public class ZoneServiceImplUnitTest {
     }
 
     /**
-     * Test zone with transport lines
+     * Test with transport lines
      */
     @Test
     public void saveWithNoLines() {
@@ -107,7 +106,45 @@ public class ZoneServiceImplUnitTest {
     }
 
     /**
-     * Test zone with not unique name
+     * Test with null transport lines data associated
+     */
+    @Test
+    public void saveWithNullLines() {
+        Zone zone = new Zone(null, NEW_NAME, null, true);
+        int countBefore = zoneService.getAll().size();
+
+        Zone dbZone = zoneService.save(zone);
+        assertThat(dbZone).isNotNull();
+
+        assertThat(zoneService.getAll()).hasSize(countBefore + 1);
+
+        assertThat(dbZone.getName()).isEqualTo(zone.getName());
+        assertThat(dbZone.isActive()).isEqualTo(zone.isActive());
+        assertThat(dbZone.getLines()).isEqualTo(zone.getLines());
+
+    }
+
+    /**
+     * Test with null values
+     */
+    @Test(expected = GeneralException.class)
+    public void saveWithNullValues() {
+        Zone zone = new Zone(null, null, NEW_LINES, true);
+        int countBefore = zoneService.getAll().size();
+
+        Zone dbZone = zoneService.save(zone);
+        assertThat(dbZone).isNotNull();
+
+        assertThat(zoneService.getAll()).hasSize(countBefore + 1);
+
+        assertThat(dbZone.getName()).isEqualTo(zone.getName());
+        assertThat(dbZone.isActive()).isEqualTo(zone.isActive());
+        assertThat(dbZone.getLines()).isEqualTo(zone.getLines());
+
+    }
+
+    /**
+     * Test with not unique name
      */
     @Test(expected = GeneralException.class)
     public void saveWithInvalidName() {
@@ -127,7 +164,7 @@ public class ZoneServiceImplUnitTest {
     }
 
     /**
-     * Test zone with invalid transport lines data associated
+     * Test with invalid transport lines data associated
      */
     @Test(expected = GeneralException.class)
     public void saveWithInvalidLines() {

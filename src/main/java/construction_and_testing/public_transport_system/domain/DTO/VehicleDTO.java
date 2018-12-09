@@ -35,7 +35,11 @@ public class VehicleDTO implements Serializable {
         this.id = vehicle.getId();
         this.name = vehicle.getName();
         this.type = vehicle.getType();
-        this.currentLine = vehicle.getCurrentLine().getId();
+        try {
+            this.currentLine = vehicle.getCurrentLine().getId();
+        } catch (NullPointerException e) {
+            this.currentLine = null;
+        }
         this.active = vehicle.isActive();
     }
 

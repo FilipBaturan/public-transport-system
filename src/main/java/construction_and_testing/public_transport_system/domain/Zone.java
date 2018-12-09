@@ -54,8 +54,13 @@ public class Zone implements Serializable {
         this.id = zone.getId();
         this.name = zone.getName();
         this.active = zone.isActive();
-        this.lines = zone.getLines().stream().map((ZoneTransportLineDTO t) -> new TransportLine(t, this)).
-                collect(Collectors.toSet());
+        try {
+            this.lines = zone.getLines().stream().map((ZoneTransportLineDTO t) -> new TransportLine(t, this)).
+                    collect(Collectors.toSet());
+        } catch (NullPointerException e) {
+            this.lines = null;
+        }
+
     }
 
 
