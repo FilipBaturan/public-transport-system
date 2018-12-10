@@ -20,7 +20,7 @@ public class ReservationController {
 
     @GetMapping
     public void getAll() {
-        //add implementation later
+        //add integration later
     }
 
 

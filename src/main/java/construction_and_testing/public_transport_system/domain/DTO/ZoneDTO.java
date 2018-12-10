@@ -14,7 +14,7 @@ public class ZoneDTO implements Serializable {
 
     private String name;
 
-    private Set<TransportLineDTO> lines;
+    private Set<ZoneTransportLineDTO> lines;
 
     private boolean active;
 
@@ -22,7 +22,7 @@ public class ZoneDTO implements Serializable {
         this.active = true;
     }
 
-    public ZoneDTO(Long id, String name, Set<TransportLineDTO> lines, boolean active) {
+    public ZoneDTO(Long id, String name, Set<ZoneTransportLineDTO> lines, boolean active) {
         this.id = id;
         this.name = name;
         this.lines = lines;
@@ -33,7 +33,12 @@ public class ZoneDTO implements Serializable {
         this.id = zone.getId();
         this.name = zone.getName();
         this.active = zone.isActive();
-        this.lines = zone.getLines().stream().map(TransportLineDTO::new).collect(Collectors.toSet());
+        try {
+            this.lines = zone.getLines().stream().map(ZoneTransportLineDTO::new).collect(Collectors.toSet());
+        } catch (NullPointerException e) {
+            this.lines = null;
+        }
+
     }
 
     public static long getSerialVersionUID() {
@@ -56,11 +61,11 @@ public class ZoneDTO implements Serializable {
         this.name = name;
     }
 
-    public Set<TransportLineDTO> getLines() {
+    public Set<ZoneTransportLineDTO> getLines() {
         return lines;
     }
 
-    public void setLines(Set<TransportLineDTO> lines) {
+    public void setLines(Set<ZoneTransportLineDTO> lines) {
         this.lines = lines;
     }
 

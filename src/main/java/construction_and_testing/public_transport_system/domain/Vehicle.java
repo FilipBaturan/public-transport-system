@@ -39,7 +39,7 @@ public class Vehicle implements Serializable {
         this.active = true;
     }
 
-    public Vehicle(long id, String name, VehicleType type, TransportLine currentLine, boolean active) {
+    public Vehicle(Long id, String name, VehicleType type, TransportLine currentLine, boolean active) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -52,7 +52,12 @@ public class Vehicle implements Serializable {
         this.name = vehicle.getName();
         this.type = vehicle.getType();
         this.active = vehicle.isActive();
-        this.currentLine = new TransportLine(vehicle.getCurrentLine());
+        try {
+            this.currentLine = new TransportLine(vehicle.getCurrentLine());
+        } catch (NullPointerException e) {
+            this.currentLine = null;
+        }
+
     }
 
     public static long getSerialVersionUID() {

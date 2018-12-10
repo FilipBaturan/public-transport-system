@@ -1,11 +1,11 @@
 package construction_and_testing.public_transport_system.domain.DTO;
 
-import construction_and_testing.public_transport_system.domain.Vehicle;
+import construction_and_testing.public_transport_system.domain.TransportLine;
 import construction_and_testing.public_transport_system.domain.enums.VehicleType;
 
 import java.io.Serializable;
 
-public class VehicleDTO implements Serializable {
+public class ZoneTransportLineDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -15,32 +15,22 @@ public class VehicleDTO implements Serializable {
 
     private VehicleType type;
 
-    private Long currentLine;
-
     private boolean active;
 
-    public VehicleDTO() {
-        this.active = true;
+    public ZoneTransportLineDTO() {
     }
 
-    public VehicleDTO(Long id, String name, VehicleType type, Long currentLine, boolean active) {
+    public ZoneTransportLineDTO(Long id, String name, VehicleType type, boolean active) {
         this.id = id;
         this.name = name;
         this.type = type;
-        this.currentLine = currentLine;
         this.active = active;
     }
 
-    public VehicleDTO(Vehicle vehicle) {
-        this.id = vehicle.getId();
-        this.name = vehicle.getName();
-        this.type = vehicle.getType();
-        try {
-            this.currentLine = vehicle.getCurrentLine().getId();
-        } catch (NullPointerException e) {
-            this.currentLine = null;
-        }
-        this.active = vehicle.isActive();
+    public ZoneTransportLineDTO(TransportLine transportLine) {
+        this.id = transportLine.getId();
+        this.name = transportLine.getName();
+        this.type = transportLine.getType();
     }
 
     public static long getSerialVersionUID() {
@@ -69,14 +59,6 @@ public class VehicleDTO implements Serializable {
 
     public void setType(VehicleType type) {
         this.type = type;
-    }
-
-    public Long getCurrentLine() {
-        return currentLine;
-    }
-
-    public void setCurrentLine(Long currentLine) {
-        this.currentLine = currentLine;
     }
 
     public boolean isActive() {

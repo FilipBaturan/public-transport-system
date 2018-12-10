@@ -10,6 +10,9 @@ import org.springframework.core.io.ClassPathResource;
 import java.io.IOException;
 import java.io.InputStream;
 
+/**
+ * JSON Schema validator
+ */
 public class ValidationController {
 
     private final String SCHEMA_PATH_PREFIX = "/static/schemes/";
