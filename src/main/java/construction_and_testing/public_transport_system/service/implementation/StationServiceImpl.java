@@ -29,7 +29,7 @@ public class StationServiceImpl implements StationService {
         try {
             return stationRepository.findById(id).orElseThrow(() ->
                     new GeneralException("Requested station does not exist!", HttpStatus.BAD_REQUEST));
-        }catch (InvalidDataAccessApiUsageException e){
+        } catch (InvalidDataAccessApiUsageException e) {
             throw new GeneralException("Invalid id!", HttpStatus.BAD_REQUEST);
         }
 
@@ -39,7 +39,7 @@ public class StationServiceImpl implements StationService {
     public Station save(Station station) {
         try {
             return stationRepository.save(station);
-        } catch (DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             throw new GeneralException("Invalid vehicle data!", HttpStatus.BAD_REQUEST);
         }
     }

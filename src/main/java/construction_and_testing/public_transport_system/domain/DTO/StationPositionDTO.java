@@ -13,9 +13,17 @@ public class StationPositionDTO extends Position {
     }
 
     public StationPositionDTO(StationPosition stationPosition) {
-        this.setId(stationPosition.getId());
-        this.setLatitude(stationPosition.getLatitude());
-        this.setLongitude(stationPosition.getLongitude());
-        this.setActive(stationPosition.isActive());
+        if (stationPosition == null) {
+            this.setId(null);
+            this.setLatitude(0);
+            this.setLongitude(0);
+            this.setActive(true);
+        } else {
+            this.setId(stationPosition.getId());
+            this.setLatitude(stationPosition.getLatitude());
+            this.setLongitude(stationPosition.getLongitude());
+            this.setActive(stationPosition.isActive());
+        }
+
     }
 }

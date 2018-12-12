@@ -1,8 +1,6 @@
 package construction_and_testing.public_transport_system.domain.DTO;
 
 import construction_and_testing.public_transport_system.domain.User;
-import construction_and_testing.public_transport_system.domain.enums.AuthorityType;
-import construction_and_testing.public_transport_system.domain.enums.UsersDocumentsStatus;
 
 public class UserDTO {
 
@@ -30,8 +28,7 @@ public class UserDTO {
         this.id = id;
     }
 
-    public UserDTO()
-    {
+    public UserDTO() {
         this.firstName = "";
         this.lastName = "";
         this.email = "";
@@ -40,8 +37,7 @@ public class UserDTO {
     }
 
 
-    public UserDTO(User u)
-    {
+    public UserDTO(User u) {
         this.id = u.getId();
         this.firstName = u.getName();
         this.lastName = u.getLastName();

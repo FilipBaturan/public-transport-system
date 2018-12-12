@@ -86,7 +86,7 @@ public class TransportLineController extends ValidationController {
         return new ResponseEntity<>(TransportLineConverter.fromEntityList(transportLineService
                 .replaceAll(TransportLineConverter.toEntityList(
                         mapper.readValue(transportLines, TransportLineColletionDTO.class).getTransportLines(),
-                        TransportLine::new)), TransportLineDTO::new), HttpStatus.ACCEPTED);
+                        TransportLine::new)), TransportLineDTO::new), HttpStatus.OK);
     }
 
     /**

@@ -58,7 +58,10 @@
     },
     "currentLine": {
       "$id": "#/properties/currentLine",
-      "type": "integer",
+      "type": [
+        "integer",
+        "null"
+      ],
       "title": "Current line",
       "description": "Vehicle current line",
       "default": 0,

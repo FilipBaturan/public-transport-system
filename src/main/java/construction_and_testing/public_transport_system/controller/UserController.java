@@ -13,7 +13,6 @@ import construction_and_testing.public_transport_system.domain.enums.AuthorityTy
 import construction_and_testing.public_transport_system.domain.enums.UsersDocumentsStatus;
 import construction_and_testing.public_transport_system.security.TokenUtils;
 import construction_and_testing.public_transport_system.service.definition.UserService;
-import construction_and_testing.public_transport_system.service.definition.ValidatorService;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +22,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -63,7 +61,6 @@ public class UserController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
 
 
     /**
@@ -140,17 +137,16 @@ public class UserController {
 
     /**
      * GET /api/user/unvalidatedUsers
-     *
+     * <p>
      * Gets users that are not yet validated in the system.
      *
      * @return list if users
      */
     @GetMapping("/unvalidatedUsers")
-    public ResponseEntity<List<UserDTO>> getUnvalidatedUsers()
-    {
+    public ResponseEntity<List<UserDTO>> getUnvalidatedUsers() {
         List<User> listOfUsers = userService.getUnvalidatedUsers();
         List<UserDTO> listOfDTOUsers = new ArrayList<>();
-        for (User user: listOfUsers) {
+        for (User user : listOfUsers) {
             listOfDTOUsers.add(UserConverter.fromEntity(user));
         }
 
@@ -159,7 +155,7 @@ public class UserController {
     }
 
     @PutMapping("/approveUser")
-    public ResponseEntity<Boolean> approveUser(@RequestBody UserDTO user){
+    public ResponseEntity<Boolean> approveUser(@RequestBody UserDTO user) {
 
         User u = this.userService.findById(user.getId());
 
@@ -167,7 +163,7 @@ public class UserController {
 
         User savedUser = this.userService.save(u);
 
-        if(savedUser != null){
+        if (savedUser != null) {
             logger.info("Successfully approved user.");
             return new ResponseEntity<>(true, HttpStatus.CREATED);
         }
@@ -197,11 +193,10 @@ public class UserController {
     }
 
     @GetMapping("/getValidators")
-    public ResponseEntity<List<UserDTO>> getValidators()
-    {
+    public ResponseEntity<List<UserDTO>> getValidators() {
         List<Validator> listOfValidators = userService.getValidators();
         List<UserDTO> listOfDTOValidators = new ArrayList<>();
-        for (Validator user: listOfValidators) {
+        for (Validator user : listOfValidators) {
             listOfDTOValidators.add(UserConverter.fromEntity(user));
         }
 
@@ -210,19 +205,18 @@ public class UserController {
     }
 
     @PutMapping("/updateValidator")
-    public ResponseEntity<Boolean> updateValidator(@RequestBody UserDTO userDTO){
+    public ResponseEntity<Boolean> updateValidator(@RequestBody UserDTO userDTO) {
 
-        Optional<User> optionalValidator = Optional.of(this.userService.findById(userDTO.getId()) );
+        Optional<User> optionalValidator = Optional.of(this.userService.findById(userDTO.getId()));
 
         if (!optionalValidator.isPresent())
             return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
-        else
-        {
+        else {
             Validator validator = (Validator) optionalValidator.get();
             if (validator.getAuthorityType() != AuthorityType.VALIDATOR)
                 return new ResponseEntity<>(false, HttpStatus.I_AM_A_TEAPOT);
 
-            Validator updatedUser = new Validator( UserConverter.toEntity(userDTO) );
+            Validator updatedUser = new Validator(UserConverter.toEntity(userDTO));
             ModelMapper mapper = new ModelMapper();
             mapper.map(userDTO, optionalValidator.get());
             //updatedUser.setAuthorityType(AuthorityType.VALIDATOR);
@@ -233,22 +227,21 @@ public class UserController {
     }
 
     @PostMapping("/addValidator")
-    ResponseEntity<Boolean> addValidator(@RequestBody UserDTO userDTO){
+    ResponseEntity<Boolean> addValidator(@RequestBody UserDTO userDTO) {
         if (userDTO.getId() != null)
             return new ResponseEntity<>(false, HttpStatus.CONFLICT);
         else {
-            Validator newValidator = new Validator( UserConverter.toEntity(userDTO) );
+            Validator newValidator = new Validator(UserConverter.toEntity(userDTO));
             this.userService.save(newValidator);
             return new ResponseEntity<>(true, HttpStatus.OK);
         }
     }
 
     @GetMapping("/registeredUsers")
-    public ResponseEntity<List<UserDTO>> getRegisteredUsers()
-    {
+    public ResponseEntity<List<UserDTO>> getRegisteredUsers() {
         List<RegisteredUser> listOfUsers = userService.getRegisteredUsers();
         List<UserDTO> listOfDTOUsers = new ArrayList<>();
-        for (RegisteredUser user: listOfUsers)
+        for (RegisteredUser user : listOfUsers)
             listOfDTOUsers.add(UserConverter.fromEntity(user));
 
         return new ResponseEntity<>(listOfDTOUsers, HttpStatus.OK);

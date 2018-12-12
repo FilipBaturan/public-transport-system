@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getUnvalidatedUsers() {
-        return  this.userRepository.getUnvalidatedUsers();
+        return this.userRepository.getUnvalidatedUsers();
     }
 
     @Override
@@ -67,8 +67,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User save(User u)
-    {
+    public User save(User u) {
         return userRepository.save(u);
     }
 

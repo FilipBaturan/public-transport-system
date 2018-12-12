@@ -11,17 +11,13 @@ import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import javax.transaction.Transactional;
 
 import java.util.Optional;
 
 import static construction_and_testing.public_transport_system.constants.StationConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
 import static org.mockito.ArgumentMatchers.any;
 
 @RunWith(SpringRunner.class)
@@ -45,10 +41,9 @@ public class StationServiceImplUnitTest {
                 Station station = (Station) arguments[0];
                 if (DEL_ID.equals(station.getId())) {
                     DEL_STATION = station;
-                } else if (station.getName() == null || station.getType() == null){
+                } else if (station.getName() == null || station.getType() == null) {
                     throw new GeneralException("Invalid vehicle data!", HttpStatus.BAD_REQUEST);
-                }
-                else {
+                } else {
                     station.setId(NEW_ID);
                     DB_STATIONS.add(station);
                 }
@@ -62,7 +57,6 @@ public class StationServiceImplUnitTest {
      * Test valid vehicle saving
      */
     @Test
-    @Transactional
     public void save() {
         Station station = new Station(null, NEW_NAME, NEW_POSITION, NEW_TYPE, NEW_ACTIVE);
         station.getPosition().setStation(station);
@@ -84,7 +78,6 @@ public class StationServiceImplUnitTest {
      * Test with null values
      */
     @Test(expected = GeneralException.class)
-    @Transactional
     public void saveWithNullValues() {
         Station station = new Station(null, null, null, null, true);
         int countBefore = stationService.getAll().size();
@@ -105,7 +98,6 @@ public class StationServiceImplUnitTest {
      * Test valid station deletion
      */
     @Test
-    @Transactional
     public void remove() {
         stationService.remove(DEL_ID);
 
@@ -122,10 +114,9 @@ public class StationServiceImplUnitTest {
      * Test station deletion that does not exist in database
      */
     @Test(expected = GeneralException.class)
-    @Transactional
     public void removeInvalidId() {
         stationService.remove(DEL_ID_INVALID);
-        
+
         Mockito.verify(stationRepository, Mockito.times(1)).findById(DEL_ID);
         Mockito.verify(stationRepository, Mockito.times(1)).save(any(Station.class));
     }

@@ -98,7 +98,6 @@ public class ZoneControllerTest {
      * Test with no transport lines
      */
     @Test
-    @Transactional
     public void saveWithNoLines() throws Exception {
         ZoneDTO zone = new ZoneDTO(new Zone(null, NEW_NAME, new HashSet<>(), true));
         String jsonZone = TestUtil.json(zone);
@@ -118,7 +117,6 @@ public class ZoneControllerTest {
      * Test with transport lines
      */
     @Test
-    @Transactional
     public void saveWithLines() throws Exception {
         ZoneDTO zone = new ZoneDTO(new Zone(null, NEW_NAME, NEW_LINES, true));
         String jsonZone = TestUtil.json(zone);
@@ -138,7 +136,6 @@ public class ZoneControllerTest {
      * Test with invalid transport lines data associated
      */
     @Test
-    @Transactional
     public void saveWithInvalidLines() throws Exception {
         ZoneDTO zone = new ZoneDTO(new Zone(null, NEW_NAME, NEW_LINES_INVALID, true));
         String jsonZone = TestUtil.json(zone);
@@ -156,7 +153,6 @@ public class ZoneControllerTest {
      * Test null transport lines
      */
     @Test
-    @Transactional
     public void saveWithNullLines() throws Exception {
         ZoneDTO zone = new ZoneDTO(new Zone(null, NEW_NAME, null, true));
         String jsonZone = TestUtil.json(zone);
@@ -176,7 +172,6 @@ public class ZoneControllerTest {
      * Test null values
      */
     @Test
-    @Transactional
     public void saveWithNullValues() throws Exception {
         ZoneDTO zone = new ZoneDTO(new Zone(null, null, NEW_LINES, true));
         String jsonZone = TestUtil.json(zone);
@@ -194,7 +189,6 @@ public class ZoneControllerTest {
      * Test with not unique name
      */
     @Test
-    @Transactional
     public void saveWithInvalidName() throws Exception {
         ZoneDTO zone = new ZoneDTO(new Zone(null, NEW_NAME, new HashSet<>(), true));
         String jsonZone = TestUtil.json(zone);

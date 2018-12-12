@@ -68,7 +68,7 @@ public class StationController extends ValidationController {
         ObjectMapper mapper = new ObjectMapper();
         Station temp = new Station(mapper.readValue(station, StationDTO.class));
         temp.getPosition().setStation(temp);
-        return new ResponseEntity<>(new StationDTO(stationService.save(temp)), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(new StationDTO(stationService.save(temp)), HttpStatus.OK);
     }
 
     /**
@@ -85,7 +85,7 @@ public class StationController extends ValidationController {
         ObjectMapper mapper = new ObjectMapper();
         return new ResponseEntity<>(StationConverter.fromEntityList(stationService
                 .replaceAll(StationConverter.toEntityList(mapper.readValue(stations, StationCollectionDTO.class)
-                        .getStations(), Station::new)), StationDTO::new), HttpStatus.ACCEPTED);
+                        .getStations(), Station::new)), StationDTO::new), HttpStatus.OK);
     }
 
     /**

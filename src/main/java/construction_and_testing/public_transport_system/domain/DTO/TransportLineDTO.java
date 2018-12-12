@@ -47,9 +47,18 @@ public class TransportLineDTO implements Serializable {
         this.name = transportLine.getName();
         this.type = transportLine.getType();
         this.active = transportLine.isActive();
-        this.schedule = transportLine.getSchedule().stream().map(Schedule::getId).collect(Collectors.toSet());
+        try {
+            this.schedule = transportLine.getSchedule().stream().map(Schedule::getId).collect(Collectors.toSet());
+        } catch (NullPointerException e) {
+            this.schedule = null;
+        }
         this.positions = new TransportLinePositionDTO(transportLine.getPositions());
-        this.zone = transportLine.getZone().getId();
+        try {
+            this.zone = transportLine.getZone().getId();
+        } catch (NullPointerException e) {
+            this.zone = null;
+        }
+
     }
 
     public static long getSerialVersionUID() {

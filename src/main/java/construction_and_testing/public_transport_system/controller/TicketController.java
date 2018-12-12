@@ -91,21 +91,20 @@ public class TicketController {
     }
 
     @GetMapping("/getTicketsForUser/{id}")
-    public ResponseEntity<List<TicketReportDTO>> getTicketsForUser(@PathVariable("id") String id)
-    {
+    public ResponseEntity<List<TicketReportDTO>> getTicketsForUser(@PathVariable("id") String id) {
         List<TicketReportDTO> ticketList = new ArrayList<TicketReportDTO>();
 
         List<Reservation> reservationList;
 
         try {
-           reservationList  =  reservationService.getReservationsForUser(Long.parseLong(id) );
+            reservationList = reservationService.getReservationsForUser(Long.parseLong(id));
 
         } catch (NumberFormatException e) {
             throw new GeneralException("Bad format of requested id!", HttpStatus.BAD_REQUEST);
         }
 
-        for (Reservation r: reservationList) {
-            for (Ticket t: r.getTickets()) {
+        for (Reservation r : reservationList) {
+            for (Ticket t : r.getTickets()) {
                 ticketList.add(TicketConverter.fromEntity(t));
             }
 
@@ -114,14 +113,13 @@ public class TicketController {
     }
 
     @PutMapping("/updateTicket")
-    ResponseEntity<Boolean> updateValidator(@RequestBody TicketReportDTO ticketDTO){
+    ResponseEntity<Boolean> updateValidator(@RequestBody TicketReportDTO ticketDTO) {
 
-        Optional<Ticket> optionalTicket = Optional.of(this.ticketService.findTicketById(ticketDTO.getId()) );
+        Optional<Ticket> optionalTicket = Optional.of(this.ticketService.findTicketById(ticketDTO.getId()));
 
         if (!optionalTicket.isPresent())
             return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
-        else
-        {
+        else {
             ModelMapper mapper = new ModelMapper();
             mapper.map(ticketDTO, optionalTicket.get());
             this.ticketService.saveTicket(optionalTicket.get());
@@ -131,8 +129,7 @@ public class TicketController {
     }
 
     @GetMapping("/reprot/{stringDate1}/{stringDate2}")
-    ResponseEntity<Map<VehicleType, Integer>> getReport(@PathVariable String stringDate1, @PathVariable String stringDate2)
-    {
+    ResponseEntity<Map<VehicleType, Integer>> getReport(@PathVariable String stringDate1, @PathVariable String stringDate2) {
         LocalDate date1 = LocalDate.parse(stringDate1);
         LocalDate date2 = LocalDate.parse(stringDate2);
 

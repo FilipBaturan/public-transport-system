@@ -135,6 +135,7 @@ public class StationServiceImplIntegrationTest {
      * Test replace all station
      */
     @Test
+    @Transactional
     public void replaceAll() {
         List<Station> stationsBefore = stationService.getAll();
         List<Station> stations = stationService.replaceAll(NEW_STATIONS);

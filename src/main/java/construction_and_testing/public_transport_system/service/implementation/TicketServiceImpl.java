@@ -1,15 +1,10 @@
 package construction_and_testing.public_transport_system.service.implementation;
 
-import construction_and_testing.public_transport_system.domain.Item;
-import construction_and_testing.public_transport_system.domain.Pricelist;
 import construction_and_testing.public_transport_system.domain.Ticket;
-import construction_and_testing.public_transport_system.domain.Vehicle;
 import construction_and_testing.public_transport_system.domain.enums.VehicleType;
 import construction_and_testing.public_transport_system.repository.ItemRepository;
 import construction_and_testing.public_transport_system.repository.TicketRepository;
 import construction_and_testing.public_transport_system.service.definition.TicketService;
-import org.hibernate.dialect.Ingres9Dialect;
-import org.joda.time.LocalDateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
@@ -72,16 +67,13 @@ public class TicketServiceImpl implements TicketService {
     public Map<VehicleType, Integer> getReport(LocalDate date1, LocalDate date2) {
 
         Map<VehicleType, Integer> prices = new HashMap<VehicleType, Integer>();
-        for(int i = 0; i <  3; i++)
-        {
+        for (int i = 0; i < 3; i++) {
             prices.put(VehicleType.values()[i], -1);
         }
 
         // If dates are not valid, return map with values -1
-        if(date1.isBefore(date2))
-        {
-            for(int i = 0; i <  3; i++)
-            {
+        if (date1.isBefore(date2)) {
+            for (int i = 0; i < 3; i++) {
                 Long databaseCost = ticketRepository.getPrice(date1, date2, i);
                 int cost;
                 if (databaseCost == null)
