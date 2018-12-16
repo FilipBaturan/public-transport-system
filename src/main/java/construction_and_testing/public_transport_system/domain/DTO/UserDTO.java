@@ -39,6 +39,16 @@ public class UserDTO {
         this.active = false;
     }
 
+    public UserDTO(Long id, String name, String lastName, String email, String password, String username)
+    {
+        this.id = id;
+        this.firstName = name;
+        this.lastName = lastName;
+        this.email = email;
+        this.username = username;
+        this.password = password;
+        this.active = true;
+    }
 
     public UserDTO(User u)
     {

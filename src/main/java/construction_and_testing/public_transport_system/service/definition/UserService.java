@@ -59,7 +59,13 @@ public interface UserService {
      * @param id
      * @return user with given id
      */
-    User findById(long id);
+    User findById(Long id);
+
+    /**
+     *
+     * @returns list of all users
+     */
+    List<User> findAll();
 
     /**
      *

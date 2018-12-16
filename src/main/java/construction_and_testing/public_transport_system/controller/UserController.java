@@ -14,10 +14,12 @@ import construction_and_testing.public_transport_system.domain.enums.UsersDocume
 import construction_and_testing.public_transport_system.security.TokenUtils;
 import construction_and_testing.public_transport_system.service.definition.UserService;
 import construction_and_testing.public_transport_system.service.definition.ValidatorService;
+import construction_and_testing.public_transport_system.util.GeneralException;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -161,36 +163,47 @@ public class UserController {
     @PutMapping("/approveUser")
     public ResponseEntity<Boolean> approveUser(@RequestBody UserDTO user){
 
-        User u = this.userService.findById(user.getId());
+        try {
+            User u = this.userService.findById(user.getId());
 
-        u.setConfirmation(UsersDocumentsStatus.APPROVED);
+            u.setConfirmation(UsersDocumentsStatus.APPROVED);
 
-        User savedUser = this.userService.save(u);
+            User savedUser = this.userService.save(u);
 
-        if(savedUser != null){
-            logger.info("Successfully approved user.");
-            return new ResponseEntity<>(true, HttpStatus.CREATED);
+            if (savedUser.getAuthorityType() == AuthorityType.REGISTERED_USER) {
+                logger.info("Successfully approved user.");
+                return new ResponseEntity<>(true, HttpStatus.CREATED);
+            }
+
+            logger.info("User found, but his documents could not be accepted!");
+            return new ResponseEntity<>(false, HttpStatus.NOT_ACCEPTABLE);
+
         }
-        logger.info("Failed to approved user, user with given id does not exists!");
-        return new ResponseEntity<>(false, HttpStatus.CONFLICT);
+        catch (GeneralException ge)
+        {
+            logger.info("Failed to approved user, user with given id does not exists!");
+            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+        }
+
     }
 
     @PutMapping("/denyUser")
     public ResponseEntity<Boolean> denyUser(@RequestBody UserDTO user) {
 
-        User u = this.userService.findById(user.getId());
-        if (u != null) {
+
+        try {
+            User u = this.userService.findById(user.getId());
             u.setConfirmation(UsersDocumentsStatus.DENIED);
 
             User savedUser = this.userService.save(u);
 
-            if (savedUser != null) {
+            if (savedUser.getAuthorityType() == AuthorityType.REGISTERED_USER) {
                 logger.info("Successfully denied users documents!");
                 return new ResponseEntity<>(true, HttpStatus.CREATED);
             }
             logger.info("User found, but his documents could not be denied!");
-            return new ResponseEntity<>(false, HttpStatus.CONFLICT);
-        } else {
+            return new ResponseEntity<>(false, HttpStatus.NOT_ACCEPTABLE);
+        } catch (GeneralException ge){
             logger.info("Failed to deny user, user with given id does not exists!");
             return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
         }
@@ -212,22 +225,28 @@ public class UserController {
     @PutMapping("/updateValidator")
     public ResponseEntity<Boolean> updateValidator(@RequestBody UserDTO userDTO){
 
-        Optional<User> optionalValidator = Optional.of(this.userService.findById(userDTO.getId()) );
+        User validator = null;
 
-        if (!optionalValidator.isPresent())
-            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
-        else
+        try {
+            validator = this.userService.findById(userDTO.getId());
+        }catch (GeneralException ge)
         {
-            Validator validator = (Validator) optionalValidator.get();
-            if (validator.getAuthorityType() != AuthorityType.VALIDATOR)
-                return new ResponseEntity<>(false, HttpStatus.I_AM_A_TEAPOT);
+            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+        }
 
-            Validator updatedUser = new Validator( UserConverter.toEntity(userDTO) );
-            ModelMapper mapper = new ModelMapper();
-            mapper.map(userDTO, optionalValidator.get());
-            //updatedUser.setAuthorityType(AuthorityType.VALIDATOR);
-            this.userService.save(updatedUser);
+
+        if (validator.getAuthorityType() != AuthorityType.VALIDATOR)
+            return new ResponseEntity<>(false, HttpStatus.I_AM_A_TEAPOT);
+
+        ModelMapper mapper = new ModelMapper();
+        mapper.map(userDTO, validator);
+        try {
+            this.userService.save(validator);
             return new ResponseEntity<>(true, HttpStatus.OK);
+        }
+        catch (GeneralException e)
+        {
+            return new ResponseEntity<>(false, HttpStatus.NOT_ACCEPTABLE);
         }
 
     }
@@ -238,7 +257,13 @@ public class UserController {
             return new ResponseEntity<>(false, HttpStatus.CONFLICT);
         else {
             Validator newValidator = new Validator( UserConverter.toEntity(userDTO) );
-            this.userService.save(newValidator);
+            try{
+                this.userService.save(newValidator);
+            }catch (GeneralException ge)
+            {
+                return new ResponseEntity<>(false, HttpStatus.NOT_ACCEPTABLE);
+            }
+
             return new ResponseEntity<>(true, HttpStatus.OK);
         }
     }
