@@ -36,7 +36,7 @@ public class Ticket implements Serializable {
     private boolean active;
 
     @OneToOne(fetch = FetchType.LAZY)
-    private Pricelist priceList;
+    private PricelistItem priceListItem;
 
     @OneToOne(fetch = FetchType.LAZY)
     private TransportLine line;
@@ -48,13 +48,13 @@ public class Ticket implements Serializable {
     }
 
     public Ticket(long id, LocalDateTime purchaseDate, LocalDateTime expiryDate, String token, boolean active,
-                  Pricelist priceList, TransportLine line, Reservation reservation) {
+                  PricelistItem priceList, TransportLine line, Reservation reservation) {
         this.id = id;
         this.purchaseDate = purchaseDate;
         this.expiryDate = expiryDate;
         this.token = token;
         this.active = active;
-        this.priceList = priceList;
+        this.priceListItem = priceList;
         this.line = line;
         this.reservation = reservation;
     }
@@ -88,12 +88,12 @@ public class Ticket implements Serializable {
         this.active = active;
     }
 
-    public Pricelist getPriceList() {
-        return priceList;
+    public PricelistItem getPriceList() {
+        return priceListItem;
     }
 
-    public void setPriceList(Pricelist priceList) {
-        this.priceList = priceList;
+    public void setPriceList(PricelistItem priceList) {
+        this.priceListItem = priceList;
     }
 
     public TransportLine getLine() {

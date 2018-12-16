@@ -1,13 +1,19 @@
 package construction_and_testing.public_transport_system.controller;
 
 import construction_and_testing.public_transport_system.converter.RegisteredUserConverter;
+import construction_and_testing.public_transport_system.converter.UserConverter;
 import construction_and_testing.public_transport_system.domain.DTO.AuthenticationRequestDTO;
 import construction_and_testing.public_transport_system.domain.DTO.AuthenticationResponseDTO;
 import construction_and_testing.public_transport_system.domain.DTO.RegisteringUserDTO;
+import construction_and_testing.public_transport_system.domain.DTO.UserDTO;
+import construction_and_testing.public_transport_system.domain.RegisteredUser;
 import construction_and_testing.public_transport_system.domain.User;
+import construction_and_testing.public_transport_system.domain.Validator;
 import construction_and_testing.public_transport_system.domain.enums.AuthorityType;
+import construction_and_testing.public_transport_system.domain.enums.UsersDocumentsStatus;
 import construction_and_testing.public_transport_system.security.TokenUtils;
 import construction_and_testing.public_transport_system.service.definition.UserService;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,7 +22,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -25,6 +30,7 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/user")
@@ -43,6 +49,15 @@ public class UserController {
 
     @Autowired
     private TokenUtils tokenUtils;
+
+    /*@Autowired
+    public UserController(AuthenticationManager authenticationManager, UserDetailsService userDetailsService,
+                                    UserService userService, TokenUtils tokenUtils) {
+        this.authenticationManager = authenticationManager;
+        this.userDetailsService = userDetailsService;
+        this.userService = userService;
+        this.tokenUtils = tokenUtils;
+    }*/
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -119,4 +134,119 @@ public class UserController {
         logger.info("Failed to register user, user with given username already exists!");
         return new ResponseEntity<>(false, HttpStatus.CONFLICT);
     }
+
+    /**
+     * GET /api/user/unvalidatedUsers
+     * <p>
+     * Gets users that are not yet validated in the system.
+     *
+     * @return list if users
+     */
+    @GetMapping("/unvalidatedUsers")
+    public ResponseEntity<List<UserDTO>> getUnvalidatedUsers() {
+        List<User> listOfUsers = userService.getUnvalidatedUsers();
+        List<UserDTO> listOfDTOUsers = new ArrayList<>();
+        for (User user : listOfUsers) {
+            listOfDTOUsers.add(UserConverter.fromEntity(user));
+        }
+
+        return new ResponseEntity<>(listOfDTOUsers, HttpStatus.OK);
+
+    }
+
+    @PutMapping("/approveUser")
+    public ResponseEntity<Boolean> approveUser(@RequestBody UserDTO user) {
+
+        User u = this.userService.findById(user.getId());
+
+        u.setConfirmation(UsersDocumentsStatus.APPROVED);
+
+        User savedUser = this.userService.save(u);
+
+        if (savedUser != null) {
+            logger.info("Successfully approved user.");
+            return new ResponseEntity<>(true, HttpStatus.CREATED);
+        }
+        logger.info("Failed to approved user, user with given id does not exists!");
+        return new ResponseEntity<>(false, HttpStatus.CONFLICT);
+    }
+
+    @PutMapping("/denyUser")
+    public ResponseEntity<Boolean> denyUser(@RequestBody UserDTO user) {
+
+        User u = this.userService.findById(user.getId());
+        if (u != null) {
+            u.setConfirmation(UsersDocumentsStatus.DENIED);
+
+            User savedUser = this.userService.save(u);
+
+            if (savedUser != null) {
+                logger.info("Successfully denied users documents!");
+                return new ResponseEntity<>(true, HttpStatus.CREATED);
+            }
+            logger.info("User found, but his documents could not be denied!");
+            return new ResponseEntity<>(false, HttpStatus.CONFLICT);
+        } else {
+            logger.info("Failed to deny user, user with given id does not exists!");
+            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/getValidators")
+    public ResponseEntity<List<UserDTO>> getValidators() {
+        List<Validator> listOfValidators = userService.getValidators();
+        List<UserDTO> listOfDTOValidators = new ArrayList<>();
+        for (Validator user : listOfValidators) {
+            listOfDTOValidators.add(UserConverter.fromEntity(user));
+        }
+
+        return new ResponseEntity<>(listOfDTOValidators, HttpStatus.OK);
+
+    }
+
+    @PutMapping("/updateValidator")
+    public ResponseEntity<Boolean> updateValidator(@RequestBody UserDTO userDTO) {
+
+        Optional<User> optionalValidator = Optional.of(this.userService.findById(userDTO.getId()));
+
+        if (!optionalValidator.isPresent())
+            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+        else {
+            Validator validator = (Validator) optionalValidator.get();
+            if (validator.getAuthorityType() != AuthorityType.VALIDATOR)
+                return new ResponseEntity<>(false, HttpStatus.I_AM_A_TEAPOT);
+
+            Validator updatedUser = new Validator(UserConverter.toEntity(userDTO));
+            ModelMapper mapper = new ModelMapper();
+            mapper.map(userDTO, optionalValidator.get());
+            //updatedUser.setAuthorityType(AuthorityType.VALIDATOR);
+            this.userService.save(updatedUser);
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        }
+
+    }
+
+    @PostMapping("/addValidator")
+    ResponseEntity<Boolean> addValidator(@RequestBody UserDTO userDTO) {
+        if (userDTO.getId() != null)
+            return new ResponseEntity<>(false, HttpStatus.CONFLICT);
+        else {
+            Validator newValidator = new Validator(UserConverter.toEntity(userDTO));
+            this.userService.save(newValidator);
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        }
+    }
+
+    @GetMapping("/registeredUsers")
+    public ResponseEntity<List<UserDTO>> getRegisteredUsers() {
+        List<RegisteredUser> listOfUsers = userService.getRegisteredUsers();
+        List<UserDTO> listOfDTOUsers = new ArrayList<>();
+        for (RegisteredUser user : listOfUsers)
+            listOfDTOUsers.add(UserConverter.fromEntity(user));
+
+        return new ResponseEntity<>(listOfDTOUsers, HttpStatus.OK);
+
+    }
+
+
 }

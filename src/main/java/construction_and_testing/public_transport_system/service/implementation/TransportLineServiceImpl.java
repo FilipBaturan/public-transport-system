@@ -2,18 +2,26 @@ package construction_and_testing.public_transport_system.service.implementation;
 
 import construction_and_testing.public_transport_system.domain.Schedule;
 import construction_and_testing.public_transport_system.domain.TransportLine;
+import construction_and_testing.public_transport_system.domain.Vehicle;
+import construction_and_testing.public_transport_system.domain.Zone;
 import construction_and_testing.public_transport_system.repository.ScheduleRepository;
 import construction_and_testing.public_transport_system.repository.TransportLineRepository;
+import construction_and_testing.public_transport_system.repository.VehicleRepository;
+import construction_and_testing.public_transport_system.repository.ZoneRepository;
 import construction_and_testing.public_transport_system.service.definition.TransportLineService;
 import construction_and_testing.public_transport_system.util.GeneralException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class TransportLineServiceImpl implements TransportLineService {
@@ -24,6 +32,12 @@ public class TransportLineServiceImpl implements TransportLineService {
     @Autowired
     private ScheduleRepository scheduleRepository;
 
+    @Autowired
+    private ZoneRepository zoneRepository;
+
+    @Autowired
+    private VehicleRepository vehicleRepository;
+
     @Override
     public List<TransportLine> getAll() {
         return transportLineRepository.findAll();
@@ -31,8 +45,13 @@ public class TransportLineServiceImpl implements TransportLineService {
 
     @Override
     public TransportLine findById(Long id) {
-        return transportLineRepository.findById(id).orElseThrow(() ->
-                new GeneralException("Requested transport line does not exist!", HttpStatus.BAD_REQUEST));
+        try {
+            return transportLineRepository.findById(id).orElseThrow(() ->
+                    new GeneralException("Requested transport line does not exist!", HttpStatus.BAD_REQUEST));
+        } catch (InvalidDataAccessApiUsageException e) {
+            throw new GeneralException("Invalid id!", HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     @Override
@@ -42,7 +61,8 @@ public class TransportLineServiceImpl implements TransportLineService {
         } catch (DataIntegrityViolationException e) {
             throw new GeneralException("Transport line with given name already exist!", HttpStatus.BAD_REQUEST);
         } catch (RuntimeException e) {
-            throw new GeneralException("Transport lines contains bad formatted id data!", HttpStatus.BAD_REQUEST);
+            throw new GeneralException("Transport lines have invalid schedule or position associated!",
+                    HttpStatus.BAD_REQUEST);
         }
     }
 
@@ -58,40 +78,72 @@ public class TransportLineServiceImpl implements TransportLineService {
         }
     }
 
+    /**
+     * get all schedules
+     * delete schedules that are not associated with any transport line
+     * creates empty schedules for new transport lines
+     * delete all transport routes in database
+     * save new transport lines
+     *
+     * @param transportLines that need to be saved
+     * @return save transport lines
+     */
     @Override
+    @Transactional
     public List<TransportLine> replaceAll(Iterable<TransportLine> transportLines) {
-
-        //dobavi sve sheculde
-        //obrisi one koje se ne nalaze u transprotLines
-        //kreiraj sve schedules za sve nove rute i uvezi ih sa njima
-        //obrisi sve rute u bazi, a zbog kaskade obrisace se i tranportLinePosition
-        //sacuvaj rute
-
         List<Schedule> associatedSchedules = new ArrayList<>();
-        List<Schedule> schedules = scheduleRepository.findAll();
-        if (!schedules.isEmpty()) { // remove all unassociated schedules
-            transportLines.forEach(transportLine -> {
+        List<Schedule> schedules = scheduleRepository.findAll(); // all schedules in database
+        List<TransportLine> dbTransportLines = transportLineRepository.findAll(); // all transport lines in database
+
+        this.validateSchedule(transportLines, schedules, associatedSchedules);
+        this.filterAndRemoveUnassociatedSchedules(schedules, associatedSchedules);
+        this.associateDefaultZoneToNewTransportLines(transportLines);
+        this.filterAssociatedTransportLines(dbTransportLines, transportLines);
+        this.removeStationsFromTransportLines(dbTransportLines);
+
+        try {
+            transportLineRepository.deleteAll(dbTransportLines);
+            return transportLineRepository.saveAll(transportLines);
+        } catch (DataIntegrityViolationException e) {
+            throw new GeneralException("Transport line with given name already exist!", HttpStatus.BAD_REQUEST);
+        } catch (RuntimeException e) { // PersistentObjectException handled
+            throw new GeneralException("Transport lines have invalid schedule or position associated!",
+                    HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    /**
+     * @param transportLines      that contain schedules that need to be validated
+     * @param schedules           valid schedules in database
+     * @param associatedSchedules valid schedules that are associated to transport lines
+     */
+    private void validateSchedule(Iterable<TransportLine> transportLines, List<Schedule> schedules,
+                                  List<Schedule> associatedSchedules) {
+        transportLines.forEach(transportLine -> {
+            if (transportLine.getSchedule() == null) {
+                transportLine.setSchedule(new HashSet<>());
+            } else {
                 transportLine.getSchedule().forEach(schedule -> {
+                    Schedule found = this.findScheduleById(schedules, schedule.getId());
                     // corrupted schedule associated to transport line
-                    if (schedule.getId() != null && (!schedules.contains(schedule))) {
-                        throw new GeneralException("Corrupted schedule data received!", HttpStatus.BAD_REQUEST);
+                    if (schedule.getId() != null && found == null) { // schedule does not exist in database
+                        throw new GeneralException("Schedule associated to transport line "
+                                + transportLine.getName() + " does not exist!", HttpStatus.BAD_REQUEST);
+                    } else if (schedule.getId() != null &&
+                            !found.getTransportLine().getId().equals(transportLine.getId())) {
+                        //  schedule associate to wrong transport line
+                        throw new GeneralException("Schedule has already associated to another transport line!",
+                                HttpStatus.BAD_REQUEST);
                     } else if (schedule.getId() != null) { // valid schedule associated to transport line
-                        Schedule temp = null;
-                        for (Schedule s : schedules) {
-                            if (s.getId().equals(schedule.getId())) {
-                                temp = s;
-                                break;
-                            }
-                        }
-                        if (temp != null) {
+                        if (found != null) {
                             // replace item in transportLine
                             for (Schedule tempSchedule : transportLine.getSchedule()) {
-                                if (tempSchedule.getId().equals(temp.getId())) {
-                                    tempSchedule.setId(temp.getId());
-                                    tempSchedule.setTransportLine(temp.getTransportLine());
-                                    tempSchedule.setDepartures(temp.getDepartures());
-                                    tempSchedule.setDayOfWeek(temp.getDayOfWeek());
-                                    tempSchedule.setActive(temp.isActive());
+                                if (tempSchedule.getId().equals(found.getId())) {
+                                    tempSchedule.setId(found.getId());
+                                    tempSchedule.setTransportLine(found.getTransportLine());
+                                    tempSchedule.setDepartures(found.getDepartures());
+                                    tempSchedule.setDayOfWeek(found.getDayOfWeek());
+                                    tempSchedule.setActive(found.isActive());
                                     break;
                                 }
                             }
@@ -99,27 +151,80 @@ public class TransportLineServiceImpl implements TransportLineService {
                         associatedSchedules.add(schedule);
                     }
                 });
-            });
+            }
+
+        });
+    }
+
+    /**
+     * @param schedules which search is performed
+     * @param id        of target schedule
+     * @return founded schedule or null if does not exist in collection
+     */
+    private Schedule findScheduleById(Iterable<Schedule> schedules, Long id) {
+        for (Schedule schedule : schedules) {
+            if (schedule.getId().equals(id)) {
+                return schedule;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * @param schedules           valid schedules in database
+     * @param associatedSchedules with transport lines
+     */
+    private void filterAndRemoveUnassociatedSchedules(List<Schedule> schedules, List<Schedule> associatedSchedules) {
+        if (!schedules.isEmpty()) {
             // remove elements that are in persistentSchedules collection
             schedules.removeIf(schedule -> associatedSchedules.stream()
                     .anyMatch(schedule1 -> schedule1.getId().equals(schedule.getId())));
+            // schedules now contains items for deletion
             scheduleRepository.deleteAll(schedules);
         }
-        try {
-            transportLineRepository.deleteAll();
-            return transportLineRepository.saveAll(transportLines);
-        } catch (DataIntegrityViolationException e) {
-            throw new GeneralException("Transport line with given name already exist!", HttpStatus.BAD_REQUEST);
-        } catch (RuntimeException e) { // PersistentObjectException handled
-            throw new GeneralException("Transport lines contains bad formatted id data!", HttpStatus.BAD_REQUEST);
-        }
-        // POSTO SE KORISTI KASKADA ALL OCEKUJE SE DA SVI ID-JEVI KOJE VIDI TRANSPORTLINE DA BUDU NULL
-        // (U SUPROTNOM BACA PERZISTENCEOBJECTEXCEPTION) TJ. ID-JEVI OD TRANSPORTLINEPOSITION.
-        // TREBA NAPISATI TESTOVE KOJI PREOVERAVAJU ID-JEVE, PRVO MORAJU BITI NULL
-
-        // testirati slucaj kada neodgovarajuci schedule je attachovan za transport line
-        // mora da postoji barem zona za koju se vezuje ruta ako, namestiti na frontu da se veze za neku
-        // defaltnu zonu za id=1 ili ovde staviti default rutu?
     }
 
+    /**
+     * @param transportLines contains new transport lines
+     */
+    private void associateDefaultZoneToNewTransportLines(Iterable<TransportLine> transportLines) {
+        // associate new transport lines with default zone
+        Zone defaultZone = zoneRepository.findById(1L).orElseThrow(
+                () -> new GeneralException("Default zone does not exist!", HttpStatus.INTERNAL_SERVER_ERROR));
+        transportLines.forEach(transportLine -> {
+            if (transportLine.getZone() == null || transportLine.getZone().getId() == null) {
+                transportLine.setZone(defaultZone);
+            }
+        });
+    }
+
+    /**
+     * @param dbTransportLines valid transport lines in database
+     * @param transportLines   that need to be saved
+     */
+    private void filterAssociatedTransportLines(List<TransportLine> dbTransportLines,
+                                                Iterable<TransportLine> transportLines) {
+        // remove items that exist in transportLine and
+        // then dbTransportLines contains items for deletion
+        dbTransportLines.removeIf(transportLine -> {
+            boolean exist = false;
+            for (TransportLine transportLine1 : transportLines) {
+                if (transportLine.getId().equals(transportLine1.getId())) {
+                    exist = true;
+                    break;
+                }
+            }
+            return exist;
+        });
+    }
+
+    /**
+     * @param dbTransportLines valid transport lines in database
+     */
+    private void removeStationsFromTransportLines(List<TransportLine> dbTransportLines) {
+        List<Vehicle> vehicles = vehicleRepository
+                .findByTransportLine(dbTransportLines.stream().map(TransportLine::getId).collect(Collectors.toList()));
+        vehicles.forEach(vehicle -> vehicle.setCurrentLine(null));
+        vehicleRepository.saveAll(vehicles);
+    }
 }

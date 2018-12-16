@@ -2,7 +2,10 @@ package construction_and_testing.public_transport_system.service.definition;
 
 import construction_and_testing.public_transport_system.domain.RegisteredUser;
 import construction_and_testing.public_transport_system.domain.User;
+import construction_and_testing.public_transport_system.domain.Validator;
 import construction_and_testing.public_transport_system.domain.enums.AuthorityType;
+
+import java.util.List;
 
 /**
  * Service which includes all required methods for users and their data
@@ -40,6 +43,37 @@ public interface UserService {
      *
      * @return user currently logged in
      */
-    public User findCurrentUser();
+    User findCurrentUser();
+
+
+    /**
+     * Method that returns all users that submitted documents that needs to be checked and they
+     * are not yet checked. If there is not such user, method returns empty list
+     *
+     * @return list of unvalidated users
+     */
+    List<User> getUnvalidatedUsers();
+
+    /**
+     * @param id
+     * @return user with given id
+     */
+    User findById(long id);
+
+    /**
+     * @param u
+     * @return saved user
+     */
+    User save(User u);
+
+    /**
+     * @return list of all validators
+     */
+    List<Validator> getValidators();
+
+    /**
+     * @returns all registered users in the system
+     */
+    List<RegisteredUser> getRegisteredUsers();
 
 }

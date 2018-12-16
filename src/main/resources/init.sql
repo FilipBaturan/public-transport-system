@@ -27,6 +27,12 @@ INSERT INTO `public_transport`.`vehicle` (`id`, `active`, `name`, `type`, `curre
 INSERT INTO `public_transport`.`vehicle` (`id`, `active`, `name`, `type`, `current_line_id`) VALUES ('2', TRUE, 'bus2', '0', '1');
 
 
+INSERT INTO `public_transport`.`item` (`id`, `active`, `age`, `cost`, `type`, `zone_id`, `vehicle_type`) VALUES ('1', TRUE, '0', '150', '1', '1', '0');
+INSERT INTO `public_transport`.`pricelist` (`id`, `active`, `end_date`, `start_date`) VALUES ('1', TRUE, '2020-01-22', '2010-01-22');
+INSERT INTO `public_transport`.`pricelist_item` (`id`, `active`, `item_id`, `pricelist_id`) VALUES ('1', TRUE, '1', '1');
+INSERT INTO `public_transport`.`reservation` (`id`, `active`, `owner_id`) VALUES ('1', TRUE, '1');
+INSERT INTO `public_transport`.`ticket` (`id`, `active`, `expiry_date`, `purchase_date`, `token`, `line_id`, `price_list_item_id`, `reservation_id`) VALUES ('1', TRUE, '2018-02-01', '2018-03-01', 'qweqwe', '1', '1', '1');
+
 INSERT INTO `public_transport`.`schedule` (`id`, `active`, `transport_line_id`, `day_of_week`) VALUES (100, TRUE, 1, 0);
 INSERT INTO `public_transport`.`schedule` (`id`, `active`, `transport_line_id`, `day_of_week`) VALUES (101, TRUE, 2, 0);
 INSERT INTO `public_transport`.`schedule` (`id`, `active`, `transport_line_id`, `day_of_week`) VALUES (102, TRUE, 3, 0);
@@ -36,11 +42,17 @@ INSERT INTO `public_transport`.`schedule` (`id`, `active`, `transport_line_id`, 
 INSERT INTO `public_transport`.`schedule` (`id`, `active`, `transport_line_id`, `day_of_week`) VALUES (106, TRUE, 2, 2);
 
 
+INSERT INTO `public_transport`.`user` (`type`, `id`, `active`, `authority`, `confirmation`, `email`, `last_name`, `name`, `password`, `telephone`, `username`, `balance`, `document`) VALUES ('REGISTERED_USER', '1', '1', '0', '2', 'asdasd.asd@gmail.com', 'LastName', 'FirstName', 'pass', '0120120012', 'username1', '100', 'asds');
+INSERT INTO `public_transport`.`user` (`type`, `id`, `active`, `authority`, `email`, `last_name`, `name`, `password`, `username`, `balance`, `document`) VALUES ('VALIDATOR', '2', '1', '2', 'asdasd.asd@gmail.com', '', 'nekoIme', '123123', 'username2', '100', 'asds');
+INSERT INTO `public_transport`.`user` (`type`, `id`, `active`, `authority`, `email`, `last_name`, `name`, `password`, `username`) VALUES ('VALIDATOR', '4', '1', '2', 'newEmail', '', 'newName', 'newPass', 'newUserName');
+
+
 INSERT INTO `public_transport`.`schedule_departures` (`schedule_id`, `departure`) VALUES (100, '08:00');
 INSERT INTO `public_transport`.`schedule_departures` (`schedule_id`, `departure`) VALUES (100, '08:15');
 INSERT INTO `public_transport`.`schedule_departures` (`schedule_id`, `departure`) VALUES (100, '08:30');
 INSERT INTO `public_transport`.`schedule_departures` (`schedule_id`, `departure`) VALUES (100, '08:45');
 INSERT INTO `public_transport`.`schedule_departures` (`schedule_id`, `departure`) VALUES (100, '09:00');
+
 
 INSERT INTO `public_transport`.`schedule_departures` (`schedule_id`, `departure`) VALUES (101, '10:00');
 INSERT INTO `public_transport`.`schedule_departures` (`schedule_id`, `departure`) VALUES (101, '10:15');
