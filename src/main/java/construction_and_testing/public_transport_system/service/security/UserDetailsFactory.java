@@ -30,7 +30,8 @@ public class UserDetailsFactory {
         try {
             //auth.add(new SimpleGrantedAuthority(user.getAuthorityType().toString()));
             //authorities = auth; //.map(a -> new SimpleGrantedAuthority(a.toString())).collect(Collectors.toList());
-            authorities = user.getAuthorityType().stream().map(a -> new SimpleGrantedAuthority(a.toString())).collect(Collectors.toList());
+            //authorities = user.getAuthorityType().stream().map(a -> new SimpleGrantedAuthority(a.toString())).collect(Collectors.toList());
+            authorities = null;
         } catch (Exception e) {
             authorities = null;
         }
