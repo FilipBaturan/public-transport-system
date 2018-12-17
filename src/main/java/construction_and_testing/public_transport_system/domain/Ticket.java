@@ -47,7 +47,7 @@ public class Ticket implements Serializable {
     public Ticket() {
     }
 
-    public Ticket(long id, LocalDateTime purchaseDate, LocalDateTime expiryDate, String token, boolean active,
+    public Ticket(Long id, LocalDateTime purchaseDate, LocalDateTime expiryDate, String token, boolean active,
                   PricelistItem priceList, TransportLine line, Reservation reservation) {
         this.id = id;
         this.purchaseDate = purchaseDate;

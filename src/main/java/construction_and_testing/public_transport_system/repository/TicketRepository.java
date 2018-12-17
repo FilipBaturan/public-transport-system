@@ -9,9 +9,10 @@ import java.util.List;
 
 public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
-    @Query(value = "SELECT * FROM Ticket t WHERE t.active = true AND t.reservation_id = ?1", nativeQuery = true)
+
+    @Query( value = "SELECT * FROM Ticket t WHERE t.reservation_id = ?1", nativeQuery = true)
     List<Ticket> getTiketsForReservation(Long id);
 
-    @Query(value = "SELECT SUM(i.cost) FROM Item i WHERE i.vehicle_type = ?3 AND i.id IN (SELECT t.price_list_item_id FROM Ticket t WHERE t.active = true AND t.purchase_date BETWEEN ?1 AND ?2)", nativeQuery = true)
+    @Query(value = "SELECT SUM(i.cost) FROM Ticket t, Pricelist_item pli, Item i WHERE t.price_list_item_id = pli.id AND pli.item_id = i.id AND i.vehicle_type = ?3 AND t.purchase_date BETWEEN ?1 AND ?2", nativeQuery = true)
     Long getPrice(LocalDate date1, LocalDate date2, int i);
 }

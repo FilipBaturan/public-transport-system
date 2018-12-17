@@ -27,7 +27,7 @@ public class ZoneConstants {
             ArrayList<TransportLine>() {{
                 add(new TransportLine(21L, "T1", VehicleType.METRO,
                         new TransportLinePosition(), new HashSet<>(), null, true));
-                add(new TransportLine(22L, "T2", VehicleType.TRAM,
+                add(new TransportLine(22L, "T2", VehicleType.TRAMVAJ,
                         new TransportLinePosition(), new HashSet<>(), null, true));
                 add(new TransportLine(23L, "T3", VehicleType.BUS,
                         new TransportLinePosition(), new HashSet<>(), null, true));

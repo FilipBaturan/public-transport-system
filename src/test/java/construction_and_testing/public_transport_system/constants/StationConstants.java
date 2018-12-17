@@ -28,7 +28,7 @@ public class StationConstants {
     public static final Long DEL_ID_INVALID = 33L;
 
     public static final List<Station> NEW_STATIONS = new ArrayList<Station>() {{
-        add(new Station(null, "Sajmiste1", new StationPosition(), VehicleType.TRAM, true));
+        add(new Station(null, "Sajmiste1", new StationPosition(), VehicleType.TRAMVAJ, true));
         add(new Station(null, "Sajmiste2", new StationPosition(), VehicleType.METRO, true));
     }};
 
