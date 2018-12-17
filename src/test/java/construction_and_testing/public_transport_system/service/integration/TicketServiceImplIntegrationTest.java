@@ -197,7 +197,7 @@ public class TicketServiceImplIntegrationTest {
         assertThat(prices).isNotEmpty();
         assertThat(prices.get(VehicleType.BUS)).isEqualTo(300);
         assertThat(prices.get(VehicleType.METRO)).isEqualTo(0);
-        assertThat(prices.get(VehicleType.TRAMVAJ)).isEqualTo(0);
+        assertThat(prices.get(VehicleType.TRAM)).isEqualTo(0);
     }
 
     @Test
@@ -210,7 +210,7 @@ public class TicketServiceImplIntegrationTest {
         assertThat(prices).isNotEmpty();
         assertThat(prices.get(VehicleType.BUS)).isEqualTo(-1);
         assertThat(prices.get(VehicleType.METRO)).isEqualTo(-1);
-        assertThat(prices.get(VehicleType.TRAMVAJ)).isEqualTo(-1);
+        assertThat(prices.get(VehicleType.TRAM)).isEqualTo(-1);
     }
 
     @Test(expected = NullPointerException.class)
@@ -220,7 +220,7 @@ public class TicketServiceImplIntegrationTest {
         assertThat(prices).isNotEmpty();
         assertThat(prices.get(VehicleType.BUS)).isEqualTo(0);
         assertThat(prices.get(VehicleType.METRO)).isEqualTo(0);
-        assertThat(prices.get(VehicleType.TRAMVAJ)).isEqualTo(0);
+        assertThat(prices.get(VehicleType.TRAM)).isEqualTo(0);
     }
 
 }

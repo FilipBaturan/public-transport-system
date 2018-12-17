@@ -8,5 +8,5 @@ public enum VehicleType {
 
     BUS,
     METRO,
-    TRAMVAJ
+    TRAM
 }

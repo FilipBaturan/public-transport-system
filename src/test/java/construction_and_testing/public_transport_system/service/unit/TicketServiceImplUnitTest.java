@@ -2,7 +2,6 @@ package construction_and_testing.public_transport_system.service.unit;
 
 
 import construction_and_testing.public_transport_system.domain.Ticket;
-import construction_and_testing.public_transport_system.domain.Vehicle;
 import construction_and_testing.public_transport_system.domain.enums.VehicleType;
 import construction_and_testing.public_transport_system.repository.ReservationRepository;
 import construction_and_testing.public_transport_system.repository.TicketRepository;
@@ -20,7 +19,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -240,7 +238,7 @@ public class TicketServiceImplUnitTest {
         assertThat(prices).isNotEmpty();
         assertThat(prices.get(VehicleType.BUS)).isEqualTo(300);
         assertThat(prices.get(VehicleType.METRO)).isEqualTo(0);
-        assertThat(prices.get(VehicleType.TRAMVAJ)).isEqualTo(0);
+        assertThat(prices.get(VehicleType.TRAM)).isEqualTo(0);
     }
 
     @Test
@@ -253,7 +251,7 @@ public class TicketServiceImplUnitTest {
         assertThat(prices).isNotEmpty();
         assertThat(prices.get(VehicleType.BUS)).isEqualTo(-1);
         assertThat(prices.get(VehicleType.METRO)).isEqualTo(-1);
-        assertThat(prices.get(VehicleType.TRAMVAJ)).isEqualTo(-1);
+        assertThat(prices.get(VehicleType.TRAM)).isEqualTo(-1);
     }
 
     @Test(expected = NullPointerException.class)
@@ -263,7 +261,7 @@ public class TicketServiceImplUnitTest {
         assertThat(prices).isNotEmpty();
         assertThat(prices.get(VehicleType.BUS)).isEqualTo(0);
         assertThat(prices.get(VehicleType.METRO)).isEqualTo(0);
-        assertThat(prices.get(VehicleType.TRAMVAJ)).isEqualTo(0);
+        assertThat(prices.get(VehicleType.TRAM)).isEqualTo(0);
     }
 
 }
