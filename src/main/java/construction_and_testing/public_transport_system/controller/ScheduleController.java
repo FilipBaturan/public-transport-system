@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -36,6 +37,7 @@ public class ScheduleController extends ValidationController {
      * @return all available schedules
      */
     @GetMapping
+    @PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<ScheduleDTO>> getAll() {
         logger.info("Requesting all available schedules at time {}.", Calendar.getInstance().getTime());
         return new ResponseEntity<>(ScheduleConverter.fromEntityList(scheduleService.getAll(), ScheduleDTO::new),

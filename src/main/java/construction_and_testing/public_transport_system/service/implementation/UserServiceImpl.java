@@ -8,6 +8,7 @@ import construction_and_testing.public_transport_system.repository.UserRepositor
 import construction_and_testing.public_transport_system.service.definition.UserService;
 import construction_and_testing.public_transport_system.util.GeneralException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -43,6 +44,12 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<User> findAll()
+    {
+        return userRepository.findAll();
+    }
+
+    @Override
     public User findCurrentUser() {
         final UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
         if (authentication == null) {
@@ -59,16 +66,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User findById(long id) {
+    public User findById(Long id) {
 
-        return userRepository.findById(id).orElseThrow(() ->
-                new GeneralException("Requested user does not exist!", HttpStatus.BAD_REQUEST));
+        try
+        {
+            return userRepository.findById(id).get();
+        }
+        catch (Exception e) {
+            throw new GeneralException("Requested user does not exist!", HttpStatus.BAD_REQUEST);
+        }
 
     }
 
     @Override
-    public User save(User u) {
-        return userRepository.save(u);
+    public User save(User u)
+    {
+        try {
+            return userRepository.save(u);
+        }
+        catch (DataIntegrityViolationException e) {
+            throw new GeneralException("User does not have valid attributes!", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @Override

@@ -118,7 +118,7 @@ public class TokenUtils {
      * @return true if token is valid
      */
     boolean validateToken(String token, UserDetails userDetails) {
-        final UserDetailsImpl user = (UserDetailsImpl) userDetails;
+        //final UserDetailsImpl user = (UserDetailsImpl) userDetails;
         final String username = getUsernameFromToken(token);
         final Date created = getCreatedDateFromToken(token);
         return username.equals(userDetails.getUsername()) && !(isTokenExpired(token));// && !(isCreatedBeforeLastPasswordReset(created, user.getLastPasswordReset()));
