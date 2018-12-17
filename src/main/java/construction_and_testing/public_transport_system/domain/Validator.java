@@ -1,7 +1,6 @@
 package construction_and_testing.public_transport_system.domain;
 
 import construction_and_testing.public_transport_system.domain.enums.AuthorityType;
-import construction_and_testing.public_transport_system.domain.enums.UsersDocumentsStatus;
 
 import javax.persistence.DiscriminatorValue;
 import javax.persistence.Entity;

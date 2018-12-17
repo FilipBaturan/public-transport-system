@@ -40,7 +40,7 @@ public class Station implements Serializable {
         this.active = true;
     }
 
-    public Station(long id, String name, StationPosition position, VehicleType type, boolean active) {
+    public Station(Long id, String name, StationPosition position, VehicleType type, boolean active) {
         this.id = id;
         this.name = name;
         this.position = position;

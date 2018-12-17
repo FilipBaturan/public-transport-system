@@ -14,7 +14,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.transaction.Transactional;
 import java.util.Optional;
 
 import static construction_and_testing.public_transport_system.constants.VehicleConstants.*;
@@ -62,7 +61,6 @@ public class VehicleServiceImplUnitTest {
      * Test valid vehicle saving
      */
     @Test
-    @Transactional
     public void save() {
         Vehicle vehicle = new Vehicle(null, NEW_NAME, NEW_TYPE, NEW_LINE, true);
         int countBefore = vehicleService.getAll().size();
@@ -84,7 +82,6 @@ public class VehicleServiceImplUnitTest {
      * Test with invalid vehicle type and transport line type
      */
     @Test(expected = GeneralException.class)
-    @Transactional
     public void saveWithInvalidType() {
         Vehicle vehicle = new Vehicle(null, NEW_NAME, NEW_TYPE_INVALID, NEW_LINE, true);
         int countBefore = vehicleService.getAll().size();
@@ -106,7 +103,6 @@ public class VehicleServiceImplUnitTest {
      * Test with invalid transport line
      */
     @Test(expected = GeneralException.class)
-    @Transactional
     public void saveWithInvalidLine() {
         Vehicle vehicle = new Vehicle(null, NEW_NAME, NEW_TYPE_INVALID, NEW_LINE_INVALID, true);
         int countBefore = vehicleService.getAll().size();
@@ -128,7 +124,6 @@ public class VehicleServiceImplUnitTest {
      * Test with null transport line
      */
     @Test(expected = GeneralException.class)
-    @Transactional
     public void saveWithNullLine() {
         Vehicle vehicle = new Vehicle(null, NEW_NAME, NEW_TYPE_INVALID, null, true);
         int countBefore = vehicleService.getAll().size();
@@ -150,7 +145,6 @@ public class VehicleServiceImplUnitTest {
      * Test with null values
      */
     @Test(expected = GeneralException.class)
-    @Transactional
     public void saveWithNullValues() {
         Vehicle vehicle = new Vehicle(null, null, null, NEW_LINE, true);
         int countBefore = vehicleService.getAll().size();
@@ -172,7 +166,6 @@ public class VehicleServiceImplUnitTest {
      * Test valid vehicle deletion
      */
     @Test
-    @Transactional
     public void remove() {
         vehicleService.remove(DEL_ID);
 
@@ -187,7 +180,6 @@ public class VehicleServiceImplUnitTest {
      * Test vehicle deletion that does not exist in database
      */
     @Test(expected = GeneralException.class)
-    @Transactional
     public void removeWithInvalidID() {
         vehicleService.remove(DEL_ID_INVALID);
 

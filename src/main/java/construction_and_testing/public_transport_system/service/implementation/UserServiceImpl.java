@@ -62,7 +62,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public List<User> getUnvalidatedUsers() {
-        return  this.userRepository.getUnvalidatedUsers();
+        return this.userRepository.getUnvalidatedUsers();
     }
 
     @Override

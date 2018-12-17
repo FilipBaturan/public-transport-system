@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
@@ -20,6 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class ZoneServiceImplIntegrationTest {
 
     @Autowired
@@ -177,7 +179,6 @@ public class ZoneServiceImplIntegrationTest {
      * Test with not unique name
      */
     @Test(expected = GeneralException.class)
-    @Transactional
     public void saveWithInvalidName() {
         Zone zone1 = new Zone(null, NEW_NAME, new HashSet<>(), true);
         Zone zone2 = new Zone(null, NEW_NAME, NEW_LINES, true);

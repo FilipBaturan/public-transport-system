@@ -94,21 +94,20 @@ public class TicketController {
     }
 
     @GetMapping("/getTicketsForUser/{id}")
-    public ResponseEntity<List<TicketReportDTO>> getTicketsForUser(@PathVariable("id") String id)
-    {
+    public ResponseEntity<List<TicketReportDTO>> getTicketsForUser(@PathVariable("id") String id) {
         List<TicketReportDTO> ticketList = new ArrayList<TicketReportDTO>();
 
         List<Reservation> reservationList;
 
         try {
-           reservationList  =  reservationService.getReservationsForUser(Long.parseLong(id) );
+            reservationList = reservationService.getReservationsForUser(Long.parseLong(id));
 
         } catch (NumberFormatException e) {
             throw new GeneralException("Bad format of requested id!", HttpStatus.BAD_REQUEST);
         }
 
-        for (Reservation r: reservationList) {
-            for (Ticket t: r.getTickets()) {
+        for (Reservation r : reservationList) {
+            for (Ticket t : r.getTickets()) {
                 ticketList.add(TicketConverter.fromEntity(t));
             }
 
@@ -117,7 +116,7 @@ public class TicketController {
     }
 
     @PutMapping("/updateTicket")
-    ResponseEntity<Boolean> updateValidator(@RequestBody TicketReportDTO ticketDTO){
+    ResponseEntity<Boolean> updateValidator(@RequestBody TicketReportDTO ticketDTO) {
 
         try {
             Optional<Ticket> optionalTicket = Optional.of(this.ticketService.findTicketById(ticketDTO.getId()) );
@@ -141,7 +140,6 @@ public class TicketController {
             LocalDate date2 = LocalDate.parse(stringDate2);
 
             Map<VehicleType, Integer> prices = this.ticketService.getReport(date1, date2);
-
             return new ResponseEntity<>(prices, HttpStatus.OK);
         }
         catch (DateTimeParseException de)

@@ -55,7 +55,6 @@ public interface UserService {
     List<User> getUnvalidatedUsers();
 
     /**
-     *
      * @param id
      * @return user with given id
      */
@@ -68,20 +67,17 @@ public interface UserService {
     List<User> findAll();
 
     /**
-     *
      * @param u
      * @return saved user
      */
     User save(User u);
 
     /**
-     *
      * @return list of all validators
      */
     List<Validator> getValidators();
 
     /**
-     *
      * @returns all registered users in the system
      */
     List<RegisteredUser> getRegisteredUsers();

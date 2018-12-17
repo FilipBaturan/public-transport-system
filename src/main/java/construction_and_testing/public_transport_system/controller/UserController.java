@@ -25,7 +25,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -65,7 +64,6 @@ public class UserController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
 
 
     /**
@@ -142,17 +140,16 @@ public class UserController {
 
     /**
      * GET /api/user/unvalidatedUsers
-     *
+     * <p>
      * Gets users that are not yet validated in the system.
      *
      * @return list if users
      */
     @GetMapping("/unvalidatedUsers")
-    public ResponseEntity<List<UserDTO>> getUnvalidatedUsers()
-    {
+    public ResponseEntity<List<UserDTO>> getUnvalidatedUsers() {
         List<User> listOfUsers = userService.getUnvalidatedUsers();
         List<UserDTO> listOfDTOUsers = new ArrayList<>();
-        for (User user: listOfUsers) {
+        for (User user : listOfUsers) {
             listOfDTOUsers.add(UserConverter.fromEntity(user));
         }
 
@@ -161,7 +158,7 @@ public class UserController {
     }
 
     @PutMapping("/approveUser")
-    public ResponseEntity<Boolean> approveUser(@RequestBody UserDTO user){
+    public ResponseEntity<Boolean> approveUser(@RequestBody UserDTO user) {
 
         try {
             User u = this.userService.findById(user.getId());
@@ -210,11 +207,10 @@ public class UserController {
     }
 
     @GetMapping("/getValidators")
-    public ResponseEntity<List<UserDTO>> getValidators()
-    {
+    public ResponseEntity<List<UserDTO>> getValidators() {
         List<Validator> listOfValidators = userService.getValidators();
         List<UserDTO> listOfDTOValidators = new ArrayList<>();
-        for (Validator user: listOfValidators) {
+        for (Validator user : listOfValidators) {
             listOfDTOValidators.add(UserConverter.fromEntity(user));
         }
 
@@ -223,7 +219,7 @@ public class UserController {
     }
 
     @PutMapping("/updateValidator")
-    public ResponseEntity<Boolean> updateValidator(@RequestBody UserDTO userDTO){
+    public ResponseEntity<Boolean> updateValidator(@RequestBody UserDTO userDTO) {
 
         User validator = null;
 
@@ -252,7 +248,7 @@ public class UserController {
     }
 
     @PostMapping("/addValidator")
-    ResponseEntity<Boolean> addValidator(@RequestBody UserDTO userDTO){
+    ResponseEntity<Boolean> addValidator(@RequestBody UserDTO userDTO) {
         if (userDTO.getId() != null)
             return new ResponseEntity<>(false, HttpStatus.CONFLICT);
         else {
@@ -269,11 +265,10 @@ public class UserController {
     }
 
     @GetMapping("/registeredUsers")
-    public ResponseEntity<List<UserDTO>> getRegisteredUsers()
-    {
+    public ResponseEntity<List<UserDTO>> getRegisteredUsers() {
         List<RegisteredUser> listOfUsers = userService.getRegisteredUsers();
         List<UserDTO> listOfDTOUsers = new ArrayList<>();
-        for (RegisteredUser user: listOfUsers)
+        for (RegisteredUser user : listOfUsers)
             listOfDTOUsers.add(UserConverter.fromEntity(user));
 
         return new ResponseEntity<>(listOfDTOUsers, HttpStatus.OK);

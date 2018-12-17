@@ -21,9 +21,16 @@ public class TransportLinePositionDTO {
     }
 
     public TransportLinePositionDTO(TransportLinePosition transportLinePosition) {
-        this.id = transportLinePosition.getId();
-        this.content = transportLinePosition.getContent();
-        this.active = transportLinePosition.isActive();
+        if (transportLinePosition == null) {
+            this.id = null;
+            this.content = null;
+            this.active = true;
+        } else {
+            this.id = transportLinePosition.getId();
+            this.content = transportLinePosition.getContent();
+            this.active = transportLinePosition.isActive();
+        }
+
     }
 
     public Long getId() {

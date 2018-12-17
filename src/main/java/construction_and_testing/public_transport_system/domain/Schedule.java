@@ -72,6 +72,14 @@ public class Schedule implements Serializable {
         this.dayOfWeek = schedule.getDayOfWeek();
     }
 
+    public Schedule(Schedule schedule) {
+        this.id = schedule.getId();
+        this.transportLine = schedule.getTransportLine();
+        this.departures = schedule.getDepartures();
+        this.dayOfWeek = schedule.getDayOfWeek();
+        this.active = schedule.isActive();
+    }
+
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
