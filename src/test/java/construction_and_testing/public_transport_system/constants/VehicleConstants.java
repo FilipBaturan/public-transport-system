@@ -21,6 +21,10 @@ public class VehicleConstants {
 
     public static final Long NEW_ID = 7L;
     public static final String NEW_NAME = "bus7";
+    public static final String NEW_NAME_SHORT_LENGTH = "";
+    public static final String NEW_NAME_LONG_LENGTH = "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn";
+    public static final String NEW_NAME_MIN_LENGTH = "bus";
+    public static final String NEW_NAME_MAX_LENGTH = "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnn";
     public static final VehicleType NEW_TYPE = VehicleType.BUS;
     public static final TransportLine NEW_LINE =
             new TransportLine(1L, "R1", VehicleType.BUS, new TransportLinePosition(),

@@ -68,17 +68,15 @@ public class ZoneController extends ValidationController {
     }
 
     /**
-     * DELETE /api/zone
+     * DELETE /api/zone/id
      *
-     * @param zone that needs to be deleted
+     * @param id of zone that needs to be deleted
      * @return message about action results
      */
-    @DeleteMapping()
-    public ResponseEntity<String> delete(@RequestBody String zone) throws IOException, ValidationException {
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> delete(@PathVariable String id) throws ValidationException {
         logger.info("Deleting zone at time {}.", Calendar.getInstance().getTime());
-        validateJSON(zone, "zone.json");
-        ObjectMapper mapper = new ObjectMapper();
-        zoneService.remove((new Zone(mapper.readValue(zone, ZoneDTO.class)).getId()));
+        zoneService.remove(Long.parseLong(id));
         return new ResponseEntity<>("Zone successfully deleted!", HttpStatus.OK);
     }
 }

@@ -17,7 +17,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import javax.transaction.Transactional;
 import java.util.HashSet;
 
 import static construction_and_testing.public_transport_system.constants.ZoneConstants.*;
@@ -214,26 +213,88 @@ public class ZoneControllerTest {
     }
 
     /**
+     * Test with to short name value
+     */
+    @Test
+    public void saveWithShortName() throws Exception {
+        ZoneDTO zone = new ZoneDTO(new Zone(null, NEW_NAME_SHORT_LENGTH, NEW_LINES, true));
+        String jsonZone = TestUtil.json(zone);
+
+        ResponseEntity<String> result = testRestTemplate.postForEntity(this.URL, jsonZone, String.class);
+
+        String body = result.getBody();
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(body).isNotNull();
+    }
+
+    /**
+     * Test with too long name value
+     */
+    @Test
+    public void saveWithLongName() throws Exception {
+        ZoneDTO zone = new ZoneDTO(new Zone(null, NEW_NAME_LONG_LENGTH, NEW_LINES, true));
+        String jsonZone = TestUtil.json(zone);
+
+        ResponseEntity<String> result = testRestTemplate.postForEntity(this.URL, jsonZone, String.class);
+
+        String body = result.getBody();
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(body).isNotNull();
+    }
+
+    /**
+     * Test with min length name value
+     */
+    @Test
+    public void saveWithMinLengthName() throws Exception {
+        ZoneDTO zone = new ZoneDTO(new Zone(null, NEW_NAME_MIN_LENGTH, NEW_LINES, true));
+        String jsonZone = TestUtil.json(zone);
+
+        ResponseEntity<ZoneDTO> result = testRestTemplate.postForEntity(this.URL, jsonZone, ZoneDTO.class);
+
+        ZoneDTO body = result.getBody();
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(body).isNotNull();
+        assertThat(body.getName()).isEqualTo(zone.getName());
+        assertThat(body.getLines()).hasSize(zone.getLines().size());
+        assertThat(body.isActive()).isEqualTo(zone.isActive());
+    }
+
+    /**
+     * Test with max length name value
+     */
+    @Test
+    public void saveWithMaxLengthName() throws Exception {
+        ZoneDTO zone = new ZoneDTO(new Zone(null, NEW_NAME_MAX_LENGTH, NEW_LINES, true));
+        String jsonZone = TestUtil.json(zone);
+
+        ResponseEntity<ZoneDTO> result = testRestTemplate.postForEntity(this.URL, jsonZone, ZoneDTO.class);
+
+        ZoneDTO body = result.getBody();
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(body).isNotNull();
+        assertThat(body.getName()).isEqualTo(zone.getName());
+        assertThat(body.getLines()).hasSize(zone.getLines().size());
+        assertThat(body.isActive()).isEqualTo(zone.isActive());
+    }
+
+    /**
      * Test valid zone deletion
      */
     @Test
-    @Transactional
     public void delete() throws Exception {
-        ZoneDTO zone = new ZoneDTO(new Zone(DEL_ID, DB_NAME, new HashSet<>(), true));
-        String jsonZone = TestUtil.json(zone);
-
-        testRestTemplate.delete(this.URL, jsonZone, String.class);
+        testRestTemplate.delete(this.URL + "/" + DEL_ID, String.class);
     }
 
     /**
      * Test zone deletion that does not exist in database
      */
     @Test
-    @Transactional
     public void deleteNotValidId() throws Exception {
-        ZoneDTO zone = new ZoneDTO(new Zone(DEL_ID_INVALID, DB_NAME, new HashSet<>(), true));
-        String jsonZone = TestUtil.json(zone);
-
-        testRestTemplate.delete(this.URL, jsonZone, String.class);
+        testRestTemplate.delete(this.URL + "/" + DEL_ID, String.class);
     }
 }

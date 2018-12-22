@@ -133,6 +133,82 @@ public class StationControllerTest {
     }
 
     /**
+     * Test with to short name value
+     */
+    @Test
+    public void saveWithShortName() throws Exception {
+        StationDTO station = new StationDTO(
+                new Station(null, NEW_NAME_SHORT_LENGTH, NEW_POSITION, NEW_TYPE, NEW_ACTIVE));
+        String jsonStation = TestUtil.json(station);
+
+        ResponseEntity<String> result = testRestTemplate.postForEntity(this.URL, jsonStation, String.class);
+
+        String body = result.getBody();
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(body).isNotNull();
+    }
+
+    /**
+     * Test with too long name value
+     */
+    @Test
+    public void saveWithLongName() throws Exception {
+        StationDTO station = new StationDTO(
+                new Station(null, NEW_NAME_LONG_LENGTH, NEW_POSITION, NEW_TYPE, NEW_ACTIVE));
+        String jsonStation = TestUtil.json(station);
+
+        ResponseEntity<String> result = testRestTemplate.postForEntity(this.URL, jsonStation, String.class);
+
+        String body = result.getBody();
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(body).isNotNull();
+    }
+
+    /**
+     * Test with min length name value
+     */
+    @Test
+    public void saveWithMinLengthName() throws Exception {
+        StationDTO station = new StationDTO(
+                new Station(null, NEW_NAME_MIN_LENGTH, NEW_POSITION, NEW_TYPE, NEW_ACTIVE));
+        String jsonStation = TestUtil.json(station);
+
+        ResponseEntity<StationDTO> result = testRestTemplate.postForEntity(this.URL, jsonStation, StationDTO.class);
+
+        StationDTO body = result.getBody();
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(body).isNotNull();
+        assertThat(body.getName()).isEqualTo(station.getName());
+        assertThat(body.getType()).isEqualTo(station.getType());
+        assertThat(body.getPosition().getLongitude()).isEqualTo(station.getPosition().getLongitude());
+        assertThat(body.isActive()).isEqualTo(station.isActive());
+    }
+
+    /**
+     * Test with max length name value
+     */
+    @Test
+    public void saveWithMaxLengthName() throws Exception {
+        StationDTO station = new StationDTO(
+                new Station(null, NEW_NAME_MAX_LENGTH, NEW_POSITION, NEW_TYPE, NEW_ACTIVE));
+        String jsonStation = TestUtil.json(station);
+
+        ResponseEntity<StationDTO> result = testRestTemplate.postForEntity(this.URL, jsonStation, StationDTO.class);
+
+        StationDTO body = result.getBody();
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(body).isNotNull();
+        assertThat(body.getName()).isEqualTo(station.getName());
+        assertThat(body.getType()).isEqualTo(station.getType());
+        assertThat(body.getPosition().getLongitude()).isEqualTo(station.getPosition().getLongitude());
+        assertThat(body.isActive()).isEqualTo(station.isActive());
+    }
+
+    /**
      * Test valid station deletion
      */
     @Test
@@ -159,6 +235,84 @@ public class StationControllerTest {
      */
     @Test
     public void replaceAll() throws Exception {
+        StationCollectionDTO stations =
+                new StationCollectionDTO(NEW_STATIONS.stream().map(StationDTO::new).collect(Collectors.toList()));
+        String jsonStations = TestUtil.json(stations);
+
+        ResponseEntity<StationDTO[]> result = testRestTemplate.postForEntity(this.URL + "/replace",
+                jsonStations, StationDTO[].class);
+
+        StationDTO[] body = result.getBody();
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(body).isNotNull();
+        assertThat(body).hasSize(stations.getStations().size());
+    }
+
+    /**
+     * Test with too short name value
+     */
+    @Test
+    public void replaceAllWithShortName() throws Exception {
+        NEW_STATIONS.get(0).setName(NEW_NAME_SHORT_LENGTH);
+        StationCollectionDTO stations =
+                new StationCollectionDTO(NEW_STATIONS.stream().map(StationDTO::new).collect(Collectors.toList()));
+        String jsonStations = TestUtil.json(stations);
+
+        ResponseEntity<String> result = testRestTemplate.postForEntity(this.URL + "/replace",
+                jsonStations, String.class);
+
+        String body = result.getBody();
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(body).isNotNull();
+    }
+
+    /**
+     * Test with too long name value
+     */
+    @Test
+    public void replaceAllWithLongName() throws Exception {
+        NEW_STATIONS.get(0).setName(NEW_NAME_LONG_LENGTH);
+        StationCollectionDTO stations =
+                new StationCollectionDTO(NEW_STATIONS.stream().map(StationDTO::new).collect(Collectors.toList()));
+        String jsonStations = TestUtil.json(stations);
+
+        ResponseEntity<String> result = testRestTemplate.postForEntity(this.URL + "/replace",
+                jsonStations, String.class);
+
+        String body = result.getBody();
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(body).isNotNull();
+    }
+
+    /**
+     * Test with min length name value
+     */
+    @Test
+    public void replaceAllWithMinLengthName() throws Exception {
+        NEW_STATIONS.get(0).setName(NEW_NAME_MIN_LENGTH);
+        StationCollectionDTO stations =
+                new StationCollectionDTO(NEW_STATIONS.stream().map(StationDTO::new).collect(Collectors.toList()));
+        String jsonStations = TestUtil.json(stations);
+
+        ResponseEntity<StationDTO[]> result = testRestTemplate.postForEntity(this.URL + "/replace",
+                jsonStations, StationDTO[].class);
+
+        StationDTO[] body = result.getBody();
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(body).isNotNull();
+        assertThat(body).hasSize(stations.getStations().size());
+    }
+
+    /**
+     * Test with max length name value
+     */
+    @Test
+    public void replaceAllWithMaxLengthName() throws Exception {
+        NEW_STATIONS.get(0).setName(NEW_NAME_MAX_LENGTH);
         StationCollectionDTO stations =
                 new StationCollectionDTO(NEW_STATIONS.stream().map(StationDTO::new).collect(Collectors.toList()));
         String jsonStations = TestUtil.json(stations);

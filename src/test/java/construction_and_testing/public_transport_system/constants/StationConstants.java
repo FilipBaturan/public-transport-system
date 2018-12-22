@@ -19,6 +19,10 @@ public class StationConstants {
 
     public static final Long NEW_ID = 77L;
     public static final String NEW_NAME = "Kamenica1";
+    public static final String NEW_NAME_SHORT_LENGTH = "";
+    public static final String NEW_NAME_LONG_LENGTH = "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn";
+    public static final String NEW_NAME_MIN_LENGTH = "bbb";
+    public static final String NEW_NAME_MAX_LENGTH = "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnn";
     public static final VehicleType NEW_TYPE = VehicleType.METRO;
     public static final StationPosition NEW_POSITION =
             new StationPosition(null, 45.24, 26.74, true, null);

@@ -61,7 +61,6 @@ public interface UserService {
     User findById(Long id);
 
     /**
-     *
      * @returns list of all users
      */
     List<User> findAll();

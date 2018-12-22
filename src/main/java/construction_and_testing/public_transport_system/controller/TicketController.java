@@ -33,7 +33,6 @@ public class TicketController {
     private TicketService ticketService;
 
 
-
     @Autowired
     private ReservationService reservationService;
 
@@ -119,31 +118,26 @@ public class TicketController {
     ResponseEntity<Boolean> updateValidator(@RequestBody TicketReportDTO ticketDTO) {
 
         try {
-            Optional<Ticket> optionalTicket = Optional.of(this.ticketService.findTicketById(ticketDTO.getId()) );
+            Optional<Ticket> optionalTicket = Optional.of(this.ticketService.findTicketById(ticketDTO.getId()));
             ModelMapper mapper = new ModelMapper();
             mapper.map(ticketDTO, optionalTicket.get());
             this.ticketService.saveTicket(optionalTicket.get());
             return new ResponseEntity<>(true, HttpStatus.OK);
-        }
-        catch (GeneralException e)
-        {
+        } catch (GeneralException e) {
             return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
         }
 
     }
 
     @GetMapping("/reprot/{stringDate1}/{stringDate2}")
-    ResponseEntity<Map<VehicleType, Integer>> getReport(@PathVariable String stringDate1, @PathVariable String stringDate2)
-    {
-        try{
+    ResponseEntity<Map<VehicleType, Integer>> getReport(@PathVariable String stringDate1, @PathVariable String stringDate2) {
+        try {
             LocalDate date1 = LocalDate.parse(stringDate1);
             LocalDate date2 = LocalDate.parse(stringDate2);
 
             Map<VehicleType, Integer> prices = this.ticketService.getReport(date1, date2);
             return new ResponseEntity<>(prices, HttpStatus.OK);
-        }
-        catch (DateTimeParseException de)
-        {
+        } catch (DateTimeParseException de) {
             return new ResponseEntity<>(new HashMap<>(), HttpStatus.NOT_ACCEPTABLE);
         }
 

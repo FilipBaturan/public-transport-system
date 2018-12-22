@@ -58,8 +58,7 @@ public class TicketControllerTest {
 //    }
 
     @Test
-    public void getTicketsForUserValid()
-    {
+    public void getTicketsForUserValid() {
         ResponseEntity<TicketReportDTO[]> result = testRestTemplate
                 .getForEntity(this.URL + "/getTicketsForUser/" + DB_USER_ID, TicketReportDTO[].class);
 
@@ -74,8 +73,7 @@ public class TicketControllerTest {
     }
 
     @Test
-    public void getTicketsForUserInvalid()
-    {
+    public void getTicketsForUserInvalid() {
         ResponseEntity<TicketReportDTO[]> result = testRestTemplate
                 .getForEntity(this.URL + "/getTicketsForUser/" + DB_ID_INVALID, TicketReportDTO[].class);
 
@@ -88,8 +86,7 @@ public class TicketControllerTest {
 
 
     @Test
-    public void updateTicketValid()
-    {
+    public void updateTicketValid() {
         ResponseEntity<Boolean> result = testRestTemplate
                 .exchange(this.URL + "/updateTicket/", HttpMethod.PUT,
                         new HttpEntity<TicketReportDTO>(DB_TICKET_DTO), Boolean.class);
@@ -102,8 +99,7 @@ public class TicketControllerTest {
     }
 
     @Test
-    public void updateTicketInvalid()
-    {
+    public void updateTicketInvalid() {
         ResponseEntity<Boolean> result = testRestTemplate
                 .exchange(this.URL + "/updateTicket/", HttpMethod.PUT,
                         new HttpEntity<TicketReportDTO>(DB_INVALID_TICKET_DTO), Boolean.class);
@@ -116,16 +112,16 @@ public class TicketControllerTest {
     }
 
     @Test
-    public void getReportValid()
-    {
+    public void getReportValid() {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<String>("", headers);
 
-        ParameterizedTypeReference<Map<VehicleType, Integer>> responseType = new ParameterizedTypeReference<Map<VehicleType, Integer>>() {};
+        ParameterizedTypeReference<Map<VehicleType, Integer>> responseType = new ParameterizedTypeReference<Map<VehicleType, Integer>>() {
+        };
         ResponseEntity<Map<VehicleType, Integer>> result = testRestTemplate
-                .exchange(this.URL + "/reprot/2015-01-01/2018-12-12", HttpMethod.GET,entity, responseType);
+                .exchange(this.URL + "/reprot/2015-01-01/2018-12-12", HttpMethod.GET, entity, responseType);
 
         Map<VehicleType, Integer> prices = result.getBody();
         assertThat(prices).isNotEmpty();
@@ -136,16 +132,16 @@ public class TicketControllerTest {
     }
 
     @Test
-    public void getReportSwappedDates()
-    {
+    public void getReportSwappedDates() {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<String>("", headers);
 
-        ParameterizedTypeReference<Map<VehicleType, Integer>> responseType = new ParameterizedTypeReference<Map<VehicleType, Integer>>() {};
+        ParameterizedTypeReference<Map<VehicleType, Integer>> responseType = new ParameterizedTypeReference<Map<VehicleType, Integer>>() {
+        };
         ResponseEntity<Map<VehicleType, Integer>> result = testRestTemplate
-                .exchange(this.URL + "/reprot/2018-01-01/2015-12-12", HttpMethod.GET,entity, responseType);
+                .exchange(this.URL + "/reprot/2018-01-01/2015-12-12", HttpMethod.GET, entity, responseType);
 
         Map<VehicleType, Integer> prices = result.getBody();
         assertThat(prices).isNotEmpty();
@@ -159,16 +155,16 @@ public class TicketControllerTest {
      * Date1 is not provided in correct form
      */
     @Test
-    public void getReportInvalid()
-    {
+    public void getReportInvalid() {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<String>("", headers);
 
-        ParameterizedTypeReference<Map<VehicleType, Integer>> responseType = new ParameterizedTypeReference<Map<VehicleType, Integer>>() {};
+        ParameterizedTypeReference<Map<VehicleType, Integer>> responseType = new ParameterizedTypeReference<Map<VehicleType, Integer>>() {
+        };
         ResponseEntity<Map<VehicleType, Integer>> result = testRestTemplate
-                .exchange(this.URL + "/reprot/2015-01-0sfdf1/2018-12-12", HttpMethod.GET,entity, responseType);
+                .exchange(this.URL + "/reprot/2015-01-0sfdf1/2018-12-12", HttpMethod.GET, entity, responseType);
 
         Map<VehicleType, Integer> prices = result.getBody();
         assertThat(prices).isEmpty();

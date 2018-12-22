@@ -5,7 +5,7 @@ import construction_and_testing.public_transport_system.domain.enums.VehicleType
 
 import java.io.Serializable;
 
-public class VehicleDTO implements Serializable {
+public class VehicleSaverDTO implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
@@ -15,15 +15,15 @@ public class VehicleDTO implements Serializable {
 
     private VehicleType type;
 
-    private VehicleTransportLineDTO currentLine;
+    private Long currentLine;
 
     private boolean active;
 
-    public VehicleDTO() {
+    public VehicleSaverDTO() {
         this.active = true;
     }
 
-    public VehicleDTO(Long id, String name, VehicleType type, VehicleTransportLineDTO currentLine, boolean active) {
+    public VehicleSaverDTO(Long id, String name, VehicleType type, Long currentLine, boolean active) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -31,15 +31,16 @@ public class VehicleDTO implements Serializable {
         this.active = active;
     }
 
-    public VehicleDTO(Vehicle vehicle) {
+    public VehicleSaverDTO(Vehicle vehicle) {
         this.id = vehicle.getId();
         this.name = vehicle.getName();
         this.type = vehicle.getType();
         try {
-            this.currentLine = new VehicleTransportLineDTO(vehicle.getCurrentLine());
+            this.currentLine = vehicle.getCurrentLine().getId();
         } catch (NullPointerException e) {
             this.currentLine = null;
         }
+
         this.active = vehicle.isActive();
     }
 
@@ -71,11 +72,11 @@ public class VehicleDTO implements Serializable {
         this.type = type;
     }
 
-    public VehicleTransportLineDTO getCurrentLine() {
+    public Long getCurrentLine() {
         return currentLine;
     }
 
-    public void setCurrentLine(VehicleTransportLineDTO currentLine) {
+    public void setCurrentLine(Long currentLine) {
         this.currentLine = currentLine;
     }
 

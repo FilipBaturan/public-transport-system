@@ -4,6 +4,7 @@ import construction_and_testing.public_transport_system.domain.*;
 import construction_and_testing.public_transport_system.domain.enums.DayOfWeek;
 import construction_and_testing.public_transport_system.domain.enums.VehicleType;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -21,10 +22,15 @@ public class TransportLineConstants {
     public static final Zone DB_ZONE = new Zone(2L, "Liman", null, true);
     public static final boolean DB_ACTIVE = true;
     public static final Long DB_ID_INVALID = 55L;
+    public static final int DB_TICKET_COUNT = 2;
 
     public static final Long NEW_ID = 77L;
     public static final Long NEW_POSITION_ID = 77L;
     public static final String NEW_NAME = "K5";
+    public static final String NEW_NAME_SHORT_LENGTH = "";
+    public static final String NEW_NAME_LONG_LENGTH = "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn";
+    public static final String NEW_NAME_MIN_LENGTH = "b";
+    public static final String NEW_NAME_MAX_LENGTH = "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnn";
     public static final VehicleType NEW_TYPE = VehicleType.METRO;
     public static final TransportLinePosition NEW_POSITION =
             new TransportLinePosition(null, "", null, true);
@@ -55,6 +61,8 @@ public class TransportLineConstants {
     public static final List<Schedule> DB_SCHEDULES = new ArrayList<>();
 
     public static final List<Vehicle> DB_VEHICLES = new ArrayList<>();
+
+    public static final List<Ticket> DB_TICKETS = new ArrayList<>();
 
     static {
 
@@ -119,6 +127,14 @@ public class TransportLineConstants {
             add("23:45");
             add("00:00");
         }}, true);
+
+        Ticket ticket1 = new Ticket(1L, LocalDateTime.now(), LocalDateTime.now(), "qweqwe",
+                true, new PricelistItem(), transportLine1, new Reservation());
+        Ticket ticket2 = new Ticket(2L, LocalDateTime.now(), LocalDateTime.now(), "zxczxczxc",
+                true, new PricelistItem(), transportLine2, new Reservation());
+
+        DB_TICKETS.add(ticket1);
+        DB_TICKETS.add(ticket2);
 
         transportLine1.getSchedule().add(schedule1);
         transportLine1.getSchedule().add(schedule2);

@@ -24,13 +24,9 @@ import java.util.Map;
 import java.util.Optional;
 
 import static construction_and_testing.public_transport_system.constants.TicketConstants.*;
-import static construction_and_testing.public_transport_system.constants.TicketConstants.DB_COUNT;
-import static construction_and_testing.public_transport_system.constants.TicketConstants.DB_LINE_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertFalse;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
+import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -50,8 +46,7 @@ public class TicketServiceImplUnitTest {
 
 
     @Before
-    public void setUp()
-    {
+    public void setUp() {
         when(ticketRepository.findById(DB_ID)).thenReturn(Optional.of(DB_TICKET));
 
         when(reservationRepository.findById(DB_RESERVATION_ID)).thenReturn(Optional.of(DB_RESERVATION));
@@ -79,8 +74,7 @@ public class TicketServiceImplUnitTest {
 
     @Transactional
     @Test
-    public void saveChangedValidTest()
-    {
+    public void saveChangedValidTest() {
         Ticket t1 = ticketService.findTicketById(DB_ID);
         t1.setPurchaseDate(DB_RANDOM_DATE);
         Ticket savedTicket = ticketService.saveTicket(t1);
@@ -102,8 +96,7 @@ public class TicketServiceImplUnitTest {
 
     @Test
     @Transactional
-    public void saveNewValidTest()
-    {
+    public void saveNewValidTest() {
 
         Ticket savedTicket = ticketService.saveTicket(DB_NEW_TICKET);
 
@@ -121,10 +114,9 @@ public class TicketServiceImplUnitTest {
 
     @Transactional
     @Test(expected = GeneralException.class)
-    public void saveInvalidLine()
-    {
+    public void saveInvalidLine() {
 
-        Ticket savedTicket =  ticketService.saveTicket(DB_INVALID_LINE_TICKET);
+        Ticket savedTicket = ticketService.saveTicket(DB_INVALID_LINE_TICKET);
         verify(reservationRepository, times(1)).findById(DB_RESERVATION_ID);
         assertThat(savedTicket.getPurchaseDate()).isEqualTo(DB_PUR_DATE);
         assertThat(savedTicket.getExpiryDate()).isEqualTo(DB_EXP_DATE);
@@ -135,10 +127,9 @@ public class TicketServiceImplUnitTest {
 
     @Transactional
     @Test(expected = GeneralException.class)
-    public void saveNullLine()
-    {
+    public void saveNullLine() {
 
-        Ticket savedTicket =  ticketService.saveTicket(DB_NULL_LINE_TICKET);
+        Ticket savedTicket = ticketService.saveTicket(DB_NULL_LINE_TICKET);
         verify(reservationRepository, times(1)).findById(DB_RESERVATION_ID);
         assertThat(savedTicket.getPurchaseDate()).isEqualTo(DB_PUR_DATE);
         assertThat(savedTicket.getExpiryDate()).isEqualTo(DB_EXP_DATE);
@@ -148,8 +139,7 @@ public class TicketServiceImplUnitTest {
     }
 
     @Test(expected = GeneralException.class)
-    public void saveInvalidReservation()
-    {
+    public void saveInvalidReservation() {
         Ticket savedTicket = ticketService.saveTicket(DB_INVALID_RES_TICKET);
         assertThat(savedTicket.getPurchaseDate()).isEqualTo(DB_PUR_DATE);
         assertThat(savedTicket.getExpiryDate()).isEqualTo(DB_EXP_DATE);
@@ -159,8 +149,7 @@ public class TicketServiceImplUnitTest {
     }
 
     @Test(expected = GeneralException.class)
-    public void saveNullReservation()
-    {
+    public void saveNullReservation() {
 
         Ticket savedTicket = ticketService.saveTicket(DB_NULL_RES_TICKET);
         assertThat(savedTicket.getPurchaseDate()).isEqualTo(DB_PUR_DATE);
@@ -171,8 +160,7 @@ public class TicketServiceImplUnitTest {
 
     @Transactional
     @Test
-    public void removeValidTest()
-    {
+    public void removeValidTest() {
         ticketService.remove(DB_ID_REMOVE);
         Ticket removedTicket = ticketService.findTicketById(DB_ID_REMOVE);
         assertFalse(removedTicket.isActive());
@@ -186,8 +174,7 @@ public class TicketServiceImplUnitTest {
 
     @Transactional
     @Test(expected = EntityNotFoundException.class)
-    public void removeNullParameter()
-    {
+    public void removeNullParameter() {
         ticketService.remove(null);
         verify(ticketRepository, times(1)).save(DB_REMOVED_TICKET);
         verify(ticketRepository, times(1)).findById(DB_ID_REMOVE);
@@ -195,16 +182,14 @@ public class TicketServiceImplUnitTest {
 
     @Transactional
     @Test(expected = EntityNotFoundException.class)
-    public void removeInvalidParameter()
-    {
+    public void removeInvalidParameter() {
         ticketService.remove(DB_ID_INVALID);
         verify(ticketRepository, times(1)).save(DB_REMOVED_TICKET);
         verify(ticketRepository, times(1)).findById(DB_ID_REMOVE);
     }
 
     @Test
-    public void getTicketsForResValid()
-    {
+    public void getTicketsForResValid() {
         List<Ticket> usersTickets = ticketService.getTiketsForReservation(DB_RESERVATION_ID);
         assertThat(usersTickets).isNotNull();
         assertThat(usersTickets).hasSize(2);
@@ -214,8 +199,7 @@ public class TicketServiceImplUnitTest {
     }
 
     @Test
-    public void getTicketsForResInvalid()
-    {
+    public void getTicketsForResInvalid() {
         List<Ticket> usersTickets = ticketService.getTiketsForReservation(DB_RES_INVALID_ID);
         assertThat(usersTickets).isEmpty();
         assertThat(usersTickets).hasSize(0);
@@ -223,8 +207,7 @@ public class TicketServiceImplUnitTest {
     }
 
     @Test()
-    public void getTicketsForResNull()
-    {
+    public void getTicketsForResNull() {
         List<Ticket> usersTickets = ticketService.getTiketsForReservation(null);
         assertThat(usersTickets).isEmpty();
         assertThat(usersTickets).hasSize(0);
@@ -232,8 +215,7 @@ public class TicketServiceImplUnitTest {
     }
 
     @Test
-    public void getReportValid()
-    {
+    public void getReportValid() {
         Map<VehicleType, Integer> prices = ticketService.getReport(DB_DATE1, DB_DATE2);
         assertThat(prices).isNotEmpty();
         assertThat(prices.get(VehicleType.BUS)).isEqualTo(300);
@@ -242,8 +224,7 @@ public class TicketServiceImplUnitTest {
     }
 
     @Test
-    public void getReportReverseDates()
-    {
+    public void getReportReverseDates() {
         LocalDate date1 = LocalDate.of(2014, 12, 21);
         LocalDate date2 = LocalDate.of(2018, 3, 8);
 
@@ -255,8 +236,7 @@ public class TicketServiceImplUnitTest {
     }
 
     @Test(expected = NullPointerException.class)
-    public void getReportNullDates()
-    {
+    public void getReportNullDates() {
         Map<VehicleType, Integer> prices = ticketService.getReport(null, null);
         assertThat(prices).isNotEmpty();
         assertThat(prices.get(VehicleType.BUS)).isEqualTo(0);

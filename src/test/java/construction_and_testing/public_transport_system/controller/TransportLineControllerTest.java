@@ -187,27 +187,105 @@ public class TransportLineControllerTest {
     }
 
     /**
-     * Test valid transport line deletion
+     * Test with to short name value
      */
     @Test
-    public void delete() throws Exception {
+    public void saveWithShortName() throws Exception {
         TransportLineDTO transportLine = new TransportLineDTO(
-                new TransportLine(DEL_ID, DB_NAME, NEW_TYPE, NEW_POSITION, new HashSet<>(), DB_ZONE, true));
+                new TransportLine(null, NEW_NAME_SHORT_LENGTH, NEW_TYPE,
+                        NEW_POSITION, new HashSet<>(), DB_ZONE, true));
         String jsonTransportLine = TestUtil.json(transportLine);
 
-        testRestTemplate.delete(this.URL, jsonTransportLine, String.class);
+        ResponseEntity<String> result = testRestTemplate.postForEntity(this.URL, jsonTransportLine, String.class);
+
+        String body = result.getBody();
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(body).isNotNull();
+    }
+
+    /**
+     * Test with too long name value
+     */
+    @Test
+    public void saveWithLongName() throws Exception {
+        TransportLineDTO transportLine = new TransportLineDTO(
+                new TransportLine(null, NEW_NAME_LONG_LENGTH, NEW_TYPE,
+                        NEW_POSITION, new HashSet<>(), DB_ZONE, true));
+        String jsonTransportLine = TestUtil.json(transportLine);
+
+        ResponseEntity<String> result = testRestTemplate.postForEntity(this.URL, jsonTransportLine, String.class);
+
+        String body = result.getBody();
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(body).isNotNull();
+    }
+
+    /**
+     * Test with min length name value
+     */
+    @Test
+    public void saveWithMinLengthName() throws Exception {
+        TransportLineDTO transportLine = new TransportLineDTO(
+                new TransportLine(null, NEW_NAME_MIN_LENGTH, NEW_TYPE,
+                        NEW_POSITION, new HashSet<>(), DB_ZONE, true));
+        String jsonTransportLine = TestUtil.json(transportLine);
+
+        ResponseEntity<TransportLineDTO> result = testRestTemplate.postForEntity(this.URL, jsonTransportLine,
+                TransportLineDTO.class);
+
+        TransportLineDTO body = result.getBody();
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(body).isNotNull();
+        assertThat(body.getName()).isEqualTo(transportLine.getName());
+        assertThat(body.getType()).isEqualTo(transportLine.getType());
+        assertThat(body.getPositions().getContent()).isEqualTo(transportLine.getPositions().getContent());
+        assertThat(body.getSchedule().size()).isEqualTo(transportLine.getSchedule().size());
+        assertThat(body.getZone()).isEqualTo(transportLine.getZone());
+        assertThat(body.isActive()).isEqualTo(transportLine.isActive());
+    }
+
+    /**
+     * Test with max length name value
+     */
+    @Test
+    public void saveWithMaxLengthName() throws Exception {
+        TransportLineDTO transportLine = new TransportLineDTO(
+                new TransportLine(null, NEW_NAME_MAX_LENGTH, NEW_TYPE,
+                        NEW_POSITION, new HashSet<>(), DB_ZONE, true));
+        String jsonTransportLine = TestUtil.json(transportLine);
+
+        ResponseEntity<TransportLineDTO> result = testRestTemplate.postForEntity(this.URL, jsonTransportLine,
+                TransportLineDTO.class);
+
+        TransportLineDTO body = result.getBody();
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(body).isNotNull();
+        assertThat(body.getName()).isEqualTo(transportLine.getName());
+        assertThat(body.getType()).isEqualTo(transportLine.getType());
+        assertThat(body.getPositions().getContent()).isEqualTo(transportLine.getPositions().getContent());
+        assertThat(body.getSchedule().size()).isEqualTo(transportLine.getSchedule().size());
+        assertThat(body.getZone()).isEqualTo(transportLine.getZone());
+        assertThat(body.isActive()).isEqualTo(transportLine.isActive());
     }
 
     /**
      * Test valid transport line deletion
      */
     @Test
-    public void deleteWithInvalidId() throws Exception {
-        TransportLineDTO transportLine = new TransportLineDTO(
-                new TransportLine(DEL_ID_INVALID, DB_NAME, NEW_TYPE, NEW_POSITION, new HashSet<>(), DB_ZONE, true));
-        String jsonTransportLine = TestUtil.json(transportLine);
+    public void delete() {
+        testRestTemplate.delete(this.URL + "/" + DEL_ID);
+    }
 
-        testRestTemplate.delete(this.URL, jsonTransportLine, String.class);
+    /**
+     * Test valid transport line deletion
+     */
+    @Test
+    public void deleteWithInvalidId() {
+        testRestTemplate.delete(this.URL + "/" + DEL_ID_INVALID);
     }
 
     /**
@@ -311,6 +389,90 @@ public class TransportLineControllerTest {
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(body).isNotNull();
         assertThat(body).isEqualTo("Schedule associated to transport line N7 does not exist!");
+    }
+
+    /**
+     * Test with too short name value
+     */
+    @Test
+    public void replaceAllWithShortName() throws Exception {
+        NEW_TRANSPORT_LINES.get(0).setName(NEW_NAME_SHORT_LENGTH);
+        TransportLineColletionDTO transportLines =
+                new TransportLineColletionDTO(NEW_TRANSPORT_LINES.stream()
+                        .map(TransportLineDTO::new).collect(Collectors.toList()));
+        String jsonTransportLine = TestUtil.json(transportLines);
+
+        ResponseEntity<String> result = testRestTemplate.postForEntity(this.URL + "/replace",
+                jsonTransportLine, String.class);
+
+        String body = result.getBody();
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(body).isNotNull();
+    }
+
+    /**
+     * Test with too long name value
+     */
+    @Test
+    public void replaceAllWithLongName() throws Exception {
+        NEW_TRANSPORT_LINES.get(0).setName(NEW_NAME_LONG_LENGTH);
+        TransportLineColletionDTO transportLines =
+                new TransportLineColletionDTO(NEW_TRANSPORT_LINES.stream()
+                        .map(TransportLineDTO::new).collect(Collectors.toList()));
+        String jsonTransportLine = TestUtil.json(transportLines);
+
+        ResponseEntity<String> result = testRestTemplate.postForEntity(this.URL + "/replace",
+                jsonTransportLine, String.class);
+
+        String body = result.getBody();
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(body).isNotNull();
+    }
+
+    /**
+     * Test with min length name value
+     */
+    @Test
+    public void replaceAllWithMinLengthName() throws Exception {
+        NEW_TRANSPORT_LINES.get(0).setName(NEW_NAME_MIN_LENGTH);
+        TransportLineColletionDTO transportLines =
+                new TransportLineColletionDTO(NEW_TRANSPORT_LINES.stream()
+                        .map(TransportLineDTO::new).collect(Collectors.toList()));
+        String jsonTransportLine = TestUtil.json(transportLines);
+
+        ResponseEntity<TransportLineDTO[]> result = testRestTemplate.postForEntity(this.URL + "/replace",
+                jsonTransportLine, TransportLineDTO[].class);
+
+        TransportLineDTO[] body = result.getBody();
+
+        assertThat(body).isNotNull();
+        assertThat(body.length).isEqualTo(NEW_TRANSPORT_LINES.size());
+        assertThat(scheduleRepository.findAll().size()).isEqualTo(DB_SCHEDULES_COUNT - DEL_SCHEDULE_COUNT);
+        vehicleRepository.findAll().forEach(vehicle -> assertThat(vehicle.getCurrentLine()).isNotNull());
+    }
+
+    /**
+     * Test with max length name value
+     */
+    @Test
+    public void replaceAllWithMaxLengthName() throws Exception {
+        NEW_TRANSPORT_LINES.get(0).setName(NEW_NAME_MAX_LENGTH);
+        TransportLineColletionDTO transportLines =
+                new TransportLineColletionDTO(NEW_TRANSPORT_LINES.stream()
+                        .map(TransportLineDTO::new).collect(Collectors.toList()));
+        String jsonTransportLine = TestUtil.json(transportLines);
+
+        ResponseEntity<TransportLineDTO[]> result = testRestTemplate.postForEntity(this.URL + "/replace",
+                jsonTransportLine, TransportLineDTO[].class);
+
+        TransportLineDTO[] body = result.getBody();
+
+        assertThat(body).isNotNull();
+        assertThat(body.length).isEqualTo(NEW_TRANSPORT_LINES.size());
+        assertThat(scheduleRepository.findAll().size()).isEqualTo(DB_SCHEDULES_COUNT - DEL_SCHEDULE_COUNT);
+        vehicleRepository.findAll().forEach(vehicle -> assertThat(vehicle.getCurrentLine()).isNotNull());
     }
 
 }

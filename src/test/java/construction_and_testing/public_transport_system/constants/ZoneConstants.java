@@ -43,6 +43,10 @@ public class ZoneConstants {
 
     public static final Long NEW_ID = 55L;
     public static final String NEW_NAME = "Klisa";
+    public static final String NEW_NAME_SHORT_LENGTH = "";
+    public static final String NEW_NAME_LONG_LENGTH = "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn";
+    public static final String NEW_NAME_MIN_LENGTH = "b";
+    public static final String NEW_NAME_MAX_LENGTH = "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnn";
     public static final HashSet<TransportLine> NEW_LINES = new HashSet<>(
             Arrays.asList(new TransportLine(2L), new TransportLine(3L))
     );

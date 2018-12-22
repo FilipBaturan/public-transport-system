@@ -6,9 +6,7 @@ import construction_and_testing.public_transport_system.domain.User;
 import construction_and_testing.public_transport_system.domain.Validator;
 import construction_and_testing.public_transport_system.domain.enums.UsersDocumentsStatus;
 
-import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 
 public class UserConstants {
 
@@ -58,7 +56,7 @@ public class UserConstants {
             , DB_NEW_EMAIL, DB_NEW_TELEPHONE, UsersDocumentsStatus.UNCHECKED, new HashSet<Reservation>(), 100.0, "docum");
 
     public static final Validator DB_VALIDATOR = new Validator(DB_VAL_ID, DB_NEW_FIRST_NAME, DB_NEW_LAST_NAME, DB_NEW_USERNAME, DB_NEW_PASSWORD
-            , DB_NEW_EMAIL,DB_TELEPHONE,true);
+            , DB_NEW_EMAIL, DB_TELEPHONE, true);
 
     public static final RegisteredUser DB_REG_USER = new RegisteredUser(DB_REG_ID, DB_NEW_FIRST_NAME, DB_NEW_LAST_NAME, DB_NEW_USERNAME, DB_NEW_PASSWORD
             , DB_NEW_EMAIL, DB_NEW_TELEPHONE, UsersDocumentsStatus.UNCHECKED, new HashSet<Reservation>(), 100.0, "document");

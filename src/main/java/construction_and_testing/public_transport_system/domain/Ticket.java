@@ -59,6 +59,16 @@ public class Ticket implements Serializable {
         this.reservation = reservation;
     }
 
+    public Ticket(Ticket ticket) {
+        this.id = ticket.getId();
+        this.purchaseDate = ticket.getPurchaseDate();
+        this.expiryDate = ticket.getExpiryDate();
+        this.active = ticket.isActive();
+        this.priceListItem = ticket.getPriceList();
+        this.reservation = ticket.getReservation();
+        this.line = new TransportLine(ticket.getLine());
+    }
+
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }

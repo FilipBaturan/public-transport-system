@@ -192,6 +192,87 @@ public class ZoneServiceImplIntegrationTest {
     }
 
     /**
+     * Test with to short name value
+     */
+    @Test(expected = GeneralException.class)
+    @Transactional
+    public void saveWithShortName() {
+        Zone zone = new Zone(null, NEW_NAME_SHORT_LENGTH, NEW_LINES, true);
+        zone.getLines().forEach((TransportLine t) -> t.setZone(zone));
+        int countBefore = zoneService.getAll().size();
+
+        Zone dbZone = zoneService.save(zone);
+        assertThat(dbZone).isNotNull();
+
+        assertThat(zoneService.getAll()).hasSize(countBefore + 1);
+
+        assertThat(dbZone.getName()).isEqualTo(zone.getName());
+        assertThat(dbZone.isActive()).isEqualTo(zone.isActive());
+        assertThat(dbZone.getLines()).isEqualTo(zone.getLines());
+    }
+
+    /**
+     * Test with too long name value
+     */
+    @Test(expected = GeneralException.class)
+    @Transactional
+    public void saveWithLongName() {
+        Zone zone = new Zone(null, NEW_NAME_LONG_LENGTH, NEW_LINES, true);
+        zone.getLines().forEach((TransportLine t) -> t.setZone(zone));
+        int countBefore = zoneService.getAll().size();
+
+        Zone dbZone = zoneService.save(zone);
+        assertThat(dbZone).isNotNull();
+
+        assertThat(zoneService.getAll()).hasSize(countBefore + 1);
+
+        assertThat(dbZone.getName()).isEqualTo(zone.getName());
+        assertThat(dbZone.isActive()).isEqualTo(zone.isActive());
+        assertThat(dbZone.getLines()).isEqualTo(zone.getLines());
+    }
+
+    /**
+     * Test with min length name value
+     */
+    @Test
+    @Transactional
+    public void saveWithMinLengthName() {
+        Zone zone = new Zone(null, NEW_NAME_MIN_LENGTH, NEW_LINES, true);
+        zone.getLines().forEach((TransportLine t) -> t.setZone(zone));
+        int countBefore = zoneService.getAll().size();
+
+        Zone dbZone = zoneService.save(zone);
+        assertThat(dbZone).isNotNull();
+
+        assertThat(zoneService.getAll()).hasSize(countBefore + 1);
+
+        assertThat(dbZone.getName()).isEqualTo(zone.getName());
+        assertThat(dbZone.isActive()).isEqualTo(zone.isActive());
+        assertThat(dbZone.getLines()).isEqualTo(zone.getLines());
+    }
+
+    /**
+     * Test with max length name value
+     */
+    @Test
+    @Transactional
+    public void saveWithMaxLengthName() {
+        Zone zone = new Zone(null, NEW_NAME_MAX_LENGTH, NEW_LINES, true);
+        zone.getLines().forEach((TransportLine t) -> t.setZone(zone));
+        int countBefore = zoneService.getAll().size();
+
+        Zone dbZone = zoneService.save(zone);
+        assertThat(dbZone).isNotNull();
+
+        assertThat(zoneService.getAll()).hasSize(countBefore + 1);
+
+        assertThat(dbZone.getName()).isEqualTo(zone.getName());
+        assertThat(dbZone.isActive()).isEqualTo(zone.isActive());
+        assertThat(dbZone.getLines()).isEqualTo(zone.getLines());
+    }
+
+
+    /**
      * Test valid zone deletion
      */
     @Test
