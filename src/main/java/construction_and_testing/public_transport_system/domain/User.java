@@ -1,6 +1,8 @@
 package construction_and_testing.public_transport_system.domain;
 
+import construction_and_testing.public_transport_system.domain.DTO.UserDTO;
 import construction_and_testing.public_transport_system.domain.enums.AuthorityType;
+import construction_and_testing.public_transport_system.domain.enums.UsersDocumentsStatus;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -21,46 +23,55 @@ public class User implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
+    protected Long id;
 
     @Column(nullable = false)
-    private String name;
+    protected String name;
 
     @Column(nullable = false)
-    private String lastName;
+    protected String lastName;
 
     @Column(nullable = false)
-    private String username;
+    protected String username;
 
     @Column(nullable = false)
-    private String password;
+    protected String password;
 
-    @Column(nullable = false)
-    private String email;
+    @Column()
+    protected String email;
 
-    @Column(nullable = false)
-    private String telephone;
+    @Column()
+    protected String telephone;
 
-    @Column(nullable = false)
-    private boolean confirmation;
+    @Column()
+    protected UsersDocumentsStatus confirmation;
 
     @Column(nullable = false, name = "active")
     private boolean active;
 
-    @ElementCollection(targetClass = AuthorityType.class, fetch = FetchType.EAGER)
-    @JoinTable(name = "user_role",
-            joinColumns = @JoinColumn(name = "user_id"))
+//    @ElementCollection(targetClass = AuthorityType.class, fetch = FetchType.EAGER)
     @Column(nullable = false, name = "authority")
-    @Enumerated(EnumType.STRING)
-    private Collection<AuthorityType> authorityType;
+    private AuthorityType authorityType;
 
     public User() {
-        this.confirmation = false;
+        this.confirmation = UsersDocumentsStatus.UNCHECKED;
         this.active = true;
     }
 
+    public User(Long id, String name, String lastName, String username, String password, String email,
+                String telephone, boolean active) {
+        this.id = id;
+        this.name = name;
+        this.lastName = lastName;
+        this.username = username;
+        this.password = password;
+        this.email = email;
+        this.telephone = telephone;
+        this.active = active;
+    }
+
     public User(Long id, String name, String lastName, String username, String password, String email, String telephone,
-                boolean confirmation) {
+                UsersDocumentsStatus confirmation) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
@@ -72,7 +83,8 @@ public class User implements Serializable {
     }
 
     public User(Long id, String name, String lastName, String username, String password, String email, String telephone,
-                boolean confirmation, Collection<AuthorityType> authorityType) {
+UsersDocumentsStatus confirmation, AuthorityType authorityType) {
+
         this.id = id;
         this.name = name;
         this.lastName = lastName;
@@ -82,6 +94,16 @@ public class User implements Serializable {
         this.telephone = telephone;
         this.confirmation = confirmation;
         this.authorityType = authorityType;
+    }
+
+    public User(UserDTO uDTO) {
+        this.id = uDTO.getId();
+        this.name = uDTO.getFirstName();
+        this.lastName = uDTO.getLast();
+        this.email = uDTO.getEmail();
+        this.username = uDTO.getUsername();
+        this.password = uDTO.getPassword();
+        this.active = uDTO.isActive();
     }
 
     public static long getSerialVersionUID() {
@@ -144,19 +166,19 @@ public class User implements Serializable {
         this.telephone = telephone;
     }
 
-    public boolean isConfirmation() {
+    public UsersDocumentsStatus getConfirmation() {
         return confirmation;
     }
 
-    public void setConfirmation(boolean confirmation) {
+    public void setConfirmation(UsersDocumentsStatus confirmation) {
         this.confirmation = confirmation;
     }
 
-    public Collection<AuthorityType> getAuthorityType() {
+    public AuthorityType getAuthorityType() {
         return authorityType;
     }
 
-    public void setAuthorityType(Collection<AuthorityType> authorityType) {
+    public void setAuthorityType(AuthorityType authorityType) {
         this.authorityType = authorityType;
     }
 

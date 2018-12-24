@@ -54,7 +54,6 @@ public class ZoneConstants {
                             new TransportLinePosition(), new HashSet<>(), null, true))
     );
 
-
     public static final ArrayList<Long> TR_ID_INVALID = new ArrayList<Long>() {{
         add(31L);
         add(32L);
@@ -80,6 +79,5 @@ public class ZoneConstants {
             new TransportLine(82L, "N7", VehicleType.METRO,
                     new TransportLinePosition(), new HashSet<>(), null, true))), DB_ACTIVE);
     public static Zone DEL_ZONE = DB_ZONE;
-
 
 }

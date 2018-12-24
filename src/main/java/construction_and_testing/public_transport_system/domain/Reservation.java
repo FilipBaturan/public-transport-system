@@ -20,7 +20,7 @@ public class Reservation implements Serializable {
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "reservation")
+    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "reservation")
     private Set<Ticket> tickets;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -56,7 +56,11 @@ public class Reservation implements Serializable {
     }
 
     public void setTickets(Set<Ticket> tickets) {
+
         this.tickets = tickets;
+        for(Ticket t : this.tickets){
+            t.setReservation(this);
+        }
     }
 
     public RegisteredUser getOwner() {

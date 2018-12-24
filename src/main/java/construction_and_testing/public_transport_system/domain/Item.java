@@ -2,6 +2,7 @@ package construction_and_testing.public_transport_system.domain;
 
 import construction_and_testing.public_transport_system.domain.enums.AgeType;
 import construction_and_testing.public_transport_system.domain.enums.TicketType;
+import construction_and_testing.public_transport_system.domain.enums.VehicleType;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -40,6 +41,9 @@ public class Item implements Serializable {
     @Column(nullable = false, name = "active")
     private boolean active;
 
+    @Column(nullable = false, name = "vehicleType")
+    private VehicleType vehicleType;
+
     @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "item")
     private Set<PricelistItem> pricelists;
 
@@ -54,6 +58,16 @@ public class Item implements Serializable {
         this.cost = cost;
         this.zone = zone;
         this.pricelists = pricelists;
+    }
+
+    public Item(long id, TicketType type, AgeType age, double cost, Zone zone, Set<PricelistItem> pricelists, VehicleType vt) {
+        this.id = id;
+        this.type = type;
+        this.age = age;
+        this.cost = cost;
+        this.zone = zone;
+        this.pricelists = pricelists;
+        this.vehicleType = vt;
     }
 
     public static long getSerialVersionUID() {
@@ -128,4 +142,13 @@ public class Item implements Serializable {
     public void setPricelists(Set<PricelistItem> pricelists) {
         this.pricelists = pricelists;
     }
+
+    public VehicleType getVehicleType() {
+        return vehicleType;
+    }
+
+    public void setVehicleType(VehicleType vehicleType) {
+        this.vehicleType = vehicleType;
+    }
+
 }

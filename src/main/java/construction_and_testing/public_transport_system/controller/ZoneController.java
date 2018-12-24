@@ -37,7 +37,7 @@ public class ZoneController extends ValidationController {
     @GetMapping
     public ResponseEntity<List<ZoneDTO>> getAll() {
         logger.info("Requesting all available zones at time {}.", Calendar.getInstance().getTime());
-        return new ResponseEntity<>(ZoneConverter.fromEntityList(zoneService.getAll(), ZoneDTO::new), HttpStatus.OK);
+        return new ResponseEntity<>(ZoneConverter.fromEntityList(zoneService.getAll(), e -> ZoneConverter.fromEntity(e)), HttpStatus.OK);
     }
 
     /**
