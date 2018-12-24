@@ -22,8 +22,6 @@ import javax.transaction.Transactional;
 import java.util.*;
 
 import static construction_and_testing.public_transport_system.constants.UserConstants.*;
-import static construction_and_testing.public_transport_system.constants.UserConstants.DB_REG_USERS_COUNT;
-import static construction_and_testing.public_transport_system.constants.UserConstants.DB_UNCHECKED_COUNT;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.assertEquals;
 import static org.mockito.Mockito.when;
@@ -113,8 +111,7 @@ public class UserServiceImplUnitTest {
 
     @Transactional
     @Test
-    public void saveNewUser()
-    {
+    public void saveNewUser() {
         // Making reg user mock again, because two different methods need to return two different reg users lists
         List<RegisteredUser> regUsersMock = new ArrayList<>();
         RegisteredUser r1 = DB_REG_USER;
@@ -145,25 +142,23 @@ public class UserServiceImplUnitTest {
      */
     @Transactional
     @Test(expected = GeneralException.class)
-    public void saveInvalidUser()
-    {
+    public void saveInvalidUser() {
         Set<Reservation> reservations = new HashSet<Reservation>();
 
         User registeredUser = new RegisteredUser(null, DB_NEW_FIRST_NAME, null, DB_NEW_USERNAME, DB_NEW_PASSWORD
                 , DB_NEW_EMAIL, DB_NEW_TELEPHONE, UsersDocumentsStatus.UNCHECKED, reservations, 100.0, "document");
         registeredUser.setAuthorityType(AuthorityType.REGISTERED_USER);
 
-        User savedUser =userService.save(registeredUser);
+        User savedUser = userService.save(registeredUser);
         assertThat(savedUser).isNull();
 
     }
 
     @Test
-    public void getValidatorsTest()
-    {
+    public void getValidatorsTest() {
         List<Validator> validators = userService.getValidators();
         assertThat(validators).isNotNull();
-        for (Validator val: validators) {
+        for (Validator val : validators) {
             assertThat(val.getAuthorityType()).isEqualTo(AuthorityType.VALIDATOR);
         }
         assertThat(validators.size()).isEqualTo(DB_VAL_COUNT);
@@ -171,11 +166,10 @@ public class UserServiceImplUnitTest {
 
 
     @Test
-    public void getRegisteredUsersTest()
-    {
+    public void getRegisteredUsersTest() {
         List<RegisteredUser> regUsers = userService.getRegisteredUsers();
         assertThat(regUsers).isNotNull();
-        for (RegisteredUser regUser: regUsers) {
+        for (RegisteredUser regUser : regUsers) {
             assertThat(regUser.getAuthorityType()).isEqualTo(AuthorityType.REGISTERED_USER);
         }
         assertThat(regUsers.size()).isEqualTo(DB_REG_USERS_COUNT);
@@ -183,11 +177,10 @@ public class UserServiceImplUnitTest {
     }
 
     @Test
-    public void getUnvalidatedUsers()
-    {
+    public void getUnvalidatedUsers() {
         List<User> users = userService.getUnvalidatedUsers();
         assertThat(users).isNotNull();
-        for (User user: users) {
+        for (User user : users) {
             assertThat(user.getConfirmation()).isEqualTo(UsersDocumentsStatus.UNCHECKED);
             assertThat(users.size()).isEqualTo(DB_UNCHECKED_COUNT);
         }

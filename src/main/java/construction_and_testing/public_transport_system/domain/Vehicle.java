@@ -1,10 +1,11 @@
 package construction_and_testing.public_transport_system.domain;
 
-import construction_and_testing.public_transport_system.domain.DTO.VehicleDTO;
+import construction_and_testing.public_transport_system.domain.DTO.VehicleSaverDTO;
 import construction_and_testing.public_transport_system.domain.enums.VehicleType;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -22,6 +23,7 @@ public class Vehicle implements Serializable {
     private Long id;
 
     @Column(nullable = false)
+    @Size(min = 3, max = 30)
     private String name;
 
     @Column(nullable = false)
@@ -47,7 +49,7 @@ public class Vehicle implements Serializable {
         this.active = active;
     }
 
-    public Vehicle(VehicleDTO vehicle) {
+    public Vehicle(VehicleSaverDTO vehicle) {
         this.id = vehicle.getId();
         this.name = vehicle.getName();
         this.type = vehicle.getType();

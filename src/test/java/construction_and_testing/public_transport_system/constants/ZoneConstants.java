@@ -27,7 +27,7 @@ public class ZoneConstants {
             ArrayList<TransportLine>() {{
                 add(new TransportLine(21L, "T1", VehicleType.METRO,
                         new TransportLinePosition(), new HashSet<>(), null, true));
-                add(new TransportLine(22L, "T2", VehicleType.TRAMVAJ,
+                add(new TransportLine(22L, "T2", VehicleType.TRAM,
                         new TransportLinePosition(), new HashSet<>(), null, true));
                 add(new TransportLine(23L, "T3", VehicleType.BUS,
                         new TransportLinePosition(), new HashSet<>(), null, true));
@@ -43,6 +43,10 @@ public class ZoneConstants {
 
     public static final Long NEW_ID = 55L;
     public static final String NEW_NAME = "Klisa";
+    public static final String NEW_NAME_SHORT_LENGTH = "";
+    public static final String NEW_NAME_LONG_LENGTH = "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn";
+    public static final String NEW_NAME_MIN_LENGTH = "b";
+    public static final String NEW_NAME_MAX_LENGTH = "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnn";
     public static final HashSet<TransportLine> NEW_LINES = new HashSet<>(
             Arrays.asList(new TransportLine(2L), new TransportLine(3L))
     );

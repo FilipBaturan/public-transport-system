@@ -13,13 +13,11 @@ import construction_and_testing.public_transport_system.domain.enums.AuthorityTy
 import construction_and_testing.public_transport_system.domain.enums.UsersDocumentsStatus;
 import construction_and_testing.public_transport_system.security.TokenUtils;
 import construction_and_testing.public_transport_system.service.definition.UserService;
-import construction_and_testing.public_transport_system.service.definition.ValidatorService;
 import construction_and_testing.public_transport_system.util.GeneralException;
 import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -33,7 +31,6 @@ import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/user")
@@ -175,9 +172,7 @@ public class UserController {
             logger.info("User found, but his documents could not be accepted!");
             return new ResponseEntity<>(false, HttpStatus.NOT_ACCEPTABLE);
 
-        }
-        catch (GeneralException ge)
-        {
+        } catch (GeneralException ge) {
             logger.info("Failed to approved user, user with given id does not exists!");
             return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
         }
@@ -200,7 +195,7 @@ public class UserController {
             }
             logger.info("User found, but his documents could not be denied!");
             return new ResponseEntity<>(false, HttpStatus.NOT_ACCEPTABLE);
-        } catch (GeneralException ge){
+        } catch (GeneralException ge) {
             logger.info("Failed to deny user, user with given id does not exists!");
             return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
         }
@@ -225,8 +220,7 @@ public class UserController {
 
         try {
             validator = this.userService.findById(userDTO.getId());
-        }catch (GeneralException ge)
-        {
+        } catch (GeneralException ge) {
             return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
         }
 
@@ -239,9 +233,7 @@ public class UserController {
         try {
             this.userService.save(validator);
             return new ResponseEntity<>(true, HttpStatus.OK);
-        }
-        catch (GeneralException e)
-        {
+        } catch (GeneralException e) {
             return new ResponseEntity<>(false, HttpStatus.NOT_ACCEPTABLE);
         }
 
@@ -252,11 +244,10 @@ public class UserController {
         if (userDTO.getId() != null)
             return new ResponseEntity<>(false, HttpStatus.CONFLICT);
         else {
-            Validator newValidator = new Validator( UserConverter.toEntity(userDTO) );
-            try{
+            Validator newValidator = new Validator(UserConverter.toEntity(userDTO));
+            try {
                 this.userService.save(newValidator);
-            }catch (GeneralException ge)
-            {
+            } catch (GeneralException ge) {
                 return new ResponseEntity<>(false, HttpStatus.NOT_ACCEPTABLE);
             }
 

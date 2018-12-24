@@ -8,9 +8,7 @@ import construction_and_testing.public_transport_system.repository.TicketReposit
 import construction_and_testing.public_transport_system.repository.TransportLineRepository;
 import construction_and_testing.public_transport_system.service.definition.TicketService;
 import construction_and_testing.public_transport_system.util.GeneralException;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -41,22 +39,17 @@ public class TicketServiceImpl implements TicketService {
 //
         try {
             t.setReservation(reservationRepository.findById(t.getReservation().getId()).get());
-        }
-        catch (NullPointerException| NoSuchElementException e) {
+        } catch (NullPointerException | NoSuchElementException e) {
             throw new GeneralException("Invalid reservation data associated!", HttpStatus.BAD_REQUEST);
-        }
-        catch (InvalidDataAccessApiUsageException e3) {
+        } catch (InvalidDataAccessApiUsageException e3) {
             throw new GeneralException("Id is not type \"Long\"", HttpStatus.BAD_REQUEST);
         }
 
-        try{
-            t.setLine( transportLineRepository.findById(t.getLine().getId()).get());
-        }
-
-        catch (NullPointerException | NoSuchElementException e) {
+        try {
+            t.setLine(transportLineRepository.findById(t.getLine().getId()).get());
+        } catch (NullPointerException | NoSuchElementException e) {
             throw new GeneralException("Invalid transport line data associated!", HttpStatus.BAD_REQUEST);
-        }
-        catch (InvalidDataAccessApiUsageException e) {
+        } catch (InvalidDataAccessApiUsageException e) {
             throw new GeneralException("Id is not type \"Long\"", HttpStatus.BAD_REQUEST);
         }
 

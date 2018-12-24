@@ -3,6 +3,7 @@ package construction_and_testing.public_transport_system.service.integration;
 import construction_and_testing.public_transport_system.domain.TransportLine;
 import construction_and_testing.public_transport_system.domain.TransportLinePosition;
 import construction_and_testing.public_transport_system.repository.ScheduleRepository;
+import construction_and_testing.public_transport_system.repository.TicketRepository;
 import construction_and_testing.public_transport_system.repository.VehicleRepository;
 import construction_and_testing.public_transport_system.service.definition.TransportLineService;
 import construction_and_testing.public_transport_system.util.GeneralException;
@@ -34,6 +35,9 @@ public class TransportLineServiceImplIntegrationTest {
 
     @Autowired
     private VehicleRepository vehicleRepository;
+
+    @Autowired
+    private TicketRepository ticketRepository;
 
     /**
      * Test get all stations from database
@@ -95,7 +99,8 @@ public class TransportLineServiceImplIntegrationTest {
     public void save() {
         TransportLine transportLine =
                 new TransportLine(null, NEW_NAME, NEW_TYPE,
-                        new TransportLinePosition(null, "", null, true), new HashSet<>(), DB_ZONE, true);
+                        new TransportLinePosition(null, "", null, true),
+                        new HashSet<>(), DB_ZONE, true);
         transportLine.getPositions().setTransportLine(transportLine);
         int countBefore = transportLineService.getAll().size();
 
@@ -117,7 +122,8 @@ public class TransportLineServiceImplIntegrationTest {
     @Transactional
     public void saveWithNullValues() {
         TransportLine transportLine =
-                new TransportLine(null, null, null, null, null, null, true);
+                new TransportLine(null, null, null, null,
+                        null, null, true);
         int countBefore = transportLineService.getAll().size();
 
         TransportLine dbTransportLine = transportLineService.save(transportLine);
@@ -160,8 +166,105 @@ public class TransportLineServiceImplIntegrationTest {
     @Test(expected = GeneralException.class)
     public void saveWithInvalidName() {
         TransportLine transportLine =
-                new TransportLine(null, DB_NAME, NEW_TYPE, NEW_POSITION, new HashSet<>(), DB_ZONE, true);
+                new TransportLine(null, DB_NAME, NEW_TYPE, NEW_POSITION, new HashSet<>(),
+                        DB_ZONE, true);
         transportLineService.save(transportLine);
+    }
+
+    /**
+     * Test with to short name value
+     */
+    @Test(expected = GeneralException.class)
+    @Transactional
+    public void saveWithShortName() {
+        TransportLine transportLine =
+                new TransportLine(null, NEW_NAME_SHORT_LENGTH, NEW_TYPE,
+                        new TransportLinePosition(null, "", null, true),
+                        new HashSet<>(), DB_ZONE, true);
+        transportLine.getPositions().setTransportLine(transportLine);
+        int countBefore = transportLineService.getAll().size();
+
+        TransportLine dbTransportLine = transportLineService.save(transportLine);
+        assertThat(dbTransportLine).isNotNull();
+
+        assertThat(transportLineService.getAll().size()).isEqualTo(countBefore + 1);
+        assertThat(dbTransportLine.getName()).isEqualTo(transportLine.getName());
+        assertThat(dbTransportLine.getType()).isEqualTo(transportLine.getType());
+        assertThat(dbTransportLine.getPositions().getId()).isNotNull();
+        assertThat(dbTransportLine.getSchedule().size()).isEqualTo(0);
+        assertThat(dbTransportLine.getZone().getId()).isEqualTo(DB_ZONE.getId());
+    }
+
+    /**
+     * Test with too long name value
+     */
+    @Test(expected = GeneralException.class)
+    @Transactional
+    public void saveWithLongName() {
+        TransportLine transportLine =
+                new TransportLine(null, NEW_NAME_LONG_LENGTH, NEW_TYPE,
+                        new TransportLinePosition(null, "", null, true),
+                        new HashSet<>(), DB_ZONE, true);
+        transportLine.getPositions().setTransportLine(transportLine);
+        int countBefore = transportLineService.getAll().size();
+
+        TransportLine dbTransportLine = transportLineService.save(transportLine);
+        assertThat(dbTransportLine).isNotNull();
+
+        assertThat(transportLineService.getAll().size()).isEqualTo(countBefore + 1);
+        assertThat(dbTransportLine.getName()).isEqualTo(transportLine.getName());
+        assertThat(dbTransportLine.getType()).isEqualTo(transportLine.getType());
+        assertThat(dbTransportLine.getPositions().getId()).isNotNull();
+        assertThat(dbTransportLine.getSchedule().size()).isEqualTo(0);
+        assertThat(dbTransportLine.getZone().getId()).isEqualTo(DB_ZONE.getId());
+    }
+
+    /**
+     * Test with min length name value
+     */
+    @Test
+    @Transactional
+    public void saveWithMinLengthName() {
+        TransportLine transportLine =
+                new TransportLine(null, NEW_NAME_MIN_LENGTH, NEW_TYPE,
+                        new TransportLinePosition(null, "", null, true),
+                        new HashSet<>(), DB_ZONE, true);
+        transportLine.getPositions().setTransportLine(transportLine);
+        int countBefore = transportLineService.getAll().size();
+
+        TransportLine dbTransportLine = transportLineService.save(transportLine);
+        assertThat(dbTransportLine).isNotNull();
+
+        assertThat(transportLineService.getAll().size()).isEqualTo(countBefore + 1);
+        assertThat(dbTransportLine.getName()).isEqualTo(transportLine.getName());
+        assertThat(dbTransportLine.getType()).isEqualTo(transportLine.getType());
+        assertThat(dbTransportLine.getPositions().getId()).isNotNull();
+        assertThat(dbTransportLine.getSchedule().size()).isEqualTo(0);
+        assertThat(dbTransportLine.getZone().getId()).isEqualTo(DB_ZONE.getId());
+    }
+
+    /**
+     * Test with max length name value
+     */
+    @Test
+    @Transactional
+    public void saveWithMaxLengthName() {
+        TransportLine transportLine =
+                new TransportLine(null, NEW_NAME_MAX_LENGTH, NEW_TYPE,
+                        new TransportLinePosition(null, "", null, true),
+                        new HashSet<>(), DB_ZONE, true);
+        transportLine.getPositions().setTransportLine(transportLine);
+        int countBefore = transportLineService.getAll().size();
+
+        TransportLine dbTransportLine = transportLineService.save(transportLine);
+        assertThat(dbTransportLine).isNotNull();
+
+        assertThat(transportLineService.getAll().size()).isEqualTo(countBefore + 1);
+        assertThat(dbTransportLine.getName()).isEqualTo(transportLine.getName());
+        assertThat(dbTransportLine.getType()).isEqualTo(transportLine.getType());
+        assertThat(dbTransportLine.getPositions().getId()).isNotNull();
+        assertThat(dbTransportLine.getSchedule().size()).isEqualTo(0);
+        assertThat(dbTransportLine.getZone().getId()).isEqualTo(DB_ZONE.getId());
     }
 
     /**
@@ -189,17 +292,18 @@ public class TransportLineServiceImplIntegrationTest {
      * Test valid replacement
      */
     @Test
+    @Transactional
     public void replaceAll() {
-        int countBefore = scheduleRepository.findAll().size();
+        int countBeforeSchedule = scheduleRepository.findAll().size();
+        int countBeforeTicket = ticketRepository.findAll().size();
 
         List<TransportLine> transportLines = transportLineService.replaceAll(NEW_TRANSPORT_LINES);
 
         assertThat(transportLines).isNotNull();
         assertThat(transportLines.size()).isEqualTo(NEW_TRANSPORT_LINES.size());
-        assertThat(scheduleRepository.findAll().size()).isEqualTo(countBefore - DEL_SCHEDULE_COUNT);
+        assertThat(scheduleRepository.findAll().size()).isEqualTo(countBeforeSchedule - DEL_SCHEDULE_COUNT);
         vehicleRepository.findAll().forEach(vehicle -> assertThat(vehicle.getCurrentLine()).isNotNull());
-
-
+        assertThat(ticketRepository.findAll().size()).isEqualTo(countBeforeTicket);
     }
 
     /**
@@ -231,6 +335,7 @@ public class TransportLineServiceImplIntegrationTest {
         transportLines.forEach(transportLine -> assertThat(transportLine.getZone().getId()).isEqualTo(DEFAULT_ZONE_ID));
         assertThat(scheduleRepository.findAll()).isEmpty();
         vehicleRepository.findAll().forEach(vehicle -> assertThat(vehicle.getCurrentLine()).isNull());
+        assertThat(ticketRepository.findAll().size()).isEqualTo(0);
     }
 
     /**
@@ -245,6 +350,7 @@ public class TransportLineServiceImplIntegrationTest {
         assertThat(transportLines.size()).isEqualTo(NEW_TRANSPORT_LINES_NO_SCHEDULE.size());
         assertThat(scheduleRepository.findAll()).isEmpty();
         vehicleRepository.findAll().forEach(vehicle -> assertThat(vehicle.getCurrentLine()).isNull());
+        assertThat(ticketRepository.findAll().size()).isEqualTo(0);
     }
 
     /**
@@ -254,6 +360,81 @@ public class TransportLineServiceImplIntegrationTest {
     @Transactional
     public void replaceAllWithInvalidSchedule() {
         transportLineService.replaceAll(NEW_TRANSPORT_LINES_INVALID_SCHEDULE);
+    }
 
+    /**
+     * Test with too short name value
+     */
+    @Test(expected = GeneralException.class)
+    @Transactional
+    public void replaceAllWithShortName() {
+        int countBeforeSchedule = scheduleRepository.findAll().size();
+        int countBeforeTicket = ticketRepository.findAll().size();
+
+        NEW_TRANSPORT_LINES.get(0).setName(NEW_NAME_SHORT_LENGTH);
+        List<TransportLine> transportLines = transportLineService.replaceAll(NEW_TRANSPORT_LINES);
+
+        assertThat(transportLines).isNotNull();
+        assertThat(transportLines.size()).isEqualTo(NEW_TRANSPORT_LINES.size());
+        assertThat(scheduleRepository.findAll().size()).isEqualTo(countBeforeSchedule - DEL_SCHEDULE_COUNT);
+        vehicleRepository.findAll().forEach(vehicle -> assertThat(vehicle.getCurrentLine()).isNotNull());
+        assertThat(ticketRepository.findAll().size()).isEqualTo(countBeforeTicket);
+    }
+
+    /**
+     * Test with too long name value
+     */
+    @Test(expected = GeneralException.class)
+    @Transactional
+    public void replaceAllWithLongName() {
+        int countBeforeSchedule = scheduleRepository.findAll().size();
+        int countBeforeTicket = ticketRepository.findAll().size();
+
+        NEW_TRANSPORT_LINES.get(0).setName(NEW_NAME_LONG_LENGTH);
+        List<TransportLine> transportLines = transportLineService.replaceAll(NEW_TRANSPORT_LINES);
+
+        assertThat(transportLines).isNotNull();
+        assertThat(transportLines.size()).isEqualTo(NEW_TRANSPORT_LINES.size());
+        assertThat(scheduleRepository.findAll().size()).isEqualTo(countBeforeSchedule - DEL_SCHEDULE_COUNT);
+        vehicleRepository.findAll().forEach(vehicle -> assertThat(vehicle.getCurrentLine()).isNotNull());
+        assertThat(ticketRepository.findAll().size()).isEqualTo(countBeforeTicket);
+    }
+
+    /**
+     * Test with min length name value
+     */
+    @Test
+    @Transactional
+    public void replaceAllWithMinLengthName() {
+        int countBeforeSchedule = scheduleRepository.findAll().size();
+        int countBeforeTicket = ticketRepository.findAll().size();
+
+        NEW_TRANSPORT_LINES.get(0).setName(NEW_NAME_MIN_LENGTH);
+        List<TransportLine> transportLines = transportLineService.replaceAll(NEW_TRANSPORT_LINES);
+
+        assertThat(transportLines).isNotNull();
+        assertThat(transportLines.size()).isEqualTo(NEW_TRANSPORT_LINES.size());
+        assertThat(scheduleRepository.findAll().size()).isEqualTo(countBeforeSchedule - DEL_SCHEDULE_COUNT);
+        vehicleRepository.findAll().forEach(vehicle -> assertThat(vehicle.getCurrentLine()).isNotNull());
+        assertThat(ticketRepository.findAll().size()).isEqualTo(countBeforeTicket);
+    }
+
+    /**
+     * Test with max length name value
+     */
+    @Test
+    @Transactional
+    public void replaceAllWithMaxLengthName() {
+        int countBeforeSchedule = scheduleRepository.findAll().size();
+        int countBeforeTicket = ticketRepository.findAll().size();
+
+        NEW_TRANSPORT_LINES.get(0).setName(NEW_NAME_MAX_LENGTH);
+        List<TransportLine> transportLines = transportLineService.replaceAll(NEW_TRANSPORT_LINES);
+
+        assertThat(transportLines).isNotNull();
+        assertThat(transportLines.size()).isEqualTo(NEW_TRANSPORT_LINES.size());
+        assertThat(scheduleRepository.findAll().size()).isEqualTo(countBeforeSchedule - DEL_SCHEDULE_COUNT);
+        vehicleRepository.findAll().forEach(vehicle -> assertThat(vehicle.getCurrentLine()).isNotNull());
+        assertThat(ticketRepository.findAll().size()).isEqualTo(countBeforeTicket);
     }
 }

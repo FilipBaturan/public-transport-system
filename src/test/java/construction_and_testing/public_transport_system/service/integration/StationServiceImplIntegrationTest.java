@@ -1,6 +1,7 @@
 package construction_and_testing.public_transport_system.service.integration;
 
 import construction_and_testing.public_transport_system.domain.Station;
+import construction_and_testing.public_transport_system.domain.StationPosition;
 import construction_and_testing.public_transport_system.service.definition.StationService;
 import construction_and_testing.public_transport_system.util.GeneralException;
 import org.junit.Test;
@@ -112,6 +113,86 @@ public class StationServiceImplIntegrationTest {
     }
 
     /**
+     * Test with to short name value
+     */
+    @Test(expected = GeneralException.class)
+    @Transactional
+    public void saveWithShortName() {
+        Station station = new Station(null, NEW_NAME_SHORT_LENGTH, new StationPosition(), NEW_TYPE, NEW_ACTIVE);
+        station.getPosition().setStation(station);
+        int countBefore = stationService.getAll().size();
+
+        Station dbStation = stationService.save(station);
+        assertThat(dbStation).isNotNull();
+
+        assertThat(stationService.getAll().size()).isEqualTo(countBefore + 1);
+        assertThat(dbStation.getName()).isEqualTo(station.getName());
+        assertThat(dbStation.getType()).isEqualTo(station.getType());
+        assertThat(dbStation.getPosition()).isEqualTo(station.getPosition());
+        assertThat(dbStation.isActive()).isEqualTo(station.isActive());
+    }
+
+    /**
+     * Test with too long name value
+     */
+    @Test(expected = GeneralException.class)
+    @Transactional
+    public void saveWithLongName() {
+        Station station = new Station(null, NEW_NAME_LONG_LENGTH, new StationPosition(), NEW_TYPE, NEW_ACTIVE);
+        station.getPosition().setStation(station);
+        int countBefore = stationService.getAll().size();
+
+        Station dbStation = stationService.save(station);
+        assertThat(dbStation).isNotNull();
+
+        assertThat(stationService.getAll().size()).isEqualTo(countBefore + 1);
+        assertThat(dbStation.getName()).isEqualTo(station.getName());
+        assertThat(dbStation.getType()).isEqualTo(station.getType());
+        assertThat(dbStation.getPosition()).isEqualTo(station.getPosition());
+        assertThat(dbStation.isActive()).isEqualTo(station.isActive());
+    }
+
+    /**
+     * Test with min length name value
+     */
+    @Test
+    @Transactional
+    public void saveWithMinLengthName() {
+        Station station = new Station(null, NEW_NAME_MIN_LENGTH, new StationPosition(), NEW_TYPE, NEW_ACTIVE);
+        station.getPosition().setStation(station);
+        int countBefore = stationService.getAll().size();
+
+        Station dbStation = stationService.save(station);
+        assertThat(dbStation).isNotNull();
+
+        assertThat(stationService.getAll().size()).isEqualTo(countBefore + 1);
+        assertThat(dbStation.getName()).isEqualTo(station.getName());
+        assertThat(dbStation.getType()).isEqualTo(station.getType());
+        assertThat(dbStation.getPosition()).isEqualTo(station.getPosition());
+        assertThat(dbStation.isActive()).isEqualTo(station.isActive());
+    }
+
+    /**
+     * Test with max length name value
+     */
+    @Test
+    @Transactional
+    public void saveWithMaxLengthName() {
+        Station station = new Station(null, NEW_NAME_MAX_LENGTH, new StationPosition(), NEW_TYPE, NEW_ACTIVE);
+        station.getPosition().setStation(station);
+        int countBefore = stationService.getAll().size();
+
+        Station dbStation = stationService.save(station);
+        assertThat(dbStation).isNotNull();
+
+        assertThat(stationService.getAll().size()).isEqualTo(countBefore + 1);
+        assertThat(dbStation.getName()).isEqualTo(station.getName());
+        assertThat(dbStation.getType()).isEqualTo(station.getType());
+        assertThat(dbStation.getPosition()).isEqualTo(station.getPosition());
+        assertThat(dbStation.isActive()).isEqualTo(station.isActive());
+    }
+
+    /**
      * Test valid station deletion
      */
     @Test
@@ -138,6 +219,66 @@ public class StationServiceImplIntegrationTest {
     @Transactional
     public void replaceAll() {
         List<Station> stationsBefore = stationService.getAll();
+        List<Station> stations = stationService.replaceAll(NEW_STATIONS);
+
+        assertThat(stations).isNotNull();
+        assertThat(stations.size()).isEqualTo(NEW_STATIONS.size());
+        assertThat(stations).doesNotContainSequence(stationsBefore);
+    }
+
+    /**
+     * Test with too short name value
+     */
+    @Test(expected = GeneralException.class)
+    @Transactional
+    public void replaceAllWithShortName() {
+        List<Station> stationsBefore = stationService.getAll();
+        NEW_STATIONS.get(0).setName(NEW_NAME_SHORT_LENGTH);
+        List<Station> stations = stationService.replaceAll(NEW_STATIONS);
+
+        assertThat(stations).isNotNull();
+        assertThat(stations.size()).isEqualTo(NEW_STATIONS.size());
+        assertThat(stations).doesNotContainSequence(stationsBefore);
+    }
+
+    /**
+     * Test with too long name value
+     */
+    @Test(expected = GeneralException.class)
+    @Transactional
+    public void replaceAllWithLongName() {
+        List<Station> stationsBefore = stationService.getAll();
+        NEW_STATIONS.get(0).setName(NEW_NAME_LONG_LENGTH);
+        List<Station> stations = stationService.replaceAll(NEW_STATIONS);
+
+        assertThat(stations).isNotNull();
+        assertThat(stations.size()).isEqualTo(NEW_STATIONS.size());
+        assertThat(stations).doesNotContainSequence(stationsBefore);
+    }
+
+    /**
+     * Test with min length name value
+     */
+    @Test
+    @Transactional
+    public void replaceAllWithMinLengthName() {
+        List<Station> stationsBefore = stationService.getAll();
+        NEW_STATIONS.get(0).setName(NEW_NAME_MIN_LENGTH);
+        List<Station> stations = stationService.replaceAll(NEW_STATIONS);
+
+        assertThat(stations).isNotNull();
+        assertThat(stations.size()).isEqualTo(NEW_STATIONS.size());
+        assertThat(stations).doesNotContainSequence(stationsBefore);
+    }
+
+    /**
+     * Test with max length name value
+     */
+    @Test
+    @Transactional
+    public void replaceAllWithMaxLengthName() {
+        List<Station> stationsBefore = stationService.getAll();
+        NEW_STATIONS.get(0).setName(NEW_NAME_MAX_LENGTH);
         List<Station> stations = stationService.replaceAll(NEW_STATIONS);
 
         assertThat(stations).isNotNull();

@@ -4,10 +4,7 @@ import construction_and_testing.public_transport_system.domain.Schedule;
 import construction_and_testing.public_transport_system.domain.TransportLine;
 import construction_and_testing.public_transport_system.domain.Vehicle;
 import construction_and_testing.public_transport_system.domain.Zone;
-import construction_and_testing.public_transport_system.repository.ScheduleRepository;
-import construction_and_testing.public_transport_system.repository.TransportLineRepository;
-import construction_and_testing.public_transport_system.repository.VehicleRepository;
-import construction_and_testing.public_transport_system.repository.ZoneRepository;
+import construction_and_testing.public_transport_system.repository.*;
 import construction_and_testing.public_transport_system.service.definition.TransportLineService;
 import construction_and_testing.public_transport_system.util.GeneralException;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,10 +14,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Optional;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -37,6 +33,9 @@ public class TransportLineServiceImpl implements TransportLineService {
 
     @Autowired
     private VehicleRepository vehicleRepository;
+
+    @Autowired
+    private TicketRepository ticketRepository;
 
     @Override
     public List<TransportLine> getAll() {
@@ -57,6 +56,7 @@ public class TransportLineServiceImpl implements TransportLineService {
     @Override
     public TransportLine save(TransportLine transportLine) {
         try {
+            this.validate(transportLine);
             return transportLineRepository.save(transportLine);
         } catch (DataIntegrityViolationException e) {
             throw new GeneralException("Transport line with given name already exist!", HttpStatus.BAD_REQUEST);
@@ -91,6 +91,7 @@ public class TransportLineServiceImpl implements TransportLineService {
     @Override
     @Transactional
     public List<TransportLine> replaceAll(Iterable<TransportLine> transportLines) {
+        this.validate(transportLines);
         List<Schedule> associatedSchedules = new ArrayList<>();
         List<Schedule> schedules = scheduleRepository.findAll(); // all schedules in database
         List<TransportLine> dbTransportLines = transportLineRepository.findAll(); // all transport lines in database
@@ -99,7 +100,11 @@ public class TransportLineServiceImpl implements TransportLineService {
         this.filterAndRemoveUnassociatedSchedules(schedules, associatedSchedules);
         this.associateDefaultZoneToNewTransportLines(transportLines);
         this.filterAssociatedTransportLines(dbTransportLines, transportLines);
-        this.removeStationsFromTransportLines(dbTransportLines);
+        if (!dbTransportLines.isEmpty()) {
+            this.removeStationsFromTransportLines(dbTransportLines);
+            this.removeTicketsFromTransportLines(dbTransportLines);
+        }
+
 
         try {
             transportLineRepository.deleteAll(dbTransportLines);
@@ -226,5 +231,37 @@ public class TransportLineServiceImpl implements TransportLineService {
                 .findByTransportLine(dbTransportLines.stream().map(TransportLine::getId).collect(Collectors.toList()));
         vehicles.forEach(vehicle -> vehicle.setCurrentLine(null));
         vehicleRepository.saveAll(vehicles);
+    }
+
+    /**
+     * @param dbTransportLines valid transport lines in database
+     */
+    private void removeTicketsFromTransportLines(List<TransportLine> dbTransportLines) {
+        ticketRepository.deleteAll(ticketRepository
+                .findByTransportLine(dbTransportLines.stream().map(TransportLine::getId).collect(Collectors.toList())));
+
+    }
+
+    /**
+     * @param transportLine that needs to be validated
+     */
+    private void validate(TransportLine transportLine) {
+        Set<ConstraintViolation<TransportLine>> violations = Validation.buildDefaultValidatorFactory()
+                .getValidator().validate(transportLine);
+        if (!violations.isEmpty()) {
+            StringBuilder builder = new StringBuilder();
+            for (ConstraintViolation<TransportLine> violation : violations) {
+                builder.append(violation.getMessage());
+                builder.append("\n");
+            }
+            throw new GeneralException(builder.toString(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    /**
+     * @param transportLines that need to be validated
+     */
+    private void validate(Iterable<TransportLine> transportLines) {
+        transportLines.forEach(this::validate);
     }
 }

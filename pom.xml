@@ -101,11 +101,17 @@
 			<artifactId>modelmapper</artifactId>
 			<version> LATEST</version>
 		</dependency>
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-        </dependency>
-    </dependencies>
+		<dependency>
+			<groupId>org.seleniumhq.selenium</groupId>
+			<artifactId>selenium-server</artifactId>
+			<version>3.0.0-beta3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.testng</groupId>
+			<artifactId>testng</artifactId>
+			<version>6.9.10</version>
+		</dependency>
+	</dependencies>
 
 	<repositories>
 		<repository>

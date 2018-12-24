@@ -5,6 +5,7 @@ import construction_and_testing.public_transport_system.domain.enums.VehicleType
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Objects;
 
@@ -19,6 +20,7 @@ public class Station implements Serializable {
     private Long id;
 
     @Column(nullable = false)
+    @Size(min = 3, max = 30)
     private String name;
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "station")

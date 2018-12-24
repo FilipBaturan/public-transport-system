@@ -1,5 +1,6 @@
 package construction_and_testing.public_transport_system.service.unit;
 
+import construction_and_testing.public_transport_system.domain.TransportLine;
 import construction_and_testing.public_transport_system.domain.Zone;
 import construction_and_testing.public_transport_system.repository.TransportLineRepository;
 import construction_and_testing.public_transport_system.repository.ZoneRepository;
@@ -182,6 +183,90 @@ public class ZoneServiceImplUnitTest {
         Mockito.verify(transportLineRepository, Mockito.times(1)).findAllById(DB_TR_ID);
         Mockito.verify(zoneRepository, Mockito.times(1)).save(any(Zone.class));
 
+    }
+
+    /**
+     * Test with to short name value
+     */
+    @Test(expected = GeneralException.class)
+    public void saveWithShortName() {
+        Zone zone = new Zone(null, NEW_NAME_SHORT_LENGTH, NEW_LINES, true);
+        zone.getLines().forEach((TransportLine t) -> t.setZone(zone));
+        int countBefore = zoneService.getAll().size();
+
+        Zone dbZone = zoneService.save(zone);
+        assertThat(dbZone).isNotNull();
+
+        assertThat(zoneService.getAll()).hasSize(countBefore + 1);
+
+        assertThat(dbZone.getName()).isEqualTo(zone.getName());
+        assertThat(dbZone.isActive()).isEqualTo(zone.isActive());
+        assertThat(dbZone.getLines()).isEqualTo(zone.getLines());
+
+        Mockito.verify(transportLineRepository, Mockito.never()).findAllById(DB_TR_ID);
+        Mockito.verify(zoneRepository, Mockito.never()).save(any(Zone.class));
+    }
+
+    /**
+     * Test with too long name value
+     */
+    @Test(expected = GeneralException.class)
+    public void saveWithLongName() {
+        Zone zone = new Zone(null, NEW_NAME_LONG_LENGTH, NEW_LINES, true);
+        zone.getLines().forEach((TransportLine t) -> t.setZone(zone));
+        int countBefore = zoneService.getAll().size();
+
+        Zone dbZone = zoneService.save(zone);
+        assertThat(dbZone).isNotNull();
+
+        assertThat(zoneService.getAll()).hasSize(countBefore + 1);
+
+        assertThat(dbZone.getName()).isEqualTo(zone.getName());
+        assertThat(dbZone.isActive()).isEqualTo(zone.isActive());
+        assertThat(dbZone.getLines()).isEqualTo(zone.getLines());
+
+        Mockito.verify(transportLineRepository, Mockito.never()).findAllById(DB_TR_ID);
+        Mockito.verify(zoneRepository, Mockito.never()).save(any(Zone.class));
+    }
+
+    /**
+     * Test with min length name value
+     */
+    @Test
+    public void saveWithMinLengthName() {
+        Zone zone = new Zone(null, NEW_NAME_MIN_LENGTH, DB_TR_SAT, true);
+        zone.getLines().forEach(transportLine -> transportLine.setZone(zone));
+        int countBefore = zoneService.getAll().size();
+
+        Zone dbZone = zoneService.save(zone);
+        assertThat(zoneService.getAll().size()).isEqualTo(countBefore + 1);
+        assertThat(dbZone.getId()).isEqualTo(NEW_ID);
+        assertThat(dbZone.getName()).isEqualTo(zone.getName());
+        assertThat(dbZone.getLines()).isEqualTo(zone.getLines());
+        assertThat(dbZone.isActive()).isEqualTo(zone.isActive());
+
+        Mockito.verify(transportLineRepository, Mockito.times(1)).findAllById(DB_TR_ID);
+        Mockito.verify(zoneRepository, Mockito.times(1)).save(any(Zone.class));
+    }
+
+    /**
+     * Test with max length name value
+     */
+    @Test
+    public void saveWithMaxLengthName() {
+        Zone zone = new Zone(null, NEW_NAME_MAX_LENGTH, DB_TR_SAT, true);
+        zone.getLines().forEach(transportLine -> transportLine.setZone(zone));
+        int countBefore = zoneService.getAll().size();
+
+        Zone dbZone = zoneService.save(zone);
+        assertThat(zoneService.getAll().size()).isEqualTo(countBefore + 1);
+        assertThat(dbZone.getId()).isEqualTo(NEW_ID);
+        assertThat(dbZone.getName()).isEqualTo(zone.getName());
+        assertThat(dbZone.getLines()).isEqualTo(zone.getLines());
+        assertThat(dbZone.isActive()).isEqualTo(zone.isActive());
+
+        Mockito.verify(transportLineRepository, Mockito.times(1)).findAllById(DB_TR_ID);
+        Mockito.verify(zoneRepository, Mockito.times(1)).save(any(Zone.class));
     }
 
     /**

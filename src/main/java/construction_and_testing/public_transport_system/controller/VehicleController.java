@@ -3,6 +3,7 @@ package construction_and_testing.public_transport_system.controller;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import construction_and_testing.public_transport_system.converter.VehicleConverter;
 import construction_and_testing.public_transport_system.domain.DTO.VehicleDTO;
+import construction_and_testing.public_transport_system.domain.DTO.VehicleSaverDTO;
 import construction_and_testing.public_transport_system.domain.Vehicle;
 import construction_and_testing.public_transport_system.service.definition.TransportLineService;
 import construction_and_testing.public_transport_system.service.definition.VehicleService;
@@ -69,21 +70,19 @@ public class VehicleController extends ValidationController {
         validateJSON(vehicle, "vehicle.json");
         ObjectMapper mapper = new ObjectMapper();
         return new ResponseEntity<>(new VehicleDTO(vehicleService
-                .save(new Vehicle(mapper.readValue(vehicle, VehicleDTO.class)))), HttpStatus.OK);
+                .save(new Vehicle(mapper.readValue(vehicle, VehicleSaverDTO.class)))), HttpStatus.OK);
     }
 
     /**
-     * DELETE /api/vehicle
+     * DELETE /api/vehicle/{id}
      *
-     * @param vehicle that needs to be deleted
+     * @param id of vehicle that needs to be deleted
      * @return message about action results
      */
-    @DeleteMapping()
-    public ResponseEntity<String> delete(@RequestBody String vehicle) throws IOException, ValidationException {
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> delete(@PathVariable String id) throws ValidationException {
         logger.info("Deleting vehicle at time {}.", Calendar.getInstance().getTime());
-        validateJSON(vehicle, "vehicle.json");
-        ObjectMapper mapper = new ObjectMapper();
-        vehicleService.remove((mapper.readValue(vehicle, VehicleDTO.class)).getId());
+        vehicleService.remove(Long.parseLong(id));
         return new ResponseEntity<>("Vehicle successfully deleted!", HttpStatus.OK);
     }
 

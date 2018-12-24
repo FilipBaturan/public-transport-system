@@ -91,15 +91,13 @@ public class StationController extends ValidationController {
     /**
      * DELETE /api/station
      *
-     * @param station that needs to be deleted
+     * @param id of station that needs to be deleted
      * @return message about action results
      */
-    @DeleteMapping()
-    public ResponseEntity<String> delete(@RequestBody String station) throws IOException, ValidationException {
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> delete(@PathVariable String id) throws ValidationException {
         logger.info("Deleting station at time {}.", Calendar.getInstance().getTime());
-        validateJSON(station, "station.json");
-        ObjectMapper mapper = new ObjectMapper();
-        stationService.remove((new Station(mapper.readValue(station, StationDTO.class))).getId());
+        stationService.remove(Long.parseLong(id));
         return new ResponseEntity<>("Station successfully deleted!", HttpStatus.OK);
     }
 

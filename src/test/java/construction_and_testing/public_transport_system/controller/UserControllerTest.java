@@ -3,9 +3,7 @@ package construction_and_testing.public_transport_system.controller;
 
 import construction_and_testing.public_transport_system.domain.DTO.UserDTO;
 import construction_and_testing.public_transport_system.domain.User;
-import construction_and_testing.public_transport_system.domain.Validator;
 import construction_and_testing.public_transport_system.domain.enums.UsersDocumentsStatus;
-import construction_and_testing.public_transport_system.service.definition.TicketService;
 import construction_and_testing.public_transport_system.service.definition.UserService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -20,7 +18,6 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import static construction_and_testing.public_transport_system.constants.TicketConstants.DB_ID;
-import static construction_and_testing.public_transport_system.constants.TicketConstants.DB_PUR_DATE;
 import static construction_and_testing.public_transport_system.constants.UserConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
@@ -38,8 +35,7 @@ public class UserControllerTest {
     private TestRestTemplate testRestTemplate;
 
     @Test
-    public void getUnvalidatedUsersTest()
-    {
+    public void getUnvalidatedUsersTest() {
         ResponseEntity<UserDTO[]> result = testRestTemplate
                 .getForEntity(this.URL + "/unvalidatedUsers/", UserDTO[].class);
 
@@ -56,8 +52,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void approveUserValid()
-    {
+    public void approveUserValid() {
         UserDTO userDTO = new UserDTO(DB_USER);
 
         ResponseEntity<Boolean> result = testRestTemplate
@@ -74,8 +69,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void approveUserInvalid()
-    {
+    public void approveUserInvalid() {
         Long randomId = 124523L;
         UserDTO userDTO = new UserDTO(randomId, "name", "lastName", "email", "username", "pass");
 
@@ -236,8 +230,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void getValidAtors()
-    {
+    public void getValidAtors() {
         ResponseEntity<UserDTO[]> result = testRestTemplate
                 .getForEntity(this.URL + "/getValidators/", UserDTO[].class);
 
@@ -254,15 +247,14 @@ public class UserControllerTest {
     }
 
     @Test
-    public void addValidAtor()
-    {
+    public void addValidAtor() {
         UserDTO newValidator = new UserDTO(null, "newFirstName", "newLastName",
                 "newEmail", "newPass", "newUser");
 
         int size = userService.getValidators().size();
 
         ResponseEntity<Boolean> result = testRestTemplate
-                .postForEntity(this.URL + "/addValidator/", newValidator,Boolean.class);
+                .postForEntity(this.URL + "/addValidator/", newValidator, Boolean.class);
 
         Boolean response = result.getBody();
         assertTrue(response);
@@ -279,8 +271,7 @@ public class UserControllerTest {
 
 
     @Test
-    public void addInvalidator()
-    {
+    public void addInvalidator() {
         Long randomId = 12343L;
         UserDTO newValidator = new UserDTO(randomId, "newFirstName", "newLastName",
                 "newEmail", "newUser", "newPass");
@@ -288,7 +279,7 @@ public class UserControllerTest {
         int size = userService.getValidators().size();
 
         ResponseEntity<Boolean> result = testRestTemplate
-                .postForEntity(this.URL + "/addValidator/", newValidator,Boolean.class);
+                .postForEntity(this.URL + "/addValidator/", newValidator, Boolean.class);
 
         Boolean response = result.getBody();
         assertFalse(response);
@@ -303,15 +294,14 @@ public class UserControllerTest {
      * Parameter pass is missing
      */
     @Test
-    public void addValidatorNullParamter()
-    {
+    public void addValidatorNullParamter() {
         UserDTO newValidator = new UserDTO(null, "newFirstName", "newLastName",
                 "newEmail", null, "newPass");
 
         int size = userService.getValidators().size();
 
         ResponseEntity<Boolean> result = testRestTemplate
-                .postForEntity(this.URL + "/addValidator/", newValidator,Boolean.class);
+                .postForEntity(this.URL + "/addValidator/", newValidator, Boolean.class);
 
         Boolean response = result.getBody();
         assertFalse(response);
@@ -323,8 +313,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void getRegUsersValid()
-    {
+    public void getRegUsersValid() {
         ResponseEntity<UserDTO[]> result = testRestTemplate
                 .getForEntity(this.URL + "/registeredUsers/", UserDTO[].class);
 

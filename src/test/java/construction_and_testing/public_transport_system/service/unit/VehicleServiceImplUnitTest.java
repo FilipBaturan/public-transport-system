@@ -158,8 +158,89 @@ public class VehicleServiceImplUnitTest {
         assertThat(dbVehicle.getCurrentLine().getId()).isEqualTo(vehicle.getCurrentLine().getId());
         assertThat(dbVehicle.isActive()).isEqualTo(vehicle.isActive());
 
-        Mockito.verify(transportLineRepository, Mockito.times(1)).findById(DB_TR_ID);
+        Mockito.verify(transportLineRepository, Mockito.never()).findById(DB_TR_ID);
         Mockito.verify(vehicleRepository, Mockito.never()).save(any(Vehicle.class));
+    }
+
+    /**
+     * Test with to short name value
+     */
+    @Test(expected = GeneralException.class)
+    public void saveWithShortName() {
+        Vehicle vehicle = new Vehicle(null, NEW_NAME_SHORT_LENGTH, NEW_TYPE, NEW_LINE, true);
+        int countBefore = vehicleService.getAll().size();
+
+        Vehicle dbVehicle = vehicleService.save(vehicle);
+        assertThat(dbVehicle).isNotNull();
+
+        assertThat(vehicleService.getAll().size()).isEqualTo(countBefore + 1);
+        assertThat(dbVehicle.getName()).isEqualTo(vehicle.getName());
+        assertThat(dbVehicle.getType()).isEqualTo(vehicle.getType());
+        assertThat(dbVehicle.getCurrentLine().getId()).isEqualTo(vehicle.getCurrentLine().getId());
+        assertThat(dbVehicle.isActive()).isEqualTo(vehicle.isActive());
+
+        Mockito.verify(transportLineRepository, Mockito.never()).findById(DB_TR_ID);
+        Mockito.verify(vehicleRepository, Mockito.never()).save(any(Vehicle.class));
+    }
+
+    /**
+     * Test with too long name value
+     */
+    @Test(expected = GeneralException.class)
+    public void saveWithLongName() {
+        Vehicle vehicle = new Vehicle(null, NEW_NAME_LONG_LENGTH, NEW_TYPE, NEW_LINE, true);
+        int countBefore = vehicleService.getAll().size();
+
+        Vehicle dbVehicle = vehicleService.save(vehicle);
+        assertThat(dbVehicle).isNotNull();
+
+        assertThat(vehicleService.getAll().size()).isEqualTo(countBefore + 1);
+        assertThat(dbVehicle.getName()).isEqualTo(vehicle.getName());
+        assertThat(dbVehicle.getType()).isEqualTo(vehicle.getType());
+        assertThat(dbVehicle.getCurrentLine().getId()).isEqualTo(vehicle.getCurrentLine().getId());
+        assertThat(dbVehicle.isActive()).isEqualTo(vehicle.isActive());
+    }
+
+    /**
+     * Test with min length name value
+     */
+    @Test
+    public void saveWithMinLengthName() {
+        Vehicle vehicle = new Vehicle(null, NEW_NAME_MIN_LENGTH, NEW_TYPE, NEW_LINE, true);
+        int countBefore = vehicleService.getAll().size();
+
+        Vehicle dbVehicle = vehicleService.save(vehicle);
+        assertThat(dbVehicle).isNotNull();
+
+        assertThat(vehicleService.getAll().size()).isEqualTo(countBefore + 1);
+        assertThat(dbVehicle.getName()).isEqualTo(vehicle.getName());
+        assertThat(dbVehicle.getType()).isEqualTo(vehicle.getType());
+        assertThat(dbVehicle.getCurrentLine().getId()).isEqualTo(vehicle.getCurrentLine().getId());
+        assertThat(dbVehicle.isActive()).isEqualTo(vehicle.isActive());
+
+        Mockito.verify(transportLineRepository, Mockito.times(1)).findById(DB_TR_ID);
+        Mockito.verify(vehicleRepository, Mockito.times(1)).save(any(Vehicle.class));
+    }
+
+    /**
+     * Test with max length name value
+     */
+    @Test
+    public void saveWithMaxLengthName() {
+        Vehicle vehicle = new Vehicle(null, NEW_NAME_MAX_LENGTH, NEW_TYPE, NEW_LINE, true);
+        int countBefore = vehicleService.getAll().size();
+
+        Vehicle dbVehicle = vehicleService.save(vehicle);
+        assertThat(dbVehicle).isNotNull();
+
+        assertThat(vehicleService.getAll().size()).isEqualTo(countBefore + 1);
+        assertThat(dbVehicle.getName()).isEqualTo(vehicle.getName());
+        assertThat(dbVehicle.getType()).isEqualTo(vehicle.getType());
+        assertThat(dbVehicle.getCurrentLine().getId()).isEqualTo(vehicle.getCurrentLine().getId());
+        assertThat(dbVehicle.isActive()).isEqualTo(vehicle.isActive());
+
+        Mockito.verify(transportLineRepository, Mockito.times(1)).findById(DB_TR_ID);
+        Mockito.verify(vehicleRepository, Mockito.times(1)).save(any(Vehicle.class));
     }
 
     /**

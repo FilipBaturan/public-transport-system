@@ -15,7 +15,7 @@ public class VehicleDTO implements Serializable {
 
     private VehicleType type;
 
-    private Long currentLine;
+    private VehicleTransportLineDTO currentLine;
 
     private boolean active;
 
@@ -23,7 +23,7 @@ public class VehicleDTO implements Serializable {
         this.active = true;
     }
 
-    public VehicleDTO(Long id, String name, VehicleType type, Long currentLine, boolean active) {
+    public VehicleDTO(Long id, String name, VehicleType type, VehicleTransportLineDTO currentLine, boolean active) {
         this.id = id;
         this.name = name;
         this.type = type;
@@ -36,7 +36,7 @@ public class VehicleDTO implements Serializable {
         this.name = vehicle.getName();
         this.type = vehicle.getType();
         try {
-            this.currentLine = vehicle.getCurrentLine().getId();
+            this.currentLine = new VehicleTransportLineDTO(vehicle.getCurrentLine());
         } catch (NullPointerException e) {
             this.currentLine = null;
         }
@@ -71,11 +71,11 @@ public class VehicleDTO implements Serializable {
         this.type = type;
     }
 
-    public Long getCurrentLine() {
+    public VehicleTransportLineDTO getCurrentLine() {
         return currentLine;
     }
 
-    public void setCurrentLine(Long currentLine) {
+    public void setCurrentLine(VehicleTransportLineDTO currentLine) {
         this.currentLine = currentLine;
     }
 
