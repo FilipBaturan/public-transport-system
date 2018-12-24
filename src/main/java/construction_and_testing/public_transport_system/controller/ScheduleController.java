@@ -37,7 +37,7 @@ public class ScheduleController extends ValidationController {
      * @return all available schedules
      */
     @GetMapping
-    @PreAuthorize("isAuthenticated()")
+    //@PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<ScheduleDTO>> getAll() {
         logger.info("Requesting all available schedules at time {}.", Calendar.getInstance().getTime());
         return new ResponseEntity<>(ScheduleConverter.fromEntityList(scheduleService.getAll(), ScheduleDTO::new),
@@ -50,9 +50,10 @@ public class ScheduleController extends ValidationController {
      * @param id of requested schedule
      * @return schedule with requested id
      */
-    @GetMapping("{/id}")
-    public ResponseEntity<ScheduleDTO> findById(@PathVariable String id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<ScheduleDTO> findById(@PathVariable("id") String id) {
         logger.info("Requesting schedule with id {} at time {}.", id, Calendar.getInstance().getTime());
+        System.out.println(id);
         return new ResponseEntity<>(new ScheduleDTO(scheduleService.findById(Long.parseLong(id))), HttpStatus.FOUND);
     }
 
