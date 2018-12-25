@@ -93,4 +93,4 @@ INSERT INTO `ticket` (`id`, `active`, `expiry_date`, `purchase_date`, `token`, `
 
 
 
-alter sequence `hibernate_sequence` restart with 500
+ALTER sequence `hibernate_sequence` restart WITH 500

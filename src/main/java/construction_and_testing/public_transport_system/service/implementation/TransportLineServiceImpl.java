@@ -250,6 +250,7 @@ public class TransportLineServiceImpl implements TransportLineService {
                 .getValidator().validate(transportLine);
         if (!violations.isEmpty()) {
             StringBuilder builder = new StringBuilder();
+            builder.append("Name ");
             for (ConstraintViolation<TransportLine> violation : violations) {
                 builder.append(violation.getMessage());
                 builder.append("\n");
