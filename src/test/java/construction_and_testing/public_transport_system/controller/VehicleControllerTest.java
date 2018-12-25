@@ -137,7 +137,7 @@ public class VehicleControllerTest {
     @Test
     public void saveWithInvalidLine() throws Exception {
         VehicleSaverDTO vehicle = new VehicleSaverDTO(
-                new Vehicle(null, NEW_NAME, NEW_TYPE_INVALID, NEW_LINE_INVALID, true));
+                new Vehicle(null, NEW_NAME, NEW_TYPE, NEW_LINE_INVALID, true));
         String jsonVehicle = TestUtil.json(vehicle);
 
         ResponseEntity<String> result = testRestTemplate.postForEntity(this.URL, jsonVehicle, String.class);
@@ -155,16 +155,19 @@ public class VehicleControllerTest {
     @Test
     public void saveWithNullLine() throws Exception {
         VehicleSaverDTO vehicle = new VehicleSaverDTO(
-                new Vehicle(null, NEW_NAME, NEW_TYPE_INVALID, null, true));
+                new Vehicle(null, NEW_NAME, NEW_TYPE, null, true));
         String jsonVehicle = TestUtil.json(vehicle);
 
-        ResponseEntity<String> result = testRestTemplate.postForEntity(this.URL, jsonVehicle, String.class);
+        ResponseEntity<VehicleDTO> result = testRestTemplate.postForEntity(this.URL, jsonVehicle, VehicleDTO.class);
 
-        String body = result.getBody();
+        VehicleDTO body = result.getBody();
 
-        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(body).isNotNull();
-        assertThat(body).isEqualTo("Invalid transport line and vehicle types!");
+        assertThat(body.getName()).isEqualTo(vehicle.getName());
+        assertThat(body.getType()).isEqualTo(vehicle.getType());
+        assertThat(body.getCurrentLine()).isNull();
+        assertThat(body.isActive()).isEqualTo(vehicle.isActive());
     }
 
     /**

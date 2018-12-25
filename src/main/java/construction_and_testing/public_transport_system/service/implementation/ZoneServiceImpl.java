@@ -71,7 +71,7 @@ public class ZoneServiceImpl implements ZoneService {
     @Override
     public void remove(Long id) {
         if (id == 1) {
-            throw new GeneralException("Zone can not be removed!", HttpStatus.BAD_REQUEST);
+            throw new GeneralException("Default zone can not be removed!", HttpStatus.BAD_REQUEST);
         }
         Optional<Zone> entity = zoneRepository.findById(id);
         if (entity.isPresent()) {
@@ -94,6 +94,7 @@ public class ZoneServiceImpl implements ZoneService {
                 .getValidator().validate(zone);
         if (!violations.isEmpty()) {
             StringBuilder builder = new StringBuilder();
+            builder.append("Name ");
             for (ConstraintViolation<Zone> violation : violations) {
                 builder.append(violation.getMessage());
                 builder.append("\n");

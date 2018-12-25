@@ -113,7 +113,7 @@ public class VehicleServiceImplIntegrationTest {
     @Test(expected = GeneralException.class)
     @Transactional
     public void saveWithInvalidLine() {
-        Vehicle vehicle = new Vehicle(null, NEW_NAME, NEW_TYPE_INVALID, NEW_LINE_INVALID, true);
+        Vehicle vehicle = new Vehicle(null, NEW_NAME, NEW_TYPE, NEW_LINE_INVALID, true);
         int countBefore = vehicleService.getAll().size();
 
         Vehicle dbVehicle = vehicleService.save(vehicle);
@@ -129,10 +129,10 @@ public class VehicleServiceImplIntegrationTest {
     /**
      * Test with null transport line
      */
-    @Test(expected = GeneralException.class)
+    @Test
     @Transactional
     public void saveWithNullLine() {
-        Vehicle vehicle = new Vehicle(null, NEW_NAME, NEW_TYPE_INVALID, null, true);
+        Vehicle vehicle = new Vehicle(null, NEW_NAME, NEW_TYPE, null, true);
         int countBefore = vehicleService.getAll().size();
 
         Vehicle dbVehicle = vehicleService.save(vehicle);
@@ -141,7 +141,7 @@ public class VehicleServiceImplIntegrationTest {
         assertThat(vehicleService.getAll().size()).isEqualTo(countBefore + 1);
         assertThat(dbVehicle.getName()).isEqualTo(vehicle.getName());
         assertThat(dbVehicle.getType()).isEqualTo(vehicle.getType());
-        assertThat(dbVehicle.getCurrentLine().getId()).isEqualTo(vehicle.getCurrentLine().getId());
+        assertThat(dbVehicle.getCurrentLine()).isNull();
         assertThat(dbVehicle.isActive()).isEqualTo(vehicle.isActive());
     }
 

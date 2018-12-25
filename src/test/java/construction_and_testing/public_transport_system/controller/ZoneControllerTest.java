@@ -295,6 +295,6 @@ public class ZoneControllerTest {
      */
     @Test
     public void deleteNotValidId() throws Exception {
-        testRestTemplate.delete(this.URL + "/" + DEL_ID, String.class);
+        testRestTemplate.delete(this.URL + "/" + DEL_ID_INVALID, String.class);
     }
 }
