@@ -1,5 +1,7 @@
 package construction_and_testing.public_transport_system.controller;
 
+import construction_and_testing.public_transport_system.domain.DTO.AuthenticationRequestDTO;
+import construction_and_testing.public_transport_system.domain.DTO.AuthenticationResponseDTO;
 import construction_and_testing.public_transport_system.domain.DTO.ZoneDTO;
 import construction_and_testing.public_transport_system.domain.Zone;
 import construction_and_testing.public_transport_system.service.definition.ZoneService;
@@ -12,8 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -39,10 +40,18 @@ public class ZoneControllerTest {
 
     private final String URL = "/api/zone";
 
+    private String accessToken;
 
     @Before
     public void setUp() throws Exception {
         Mockito.doNothing().when(zoneController).validateJSON(any(String.class), any(String.class));
+        ResponseEntity<AuthenticationResponseDTO> responseEntity = testRestTemplate.postForEntity("/api/user/auth",
+                        new AuthenticationRequestDTO("null", "null"),
+                        AuthenticationResponseDTO.class);
+        if (responseEntity.getBody() != null){
+            accessToken = responseEntity.getBody().getToken();
+        }
+
     }
 
     /**
@@ -117,10 +126,15 @@ public class ZoneControllerTest {
      */
     @Test
     public void saveWithLines() throws Exception {
-        ZoneDTO zone = new ZoneDTO(new Zone(null, NEW_NAME, NEW_LINES, true));
-        String jsonZone = TestUtil.json(zone);
 
-        ResponseEntity<ZoneDTO> result = testRestTemplate.postForEntity(this.URL, jsonZone, ZoneDTO.class);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<ZoneDTO> httpEntity = new HttpEntity<>(new ZoneDTO(
+                new Zone(null, NEW_NAME, NEW_LINES, true)), headers);
+
+        ZoneDTO zone = new ZoneDTO(new Zone(null, NEW_NAME, NEW_LINES, true));
+
+        ResponseEntity<ZoneDTO> result = testRestTemplate.exchange(this.URL, HttpMethod.POST, httpEntity, ZoneDTO.class);
 
         ZoneDTO body = result.getBody();
 

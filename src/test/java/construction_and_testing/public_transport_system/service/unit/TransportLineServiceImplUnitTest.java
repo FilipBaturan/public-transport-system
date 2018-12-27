@@ -134,6 +134,8 @@ public class TransportLineServiceImplUnitTest {
             return null;
         }).when(scheduleRepository).deleteAll(any());
 
+        Mockito.when(scheduleRepository.findAllById(any())).thenReturn(new ArrayList<>());
+
         Mockito.when(ticketRepository.findAll())
                 .then(invocationOnMock -> this.tickets.stream()
                         .map(Ticket::new)
@@ -236,6 +238,7 @@ public class TransportLineServiceImplUnitTest {
         Mockito.verify(transportLineRepository, Mockito.times(1)).save(any(TransportLine.class));
         Mockito.verify(transportLinePositionRepository, Mockito.times(1))
                 .save(any(TransportLinePosition.class));
+        Mockito.verify(scheduleRepository, Mockito.times(1)).findAllById(any());
     }
 
     /**
@@ -374,6 +377,7 @@ public class TransportLineServiceImplUnitTest {
         Mockito.verify(transportLineRepository, Mockito.times(1)).save(any(TransportLine.class));
         Mockito.verify(transportLinePositionRepository, Mockito.times(1))
                 .save(any(TransportLinePosition.class));
+        Mockito.verify(scheduleRepository, Mockito.times(1)).findAllById(any());
     }
 
     /**
@@ -402,6 +406,7 @@ public class TransportLineServiceImplUnitTest {
         Mockito.verify(transportLineRepository, Mockito.times(1)).save(any(TransportLine.class));
         Mockito.verify(transportLinePositionRepository, Mockito.times(1))
                 .save(any(TransportLinePosition.class));
+        Mockito.verify(scheduleRepository, Mockito.times(1)).findAllById(any());
     }
 
     /**

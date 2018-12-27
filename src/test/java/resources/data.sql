@@ -80,6 +80,8 @@ INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES (106, '00:
 
 INSERT INTO `user` (`type`, `id`, `active`, `authority`, `confirmation`, `email`, `last_name`, `name`, `password`, `telephone`, `username`, `balance`, `document`) VALUES ('REGISTERED_USER', '1', true, '0', '2', 'email@gmail.com', 'LastName', 'FirstName', 'password', '00213123', 'username', '100', 'asds');
 INSERT INTO `user` (`type`, `id`, `active`, `authority`, `email`, `last_name`, `name`, `password`, `username`) VALUES ('VALIDATOR', '2', true, '2', 'email@gmail.com', 'ValLastName', 'ValFirstName', 'valPassword', 'valUsername');
+INSERT INTO `user` (`type`, `id`, `active`, `authority`, `email`, `last_name`, `name`, `password`, `username`) VALUES ('OPERATOR', '3', true, '3', 'null@gmail.com', 'David', 'Davidovic', '$2a$04$CpdJcjORftUKRbJpynFIa.qUY2c/DoqNmta2dL.o6Wkw1I3ZLh79C', 'null');
+
 INSERT INTO `item` (`id`, `active`, `age`, `cost`, `type`, `zone_id`, `vehicle_type`) VALUES ('1', true, '0', '150', '1', '1', '0');
 INSERT INTO `pricelist` (`id`, `active`, `end_date`, `start_date`) VALUES ('1', true, '2020-01-22', '2010-01-22');
 INSERT INTO `pricelist_item` (`id`, `active`, `item_id`, `pricelist_id`) VALUES ('1', true, '1', '1');

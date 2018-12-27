@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -59,6 +60,7 @@ public class ZoneController extends ValidationController {
      * @return added zone
      */
     @PostMapping
+    @PreAuthorize("hasAuthority('OPERATER')")
     public ResponseEntity<ZoneDTO> save(@RequestBody String zone) throws IOException, ValidationException {
         logger.info("Saving zone at time {}.", Calendar.getInstance().getTime());
         validateJSON(zone, "zone.json");
