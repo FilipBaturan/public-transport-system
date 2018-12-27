@@ -26,6 +26,9 @@ public class TransportLineServiceImpl implements TransportLineService {
     private TransportLineRepository transportLineRepository;
 
     @Autowired
+    private TransportLinePositionRepository transportLinePositionRepository;
+
+    @Autowired
     private ScheduleRepository scheduleRepository;
 
     @Autowired
@@ -57,7 +60,10 @@ public class TransportLineServiceImpl implements TransportLineService {
     public TransportLine save(TransportLine transportLine) {
         try {
             this.validate(transportLine);
-            return transportLineRepository.save(transportLine);
+            this.placeSchedulesInTransportLine(scheduleRepository.findAllById(transportLine.getSchedule()
+                    .stream().map(Schedule::getId).collect(Collectors.toList())), transportLine);
+            transportLineRepository.save(transportLine);
+            return transportLinePositionRepository.save(transportLine.getPositions()).getTransportLine();
         } catch (DataIntegrityViolationException e) {
             throw new GeneralException("Transport line with given name already exist!", HttpStatus.BAD_REQUEST);
         } catch (RuntimeException e) {
@@ -114,6 +120,23 @@ public class TransportLineServiceImpl implements TransportLineService {
         } catch (RuntimeException e) { // PersistentObjectException handled
             throw new GeneralException("Transport lines have invalid schedule or position associated!",
                     HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    /**
+     * @param schedules that need to be placed in transport line
+     * @param transportLine target transport line
+     */
+    private void placeSchedulesInTransportLine(Iterable<Schedule> schedules, TransportLine transportLine){
+        for (Schedule schedule: transportLine.getSchedule()) {
+            schedules.forEach(s -> {
+                if (s.getId().equals(schedule.getId())){
+                    schedule.setId(s.getId());
+                    schedule.setDayOfWeek(s.getDayOfWeek());
+                    schedule.setDepartures(s.getDepartures());
+                    schedule.setActive(s.isActive());
+                }
+            });
         }
     }
 

@@ -100,7 +100,8 @@ public class StationControllerTest {
      */
     @Test
     public void save() throws Exception {
-        StationDTO station = new StationDTO(new Station(null, NEW_NAME, NEW_POSITION, NEW_TYPE, NEW_ACTIVE));
+        StationDTO station = new StationDTO(new Station(null, NEW_NAME, new StationPosition(),
+                NEW_TYPE, NEW_ACTIVE));
         String jsonStation = TestUtil.json(station);
 
         ResponseEntity<StationDTO> result = testRestTemplate.postForEntity(this.URL, jsonStation, StationDTO.class);
@@ -138,7 +139,7 @@ public class StationControllerTest {
     @Test
     public void saveWithShortName() throws Exception {
         StationDTO station = new StationDTO(
-                new Station(null, NEW_NAME_SHORT_LENGTH, NEW_POSITION, NEW_TYPE, NEW_ACTIVE));
+                new Station(null, NEW_NAME_SHORT_LENGTH, new StationPosition(), NEW_TYPE, NEW_ACTIVE));
         String jsonStation = TestUtil.json(station);
 
         ResponseEntity<String> result = testRestTemplate.postForEntity(this.URL, jsonStation, String.class);
@@ -155,7 +156,7 @@ public class StationControllerTest {
     @Test
     public void saveWithLongName() throws Exception {
         StationDTO station = new StationDTO(
-                new Station(null, NEW_NAME_LONG_LENGTH, NEW_POSITION, NEW_TYPE, NEW_ACTIVE));
+                new Station(null, NEW_NAME_LONG_LENGTH, new StationPosition(), NEW_TYPE, NEW_ACTIVE));
         String jsonStation = TestUtil.json(station);
 
         ResponseEntity<String> result = testRestTemplate.postForEntity(this.URL, jsonStation, String.class);
@@ -172,7 +173,7 @@ public class StationControllerTest {
     @Test
     public void saveWithMinLengthName() throws Exception {
         StationDTO station = new StationDTO(
-                new Station(null, NEW_NAME_MIN_LENGTH, NEW_POSITION, NEW_TYPE, NEW_ACTIVE));
+                new Station(null, NEW_NAME_MIN_LENGTH, new StationPosition(), NEW_TYPE, NEW_ACTIVE));
         String jsonStation = TestUtil.json(station);
 
         ResponseEntity<StationDTO> result = testRestTemplate.postForEntity(this.URL, jsonStation, StationDTO.class);
@@ -193,7 +194,7 @@ public class StationControllerTest {
     @Test
     public void saveWithMaxLengthName() throws Exception {
         StationDTO station = new StationDTO(
-                new Station(null, NEW_NAME_MAX_LENGTH, NEW_POSITION, NEW_TYPE, NEW_ACTIVE));
+                new Station(null, NEW_NAME_MAX_LENGTH, new StationPosition(), NEW_TYPE, NEW_ACTIVE));
         String jsonStation = TestUtil.json(station);
 
         ResponseEntity<StationDTO> result = testRestTemplate.postForEntity(this.URL, jsonStation, StationDTO.class);

@@ -112,7 +112,9 @@ public class TransportLineControllerTest {
     @Test
     public void save() throws Exception {
         TransportLineDTO transportLine = new TransportLineDTO(
-                new TransportLine(null, NEW_NAME, NEW_TYPE, NEW_POSITION, new HashSet<>(), DB_ZONE, true));
+                new TransportLine(null, NEW_NAME, NEW_TYPE, new TransportLinePosition(null,
+                        "45.23,26.24  44.74,36.12 (green|" + NEW_NAME + ")", null, true),
+                        new HashSet<>(), DB_ZONE, true));
         String jsonTransportLine = TestUtil.json(transportLine);
 
         ResponseEntity<TransportLineDTO> result = testRestTemplate.postForEntity(this.URL, jsonTransportLine,
@@ -174,7 +176,8 @@ public class TransportLineControllerTest {
     @Test
     public void saveWithInvalidName() throws Exception {
         TransportLineDTO transportLine = new TransportLineDTO(
-                new TransportLine(null, DB_NAME, NEW_TYPE, NEW_POSITION, new HashSet<>(), DB_ZONE, true));
+                new TransportLine(null, DB_NAME, NEW_TYPE, new TransportLinePosition(), new HashSet<>(),
+                        DB_ZONE, true));
         String jsonTransportLine = TestUtil.json(transportLine);
 
         ResponseEntity<String> result = testRestTemplate.postForEntity(this.URL, jsonTransportLine, String.class);
@@ -183,7 +186,6 @@ public class TransportLineControllerTest {
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(body).isNotNull();
-        assertThat(body).isEqualTo("Transport line with given name already exist!");
     }
 
     /**
@@ -228,8 +230,9 @@ public class TransportLineControllerTest {
     @Test
     public void saveWithMinLengthName() throws Exception {
         TransportLineDTO transportLine = new TransportLineDTO(
-                new TransportLine(null, NEW_NAME_MIN_LENGTH, NEW_TYPE,
-                        NEW_POSITION, new HashSet<>(), DB_ZONE, true));
+                new TransportLine(null, NEW_NAME_MIN_LENGTH, NEW_TYPE, new TransportLinePosition(null,
+                        "45.23,26.24  44.74,36.12 (green|" + NEW_NAME_MIN_LENGTH + ")", null,
+                        true), new HashSet<>(), DB_ZONE, true));
         String jsonTransportLine = TestUtil.json(transportLine);
 
         ResponseEntity<TransportLineDTO> result = testRestTemplate.postForEntity(this.URL, jsonTransportLine,
@@ -253,8 +256,9 @@ public class TransportLineControllerTest {
     @Test
     public void saveWithMaxLengthName() throws Exception {
         TransportLineDTO transportLine = new TransportLineDTO(
-                new TransportLine(null, NEW_NAME_MAX_LENGTH, NEW_TYPE,
-                        NEW_POSITION, new HashSet<>(), DB_ZONE, true));
+                new TransportLine(null, NEW_NAME_MAX_LENGTH, NEW_TYPE, new TransportLinePosition(null,
+                        "45.23,26.24  44.74,36.12 (green|" + NEW_NAME_MAX_LENGTH + ")", null,
+                        true), new HashSet<>(), DB_ZONE, true));
         String jsonTransportLine = TestUtil.json(transportLine);
 
         ResponseEntity<TransportLineDTO> result = testRestTemplate.postForEntity(this.URL, jsonTransportLine,

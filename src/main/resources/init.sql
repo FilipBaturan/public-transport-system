@@ -30,7 +30,7 @@ INSERT INTO `public_transport`.`zone` (`id`, `active`, `name`) VALUES ('6', TRUE
 INSERT INTO `public_transport`.`transport_line` (`id`, `active`, `name`, `type`, `zone_id`) VALUES ('1', TRUE, 'R1', '0', '2');
 INSERT INTO `public_transport`.`transport_line` (`id`, `active`, `name`, `type`, `zone_id`) VALUES ('2', TRUE, 'G7', '2', '2');
 INSERT INTO `public_transport`.`transport_line` (`id`, `active`, `name`, `type`, `zone_id`) VALUES ('3', TRUE, 'V3', '0', '3');
-INSERT INTO `public_transport`.`transport_line` (`id`, `active`, `name`, `type`, `zone_id`) VALUES ('4', TRUE, 'M5', '0', '4');
+INSERT INTO `public_transport`.`transport_line` (`id`, `active`, `name`, `type`, `zone_id`) VALUES ('4', TRUE, 'M5', '1', '4');
 
 INSERT INTO `public_transport`.`transport_line_position` (`id`, `active`, `content`, `transport_line_id`) VALUES ('1', TRUE, '45.26377,19.82895 45.26407,19.82122 45.26274,19.81878 45.26015,19.82195 45.25761,19.82431 45.2529,19.82431 45.24867,19.82466 45.24398,19.82504 45.23972,19.82552 45.23712,19.82655 45.23879,19.83264 45.24166,19.84268 45.24565,19.84045 45.24951,19.83839 45.25229,19.83685 45.25833,19.83341 45.26154,19.83174 45.26419,19.83028 45.26377,19.82891 (red|R1)', '1');
 INSERT INTO `public_transport`.`transport_line_position` (`id`, `active`, `content`, `transport_line_id`) VALUES ('2', TRUE, '45.25374,19.78947 45.24939,19.79187 45.24552,19.79419 45.24208,19.79642 45.24166,19.80234 45.24111,19.80809 45.24057,19.81333 45.24009,19.81822 45.23966,19.8232 45.24311,19.82054 45.24649,19.81813 45.25,19.81556 45.25411,19.81273 45.25755,19.81041 45.26033,19.80852 45.25731,19.80054 45.25507,19.7935 45.25368,19.78955(green,w7|G7)', '2');
