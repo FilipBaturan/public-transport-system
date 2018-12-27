@@ -34,9 +34,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             );
         }
 
-        AuthorityType type = AuthorityType.REGISTERED_USER;
+        return UserDetailsFactory.create(user);
 
-        return org.springframework.security.core.userdetails.User//
+        //AuthorityType type = AuthorityType.REGISTERED_USER;
+
+        /*return org.springframework.security.core.userdetails.User//
                 .withUsername(username)//+
                 .password(user.getPassword())
                 //.passwordEncoder(new BCryptPasswordEncoder()::encode)//
@@ -45,7 +47,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .accountLocked(false)//
                 .credentialsExpired(false)//
                 .disabled(false)//
-                .build();
+                .build();*/
 
         //return UserDetailsFactory.create(user);
     }
