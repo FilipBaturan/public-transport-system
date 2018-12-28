@@ -1,8 +1,10 @@
 package construction_and_testing.public_transport_system.service.security;
 
 import construction_and_testing.public_transport_system.domain.User;
+import construction_and_testing.public_transport_system.domain.enums.AuthorityType;
 import construction_and_testing.public_transport_system.domain.security.UserDetailsImpl;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -24,7 +26,8 @@ public class UserDetailsFactory {
      */
     public static UserDetailsImpl create(User user) {
         Collection<? extends GrantedAuthority> authorities;
-        List auth = new ArrayList<String>();
+        List<GrantedAuthority> auth = new ArrayList<GrantedAuthority>();
+        auth.add(user.getAuthorityType());
         try {
             //auth.add(new SimpleGrantedAuthority(user.getAuthorityType().toString()));
             //authorities = auth; //.map(a -> new SimpleGrantedAuthority(a.toString())).collect(Collectors.toList());
@@ -34,6 +37,8 @@ public class UserDetailsFactory {
             authorities = null;
         }
 
+        //AuthorityType auth = AuthorityType.REGISTERED_USER;
+
         return new UserDetailsImpl(
                 user.getId(),
                 user.getUsername(),
@@ -41,7 +46,7 @@ public class UserDetailsFactory {
                 user.getEmail(),
                 user.getTelephone(),
                 //user.getLastPasswordReset(),
-                authorities
+                auth
         );
     }
 }

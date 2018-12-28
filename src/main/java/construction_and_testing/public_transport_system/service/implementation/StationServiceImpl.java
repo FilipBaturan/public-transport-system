@@ -75,6 +75,7 @@ public class StationServiceImpl implements StationService {
                 .getValidator().validate(station);
         if (!violations.isEmpty()) {
             StringBuilder builder = new StringBuilder();
+            builder.append("Name ");
             for (ConstraintViolation<Station> violation : violations) {
                 builder.append(violation.getMessage());
                 builder.append("\n");

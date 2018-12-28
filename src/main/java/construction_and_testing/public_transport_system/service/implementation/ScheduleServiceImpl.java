@@ -6,11 +6,13 @@ import construction_and_testing.public_transport_system.repository.TransportLine
 import construction_and_testing.public_transport_system.service.definition.ScheduleService;
 import construction_and_testing.public_transport_system.util.GeneralException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
-import org.springframework.stereotype.Service;
 
+import org.springframework.stereotype.Service;
 import java.util.List;
 import java.util.Optional;
+
 
 @Service
 public class ScheduleServiceImpl implements ScheduleService {
@@ -28,8 +30,12 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     public Schedule findById(Long id) {
-        return scheduleRepository.findById(id).orElseThrow(() ->
-                new GeneralException("Requested schedule does not exist!", HttpStatus.BAD_REQUEST));
+        try{
+            return scheduleRepository.findById(id).orElseThrow(() ->
+                    new GeneralException("Requested schedule does not exist!", HttpStatus.BAD_REQUEST));
+        } catch (InvalidDataAccessApiUsageException e) {
+            throw new GeneralException("Invalid id!", HttpStatus.BAD_REQUEST);
+        }
     }
 
     @Override

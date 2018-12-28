@@ -11,13 +11,13 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
 import java.util.HashSet;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static construction_and_testing.public_transport_system.constants.TransportLineConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -99,8 +99,8 @@ public class TransportLineServiceImplIntegrationTest {
     public void save() {
         TransportLine transportLine =
                 new TransportLine(null, NEW_NAME, NEW_TYPE,
-                        new TransportLinePosition(null, "", null, true),
-                        new HashSet<>(), DB_ZONE, true);
+                        new TransportLinePosition(null, "45.23,26.24  44.74,36.12 (green|" + NEW_NAME + ")",
+                                null, true), new HashSet<>(), DB_ZONE, true);
         transportLine.getPositions().setTransportLine(transportLine);
         int countBefore = transportLineService.getAll().size();
 
@@ -111,6 +111,7 @@ public class TransportLineServiceImplIntegrationTest {
         assertThat(dbTransportLine.getName()).isEqualTo(transportLine.getName());
         assertThat(dbTransportLine.getType()).isEqualTo(transportLine.getType());
         assertThat(dbTransportLine.getPositions().getId()).isNotNull();
+        assertThat(dbTransportLine.getPositions().getContent().contains(NEW_NAME)).isTrue();
         assertThat(dbTransportLine.getSchedule().size()).isEqualTo(0);
         assertThat(dbTransportLine.getZone().getId()).isEqualTo(DB_ZONE.getId());
     }
@@ -118,7 +119,7 @@ public class TransportLineServiceImplIntegrationTest {
     /**
      * Test with null values
      */
-    @Test(expected = DataIntegrityViolationException.class)
+    @Test(expected = GeneralException.class)
     @Transactional
     public void saveWithNullValues() {
         TransportLine transportLine =
@@ -226,9 +227,9 @@ public class TransportLineServiceImplIntegrationTest {
     @Transactional
     public void saveWithMinLengthName() {
         TransportLine transportLine =
-                new TransportLine(null, NEW_NAME_MIN_LENGTH, NEW_TYPE,
-                        new TransportLinePosition(null, "", null, true),
-                        new HashSet<>(), DB_ZONE, true);
+                new TransportLine(null, NEW_NAME_MIN_LENGTH, NEW_TYPE, new TransportLinePosition(null,
+                        "45.23,26.24  44.74,36.12 (green|" + NEW_NAME_MIN_LENGTH + ")", null,
+                        true), new HashSet<>(), DB_ZONE, true);
         transportLine.getPositions().setTransportLine(transportLine);
         int countBefore = transportLineService.getAll().size();
 
@@ -239,6 +240,7 @@ public class TransportLineServiceImplIntegrationTest {
         assertThat(dbTransportLine.getName()).isEqualTo(transportLine.getName());
         assertThat(dbTransportLine.getType()).isEqualTo(transportLine.getType());
         assertThat(dbTransportLine.getPositions().getId()).isNotNull();
+        assertThat(dbTransportLine.getPositions().getContent().contains(NEW_NAME_MIN_LENGTH)).isTrue();
         assertThat(dbTransportLine.getSchedule().size()).isEqualTo(0);
         assertThat(dbTransportLine.getZone().getId()).isEqualTo(DB_ZONE.getId());
     }
@@ -250,9 +252,9 @@ public class TransportLineServiceImplIntegrationTest {
     @Transactional
     public void saveWithMaxLengthName() {
         TransportLine transportLine =
-                new TransportLine(null, NEW_NAME_MAX_LENGTH, NEW_TYPE,
-                        new TransportLinePosition(null, "", null, true),
-                        new HashSet<>(), DB_ZONE, true);
+                new TransportLine(null, NEW_NAME_MAX_LENGTH, NEW_TYPE, new TransportLinePosition(null,
+                        "45.23,26.24  44.74,36.12 (green|" + NEW_NAME_MAX_LENGTH + ")", null,
+                        true), new HashSet<>(), DB_ZONE, true);
         transportLine.getPositions().setTransportLine(transportLine);
         int countBefore = transportLineService.getAll().size();
 
@@ -263,6 +265,7 @@ public class TransportLineServiceImplIntegrationTest {
         assertThat(dbTransportLine.getName()).isEqualTo(transportLine.getName());
         assertThat(dbTransportLine.getType()).isEqualTo(transportLine.getType());
         assertThat(dbTransportLine.getPositions().getId()).isNotNull();
+        assertThat(dbTransportLine.getPositions().getContent().contains(NEW_NAME_MAX_LENGTH)).isTrue();
         assertThat(dbTransportLine.getSchedule().size()).isEqualTo(0);
         assertThat(dbTransportLine.getZone().getId()).isEqualTo(DB_ZONE.getId());
     }
@@ -301,6 +304,11 @@ public class TransportLineServiceImplIntegrationTest {
 
         assertThat(transportLines).isNotNull();
         assertThat(transportLines.size()).isEqualTo(NEW_TRANSPORT_LINES.size());
+        transportLines.forEach(transportLine -> {
+            assertThat(transportLine.getId()).isNotNull();
+            assertThat(transportLine.getName()).isIn(NEW_TRANSPORT_LINES
+                    .stream().map(TransportLine::getName).collect(Collectors.toList()));
+        });
         assertThat(scheduleRepository.findAll().size()).isEqualTo(countBeforeSchedule - DEL_SCHEDULE_COUNT);
         vehicleRepository.findAll().forEach(vehicle -> assertThat(vehicle.getCurrentLine()).isNotNull());
         assertThat(ticketRepository.findAll().size()).isEqualTo(countBeforeTicket);

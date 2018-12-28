@@ -23,7 +23,7 @@ public class TransportLinePosition implements Serializable {
     @Column(nullable = false)
     private String content;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     private TransportLine transportLine;
 
     @Column(nullable = false, name = "active")

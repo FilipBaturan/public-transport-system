@@ -32,6 +32,9 @@ public class TransportLineServiceImplUnitTest {
     private TransportLineRepository transportLineRepository;
 
     @MockBean
+    private TransportLinePositionRepository transportLinePositionRepository;
+
+    @MockBean
     private ScheduleRepository scheduleRepository;
 
     @MockBean
@@ -87,6 +90,14 @@ public class TransportLineServiceImplUnitTest {
             return null;
         });
 
+        Mockito.when(transportLinePositionRepository.save(any(TransportLinePosition.class))).then(invocation -> {
+            Object[] arguments = invocation.getArguments();
+            if (arguments != null && arguments.length > 0 && arguments[0] != null) {
+                return arguments[0];
+            }
+            return null;
+        });
+
         Mockito.when(scheduleRepository.findAll())
                 .then(invocationOnMock -> this.schedules.stream()
                         .map(Schedule::new)
@@ -122,6 +133,8 @@ public class TransportLineServiceImplUnitTest {
             }
             return null;
         }).when(scheduleRepository).deleteAll(any());
+
+        Mockito.when(scheduleRepository.findAllById(any())).thenReturn(new ArrayList<>());
 
         Mockito.when(ticketRepository.findAll())
                 .then(invocationOnMock -> this.tickets.stream()
@@ -205,8 +218,9 @@ public class TransportLineServiceImplUnitTest {
     @Test
     public void save() {
         TransportLine transportLine =
-                new TransportLine(null, NEW_NAME, NEW_TYPE,
-                        new TransportLinePosition(null, "", null, true), new HashSet<>(), DB_ZONE, true);
+                new TransportLine(null, NEW_NAME, NEW_TYPE, new TransportLinePosition(null,
+                        "45.23,26.24  44.74,36.12 (green|" + NEW_NAME + ")", null, true),
+                        new HashSet<>(), DB_ZONE, true);
         transportLine.getPositions().setTransportLine(transportLine);
         int countBefore = transportLineService.getAll().size();
 
@@ -217,10 +231,14 @@ public class TransportLineServiceImplUnitTest {
         assertThat(dbTransportLine.getName()).isEqualTo(transportLine.getName());
         assertThat(dbTransportLine.getType()).isEqualTo(transportLine.getType());
         assertThat(dbTransportLine.getPositions().getId()).isNotNull();
+        assertThat(dbTransportLine.getPositions().getContent().contains(NEW_NAME)).isTrue();
         assertThat(dbTransportLine.getSchedule().size()).isEqualTo(0);
         assertThat(dbTransportLine.getZone().getId()).isEqualTo(DB_ZONE.getId());
 
         Mockito.verify(transportLineRepository, Mockito.times(1)).save(any(TransportLine.class));
+        Mockito.verify(transportLinePositionRepository, Mockito.times(1))
+                .save(any(TransportLinePosition.class));
+        Mockito.verify(scheduleRepository, Mockito.times(1)).findAllById(any());
     }
 
     /**
@@ -339,9 +357,9 @@ public class TransportLineServiceImplUnitTest {
     @Test
     public void saveWithMinLengthName() {
         TransportLine transportLine =
-                new TransportLine(null, NEW_NAME_MIN_LENGTH, NEW_TYPE,
-                        new TransportLinePosition(null, "", null, true),
-                        new HashSet<>(), DB_ZONE, true);
+                new TransportLine(null, NEW_NAME_MIN_LENGTH, NEW_TYPE, new TransportLinePosition(null,
+                        "45.23,26.24  44.74,36.12 (green|" + NEW_NAME_MIN_LENGTH + ")", null,
+                        true), new HashSet<>(), DB_ZONE, true);
         transportLine.getPositions().setTransportLine(transportLine);
         int countBefore = transportLineService.getAll().size();
 
@@ -352,10 +370,14 @@ public class TransportLineServiceImplUnitTest {
         assertThat(dbTransportLine.getName()).isEqualTo(transportLine.getName());
         assertThat(dbTransportLine.getType()).isEqualTo(transportLine.getType());
         assertThat(dbTransportLine.getPositions().getId()).isNotNull();
+        assertThat(dbTransportLine.getPositions().getContent().contains(NEW_NAME_MIN_LENGTH)).isTrue();
         assertThat(dbTransportLine.getSchedule().size()).isEqualTo(0);
         assertThat(dbTransportLine.getZone().getId()).isEqualTo(DB_ZONE.getId());
 
         Mockito.verify(transportLineRepository, Mockito.times(1)).save(any(TransportLine.class));
+        Mockito.verify(transportLinePositionRepository, Mockito.times(1))
+                .save(any(TransportLinePosition.class));
+        Mockito.verify(scheduleRepository, Mockito.times(1)).findAllById(any());
     }
 
     /**
@@ -364,9 +386,9 @@ public class TransportLineServiceImplUnitTest {
     @Test
     public void saveWithMaxLengthName() {
         TransportLine transportLine =
-                new TransportLine(null, NEW_NAME_MAX_LENGTH, NEW_TYPE,
-                        new TransportLinePosition(null, "", null, true),
-                        new HashSet<>(), DB_ZONE, true);
+                new TransportLine(null, NEW_NAME_MAX_LENGTH, NEW_TYPE, new TransportLinePosition(null,
+                        "45.23,26.24  44.74,36.12 (green|" + NEW_NAME_MAX_LENGTH + ")", null,
+                        true), new HashSet<>(), DB_ZONE, true);
         transportLine.getPositions().setTransportLine(transportLine);
         int countBefore = transportLineService.getAll().size();
 
@@ -377,10 +399,14 @@ public class TransportLineServiceImplUnitTest {
         assertThat(dbTransportLine.getName()).isEqualTo(transportLine.getName());
         assertThat(dbTransportLine.getType()).isEqualTo(transportLine.getType());
         assertThat(dbTransportLine.getPositions().getId()).isNotNull();
+        assertThat(dbTransportLine.getPositions().getContent().contains(NEW_NAME_MAX_LENGTH)).isTrue();
         assertThat(dbTransportLine.getSchedule().size()).isEqualTo(0);
         assertThat(dbTransportLine.getZone().getId()).isEqualTo(DB_ZONE.getId());
 
         Mockito.verify(transportLineRepository, Mockito.times(1)).save(any(TransportLine.class));
+        Mockito.verify(transportLinePositionRepository, Mockito.times(1))
+                .save(any(TransportLinePosition.class));
+        Mockito.verify(scheduleRepository, Mockito.times(1)).findAllById(any());
     }
 
     /**
@@ -426,6 +452,12 @@ public class TransportLineServiceImplUnitTest {
 
         assertThat(transportLines).isNotNull();
         assertThat(transportLines.size()).isEqualTo(NEW_TRANSPORT_LINES.size());
+        assertThat(transportLines.size()).isEqualTo(NEW_TRANSPORT_LINES.size());
+        transportLines.forEach(transportLine -> {
+            assertThat(transportLine.getId()).isNotNull();
+            assertThat(transportLine.getName()).isIn(NEW_TRANSPORT_LINES
+                    .stream().map(TransportLine::getName).collect(Collectors.toList()));
+        });
         assertThat(scheduleRepository.findAll().size()).isEqualTo(DB_SCHEDULES_COUNT - DEL_SCHEDULE_COUNT);
         vehicleRepository.findAll().forEach(vehicle -> assertThat(vehicle.getCurrentLine()).isNotNull());
         assertThat(ticketRepository.findAll().size()).isEqualTo(DB_TICKET_COUNT);

@@ -43,24 +43,16 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public Vehicle save(Vehicle vehicle) {
-        try {
-            this.validate(vehicle);
+        this.validate(vehicle);
+        if (vehicle.getCurrentLine() != null) {
             vehicle.setCurrentLine(transportLineRepository.findById(vehicle.getCurrentLine().getId())
-                    .orElseThrow(() -> new GeneralException("Invalid transport line data associated!", HttpStatus.BAD_REQUEST)));
+                    .orElseThrow(() -> new GeneralException("Invalid transport line data associated!",
+                            HttpStatus.BAD_REQUEST)));
             if (vehicle.getType() != vehicle.getCurrentLine().getType()) {
                 throw new GeneralException("Invalid transport line and vehicle types!", HttpStatus.BAD_REQUEST);
             }
-            return vehicleRepository.save(vehicle);
-        } catch (NullPointerException e) {
-            throw new GeneralException("Invalid transport line and vehicle types!", HttpStatus.BAD_REQUEST);
         }
-
-        /***
-         *  TREBA DA SE PROVERI DA LI SU ISTOG TIPA VOZILO I ZUTA I DUZINA IMENA
-         *  TESTIRATI NA FRONTU KAD OBRISE SVE RUTE NA MAPI
-         *  DODATI NA FRONTU DA MOZE DA SE MENJA NAZI I TIP RUTE
-         *  POPRAVITI TOSTER NA FRONTU DA NE IZBACUJE JEDNU TE ISTU GRESKU
-         */
+        return vehicleRepository.save(vehicle);
     }
 
     @Override
@@ -83,6 +75,7 @@ public class VehicleServiceImpl implements VehicleService {
                 .getValidator().validate(vehicle);
         if (!violations.isEmpty()) {
             StringBuilder builder = new StringBuilder();
+            builder.append("Name ");
             for (ConstraintViolation<Vehicle> violation : violations) {
                 builder.append(violation.getMessage());
                 builder.append("\n");

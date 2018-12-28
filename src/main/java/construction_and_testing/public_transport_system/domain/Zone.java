@@ -92,6 +92,7 @@ public class Zone implements Serializable {
 
     public void setLines(Set<TransportLine> lines) {
         this.lines = lines;
+        this.lines.forEach(transportLine -> transportLine.setZone(this));
     }
 
     @Override
