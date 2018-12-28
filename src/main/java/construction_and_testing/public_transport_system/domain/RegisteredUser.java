@@ -24,7 +24,6 @@ public class RegisteredUser extends User implements Serializable {
     @Column
     private String document;
 
-
     @Column
     private String image;
 
@@ -42,6 +41,8 @@ public class RegisteredUser extends User implements Serializable {
         this.reservations = reservations;
         this.balance = balance;
         this.document = document;
+        this.setActive(true);
+        this.image = "";
         //this.image = image;
     }
 

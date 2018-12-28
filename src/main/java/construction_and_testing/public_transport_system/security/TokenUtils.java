@@ -1,6 +1,5 @@
 package construction_and_testing.public_transport_system.security;
 
-import construction_and_testing.public_transport_system.domain.security.UserDetailsImpl;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -10,6 +9,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.StandardCharsets;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -55,19 +55,11 @@ public class TokenUtils {
      * @return String with JSON Web Token
      */
     private String generateToken(Map<String, Object> claims) {
-        try {
-            return Jwts.builder()
-                    .setClaims(claims)
-                    .setExpiration(generateExpirationDate())
-                    .signWith(SignatureAlgorithm.HS512, secret.getBytes("UTF-8"))
-                    .compact();
-        } catch (UnsupportedEncodingException ex) {
-            return Jwts.builder()
-                    .setClaims(claims)
-                    .setExpiration(generateExpirationDate())
-                    .signWith(SignatureAlgorithm.HS512, secret)
-                    .compact();
-        }
+        return Jwts.builder()
+                .setClaims(claims)
+                .setExpiration(generateExpirationDate())
+                .signWith(SignatureAlgorithm.HS512, secret.getBytes(StandardCharsets.UTF_8))
+                .compact();
     }
 
     /**
@@ -101,7 +93,7 @@ public class TokenUtils {
         Claims claims;
         try {
             claims = Jwts.parser()
-                    .setSigningKey(secret.getBytes("UTF-8"))
+                    .setSigningKey(secret.getBytes(StandardCharsets.UTF_8))
                     .parseClaimsJws(token)
                     .getBody();
         } catch (Exception e) {
@@ -118,7 +110,7 @@ public class TokenUtils {
      * @return true if token is valid
      */
     boolean validateToken(String token, UserDetails userDetails) {
-        final UserDetailsImpl user = (UserDetailsImpl) userDetails;
+        //final UserDetailsImpl user = (UserDetailsImpl) userDetails;
         final String username = getUsernameFromToken(token);
         final Date created = getCreatedDateFromToken(token);
         return username.equals(userDetails.getUsername()) && !(isTokenExpired(token));// && !(isCreatedBeforeLastPasswordReset(created, user.getLastPasswordReset()));

@@ -86,23 +86,20 @@ public class TransportLineController extends ValidationController {
         return new ResponseEntity<>(TransportLineConverter.fromEntityList(transportLineService
                 .replaceAll(TransportLineConverter.toEntityList(
                         mapper.readValue(transportLines, TransportLineColletionDTO.class).getTransportLines(),
-                        TransportLine::new)), TransportLineDTO::new), HttpStatus.ACCEPTED);
+                        TransportLine::new)), TransportLineDTO::new), HttpStatus.OK);
     }
 
     /**
-     * DELETE /api/transportLine
+     * DELETE /api/transportLine/{id}
      *
-     * @param transportLine that needs to be deleted
+     * @param id of transport line that needs to be deleted
      * @return message about action results
      */
-    @DeleteMapping()
-    public ResponseEntity<String> delete(@RequestBody String transportLine) throws IOException,
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> delete(@PathVariable String id) throws IOException,
             ValidationException {
         logger.info("Deleting transportLine with id at time {}.", Calendar.getInstance().getTime());
-        validateJSON(transportLine, "transportLineCollection.json");
-        ObjectMapper mapper = new ObjectMapper();
-        transportLineService.remove((new TransportLine(mapper.readValue(transportLine,
-                TransportLineDTO.class))).getId());
+        transportLineService.remove(Long.parseLong(id));
         return new ResponseEntity<>("TransportLine successfully deleted!", HttpStatus.OK);
     }
 }

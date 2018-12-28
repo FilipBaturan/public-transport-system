@@ -7,7 +7,6 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Collection;
 import java.util.Objects;
 
 /**
@@ -49,8 +48,9 @@ public class User implements Serializable {
     @Column(nullable = false, name = "active")
     private boolean active;
 
-//    @ElementCollection(targetClass = AuthorityType.class, fetch = FetchType.EAGER)
+    //@ElementCollection(targetClass = AuthorityType.class, fetch = FetchType.EAGER)
     @Column(nullable = false, name = "authority")
+
     private AuthorityType authorityType;
 
     public User() {
@@ -83,7 +83,7 @@ public class User implements Serializable {
     }
 
     public User(Long id, String name, String lastName, String username, String password, String email, String telephone,
-UsersDocumentsStatus confirmation, AuthorityType authorityType) {
+                UsersDocumentsStatus confirmation, AuthorityType authorityType) {
 
         this.id = id;
         this.name = name;

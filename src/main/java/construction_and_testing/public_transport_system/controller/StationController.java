@@ -68,7 +68,7 @@ public class StationController extends ValidationController {
         ObjectMapper mapper = new ObjectMapper();
         Station temp = new Station(mapper.readValue(station, StationDTO.class));
         temp.getPosition().setStation(temp);
-        return new ResponseEntity<>(new StationDTO(stationService.save(temp)), HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(new StationDTO(stationService.save(temp)), HttpStatus.OK);
     }
 
     /**
@@ -85,21 +85,19 @@ public class StationController extends ValidationController {
         ObjectMapper mapper = new ObjectMapper();
         return new ResponseEntity<>(StationConverter.fromEntityList(stationService
                 .replaceAll(StationConverter.toEntityList(mapper.readValue(stations, StationCollectionDTO.class)
-                        .getStations(), Station::new)), StationDTO::new), HttpStatus.ACCEPTED);
+                        .getStations(), Station::new)), StationDTO::new), HttpStatus.OK);
     }
 
     /**
      * DELETE /api/station
      *
-     * @param station that needs to be deleted
+     * @param id of station that needs to be deleted
      * @return message about action results
      */
-    @DeleteMapping()
-    public ResponseEntity<String> delete(@RequestBody String station) throws IOException, ValidationException {
+    @DeleteMapping("{id}")
+    public ResponseEntity<String> delete(@PathVariable String id) throws ValidationException {
         logger.info("Deleting station at time {}.", Calendar.getInstance().getTime());
-        validateJSON(station, "station.json");
-        ObjectMapper mapper = new ObjectMapper();
-        stationService.remove((new Station(mapper.readValue(station, StationDTO.class))).getId());
+        stationService.remove(Long.parseLong(id));
         return new ResponseEntity<>("Station successfully deleted!", HttpStatus.OK);
     }
 

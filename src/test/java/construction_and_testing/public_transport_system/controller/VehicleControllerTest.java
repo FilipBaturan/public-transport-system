@@ -1,6 +1,7 @@
 package construction_and_testing.public_transport_system.controller;
 
 import construction_and_testing.public_transport_system.domain.DTO.VehicleDTO;
+import construction_and_testing.public_transport_system.domain.DTO.VehicleSaverDTO;
 import construction_and_testing.public_transport_system.domain.Vehicle;
 import construction_and_testing.public_transport_system.service.definition.VehicleService;
 import construction_and_testing.public_transport_system.util.TestUtil;
@@ -16,8 +17,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
-
-import javax.transaction.Transactional;
 
 import static construction_and_testing.public_transport_system.constants.VehicleConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -74,7 +73,7 @@ public class VehicleControllerTest {
         assertThat(body.getId()).isEqualTo(DB_ID);
         assertThat(body.getName()).isEqualTo(DB_NAME);
         assertThat(body.getType()).isEqualTo(DB_TYPE);
-        assertThat(body.getCurrentLine()).isEqualTo(DB_LINE);
+        assertThat(body.getCurrentLine().getId()).isEqualTo(DB_LINE);
         assertThat(body.isActive()).isEqualTo(DB_ACTIVE);
     }
 
@@ -97,9 +96,8 @@ public class VehicleControllerTest {
      * Test valid vehicle saving
      */
     @Test
-    @Transactional
     public void save() throws Exception {
-        VehicleDTO vehicle = new VehicleDTO(new Vehicle(null, NEW_NAME, NEW_TYPE, NEW_LINE, true));
+        VehicleSaverDTO vehicle = new VehicleSaverDTO(new Vehicle(null, NEW_NAME, NEW_TYPE, NEW_LINE, true));
         String jsonVehicle = TestUtil.json(vehicle);
 
         ResponseEntity<VehicleDTO> result = testRestTemplate.postForEntity(this.URL, jsonVehicle, VehicleDTO.class);
@@ -110,7 +108,7 @@ public class VehicleControllerTest {
         assertThat(body).isNotNull();
         assertThat(body.getName()).isEqualTo(vehicle.getName());
         assertThat(body.getType()).isEqualTo(vehicle.getType());
-        assertThat(body.getCurrentLine()).isEqualTo(vehicle.getCurrentLine());
+        assertThat(body.getCurrentLine().getId()).isEqualTo(vehicle.getCurrentLine());
         assertThat(body.isActive()).isEqualTo(vehicle.isActive());
 
     }
@@ -119,9 +117,9 @@ public class VehicleControllerTest {
      * Test with invalid vehicle type and transport line type
      */
     @Test
-    @Transactional
     public void saveWithInvalidType() throws Exception {
-        VehicleDTO vehicle = new VehicleDTO(new Vehicle(null, NEW_NAME, NEW_TYPE_INVALID, NEW_LINE, true));
+        VehicleSaverDTO vehicle = new VehicleSaverDTO(
+                new Vehicle(null, NEW_NAME, NEW_TYPE_INVALID, NEW_LINE, true));
         String jsonVehicle = TestUtil.json(vehicle);
 
         ResponseEntity<String> result = testRestTemplate.postForEntity(this.URL, jsonVehicle, String.class);
@@ -137,9 +135,9 @@ public class VehicleControllerTest {
      * Test with invalid transport line associated
      */
     @Test
-    @Transactional
     public void saveWithInvalidLine() throws Exception {
-        VehicleDTO vehicle = new VehicleDTO(new Vehicle(null, NEW_NAME, NEW_TYPE_INVALID, NEW_LINE_INVALID, true));
+        VehicleSaverDTO vehicle = new VehicleSaverDTO(
+                new Vehicle(null, NEW_NAME, NEW_TYPE_INVALID, NEW_LINE_INVALID, true));
         String jsonVehicle = TestUtil.json(vehicle);
 
         ResponseEntity<String> result = testRestTemplate.postForEntity(this.URL, jsonVehicle, String.class);
@@ -155,9 +153,9 @@ public class VehicleControllerTest {
      * Test with null transport line
      */
     @Test
-    @Transactional
     public void saveWithNullLine() throws Exception {
-        VehicleDTO vehicle = new VehicleDTO(new Vehicle(null, NEW_NAME, NEW_TYPE_INVALID, null, true));
+        VehicleSaverDTO vehicle = new VehicleSaverDTO(
+                new Vehicle(null, NEW_NAME, NEW_TYPE_INVALID, null, true));
         String jsonVehicle = TestUtil.json(vehicle);
 
         ResponseEntity<String> result = testRestTemplate.postForEntity(this.URL, jsonVehicle, String.class);
@@ -173,9 +171,9 @@ public class VehicleControllerTest {
      * Test with null values
      */
     @Test
-    @Transactional
     public void saveWithNullValues() throws Exception {
-        VehicleDTO vehicle = new VehicleDTO(new Vehicle(null, null, null, NEW_LINE, true));
+        VehicleSaverDTO vehicle = new VehicleSaverDTO(
+                new Vehicle(null, null, null, NEW_LINE, true));
         String jsonVehicle = TestUtil.json(vehicle);
 
         ResponseEntity<String> result = testRestTemplate.postForEntity(this.URL, jsonVehicle, String.class);
@@ -188,24 +186,95 @@ public class VehicleControllerTest {
     }
 
     /**
+     * Test with to short name value
+     */
+    @Test
+    public void saveWithShortName() throws Exception {
+        VehicleSaverDTO vehicle = new VehicleSaverDTO(
+                new Vehicle(null, NEW_NAME_SHORT_LENGTH, NEW_TYPE, NEW_LINE, true));
+        String jsonVehicle = TestUtil.json(vehicle);
+
+        ResponseEntity<String> result = testRestTemplate.postForEntity(this.URL, jsonVehicle, String.class);
+
+        String body = result.getBody();
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(body).isNotNull();
+    }
+
+    /**
+     * Test with too long name value
+     */
+    @Test
+    public void saveWithLongName() throws Exception {
+        VehicleSaverDTO vehicle =
+                new VehicleSaverDTO(new Vehicle(null, NEW_NAME_LONG_LENGTH, NEW_TYPE, NEW_LINE, true));
+        String jsonVehicle = TestUtil.json(vehicle);
+
+        ResponseEntity<String> result = testRestTemplate.postForEntity(this.URL, jsonVehicle, String.class);
+
+        String body = result.getBody();
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(body).isNotNull();
+    }
+
+    /**
+     * Test with min length name value
+     */
+    @Test
+    public void saveWithMinLengthName() throws Exception {
+        VehicleSaverDTO vehicle = new VehicleSaverDTO(
+                new Vehicle(null, NEW_NAME_MIN_LENGTH, NEW_TYPE, NEW_LINE, true));
+        String jsonVehicle = TestUtil.json(vehicle);
+
+        ResponseEntity<VehicleDTO> result = testRestTemplate.postForEntity(this.URL, jsonVehicle, VehicleDTO.class);
+
+        VehicleDTO body = result.getBody();
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(body).isNotNull();
+        assertThat(body.getName()).isEqualTo(vehicle.getName());
+        assertThat(body.getType()).isEqualTo(vehicle.getType());
+        assertThat(body.getCurrentLine().getId()).isEqualTo(vehicle.getCurrentLine());
+        assertThat(body.isActive()).isEqualTo(vehicle.isActive());
+    }
+
+    /**
+     * Test with max length name value
+     */
+    @Test
+    public void saveWithMaxLengthName() throws Exception {
+        VehicleSaverDTO vehicle = new VehicleSaverDTO(
+                new Vehicle(null, NEW_NAME_MAX_LENGTH, NEW_TYPE, NEW_LINE, true));
+        String jsonVehicle = TestUtil.json(vehicle);
+
+        ResponseEntity<VehicleDTO> result = testRestTemplate.postForEntity(this.URL, jsonVehicle, VehicleDTO.class);
+
+        VehicleDTO body = result.getBody();
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(body).isNotNull();
+        assertThat(body.getName()).isEqualTo(vehicle.getName());
+        assertThat(body.getType()).isEqualTo(vehicle.getType());
+        assertThat(body.getCurrentLine().getId()).isEqualTo(vehicle.getCurrentLine());
+        assertThat(body.isActive()).isEqualTo(vehicle.isActive());
+    }
+
+
+    /**
      * Test valid vehicle deletion
      */
     @Test
-    public void delete() throws Exception {
-        VehicleDTO vehicle = new VehicleDTO(new Vehicle(DEL_ID, DB_NAME, DB_TYPE, DB_TR, DB_ACTIVE));
-        String jsonVehicle = TestUtil.json(vehicle);
-
-        testRestTemplate.delete(this.URL, jsonVehicle, String.class);
+    public void delete() {
+        testRestTemplate.delete(this.URL + "/" + DEL_ID, String.class);
     }
 
     /**
      * Test vehicle deletion that does not exist in database
      */
     @Test
-    public void deleteWithInvalidId() throws Exception {
-        VehicleDTO vehicle = new VehicleDTO(new Vehicle(DEL_ID_INVALID, DB_NAME, DB_TYPE, DB_TR, DB_ACTIVE));
-        String jsonVehicle = TestUtil.json(vehicle);
-
-        testRestTemplate.delete(this.URL, jsonVehicle, String.class);
+    public void deleteWithInvalidId() {
+        testRestTemplate.delete(this.URL + "/" + DEL_ID_INVALID, String.class);
     }
 }

@@ -8,7 +8,6 @@ import java.util.List;
 public interface ReservationService {
 
     /**
-     *
      * @param id of the user
      * @returns listOfUsersReservation
      */

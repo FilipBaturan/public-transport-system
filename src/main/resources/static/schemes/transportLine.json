@@ -73,7 +73,10 @@
     },
     "schedule": {
       "$id": "#/properties/schedule",
-      "type": "array",
+      "type": [
+        "array",
+        "null"
+      ],
       "title": "Schedule",
       "description": "Transport line schedule",
       "minItems": 0,
@@ -97,7 +100,10 @@
     },
     "zone": {
       "$id": "#/properties/zone",
-      "type": "integer",
+      "type": [
+        "integer",
+        "null"
+      ],
       "title": "Zone",
       "description": "Transport line zone",
       "default": 0,

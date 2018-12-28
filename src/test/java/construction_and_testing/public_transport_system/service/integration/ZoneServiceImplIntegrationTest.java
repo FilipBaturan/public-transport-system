@@ -9,6 +9,7 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
+import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
@@ -20,6 +21,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class ZoneServiceImplIntegrationTest {
 
     @Autowired
@@ -177,7 +179,6 @@ public class ZoneServiceImplIntegrationTest {
      * Test with not unique name
      */
     @Test(expected = GeneralException.class)
-    @Transactional
     public void saveWithInvalidName() {
         Zone zone1 = new Zone(null, NEW_NAME, new HashSet<>(), true);
         Zone zone2 = new Zone(null, NEW_NAME, NEW_LINES, true);
@@ -189,6 +190,87 @@ public class ZoneServiceImplIntegrationTest {
         assertThat(dbZone2).isNotNull();
 
     }
+
+    /**
+     * Test with to short name value
+     */
+    @Test(expected = GeneralException.class)
+    @Transactional
+    public void saveWithShortName() {
+        Zone zone = new Zone(null, NEW_NAME_SHORT_LENGTH, NEW_LINES, true);
+        zone.getLines().forEach((TransportLine t) -> t.setZone(zone));
+        int countBefore = zoneService.getAll().size();
+
+        Zone dbZone = zoneService.save(zone);
+        assertThat(dbZone).isNotNull();
+
+        assertThat(zoneService.getAll()).hasSize(countBefore + 1);
+
+        assertThat(dbZone.getName()).isEqualTo(zone.getName());
+        assertThat(dbZone.isActive()).isEqualTo(zone.isActive());
+        assertThat(dbZone.getLines()).isEqualTo(zone.getLines());
+    }
+
+    /**
+     * Test with too long name value
+     */
+    @Test(expected = GeneralException.class)
+    @Transactional
+    public void saveWithLongName() {
+        Zone zone = new Zone(null, NEW_NAME_LONG_LENGTH, NEW_LINES, true);
+        zone.getLines().forEach((TransportLine t) -> t.setZone(zone));
+        int countBefore = zoneService.getAll().size();
+
+        Zone dbZone = zoneService.save(zone);
+        assertThat(dbZone).isNotNull();
+
+        assertThat(zoneService.getAll()).hasSize(countBefore + 1);
+
+        assertThat(dbZone.getName()).isEqualTo(zone.getName());
+        assertThat(dbZone.isActive()).isEqualTo(zone.isActive());
+        assertThat(dbZone.getLines()).isEqualTo(zone.getLines());
+    }
+
+    /**
+     * Test with min length name value
+     */
+    @Test
+    @Transactional
+    public void saveWithMinLengthName() {
+        Zone zone = new Zone(null, NEW_NAME_MIN_LENGTH, NEW_LINES, true);
+        zone.getLines().forEach((TransportLine t) -> t.setZone(zone));
+        int countBefore = zoneService.getAll().size();
+
+        Zone dbZone = zoneService.save(zone);
+        assertThat(dbZone).isNotNull();
+
+        assertThat(zoneService.getAll()).hasSize(countBefore + 1);
+
+        assertThat(dbZone.getName()).isEqualTo(zone.getName());
+        assertThat(dbZone.isActive()).isEqualTo(zone.isActive());
+        assertThat(dbZone.getLines()).isEqualTo(zone.getLines());
+    }
+
+    /**
+     * Test with max length name value
+     */
+    @Test
+    @Transactional
+    public void saveWithMaxLengthName() {
+        Zone zone = new Zone(null, NEW_NAME_MAX_LENGTH, NEW_LINES, true);
+        zone.getLines().forEach((TransportLine t) -> t.setZone(zone));
+        int countBefore = zoneService.getAll().size();
+
+        Zone dbZone = zoneService.save(zone);
+        assertThat(dbZone).isNotNull();
+
+        assertThat(zoneService.getAll()).hasSize(countBefore + 1);
+
+        assertThat(dbZone.getName()).isEqualTo(zone.getName());
+        assertThat(dbZone.isActive()).isEqualTo(zone.isActive());
+        assertThat(dbZone.getLines()).isEqualTo(zone.getLines());
+    }
+
 
     /**
      * Test valid zone deletion

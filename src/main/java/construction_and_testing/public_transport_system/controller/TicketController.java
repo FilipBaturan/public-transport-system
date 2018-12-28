@@ -20,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
 import java.time.LocalDate;
+import java.time.format.DateTimeParseException;
 import java.util.*;
 
 @RestController
@@ -30,6 +31,7 @@ public class TicketController {
 
     @Autowired
     private TicketService ticketService;
+
 
     @Autowired
     private ReservationService reservationService;
@@ -91,21 +93,20 @@ public class TicketController {
     }
 
     @GetMapping("/getTicketsForUser/{id}")
-    public ResponseEntity<List<TicketReportDTO>> getTicketsForUser(@PathVariable("id") String id)
-    {
+    public ResponseEntity<List<TicketReportDTO>> getTicketsForUser(@PathVariable("id") String id) {
         List<TicketReportDTO> ticketList = new ArrayList<TicketReportDTO>();
 
         List<Reservation> reservationList;
 
         try {
-           reservationList  =  reservationService.getReservationsForUser(Long.parseLong(id) );
+            reservationList = reservationService.getReservationsForUser(Long.parseLong(id));
 
         } catch (NumberFormatException e) {
             throw new GeneralException("Bad format of requested id!", HttpStatus.BAD_REQUEST);
         }
 
-        for (Reservation r: reservationList) {
-            for (Ticket t: r.getTickets()) {
+        for (Reservation r : reservationList) {
+            for (Ticket t : r.getTickets()) {
                 ticketList.add(TicketConverter.fromEntity(t));
             }
 
@@ -114,31 +115,32 @@ public class TicketController {
     }
 
     @PutMapping("/updateTicket")
-    ResponseEntity<Boolean> updateValidator(@RequestBody TicketReportDTO ticketDTO){
+    ResponseEntity<Boolean> updateValidator(@RequestBody TicketReportDTO ticketDTO) {
 
-        Optional<Ticket> optionalTicket = Optional.of(this.ticketService.findTicketById(ticketDTO.getId()) );
-
-        if (!optionalTicket.isPresent())
-            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
-        else
-        {
+        try {
+            Optional<Ticket> optionalTicket = Optional.of(this.ticketService.findTicketById(ticketDTO.getId()));
             ModelMapper mapper = new ModelMapper();
             mapper.map(ticketDTO, optionalTicket.get());
             this.ticketService.saveTicket(optionalTicket.get());
             return new ResponseEntity<>(true, HttpStatus.OK);
+        } catch (GeneralException e) {
+            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
         }
 
     }
 
     @GetMapping("/reprot/{stringDate1}/{stringDate2}")
-    ResponseEntity<Map<VehicleType, Integer>> getReport(@PathVariable String stringDate1, @PathVariable String stringDate2)
-    {
-        LocalDate date1 = LocalDate.parse(stringDate1);
-        LocalDate date2 = LocalDate.parse(stringDate2);
+    ResponseEntity<Map<VehicleType, Integer>> getReport(@PathVariable String stringDate1, @PathVariable String stringDate2) {
+        try {
+            LocalDate date1 = LocalDate.parse(stringDate1);
+            LocalDate date2 = LocalDate.parse(stringDate2);
 
-        Map<VehicleType, Integer> prices = this.ticketService.getReport(date1, date2);
+            Map<VehicleType, Integer> prices = this.ticketService.getReport(date1, date2);
+            return new ResponseEntity<>(prices, HttpStatus.OK);
+        } catch (DateTimeParseException de) {
+            return new ResponseEntity<>(new HashMap<>(), HttpStatus.NOT_ACCEPTABLE);
+        }
 
-        return new ResponseEntity<>(prices, HttpStatus.OK);
 
     }
 

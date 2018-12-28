@@ -35,10 +35,10 @@ public class NewsController {
      * @return all news
      */
     @GetMapping
-    @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<List<News>> getAll() {
+    //@PreAuthorize("isAuthenticated()")
+    public ResponseEntity<List<NewsDTO>> getAll() {
         logger.info("Fetching all news...");
-        List<News> allNews = newsService.getAll();
+        List<NewsDTO> allNews = NewsConverter.fromEntityList(newsService.getAll(), e -> NewsConverter.fromEntity(e));
         return new ResponseEntity<>(allNews, HttpStatus.OK);
     }
 

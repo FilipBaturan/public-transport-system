@@ -47,7 +47,7 @@ public class Ticket implements Serializable {
     public Ticket() {
     }
 
-    public Ticket(long id, LocalDateTime purchaseDate, LocalDateTime expiryDate, String token, boolean active,
+    public Ticket(Long id, LocalDateTime purchaseDate, LocalDateTime expiryDate, String token, boolean active,
                   PricelistItem priceList, TransportLine line, Reservation reservation) {
         this.id = id;
         this.purchaseDate = purchaseDate;
@@ -57,6 +57,16 @@ public class Ticket implements Serializable {
         this.priceListItem = priceList;
         this.line = line;
         this.reservation = reservation;
+    }
+
+    public Ticket(Ticket ticket) {
+        this.id = ticket.getId();
+        this.purchaseDate = ticket.getPurchaseDate();
+        this.expiryDate = ticket.getExpiryDate();
+        this.active = ticket.isActive();
+        this.priceListItem = ticket.getPriceList();
+        this.reservation = ticket.getReservation();
+        this.line = new TransportLine(ticket.getLine());
     }
 
     public static long getSerialVersionUID() {

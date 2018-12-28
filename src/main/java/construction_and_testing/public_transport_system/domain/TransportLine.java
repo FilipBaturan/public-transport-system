@@ -2,11 +2,13 @@ package construction_and_testing.public_transport_system.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import construction_and_testing.public_transport_system.domain.DTO.TransportLineDTO;
+import construction_and_testing.public_transport_system.domain.DTO.VehicleTransportLineDTO;
 import construction_and_testing.public_transport_system.domain.DTO.ZoneTransportLineDTO;
 import construction_and_testing.public_transport_system.domain.enums.VehicleType;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
+import javax.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Objects;
 import java.util.Set;
@@ -27,6 +29,7 @@ public class TransportLine implements Serializable {
     private Long id;
 
     @Column(nullable = false, unique = true)
+    @Size(min = 1, max = 30)
     private String name;
 
     @Column(nullable = false)
@@ -34,7 +37,9 @@ public class TransportLine implements Serializable {
     private VehicleType type;
 
     @JsonIgnore
-    @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL, mappedBy = "transportLine")
+    @OneToOne(fetch = FetchType.EAGER,
+            cascade = {CascadeType.PERSIST, CascadeType.DETACH, CascadeType.REMOVE, CascadeType.REFRESH},
+            mappedBy = "transportLine")
     private TransportLinePosition positions;
 
     @JsonIgnore
@@ -71,8 +76,12 @@ public class TransportLine implements Serializable {
         this.id = transportLine.getId();
         this.name = transportLine.getName();
         this.type = transportLine.getType();
-        this.schedule = transportLine.getSchedule().stream().map((Long s) -> new Schedule(s, this))
-                .collect(Collectors.toSet());
+        try {
+            this.schedule = transportLine.getSchedule().stream().map((Long s) -> new Schedule(s, this))
+                    .collect(Collectors.toSet());
+        } catch (NullPointerException e) {
+            this.schedule = null;
+        }
         this.positions = new TransportLinePosition(transportLine.getPositions(), this);
         this.zone = new Zone(transportLine.getZone());
         this.active = transportLine.isActive();
@@ -94,6 +103,20 @@ public class TransportLine implements Serializable {
         this.name = transportLine.getName();
         this.type = transportLine.getType();
         this.zone = zone;
+    }
+
+    public TransportLine(TransportLine transportLine) {
+        this.id = transportLine.getId();
+        this.name = transportLine.getName();
+        this.type = transportLine.getType();
+        this.positions = transportLine.getPositions();
+        this.schedule = transportLine.getSchedule();
+        this.zone = transportLine.getZone();
+    }
+
+    public TransportLine(VehicleTransportLineDTO vehicle) {
+        this.id = vehicle.getId();
+        this.name = vehicle.getName();
     }
 
     public static long getSerialVersionUID() {
@@ -166,6 +189,25 @@ public class TransportLine implements Serializable {
     }
 
     public void setPositions(TransportLinePosition positions) {
+
+        if (sameAs(positions)) {
+            return;
+        }
+        TransportLinePosition oldPosition = this.positions;
         this.positions = positions;
+        if (oldPosition != null) {
+            oldPosition.setTransportLine(null);
+        }
+        if (positions != null) {
+            positions.setTransportLine(this);
+        }
+    }
+
+    private boolean sameAs(TransportLinePosition newPositions) {
+        if (this.positions == null) {
+            return newPositions == null;
+        } else {
+            return positions.equals(newPositions);
+        }
     }
 }
