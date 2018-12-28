@@ -2,6 +2,7 @@ package construction_and_testing.public_transport_system.controller;
 
 
 import construction_and_testing.public_transport_system.converter.NewsConverter;
+import construction_and_testing.public_transport_system.domain.DTO.AddNewsDTO;
 import construction_and_testing.public_transport_system.domain.DTO.NewsDTO;
 import construction_and_testing.public_transport_system.domain.News;
 import construction_and_testing.public_transport_system.service.definition.NewsService;
@@ -74,9 +75,9 @@ public class NewsController {
      */
     @PostMapping
     //@PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<News> create(@RequestBody NewsDTO news) {
-        News entity = NewsConverter.toEntity(news);
-        boolean succeeded = newsService.addNew(NewsConverter.toEntity(news));
+    public ResponseEntity<News> create(@RequestBody AddNewsDTO news) {
+        News entity = NewsConverter.toAddingEntity(news);
+        boolean succeeded = newsService.addNew(entity);
         if (succeeded) {
             logger.info("News added.");
             return new ResponseEntity<>(entity, HttpStatus.OK);
