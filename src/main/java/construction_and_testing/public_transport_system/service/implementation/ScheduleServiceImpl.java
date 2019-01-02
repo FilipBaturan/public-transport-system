@@ -8,8 +8,8 @@ import construction_and_testing.public_transport_system.util.GeneralException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
-
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 
@@ -30,7 +30,7 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     public Schedule findById(Long id) {
-        try{
+        try {
             return scheduleRepository.findById(id).orElseThrow(() ->
                     new GeneralException("Requested schedule does not exist!", HttpStatus.BAD_REQUEST));
         } catch (InvalidDataAccessApiUsageException e) {

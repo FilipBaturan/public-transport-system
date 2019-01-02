@@ -1,9 +1,7 @@
 package construction_and_testing.public_transport_system.controller;
 
 import construction_and_testing.public_transport_system.domain.DTO.ScheduleDTO;
-import construction_and_testing.public_transport_system.domain.DTO.TransportLineDTO;
 import construction_and_testing.public_transport_system.domain.Schedule;
-import construction_and_testing.public_transport_system.domain.TransportLine;
 import construction_and_testing.public_transport_system.service.definition.ScheduleService;
 import construction_and_testing.public_transport_system.util.TestUtil;
 import org.junit.Before;
@@ -19,11 +17,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.HashSet;
-import java.util.stream.Collectors;
-
-import static org.assertj.core.api.Assertions.assertThat;
 import static construction_and_testing.public_transport_system.constants.ScheduleConstants.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 
 @RunWith(SpringRunner.class)
@@ -157,7 +152,6 @@ public class ScheduleControllerTest {
         assertThat(body).isNotNull();
         assertThat(body).isEqualTo("Requested transport line does not exist!");
     }
-
 
 
 }

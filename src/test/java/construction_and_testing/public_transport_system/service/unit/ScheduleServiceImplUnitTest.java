@@ -1,8 +1,6 @@
 package construction_and_testing.public_transport_system.service.unit;
 
 import construction_and_testing.public_transport_system.domain.Schedule;
-import construction_and_testing.public_transport_system.domain.Station;
-import construction_and_testing.public_transport_system.domain.TransportLine;
 import construction_and_testing.public_transport_system.repository.ScheduleRepository;
 import construction_and_testing.public_transport_system.repository.TransportLineRepository;
 import construction_and_testing.public_transport_system.service.implementation.ScheduleServiceImpl;
@@ -15,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.http.HttpStatus;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
@@ -53,7 +50,7 @@ public class ScheduleServiceImplUnitTest {
      * Test fetching all schedules from the database.
      */
     @Test
-    public void testGetAllSchedules(){
+    public void testGetAllSchedules() {
 
         List<Schedule> schedules = scheduleService.getAll();
         assertThat(schedules).hasSize(DB_SCHEDULES.size());

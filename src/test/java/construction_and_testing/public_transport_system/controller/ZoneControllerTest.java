@@ -5,7 +5,6 @@ import construction_and_testing.public_transport_system.domain.DTO.Authenticatio
 import construction_and_testing.public_transport_system.domain.DTO.ZoneDTO;
 import construction_and_testing.public_transport_system.domain.Zone;
 import construction_and_testing.public_transport_system.service.definition.ZoneService;
-import construction_and_testing.public_transport_system.util.TestUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -42,11 +41,11 @@ public class ZoneControllerTest {
 
     private String accessToken;
 
-    private void setUnauthorizedUser(){
+    private void setUnauthorizedUser() {
         ResponseEntity<AuthenticationResponseDTO> auth = testRestTemplate.postForEntity("/api/user/auth",
                 new AuthenticationRequestDTO("username", "password"),
                 AuthenticationResponseDTO.class);
-        if( auth.getBody() == null){
+        if (auth.getBody() == null) {
             return;
         }
         accessToken = auth.getBody().getToken();
@@ -56,9 +55,9 @@ public class ZoneControllerTest {
     public void setUp() throws Exception {
         Mockito.doNothing().when(zoneController).validateJSON(any(String.class), any(String.class));
         ResponseEntity<AuthenticationResponseDTO> responseEntity = testRestTemplate.postForEntity("/api/user/auth",
-                        new AuthenticationRequestDTO("null", "null"),
-                        AuthenticationResponseDTO.class);
-        if (responseEntity.getBody() != null){
+                new AuthenticationRequestDTO("null", "null"),
+                AuthenticationResponseDTO.class);
+        if (responseEntity.getBody() != null) {
             accessToken = responseEntity.getBody().getToken();
         }
     }

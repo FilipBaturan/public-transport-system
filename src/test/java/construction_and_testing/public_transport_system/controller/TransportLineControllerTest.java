@@ -9,7 +9,6 @@ import construction_and_testing.public_transport_system.domain.TransportLinePosi
 import construction_and_testing.public_transport_system.repository.ScheduleRepository;
 import construction_and_testing.public_transport_system.repository.VehicleRepository;
 import construction_and_testing.public_transport_system.service.definition.TransportLineService;
-import construction_and_testing.public_transport_system.util.TestUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -55,11 +54,11 @@ public class TransportLineControllerTest {
 
     private String accessToken;
 
-    private void setUnauthorizedUser(){
+    private void setUnauthorizedUser() {
         ResponseEntity<AuthenticationResponseDTO> auth = testRestTemplate.postForEntity("/api/user/auth",
                 new AuthenticationRequestDTO("username", "password"),
                 AuthenticationResponseDTO.class);
-        if( auth.getBody() == null){
+        if (auth.getBody() == null) {
             return;
         }
         accessToken = auth.getBody().getToken();
@@ -71,7 +70,7 @@ public class TransportLineControllerTest {
         ResponseEntity<AuthenticationResponseDTO> responseEntity = testRestTemplate.postForEntity("/api/user/auth",
                 new AuthenticationRequestDTO("null", "null"),
                 AuthenticationResponseDTO.class);
-        if (responseEntity.getBody() != null){
+        if (responseEntity.getBody() != null) {
             accessToken = responseEntity.getBody().getToken();
         }
     }

@@ -31,12 +31,11 @@ public class ReservationController {
      * @return true if reservation is saved successfully and OK, false if not and BAD_REQUEST
      */
     @PostMapping("reserve")
-    public ResponseEntity<Object> reserve(@RequestBody ReservationDTO reservation){
+    public ResponseEntity<Object> reserve(@RequestBody ReservationDTO reservation) {
         boolean success = reservationService.reserve(ReservationConverter.toEntity(reservation), ReservationConverter.getTypes(reservation));
-        if(success) {
+        if (success) {
             return new ResponseEntity<>(success, HttpStatus.OK);
-        }
-        else{
+        } else {
             return new ResponseEntity<>(success, HttpStatus.BAD_REQUEST);
         }
     }

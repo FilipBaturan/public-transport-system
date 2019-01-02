@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 
 public class NewsConverter extends AbstractConverter {
 
-    public static News toEntity(NewsDTO dto){
+    public static News toEntity(NewsDTO dto) {
         News entity = new News();
         entity.setId(dto.getId());
         entity.setActive(dto.isActive());
@@ -22,12 +22,12 @@ public class NewsConverter extends AbstractConverter {
         return entity;
     }
 
-    public static NewsDTO fromEntity(News entity){
+    public static NewsDTO fromEntity(News entity) {
         NewsDTO dto = new NewsDTO(entity);
         return dto;
     }
 
-    public static News toAddingEntity(AddNewsDTO dto){
+    public static News toAddingEntity(AddNewsDTO dto) {
         News entity = new News();
         entity.setTitle(dto.getTitle());
         entity.setContent(dto.getContent());

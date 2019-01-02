@@ -1,9 +1,11 @@
 package construction_and_testing.public_transport_system.constants;
 
-import construction_and_testing.public_transport_system.domain.*;
+import construction_and_testing.public_transport_system.domain.Schedule;
+import construction_and_testing.public_transport_system.domain.TransportLine;
+import construction_and_testing.public_transport_system.domain.TransportLinePosition;
+import construction_and_testing.public_transport_system.domain.Zone;
 import construction_and_testing.public_transport_system.domain.enums.DayOfWeek;
 import construction_and_testing.public_transport_system.domain.enums.VehicleType;
-import org.omg.CORBA.DATA_CONVERSION;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -19,8 +21,7 @@ public class ScheduleConstants {
     public static final Integer DB_VALID_DEPARTURES_SIZE = 5;
     public static final boolean DB_VALID_ACTIVE = true;
 
-    public static final ArrayList<String> DB_VALID_DEPARTURES = new ArrayList<String>()
-    {
+    public static final ArrayList<String> DB_VALID_DEPARTURES = new ArrayList<String>() {
         {
             add("08:00");
             add("08:15");
@@ -40,14 +41,12 @@ public class ScheduleConstants {
     public static final boolean DB_NEW_ACTIVE = true;
 
 
-
     public static final TransportLine DB_NEW_TL = new TransportLine(100L, "R1", VehicleType.BUS,
             new TransportLinePosition(1L, "45.25674,23.45442 46.75338,24.27895(red|R3)",
                     null, true),
             new HashSet<>(), new Zone(2L, "Liman", null, true), true);
 
-    public static final ArrayList<String> DB_NEW_DEPARTURES = new ArrayList<String>()
-    {
+    public static final ArrayList<String> DB_NEW_DEPARTURES = new ArrayList<String>() {
         {
             add("17:00");
             add("17:15");
@@ -60,8 +59,7 @@ public class ScheduleConstants {
     public static final Schedule DB_NEW_SCHEDULE = new Schedule(null, DB_NEW_TL, DB_VALID_DAY_OF_WEEK, DB_NEW_DEPARTURES, true);
 
 
-    public static final ArrayList<String> DB_VALID_TL_DEPARTURES = new ArrayList<String>()
-    {
+    public static final ArrayList<String> DB_VALID_TL_DEPARTURES = new ArrayList<String>() {
         {
             add("08:00");
             add("08:15");
@@ -71,8 +69,7 @@ public class ScheduleConstants {
         }
     };
 
-    public static final ArrayList<String> DB_VALID_TL_DEPARTURES_SAT = new ArrayList<String>()
-    {
+    public static final ArrayList<String> DB_VALID_TL_DEPARTURES_SAT = new ArrayList<String>() {
         {
             add("15:10");
             add("15:25");

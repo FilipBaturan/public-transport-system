@@ -27,7 +27,7 @@ public class LoggedUserDTO {
         this.telephone = telephone;
     }
 
-    public LoggedUserDTO(User entity){
+    public LoggedUserDTO(User entity) {
         this.id = entity.getId();
         this.firstName = entity.getName();
         this.lastName = entity.getLastName();

@@ -58,7 +58,7 @@ public class Reservation implements Serializable {
     public void setTickets(Set<Ticket> tickets) {
 
         this.tickets = tickets;
-        for(Ticket t : this.tickets){
+        for (Ticket t : this.tickets) {
             t.setReservation(this);
         }
     }

@@ -11,13 +11,13 @@ import java.util.Set;
 
 public class PriceListConverter extends AbstractConverter {
 
-    public static PricelistDTO fromEntity(Pricelist entity){
+    public static PricelistDTO fromEntity(Pricelist entity) {
         PricelistDTO dto = new PricelistDTO();
         dto.setId(entity.getId());
         dto.setStartDate(entity.getStartDate());
         dto.setEndDate(entity.getEndDate());
         Set<PricelistItemDTO> items = new HashSet<>();
-        for(PricelistItem pi : entity.getItems()){
+        for (PricelistItem pi : entity.getItems()) {
             PricelistItemDTO piDTO = new PricelistItemDTO();
             piDTO.setId(pi.getId());
             ItemDTO itemDTO = new ItemDTO();

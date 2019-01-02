@@ -9,26 +9,26 @@ import java.util.HashSet;
 
 public class ZoneConverter extends AbstractConverter {
 
-    public static Zone toEntity(ZoneDTO dto){
+    public static Zone toEntity(ZoneDTO dto) {
         Zone entity = new Zone();
         entity.setId(dto.getId());
         entity.setActive(dto.isActive());
         entity.setName(dto.getName());
         entity.setLines(new HashSet<>());
-        for(ZoneTransportLineDTO line : dto.getLines()){
+        for (ZoneTransportLineDTO line : dto.getLines()) {
             TransportLine tranLine = new TransportLine();
             tranLine.setId(line.getId());
             tranLine.setActive(line.isActive());
             tranLine.setType(line.getType());
             tranLine.setName(line.getName());
-            HashSet<TransportLine> newLines = (HashSet<TransportLine>)entity.getLines();
+            HashSet<TransportLine> newLines = (HashSet<TransportLine>) entity.getLines();
             newLines.add(tranLine);
             entity.setLines(newLines);
         }
         return entity;
     }
 
-    public static ZoneDTO fromEntity(Zone entity){
+    public static ZoneDTO fromEntity(Zone entity) {
         ZoneDTO dto = new ZoneDTO(entity);
         return dto;
     }

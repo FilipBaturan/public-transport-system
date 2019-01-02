@@ -1,7 +1,5 @@
 package construction_and_testing.public_transport_system.domain.DTO;
 
-import construction_and_testing.public_transport_system.domain.User;
-
 /**
  * Represents authentication response.
  * After user successfully logs this response is sent.

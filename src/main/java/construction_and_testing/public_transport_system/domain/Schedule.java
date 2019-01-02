@@ -2,7 +2,6 @@ package construction_and_testing.public_transport_system.domain;
 
 import construction_and_testing.public_transport_system.domain.DTO.ScheduleDTO;
 import construction_and_testing.public_transport_system.domain.enums.DayOfWeek;
-import org.hibernate.annotations.Fetch;
 import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
@@ -56,7 +55,6 @@ public class Schedule implements Serializable {
         this.departures = departures;
         this.active = active;
     }
-
 
 
     public Schedule(ScheduleDTO schedule) {

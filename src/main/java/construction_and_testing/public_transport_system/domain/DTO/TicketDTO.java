@@ -1,8 +1,5 @@
 package construction_and_testing.public_transport_system.domain.DTO;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-import com.fasterxml.jackson.datatype.jsr310.deser.LocalDateDeserializer;
 import construction_and_testing.public_transport_system.domain.enums.TicketType;
 
 import java.time.LocalDateTime;

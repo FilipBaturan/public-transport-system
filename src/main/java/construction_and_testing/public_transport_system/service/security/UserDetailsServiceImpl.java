@@ -1,7 +1,6 @@
 package construction_and_testing.public_transport_system.service.security;
 
 import construction_and_testing.public_transport_system.domain.User;
-import construction_and_testing.public_transport_system.domain.enums.AuthorityType;
 import construction_and_testing.public_transport_system.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;

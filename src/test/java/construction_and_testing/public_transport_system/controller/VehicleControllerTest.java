@@ -6,7 +6,6 @@ import construction_and_testing.public_transport_system.domain.DTO.VehicleDTO;
 import construction_and_testing.public_transport_system.domain.DTO.VehicleSaverDTO;
 import construction_and_testing.public_transport_system.domain.Vehicle;
 import construction_and_testing.public_transport_system.service.definition.VehicleService;
-import construction_and_testing.public_transport_system.util.TestUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -41,11 +40,11 @@ public class VehicleControllerTest {
 
     private String accessToken;
 
-    private void setUnauthorizedUser(){
+    private void setUnauthorizedUser() {
         ResponseEntity<AuthenticationResponseDTO> auth = testRestTemplate.postForEntity("/api/user/auth",
                 new AuthenticationRequestDTO("username", "password"),
                 AuthenticationResponseDTO.class);
-        if( auth.getBody() == null){
+        if (auth.getBody() == null) {
             return;
         }
         accessToken = auth.getBody().getToken();
@@ -57,7 +56,7 @@ public class VehicleControllerTest {
         ResponseEntity<AuthenticationResponseDTO> responseEntity = testRestTemplate.postForEntity("/api/user/auth",
                 new AuthenticationRequestDTO("null", "null"),
                 AuthenticationResponseDTO.class);
-        if (responseEntity.getBody() != null){
+        if (responseEntity.getBody() != null) {
             accessToken = responseEntity.getBody().getToken();
         }
     }

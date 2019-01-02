@@ -7,7 +7,6 @@ import construction_and_testing.public_transport_system.domain.DTO.StationDTO;
 import construction_and_testing.public_transport_system.domain.Station;
 import construction_and_testing.public_transport_system.domain.StationPosition;
 import construction_and_testing.public_transport_system.service.definition.StationService;
-import construction_and_testing.public_transport_system.util.TestUtil;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -46,11 +45,11 @@ public class StationControllerTest {
 
     private String accessToken;
 
-    private void setUnauthorizedUser(){
+    private void setUnauthorizedUser() {
         ResponseEntity<AuthenticationResponseDTO> auth = testRestTemplate.postForEntity("/api/user/auth",
                 new AuthenticationRequestDTO("username", "password"),
                 AuthenticationResponseDTO.class);
-        if( auth.getBody() == null){
+        if (auth.getBody() == null) {
             return;
         }
         accessToken = auth.getBody().getToken();
@@ -62,7 +61,7 @@ public class StationControllerTest {
         ResponseEntity<AuthenticationResponseDTO> responseEntity = testRestTemplate.postForEntity("/api/user/auth",
                 new AuthenticationRequestDTO("null", "null"),
                 AuthenticationResponseDTO.class);
-        if (responseEntity.getBody() != null){
+        if (responseEntity.getBody() != null) {
             accessToken = responseEntity.getBody().getToken();
         }
     }

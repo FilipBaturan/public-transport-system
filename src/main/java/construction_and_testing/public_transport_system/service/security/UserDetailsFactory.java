@@ -1,10 +1,8 @@
 package construction_and_testing.public_transport_system.service.security;
 
 import construction_and_testing.public_transport_system.domain.User;
-import construction_and_testing.public_transport_system.domain.enums.AuthorityType;
 import construction_and_testing.public_transport_system.domain.security.UserDetailsImpl;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 
 import java.util.ArrayList;
 import java.util.Collection;

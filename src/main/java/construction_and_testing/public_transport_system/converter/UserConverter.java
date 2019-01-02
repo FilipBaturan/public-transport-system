@@ -14,6 +14,8 @@ public class UserConverter extends AbstractConverter {
         return new User(dto);
     }
 
-    public static LoggedUserDTO fromLoggedEntity(User entity) { return new LoggedUserDTO(entity);}
+    public static LoggedUserDTO fromLoggedEntity(User entity) {
+        return new LoggedUserDTO(entity);
+    }
 
 }

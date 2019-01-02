@@ -53,8 +53,8 @@ public class PricelistServiceImpl implements PricelistService {
     public Pricelist findValid() {
         List<Pricelist> pricelists = pricelistRepository.findAll();
         LocalDateTime now = LocalDateTime.now();
-        for(Pricelist p : pricelists){
-            if(p.getStartDate().isBefore(now) && p.getEndDate().isAfter(now));
+        for (Pricelist p : pricelists) {
+            if (p.getStartDate().isBefore(now) && p.getEndDate().isAfter(now)) ;
             return p;
         }
         return null;

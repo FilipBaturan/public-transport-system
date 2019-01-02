@@ -2,7 +2,6 @@ package construction_and_testing.public_transport_system.domain.DTO;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 public class ReservationDTO {
 

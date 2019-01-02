@@ -10,11 +10,9 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
-import java.util.ArrayList;
 import java.util.List;
 
 import static construction_and_testing.public_transport_system.constants.ScheduleConstants.*;
@@ -34,7 +32,7 @@ public class ScheduleServiceImplIntegrationTest {
      * Test fetching all schedules from the database.
      */
     @Test
-    public void testGetAllSchedules(){
+    public void testGetAllSchedules() {
 
         List<Schedule> schedules = scheduleService.getAll();
         assertThat(schedules).hasSize(DB_COUNT);

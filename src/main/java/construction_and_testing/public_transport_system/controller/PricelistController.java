@@ -15,9 +15,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
-import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashSet;
 import java.util.List;
 
 @RestController
@@ -49,7 +47,7 @@ public class PricelistController {
     }
 
     @GetMapping("findActive")
-    public ResponseEntity<PricelistDTO> findActive(){
+    public ResponseEntity<PricelistDTO> findActive() {
         Pricelist p = pricelistService.findValid();
         return new ResponseEntity<>(PriceListConverter.fromEntity(p), HttpStatus.OK);
     }

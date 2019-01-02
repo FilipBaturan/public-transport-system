@@ -116,10 +116,10 @@ public class News implements Serializable, Comparable<News> {
 
     @Override
     public int compareTo(News o) {
-        if(this.getDate().isBefore(o.getDate())){
+        if (this.getDate().isBefore(o.getDate())) {
             return 1;
         }
-        if(this.getDate().isAfter(o.getDate())){
+        if (this.getDate().isAfter(o.getDate())) {
             return -1;
         }
         return 0;

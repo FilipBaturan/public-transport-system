@@ -14,9 +14,8 @@ public interface ReservationService {
     List<Reservation> getReservationsForUser(Long id);
 
     /**
-     *
      * @param reservation of user
-     * @param types of tickets, for calculating expiring date
+     * @param types       of tickets, for calculating expiring date
      * @return true if reservation is saved, false if not
      */
     boolean reserve(Reservation reservation, List<TicketType> types);

@@ -124,13 +124,13 @@ public class TransportLineServiceImpl implements TransportLineService {
     }
 
     /**
-     * @param schedules that need to be placed in transport line
+     * @param schedules     that need to be placed in transport line
      * @param transportLine target transport line
      */
-    private void placeSchedulesInTransportLine(Iterable<Schedule> schedules, TransportLine transportLine){
-        for (Schedule schedule: transportLine.getSchedule()) {
+    private void placeSchedulesInTransportLine(Iterable<Schedule> schedules, TransportLine transportLine) {
+        for (Schedule schedule : transportLine.getSchedule()) {
             schedules.forEach(s -> {
-                if (s.getId().equals(schedule.getId())){
+                if (s.getId().equals(schedule.getId())) {
                     schedule.setId(s.getId());
                     schedule.setDayOfWeek(s.getDayOfWeek());
                     schedule.setDepartures(s.getDepartures());
