@@ -13,6 +13,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static construction_and_testing.public_transport_system.constants.StationConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -223,6 +224,11 @@ public class StationServiceImplIntegrationTest {
 
         assertThat(stations).isNotNull();
         assertThat(stations.size()).isEqualTo(NEW_STATIONS.size());
+        stations.forEach(transportLine -> {
+            assertThat(transportLine.getId()).isNotNull();
+            assertThat(transportLine.getName()).isIn(NEW_STATIONS
+                    .stream().map(Station::getName).collect(Collectors.toList()));
+        });
         assertThat(stations).doesNotContainSequence(stationsBefore);
     }
 

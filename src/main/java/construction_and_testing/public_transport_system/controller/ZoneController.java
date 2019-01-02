@@ -76,6 +76,7 @@ public class ZoneController extends ValidationController {
      * @return message about action results
      */
     @DeleteMapping("{id}")
+    @PreAuthorize("hasAuthority('OPERATER')")
     public ResponseEntity<String> delete(@PathVariable String id) throws ValidationException {
         logger.info("Deleting zone at time {}.", Calendar.getInstance().getTime());
         zoneService.remove(Long.parseLong(id));

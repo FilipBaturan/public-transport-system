@@ -42,6 +42,16 @@ public class ZoneControllerTest {
 
     private String accessToken;
 
+    private void setUnauthorizedUser(){
+        ResponseEntity<AuthenticationResponseDTO> auth = testRestTemplate.postForEntity("/api/user/auth",
+                new AuthenticationRequestDTO("username", "password"),
+                AuthenticationResponseDTO.class);
+        if( auth.getBody() == null){
+            return;
+        }
+        accessToken = auth.getBody().getToken();
+    }
+
     @Before
     public void setUp() throws Exception {
         Mockito.doNothing().when(zoneController).validateJSON(any(String.class), any(String.class));
@@ -51,7 +61,6 @@ public class ZoneControllerTest {
         if (responseEntity.getBody() != null){
             accessToken = responseEntity.getBody().getToken();
         }
-
     }
 
     /**
@@ -106,11 +115,14 @@ public class ZoneControllerTest {
      * Test with no transport lines
      */
     @Test
-    public void saveWithNoLines() throws Exception {
+    public void saveWithNoLines() {
         ZoneDTO zone = new ZoneDTO(new Zone(null, NEW_NAME, new HashSet<>(), true));
-        String jsonZone = TestUtil.json(zone);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<ZoneDTO> httpEntity = new HttpEntity<>(zone, headers);
 
-        ResponseEntity<ZoneDTO> result = testRestTemplate.postForEntity(this.URL, jsonZone, ZoneDTO.class);
+        ResponseEntity<ZoneDTO> result = testRestTemplate.exchange(this.URL, HttpMethod.POST, httpEntity,
+                ZoneDTO.class);
 
         ZoneDTO body = result.getBody();
 
@@ -125,16 +137,14 @@ public class ZoneControllerTest {
      * Test with transport lines
      */
     @Test
-    public void saveWithLines() throws Exception {
-
+    public void saveWithLines() {
+        ZoneDTO zone = new ZoneDTO(new Zone(null, NEW_NAME, NEW_LINES, true));
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Auth-Token", accessToken);
-        HttpEntity<ZoneDTO> httpEntity = new HttpEntity<>(new ZoneDTO(
-                new Zone(null, NEW_NAME, NEW_LINES, true)), headers);
+        HttpEntity<ZoneDTO> httpEntity = new HttpEntity<>(zone, headers);
 
-        ZoneDTO zone = new ZoneDTO(new Zone(null, NEW_NAME, NEW_LINES, true));
-
-        ResponseEntity<ZoneDTO> result = testRestTemplate.exchange(this.URL, HttpMethod.POST, httpEntity, ZoneDTO.class);
+        ResponseEntity<ZoneDTO> result = testRestTemplate.exchange(this.URL, HttpMethod.POST, httpEntity,
+                ZoneDTO.class);
 
         ZoneDTO body = result.getBody();
 
@@ -149,11 +159,14 @@ public class ZoneControllerTest {
      * Test with invalid transport lines data associated
      */
     @Test
-    public void saveWithInvalidLines() throws Exception {
+    public void saveWithInvalidLines() {
         ZoneDTO zone = new ZoneDTO(new Zone(null, NEW_NAME, NEW_LINES_INVALID, true));
-        String jsonZone = TestUtil.json(zone);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<ZoneDTO> httpEntity = new HttpEntity<>(zone, headers);
 
-        ResponseEntity<String> result = testRestTemplate.postForEntity(this.URL, jsonZone, String.class);
+        ResponseEntity<String> result = testRestTemplate.exchange(this.URL, HttpMethod.POST, httpEntity,
+                String.class);
 
         String body = result.getBody();
 
@@ -166,11 +179,14 @@ public class ZoneControllerTest {
      * Test null transport lines
      */
     @Test
-    public void saveWithNullLines() throws Exception {
+    public void saveWithNullLines() {
         ZoneDTO zone = new ZoneDTO(new Zone(null, NEW_NAME, null, true));
-        String jsonZone = TestUtil.json(zone);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<ZoneDTO> httpEntity = new HttpEntity<>(zone, headers);
 
-        ResponseEntity<ZoneDTO> result = testRestTemplate.postForEntity(this.URL, jsonZone, ZoneDTO.class);
+        ResponseEntity<ZoneDTO> result = testRestTemplate.exchange(this.URL, HttpMethod.POST, httpEntity,
+                ZoneDTO.class);
 
         ZoneDTO body = result.getBody();
 
@@ -185,11 +201,14 @@ public class ZoneControllerTest {
      * Test null values
      */
     @Test
-    public void saveWithNullValues() throws Exception {
+    public void saveWithNullValues() {
         ZoneDTO zone = new ZoneDTO(new Zone(null, null, NEW_LINES, true));
-        String jsonZone = TestUtil.json(zone);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<ZoneDTO> httpEntity = new HttpEntity<>(zone, headers);
 
-        ResponseEntity<String> result = testRestTemplate.postForEntity(this.URL, jsonZone, String.class);
+        ResponseEntity<String> result = testRestTemplate.exchange(this.URL, HttpMethod.POST, httpEntity,
+                String.class);
 
         String body = result.getBody();
 
@@ -202,11 +221,14 @@ public class ZoneControllerTest {
      * Test with not unique name
      */
     @Test
-    public void saveWithInvalidName() throws Exception {
+    public void saveWithInvalidName() {
         ZoneDTO zone = new ZoneDTO(new Zone(null, NEW_NAME, new HashSet<>(), true));
-        String jsonZone = TestUtil.json(zone);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<ZoneDTO> httpEntity = new HttpEntity<>(zone, headers);
 
-        ResponseEntity<ZoneDTO> result1 = testRestTemplate.postForEntity(this.URL, jsonZone, ZoneDTO.class);
+        ResponseEntity<ZoneDTO> result1 = testRestTemplate.exchange(this.URL, HttpMethod.POST, httpEntity,
+                ZoneDTO.class);
 
         ZoneDTO body1 = result1.getBody();
 
@@ -214,9 +236,10 @@ public class ZoneControllerTest {
         assertThat(body1).isNotNull();
 
         zone = new ZoneDTO(new Zone(null, NEW_NAME, NEW_LINES, true));
-        jsonZone = TestUtil.json(zone);
+        httpEntity = new HttpEntity<>(zone, headers);
 
-        ResponseEntity<String> result2 = testRestTemplate.postForEntity(this.URL, jsonZone, String.class);
+        ResponseEntity<String> result2 = testRestTemplate.exchange(this.URL, HttpMethod.POST, httpEntity,
+                String.class);
 
         String body2 = result2.getBody();
 
@@ -230,11 +253,14 @@ public class ZoneControllerTest {
      * Test with to short name value
      */
     @Test
-    public void saveWithShortName() throws Exception {
+    public void saveWithShortName() {
         ZoneDTO zone = new ZoneDTO(new Zone(null, NEW_NAME_SHORT_LENGTH, NEW_LINES, true));
-        String jsonZone = TestUtil.json(zone);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<ZoneDTO> httpEntity = new HttpEntity<>(zone, headers);
 
-        ResponseEntity<String> result = testRestTemplate.postForEntity(this.URL, jsonZone, String.class);
+        ResponseEntity<String> result = testRestTemplate.exchange(this.URL, HttpMethod.POST, httpEntity,
+                String.class);
 
         String body = result.getBody();
 
@@ -246,11 +272,14 @@ public class ZoneControllerTest {
      * Test with too long name value
      */
     @Test
-    public void saveWithLongName() throws Exception {
+    public void saveWithLongName() {
         ZoneDTO zone = new ZoneDTO(new Zone(null, NEW_NAME_LONG_LENGTH, NEW_LINES, true));
-        String jsonZone = TestUtil.json(zone);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<ZoneDTO> httpEntity = new HttpEntity<>(zone, headers);
 
-        ResponseEntity<String> result = testRestTemplate.postForEntity(this.URL, jsonZone, String.class);
+        ResponseEntity<String> result = testRestTemplate.exchange(this.URL, HttpMethod.POST, httpEntity,
+                String.class);
 
         String body = result.getBody();
 
@@ -262,11 +291,14 @@ public class ZoneControllerTest {
      * Test with min length name value
      */
     @Test
-    public void saveWithMinLengthName() throws Exception {
+    public void saveWithMinLengthName() {
         ZoneDTO zone = new ZoneDTO(new Zone(null, NEW_NAME_MIN_LENGTH, NEW_LINES, true));
-        String jsonZone = TestUtil.json(zone);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<ZoneDTO> httpEntity = new HttpEntity<>(zone, headers);
 
-        ResponseEntity<ZoneDTO> result = testRestTemplate.postForEntity(this.URL, jsonZone, ZoneDTO.class);
+        ResponseEntity<ZoneDTO> result = testRestTemplate.exchange(this.URL, HttpMethod.POST, httpEntity,
+                ZoneDTO.class);
 
         ZoneDTO body = result.getBody();
 
@@ -281,11 +313,14 @@ public class ZoneControllerTest {
      * Test with max length name value
      */
     @Test
-    public void saveWithMaxLengthName() throws Exception {
+    public void saveWithMaxLengthName() {
         ZoneDTO zone = new ZoneDTO(new Zone(null, NEW_NAME_MAX_LENGTH, NEW_LINES, true));
-        String jsonZone = TestUtil.json(zone);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<ZoneDTO> httpEntity = new HttpEntity<>(zone, headers);
 
-        ResponseEntity<ZoneDTO> result = testRestTemplate.postForEntity(this.URL, jsonZone, ZoneDTO.class);
+        ResponseEntity<ZoneDTO> result = testRestTemplate.exchange(this.URL, HttpMethod.POST, httpEntity,
+                ZoneDTO.class);
 
         ZoneDTO body = result.getBody();
 
@@ -297,18 +332,96 @@ public class ZoneControllerTest {
     }
 
     /**
+     * Test unauthorized user tries to save zone
+     */
+    @Test
+    public void saveUnauthorized() {
+        setUnauthorizedUser();
+
+        ZoneDTO zone = new ZoneDTO(new Zone(null, NEW_NAME, NEW_LINES, true));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<ZoneDTO> httpEntity = new HttpEntity<>(zone, headers);
+
+        ResponseEntity<String> result = testRestTemplate.exchange(this.URL, HttpMethod.POST, httpEntity,
+                String.class);
+
+        String body = result.getBody();
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+        assertThat(body).isNotNull();
+    }
+
+    /**
      * Test valid zone deletion
      */
     @Test
-    public void delete() throws Exception {
-        testRestTemplate.delete(this.URL + "/" + DEL_ID, String.class);
+    public void delete() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<ZoneDTO> httpEntity = new HttpEntity<>(headers);
+
+        ResponseEntity<String> result = testRestTemplate.exchange(this.URL + "/" + DEL_ID,
+                HttpMethod.DELETE, httpEntity, String.class);
+
+        String body = result.getBody();
+
+        assertThat(body).isEqualTo("Zone successfully deleted!");
     }
 
     /**
      * Test zone deletion that does not exist in database
      */
     @Test
-    public void deleteNotValidId() throws Exception {
-        testRestTemplate.delete(this.URL + "/" + DEL_ID_INVALID, String.class);
+    public void deleteNotValidId() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<ZoneDTO> httpEntity = new HttpEntity<>(headers);
+
+        ResponseEntity<String> result = testRestTemplate.exchange(this.URL + "/" + DEL_ID_INVALID,
+                HttpMethod.DELETE, httpEntity, String.class);
+
+        String body = result.getBody();
+
+        assertThat(body).isEqualTo("Requested zone does not exist!");
+    }
+
+    /**
+     * Test default zone deletion that can not be deleted
+     */
+    @Test
+    public void deleteDefaultZone() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<ZoneDTO> httpEntity = new HttpEntity<>(headers);
+
+        ResponseEntity<String> result = testRestTemplate.exchange(this.URL + "/" + DEFAULT_ZONE_ID,
+                HttpMethod.DELETE, httpEntity, String.class);
+
+        String body = result.getBody();
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(body).isNotNull();
+        assertThat(body).isEqualTo("Default zone can not be removed!");
+    }
+
+    /**
+     * Test unauthorized user tries to delete zone
+     */
+    @Test
+    public void deleteUnauthorized() {
+        setUnauthorizedUser();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<ZoneDTO> httpEntity = new HttpEntity<>(headers);
+
+        ResponseEntity<String> result = testRestTemplate.exchange(this.URL + "/" + DEL_ID,
+                HttpMethod.DELETE, httpEntity, String.class);
+
+        String body = result.getBody();
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+        assertThat(body).isNotNull();
     }
 }

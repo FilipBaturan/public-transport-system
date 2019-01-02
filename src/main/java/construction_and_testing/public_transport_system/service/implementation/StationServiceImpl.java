@@ -56,7 +56,7 @@ public class StationServiceImpl implements StationService {
             station.setActive(false);
             stationRepository.save(station);
         } else {
-            throw new GeneralException("Station with id:" + id + " does not exist!", HttpStatus.BAD_REQUEST);
+            throw new GeneralException("Requested station does not exist!", HttpStatus.BAD_REQUEST);
         }
     }
 

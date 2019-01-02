@@ -1,5 +1,7 @@
 package construction_and_testing.public_transport_system.controller;
 
+import construction_and_testing.public_transport_system.domain.DTO.AuthenticationRequestDTO;
+import construction_and_testing.public_transport_system.domain.DTO.AuthenticationResponseDTO;
 import construction_and_testing.public_transport_system.domain.DTO.StationCollectionDTO;
 import construction_and_testing.public_transport_system.domain.DTO.StationDTO;
 import construction_and_testing.public_transport_system.domain.Station;
@@ -14,11 +16,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.stream.Collectors;
 
 import static construction_and_testing.public_transport_system.constants.StationConstants.*;
@@ -41,9 +44,27 @@ public class StationControllerTest {
 
     private final String URL = "/api/station";
 
+    private String accessToken;
+
+    private void setUnauthorizedUser(){
+        ResponseEntity<AuthenticationResponseDTO> auth = testRestTemplate.postForEntity("/api/user/auth",
+                new AuthenticationRequestDTO("username", "password"),
+                AuthenticationResponseDTO.class);
+        if( auth.getBody() == null){
+            return;
+        }
+        accessToken = auth.getBody().getToken();
+    }
+
     @Before
     public void setUp() throws Exception {
         Mockito.doNothing().when(stationController).validateJSON(any(String.class), any(String.class));
+        ResponseEntity<AuthenticationResponseDTO> responseEntity = testRestTemplate.postForEntity("/api/user/auth",
+                new AuthenticationRequestDTO("null", "null"),
+                AuthenticationResponseDTO.class);
+        if (responseEntity.getBody() != null){
+            accessToken = responseEntity.getBody().getToken();
+        }
     }
 
     /**
@@ -99,12 +120,15 @@ public class StationControllerTest {
      * Test valid vehicle saving
      */
     @Test
-    public void save() throws Exception {
+    public void save() {
         StationDTO station = new StationDTO(new Station(null, NEW_NAME, new StationPosition(),
                 NEW_TYPE, NEW_ACTIVE));
-        String jsonStation = TestUtil.json(station);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<StationDTO> httpEntity = new HttpEntity<>(station, headers);
 
-        ResponseEntity<StationDTO> result = testRestTemplate.postForEntity(this.URL, jsonStation, StationDTO.class);
+        ResponseEntity<StationDTO> result = testRestTemplate.exchange(this.URL, HttpMethod.POST, httpEntity,
+                StationDTO.class);
 
         StationDTO body = result.getBody();
 
@@ -120,11 +144,14 @@ public class StationControllerTest {
      * Test with null values
      */
     @Test
-    public void saveWithNullValues() throws Exception {
+    public void saveWithNullValues() {
         StationDTO station = new StationDTO(new Station(null, null, null, null, true));
-        String jsonStation = TestUtil.json(station);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<StationDTO> httpEntity = new HttpEntity<>(station, headers);
 
-        ResponseEntity<String> result = testRestTemplate.postForEntity(this.URL, jsonStation, String.class);
+        ResponseEntity<String> result = testRestTemplate.exchange(this.URL, HttpMethod.POST, httpEntity,
+                String.class);
 
         String body = result.getBody();
 
@@ -137,12 +164,15 @@ public class StationControllerTest {
      * Test with to short name value
      */
     @Test
-    public void saveWithShortName() throws Exception {
+    public void saveWithShortName() {
         StationDTO station = new StationDTO(
                 new Station(null, NEW_NAME_SHORT_LENGTH, new StationPosition(), NEW_TYPE, NEW_ACTIVE));
-        String jsonStation = TestUtil.json(station);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<StationDTO> httpEntity = new HttpEntity<>(station, headers);
 
-        ResponseEntity<String> result = testRestTemplate.postForEntity(this.URL, jsonStation, String.class);
+        ResponseEntity<String> result = testRestTemplate.exchange(this.URL, HttpMethod.POST, httpEntity,
+                String.class);
 
         String body = result.getBody();
 
@@ -154,12 +184,15 @@ public class StationControllerTest {
      * Test with too long name value
      */
     @Test
-    public void saveWithLongName() throws Exception {
+    public void saveWithLongName() {
         StationDTO station = new StationDTO(
                 new Station(null, NEW_NAME_LONG_LENGTH, new StationPosition(), NEW_TYPE, NEW_ACTIVE));
-        String jsonStation = TestUtil.json(station);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<StationDTO> httpEntity = new HttpEntity<>(station, headers);
 
-        ResponseEntity<String> result = testRestTemplate.postForEntity(this.URL, jsonStation, String.class);
+        ResponseEntity<String> result = testRestTemplate.exchange(this.URL, HttpMethod.POST, httpEntity,
+                String.class);
 
         String body = result.getBody();
 
@@ -171,12 +204,15 @@ public class StationControllerTest {
      * Test with min length name value
      */
     @Test
-    public void saveWithMinLengthName() throws Exception {
+    public void saveWithMinLengthName() {
         StationDTO station = new StationDTO(
                 new Station(null, NEW_NAME_MIN_LENGTH, new StationPosition(), NEW_TYPE, NEW_ACTIVE));
-        String jsonStation = TestUtil.json(station);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<StationDTO> httpEntity = new HttpEntity<>(station, headers);
 
-        ResponseEntity<StationDTO> result = testRestTemplate.postForEntity(this.URL, jsonStation, StationDTO.class);
+        ResponseEntity<StationDTO> result = testRestTemplate.exchange(this.URL, HttpMethod.POST, httpEntity,
+                StationDTO.class);
 
         StationDTO body = result.getBody();
 
@@ -192,12 +228,15 @@ public class StationControllerTest {
      * Test with max length name value
      */
     @Test
-    public void saveWithMaxLengthName() throws Exception {
+    public void saveWithMaxLengthName() {
         StationDTO station = new StationDTO(
                 new Station(null, NEW_NAME_MAX_LENGTH, new StationPosition(), NEW_TYPE, NEW_ACTIVE));
-        String jsonStation = TestUtil.json(station);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<StationDTO> httpEntity = new HttpEntity<>(station, headers);
 
-        ResponseEntity<StationDTO> result = testRestTemplate.postForEntity(this.URL, jsonStation, StationDTO.class);
+        ResponseEntity<StationDTO> result = testRestTemplate.exchange(this.URL, HttpMethod.POST, httpEntity,
+                StationDTO.class);
 
         StationDTO body = result.getBody();
 
@@ -207,61 +246,125 @@ public class StationControllerTest {
         assertThat(body.getType()).isEqualTo(station.getType());
         assertThat(body.getPosition().getLongitude()).isEqualTo(station.getPosition().getLongitude());
         assertThat(body.isActive()).isEqualTo(station.isActive());
+    }
+
+    /**
+     * Test unauthorized user tries to save station
+     */
+    @Test
+    public void saveUnauthorized() {
+        setUnauthorizedUser();
+
+        StationDTO station = new StationDTO(new Station(null, NEW_NAME, new StationPosition(),
+                NEW_TYPE, NEW_ACTIVE));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<StationDTO> httpEntity = new HttpEntity<>(station, headers);
+
+        ResponseEntity<String> result = testRestTemplate.exchange(this.URL, HttpMethod.POST, httpEntity,
+                String.class);
+
+        String body = result.getBody();
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+        assertThat(body).isNotNull();
     }
 
     /**
      * Test valid station deletion
      */
     @Test
-    public void delete() throws Exception {
-        StationDTO station = new StationDTO(new Station(DEL_ID, DB_NAME, new StationPosition(), DB_TYPE, DB_ACTIVE));
-        String jsonStation = TestUtil.json(station);
+    public void delete() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<StationDTO> httpEntity = new HttpEntity<>(headers);
 
-        testRestTemplate.delete(this.URL, jsonStation, String.class);
+        ResponseEntity<String> result = testRestTemplate.exchange(this.URL + "/" + DEL_ID,
+                HttpMethod.DELETE, httpEntity, String.class);
+
+        String body = result.getBody();
+
+        assertThat(body).isEqualTo("Station successfully deleted!");
     }
 
     /**
      * Test station deletion that does not exist in database
      */
     @Test
-    public void deleteWithInvalidId() throws Exception {
-        StationDTO station = new StationDTO(new Station(DEL_ID_INVALID, DB_NAME, new StationPosition(), DB_TYPE, DB_ACTIVE));
-        String jsonStation = TestUtil.json(station);
+    public void deleteWithInvalidId() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<StationDTO> httpEntity = new HttpEntity<>(headers);
 
-        testRestTemplate.delete(this.URL, jsonStation, String.class);
+        ResponseEntity<String> result = testRestTemplate.exchange(this.URL + "/" + DEL_ID_INVALID,
+                HttpMethod.DELETE, httpEntity, String.class);
+
+        String body = result.getBody();
+
+        assertThat(body).isEqualTo("Requested station does not exist!");
+    }
+
+    /**
+     * Test unauthorized user tries to delete station
+     */
+    @Test
+    public void deleteUnauthorized() {
+        setUnauthorizedUser();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<StationDTO> httpEntity = new HttpEntity<>(headers);
+
+        ResponseEntity<String> result = testRestTemplate.exchange(this.URL + "/" + DEL_ID,
+                HttpMethod.DELETE, httpEntity, String.class);
+
+        String body = result.getBody();
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+        assertThat(body).isNotNull();
     }
 
     /**
      * Test replace all station
      */
     @Test
-    public void replaceAll() throws Exception {
+    public void replaceAll() {
         StationCollectionDTO stations =
                 new StationCollectionDTO(NEW_STATIONS.stream().map(StationDTO::new).collect(Collectors.toList()));
-        String jsonStations = TestUtil.json(stations);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<StationCollectionDTO> httpEntity = new HttpEntity<>(stations, headers);
 
-        ResponseEntity<StationDTO[]> result = testRestTemplate.postForEntity(this.URL + "/replace",
-                jsonStations, StationDTO[].class);
+        ResponseEntity<StationDTO[]> result = testRestTemplate.exchange(this.URL + "/replace", HttpMethod.POST, httpEntity,
+                StationDTO[].class);
 
         StationDTO[] body = result.getBody();
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(body).isNotNull();
         assertThat(body).hasSize(stations.getStations().size());
+        (new ArrayList<>(Arrays.asList(body))).forEach(transportLine -> {
+            assertThat(transportLine.getId()).isNotNull();
+            assertThat(transportLine.getName()).isIn(NEW_STATIONS
+                    .stream().map(Station::getName).collect(Collectors.toList()));
+        });
+
     }
 
     /**
      * Test with too short name value
      */
     @Test
-    public void replaceAllWithShortName() throws Exception {
+    public void replaceAllWithShortName() {
         NEW_STATIONS.get(0).setName(NEW_NAME_SHORT_LENGTH);
         StationCollectionDTO stations =
                 new StationCollectionDTO(NEW_STATIONS.stream().map(StationDTO::new).collect(Collectors.toList()));
-        String jsonStations = TestUtil.json(stations);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<StationCollectionDTO> httpEntity = new HttpEntity<>(stations, headers);
 
-        ResponseEntity<String> result = testRestTemplate.postForEntity(this.URL + "/replace",
-                jsonStations, String.class);
+        ResponseEntity<String> result = testRestTemplate.exchange(this.URL + "/replace", HttpMethod.POST, httpEntity,
+                String.class);
 
         String body = result.getBody();
 
@@ -273,14 +376,16 @@ public class StationControllerTest {
      * Test with too long name value
      */
     @Test
-    public void replaceAllWithLongName() throws Exception {
+    public void replaceAllWithLongName() {
         NEW_STATIONS.get(0).setName(NEW_NAME_LONG_LENGTH);
         StationCollectionDTO stations =
                 new StationCollectionDTO(NEW_STATIONS.stream().map(StationDTO::new).collect(Collectors.toList()));
-        String jsonStations = TestUtil.json(stations);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<StationCollectionDTO> httpEntity = new HttpEntity<>(stations, headers);
 
-        ResponseEntity<String> result = testRestTemplate.postForEntity(this.URL + "/replace",
-                jsonStations, String.class);
+        ResponseEntity<String> result = testRestTemplate.exchange(this.URL + "/replace", HttpMethod.POST, httpEntity,
+                String.class);
 
         String body = result.getBody();
 
@@ -292,14 +397,16 @@ public class StationControllerTest {
      * Test with min length name value
      */
     @Test
-    public void replaceAllWithMinLengthName() throws Exception {
+    public void replaceAllWithMinLengthName() {
         NEW_STATIONS.get(0).setName(NEW_NAME_MIN_LENGTH);
         StationCollectionDTO stations =
                 new StationCollectionDTO(NEW_STATIONS.stream().map(StationDTO::new).collect(Collectors.toList()));
-        String jsonStations = TestUtil.json(stations);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<StationCollectionDTO> httpEntity = new HttpEntity<>(stations, headers);
 
-        ResponseEntity<StationDTO[]> result = testRestTemplate.postForEntity(this.URL + "/replace",
-                jsonStations, StationDTO[].class);
+        ResponseEntity<StationDTO[]> result = testRestTemplate.exchange(this.URL + "/replace", HttpMethod.POST, httpEntity,
+                StationDTO[].class);
 
         StationDTO[] body = result.getBody();
 
@@ -312,19 +419,43 @@ public class StationControllerTest {
      * Test with max length name value
      */
     @Test
-    public void replaceAllWithMaxLengthName() throws Exception {
+    public void replaceAllWithMaxLengthName() {
         NEW_STATIONS.get(0).setName(NEW_NAME_MAX_LENGTH);
         StationCollectionDTO stations =
                 new StationCollectionDTO(NEW_STATIONS.stream().map(StationDTO::new).collect(Collectors.toList()));
-        String jsonStations = TestUtil.json(stations);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<StationCollectionDTO> httpEntity = new HttpEntity<>(stations, headers);
 
-        ResponseEntity<StationDTO[]> result = testRestTemplate.postForEntity(this.URL + "/replace",
-                jsonStations, StationDTO[].class);
+        ResponseEntity<StationDTO[]> result = testRestTemplate.exchange(this.URL + "/replace", HttpMethod.POST, httpEntity,
+                StationDTO[].class);
 
         StationDTO[] body = result.getBody();
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(body).isNotNull();
         assertThat(body).hasSize(stations.getStations().size());
+    }
+
+    /**
+     * Test unauthorized user tries to replace stations
+     */
+    @Test
+    public void replaceAllUnauthorized() {
+        setUnauthorizedUser();
+
+        StationCollectionDTO stations =
+                new StationCollectionDTO(NEW_STATIONS.stream().map(StationDTO::new).collect(Collectors.toList()));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<StationCollectionDTO> httpEntity = new HttpEntity<>(stations, headers);
+
+        ResponseEntity<String> result = testRestTemplate.exchange(this.URL + "/replace",
+                HttpMethod.POST, httpEntity, String.class);
+
+        String body = result.getBody();
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+        assertThat(body).isNotNull();
     }
 }

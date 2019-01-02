@@ -13,6 +13,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -65,6 +66,7 @@ public class VehicleController extends ValidationController {
      * @return added vehicle
      */
     @PostMapping()
+    @PreAuthorize("hasAuthority('OPERATER')")
     public ResponseEntity<VehicleDTO> save(@RequestBody String vehicle) throws IOException, ValidationException {
         logger.info("Adding vehicle with at time {}.", Calendar.getInstance().getTime());
         validateJSON(vehicle, "vehicle.json");
@@ -80,6 +82,7 @@ public class VehicleController extends ValidationController {
      * @return message about action results
      */
     @DeleteMapping("{id}")
+    @PreAuthorize("hasAuthority('OPERATER')")
     public ResponseEntity<String> delete(@PathVariable String id) throws ValidationException {
         logger.info("Deleting vehicle at time {}.", Calendar.getInstance().getTime());
         vehicleService.remove(Long.parseLong(id));

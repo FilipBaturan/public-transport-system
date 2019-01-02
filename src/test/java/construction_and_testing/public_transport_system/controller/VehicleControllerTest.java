@@ -1,5 +1,7 @@
 package construction_and_testing.public_transport_system.controller;
 
+import construction_and_testing.public_transport_system.domain.DTO.AuthenticationRequestDTO;
+import construction_and_testing.public_transport_system.domain.DTO.AuthenticationResponseDTO;
 import construction_and_testing.public_transport_system.domain.DTO.VehicleDTO;
 import construction_and_testing.public_transport_system.domain.DTO.VehicleSaverDTO;
 import construction_and_testing.public_transport_system.domain.Vehicle;
@@ -13,8 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -38,9 +39,27 @@ public class VehicleControllerTest {
 
     private final String URL = "/api/vehicle";
 
+    private String accessToken;
+
+    private void setUnauthorizedUser(){
+        ResponseEntity<AuthenticationResponseDTO> auth = testRestTemplate.postForEntity("/api/user/auth",
+                new AuthenticationRequestDTO("username", "password"),
+                AuthenticationResponseDTO.class);
+        if( auth.getBody() == null){
+            return;
+        }
+        accessToken = auth.getBody().getToken();
+    }
+
     @Before
     public void setUp() throws Exception {
         Mockito.doNothing().when(vehicleController).validateJSON(any(String.class), any(String.class));
+        ResponseEntity<AuthenticationResponseDTO> responseEntity = testRestTemplate.postForEntity("/api/user/auth",
+                new AuthenticationRequestDTO("null", "null"),
+                AuthenticationResponseDTO.class);
+        if (responseEntity.getBody() != null){
+            accessToken = responseEntity.getBody().getToken();
+        }
     }
 
     /**
@@ -96,11 +115,14 @@ public class VehicleControllerTest {
      * Test valid vehicle saving
      */
     @Test
-    public void save() throws Exception {
+    public void save() {
         VehicleSaverDTO vehicle = new VehicleSaverDTO(new Vehicle(null, NEW_NAME, NEW_TYPE, NEW_LINE, true));
-        String jsonVehicle = TestUtil.json(vehicle);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<VehicleSaverDTO> httpEntity = new HttpEntity<>(vehicle, headers);
 
-        ResponseEntity<VehicleDTO> result = testRestTemplate.postForEntity(this.URL, jsonVehicle, VehicleDTO.class);
+        ResponseEntity<VehicleDTO> result = testRestTemplate.exchange(this.URL, HttpMethod.POST, httpEntity,
+                VehicleDTO.class);
 
         VehicleDTO body = result.getBody();
 
@@ -117,12 +139,15 @@ public class VehicleControllerTest {
      * Test with invalid vehicle type and transport line type
      */
     @Test
-    public void saveWithInvalidType() throws Exception {
+    public void saveWithInvalidType() {
         VehicleSaverDTO vehicle = new VehicleSaverDTO(
                 new Vehicle(null, NEW_NAME, NEW_TYPE_INVALID, NEW_LINE, true));
-        String jsonVehicle = TestUtil.json(vehicle);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<VehicleSaverDTO> httpEntity = new HttpEntity<>(vehicle, headers);
 
-        ResponseEntity<String> result = testRestTemplate.postForEntity(this.URL, jsonVehicle, String.class);
+        ResponseEntity<String> result = testRestTemplate.exchange(this.URL, HttpMethod.POST, httpEntity,
+                String.class);
 
         String body = result.getBody();
 
@@ -135,12 +160,15 @@ public class VehicleControllerTest {
      * Test with invalid transport line associated
      */
     @Test
-    public void saveWithInvalidLine() throws Exception {
+    public void saveWithInvalidLine() {
         VehicleSaverDTO vehicle = new VehicleSaverDTO(
                 new Vehicle(null, NEW_NAME, NEW_TYPE, NEW_LINE_INVALID, true));
-        String jsonVehicle = TestUtil.json(vehicle);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<VehicleSaverDTO> httpEntity = new HttpEntity<>(vehicle, headers);
 
-        ResponseEntity<String> result = testRestTemplate.postForEntity(this.URL, jsonVehicle, String.class);
+        ResponseEntity<String> result = testRestTemplate.exchange(this.URL, HttpMethod.POST, httpEntity,
+                String.class);
 
         String body = result.getBody();
 
@@ -153,12 +181,15 @@ public class VehicleControllerTest {
      * Test with null transport line
      */
     @Test
-    public void saveWithNullLine() throws Exception {
+    public void saveWithNullLine() {
         VehicleSaverDTO vehicle = new VehicleSaverDTO(
                 new Vehicle(null, NEW_NAME, NEW_TYPE, null, true));
-        String jsonVehicle = TestUtil.json(vehicle);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<VehicleSaverDTO> httpEntity = new HttpEntity<>(vehicle, headers);
 
-        ResponseEntity<VehicleDTO> result = testRestTemplate.postForEntity(this.URL, jsonVehicle, VehicleDTO.class);
+        ResponseEntity<VehicleDTO> result = testRestTemplate.exchange(this.URL, HttpMethod.POST, httpEntity,
+                VehicleDTO.class);
 
         VehicleDTO body = result.getBody();
 
@@ -174,12 +205,15 @@ public class VehicleControllerTest {
      * Test with null values
      */
     @Test
-    public void saveWithNullValues() throws Exception {
+    public void saveWithNullValues() {
         VehicleSaverDTO vehicle = new VehicleSaverDTO(
                 new Vehicle(null, null, null, NEW_LINE, true));
-        String jsonVehicle = TestUtil.json(vehicle);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<VehicleSaverDTO> httpEntity = new HttpEntity<>(vehicle, headers);
 
-        ResponseEntity<String> result = testRestTemplate.postForEntity(this.URL, jsonVehicle, String.class);
+        ResponseEntity<String> result = testRestTemplate.exchange(this.URL, HttpMethod.POST, httpEntity,
+                String.class);
 
         String body = result.getBody();
 
@@ -192,12 +226,15 @@ public class VehicleControllerTest {
      * Test with to short name value
      */
     @Test
-    public void saveWithShortName() throws Exception {
+    public void saveWithShortName() {
         VehicleSaverDTO vehicle = new VehicleSaverDTO(
                 new Vehicle(null, NEW_NAME_SHORT_LENGTH, NEW_TYPE, NEW_LINE, true));
-        String jsonVehicle = TestUtil.json(vehicle);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<VehicleSaverDTO> httpEntity = new HttpEntity<>(vehicle, headers);
 
-        ResponseEntity<String> result = testRestTemplate.postForEntity(this.URL, jsonVehicle, String.class);
+        ResponseEntity<String> result = testRestTemplate.exchange(this.URL, HttpMethod.POST, httpEntity,
+                String.class);
 
         String body = result.getBody();
 
@@ -209,12 +246,15 @@ public class VehicleControllerTest {
      * Test with too long name value
      */
     @Test
-    public void saveWithLongName() throws Exception {
+    public void saveWithLongName() {
         VehicleSaverDTO vehicle =
                 new VehicleSaverDTO(new Vehicle(null, NEW_NAME_LONG_LENGTH, NEW_TYPE, NEW_LINE, true));
-        String jsonVehicle = TestUtil.json(vehicle);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<VehicleSaverDTO> httpEntity = new HttpEntity<>(vehicle, headers);
 
-        ResponseEntity<String> result = testRestTemplate.postForEntity(this.URL, jsonVehicle, String.class);
+        ResponseEntity<String> result = testRestTemplate.exchange(this.URL, HttpMethod.POST, httpEntity,
+                String.class);
 
         String body = result.getBody();
 
@@ -226,12 +266,15 @@ public class VehicleControllerTest {
      * Test with min length name value
      */
     @Test
-    public void saveWithMinLengthName() throws Exception {
+    public void saveWithMinLengthName() {
         VehicleSaverDTO vehicle = new VehicleSaverDTO(
                 new Vehicle(null, NEW_NAME_MIN_LENGTH, NEW_TYPE, NEW_LINE, true));
-        String jsonVehicle = TestUtil.json(vehicle);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<VehicleSaverDTO> httpEntity = new HttpEntity<>(vehicle, headers);
 
-        ResponseEntity<VehicleDTO> result = testRestTemplate.postForEntity(this.URL, jsonVehicle, VehicleDTO.class);
+        ResponseEntity<VehicleDTO> result = testRestTemplate.exchange(this.URL, HttpMethod.POST, httpEntity,
+                VehicleDTO.class);
 
         VehicleDTO body = result.getBody();
 
@@ -247,12 +290,15 @@ public class VehicleControllerTest {
      * Test with max length name value
      */
     @Test
-    public void saveWithMaxLengthName() throws Exception {
+    public void saveWithMaxLengthName() {
         VehicleSaverDTO vehicle = new VehicleSaverDTO(
                 new Vehicle(null, NEW_NAME_MAX_LENGTH, NEW_TYPE, NEW_LINE, true));
-        String jsonVehicle = TestUtil.json(vehicle);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<VehicleSaverDTO> httpEntity = new HttpEntity<>(vehicle, headers);
 
-        ResponseEntity<VehicleDTO> result = testRestTemplate.postForEntity(this.URL, jsonVehicle, VehicleDTO.class);
+        ResponseEntity<VehicleDTO> result = testRestTemplate.exchange(this.URL, HttpMethod.POST, httpEntity,
+                VehicleDTO.class);
 
         VehicleDTO body = result.getBody();
 
@@ -264,13 +310,42 @@ public class VehicleControllerTest {
         assertThat(body.isActive()).isEqualTo(vehicle.isActive());
     }
 
+    /**
+     * Test unauthorized user tries to save vehicle
+     */
+    @Test
+    public void saveUnauthorized() {
+        setUnauthorizedUser();
+
+        VehicleSaverDTO vehicle = new VehicleSaverDTO(new Vehicle(null, NEW_NAME, NEW_TYPE, NEW_LINE, true));
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<VehicleSaverDTO> httpEntity = new HttpEntity<>(vehicle, headers);
+
+        ResponseEntity<String> result = testRestTemplate.exchange(this.URL, HttpMethod.POST, httpEntity,
+                String.class);
+
+        String body = result.getBody();
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+        assertThat(body).isNotNull();
+    }
+
 
     /**
      * Test valid vehicle deletion
      */
     @Test
     public void delete() {
-        testRestTemplate.delete(this.URL + "/" + DEL_ID, String.class);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<VehicleSaverDTO> httpEntity = new HttpEntity<>(headers);
+
+        ResponseEntity<String> result = testRestTemplate.exchange(this.URL + "/" + DEL_ID,
+                HttpMethod.DELETE, httpEntity, String.class);
+        String body = result.getBody();
+
+        assertThat(body).isEqualTo("Vehicle successfully deleted!");
     }
 
     /**
@@ -278,6 +353,34 @@ public class VehicleControllerTest {
      */
     @Test
     public void deleteWithInvalidId() {
-        testRestTemplate.delete(this.URL + "/" + DEL_ID_INVALID, String.class);
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<VehicleSaverDTO> httpEntity = new HttpEntity<>(headers);
+
+        ResponseEntity<String> result = testRestTemplate.exchange(this.URL + "/" + DEL_ID_INVALID,
+                HttpMethod.DELETE, httpEntity, String.class);
+        String body = result.getBody();
+
+        assertThat(body).isEqualTo("Requested vehicle does not exist!");
+    }
+
+    /**
+     * Test unauthorized user tries to delete vehicle
+     */
+    @Test
+    public void deleteUnauthorized() {
+        setUnauthorizedUser();
+
+        HttpHeaders headers = new HttpHeaders();
+        headers.add("X-Auth-Token", accessToken);
+        HttpEntity<VehicleSaverDTO> httpEntity = new HttpEntity<>(headers);
+
+        ResponseEntity<String> result = testRestTemplate.exchange(this.URL + "/" + DEL_ID,
+                HttpMethod.DELETE, httpEntity, String.class);
+
+        String body = result.getBody();
+
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.UNAUTHORIZED);
+        assertThat(body).isNotNull();
     }
 }

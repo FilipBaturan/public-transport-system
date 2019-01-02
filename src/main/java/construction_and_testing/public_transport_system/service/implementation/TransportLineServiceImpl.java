@@ -80,7 +80,7 @@ public class TransportLineServiceImpl implements TransportLineService {
             transportLine.setActive(false);
             transportLineRepository.save(transportLine);
         } else {
-            throw new GeneralException("Transport line with id:" + id + " does not exist!", HttpStatus.BAD_REQUEST);
+            throw new GeneralException("Requested transport line does not exist!", HttpStatus.BAD_REQUEST);
         }
     }
 

@@ -532,6 +532,7 @@ public class TransportLineServiceImplUnitTest {
         assertThat(transportLines).isNotNull();
         assertThat(transportLines.size()).isEqualTo(NEW_TRANSPORT_LINES_NO_SCHEDULE.size());
         assertThat(scheduleRepository.findAll()).isEmpty();
+        transportLines.forEach(transportLine -> assertThat(transportLine.getSchedule().size()).isEqualTo(0));
         vehicleRepository.findAll().forEach(vehicle -> assertThat(vehicle.getCurrentLine()).isNull());
         assertThat(ticketRepository.findAll().size()).isEqualTo(0);
     }

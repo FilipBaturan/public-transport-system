@@ -63,7 +63,7 @@ public class VehicleServiceImpl implements VehicleService {
             vehicle.setActive(false);
             vehicleRepository.save(vehicle);
         } else {
-            throw new GeneralException("Vehicle with id:" + id + " does not exist!", HttpStatus.BAD_REQUEST);
+            throw new GeneralException("Requested vehicle does not exist!", HttpStatus.BAD_REQUEST);
         }
     }
 

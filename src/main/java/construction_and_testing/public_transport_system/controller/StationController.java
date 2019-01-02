@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -62,6 +63,7 @@ public class StationController extends ValidationController {
      * @return added station
      */
     @PostMapping
+    @PreAuthorize("hasAuthority('OPERATER')")
     public ResponseEntity<StationDTO> save(@RequestBody String station) throws IOException, ValidationException {
         logger.info("Saving station at time {}.", Calendar.getInstance().getTime());
         validateJSON(station, "station.json");
@@ -78,6 +80,7 @@ public class StationController extends ValidationController {
      * @return added station
      */
     @PostMapping("/replace")
+    @PreAuthorize("hasAuthority('OPERATER')")
     public ResponseEntity<List<StationDTO>> replaceAll(@RequestBody String stations) throws
             IOException, ValidationException {
         logger.info("Replacing all stations at time {}.", Calendar.getInstance().getTime());
@@ -95,6 +98,7 @@ public class StationController extends ValidationController {
      * @return message about action results
      */
     @DeleteMapping("{id}")
+    @PreAuthorize("hasAuthority('OPERATER')")
     public ResponseEntity<String> delete(@PathVariable String id) throws ValidationException {
         logger.info("Deleting station at time {}.", Calendar.getInstance().getTime());
         stationService.remove(Long.parseLong(id));
