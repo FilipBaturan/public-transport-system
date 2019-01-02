@@ -81,7 +81,6 @@ public class Ticket implements Serializable {
         this.id = id;
     }
 
-
     public String getToken() {
         return token;
     }
@@ -143,7 +142,14 @@ public class Ticket implements Serializable {
         if (this == o) return true;
         if (!(o instanceof Ticket)) return false;
         Ticket ticket = (Ticket) o;
-        return Objects.equals(id, ticket.id);
+        return active == ticket.active &&
+                Objects.equals(id, ticket.id) &&
+                Objects.equals(purchaseDate, ticket.purchaseDate) &&
+                Objects.equals(expiryDate, ticket.expiryDate) &&
+                Objects.equals(token, ticket.token) &&
+                Objects.equals(priceListItem, ticket.priceListItem) &&
+                Objects.equals(line, ticket.line) &&
+                Objects.equals(reservation, ticket.reservation);
     }
 
     @Override

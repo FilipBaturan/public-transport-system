@@ -2,10 +2,7 @@ package construction_and_testing.public_transport_system.controller;
 
 import construction_and_testing.public_transport_system.converter.RegisteredUserConverter;
 import construction_and_testing.public_transport_system.converter.UserConverter;
-import construction_and_testing.public_transport_system.domain.DTO.AuthenticationRequestDTO;
-import construction_and_testing.public_transport_system.domain.DTO.AuthenticationResponseDTO;
-import construction_and_testing.public_transport_system.domain.DTO.RegisteringUserDTO;
-import construction_and_testing.public_transport_system.domain.DTO.UserDTO;
+import construction_and_testing.public_transport_system.domain.DTO.*;
 import construction_and_testing.public_transport_system.domain.RegisteredUser;
 import construction_and_testing.public_transport_system.domain.User;
 import construction_and_testing.public_transport_system.domain.Validator;
@@ -94,7 +91,7 @@ public class UserController {
         //SecurityContextHolder.getContext().setAuthentication(authentication);
 
         UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-        User user = userService.findByUsername(userDetails.getUsername());
+        LoggedUserDTO user = UserConverter.fromLoggedEntity(userService.findByUsername(userDetails.getUsername()));
         String token = tokenUtils.generateToken(userDetails);
 
         logger.info("Successfully logged in.");
@@ -114,7 +111,7 @@ public class UserController {
      */
     @GetMapping("/currentUser")
     public ResponseEntity findCurrentUser() {
-        return new ResponseEntity<>(userService.findCurrentUser(), HttpStatus.OK);
+        return new ResponseEntity<>(UserConverter.fromLoggedEntity(userService.findCurrentUser()), HttpStatus.OK);
     }
 
     /**

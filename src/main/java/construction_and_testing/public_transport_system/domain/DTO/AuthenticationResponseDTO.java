@@ -11,7 +11,7 @@ public class AuthenticationResponseDTO {
     /**
      * User that requested authentication.
      */
-    private User user;
+    private LoggedUserDTO user;
 
     /**
      * User's token.
@@ -21,16 +21,16 @@ public class AuthenticationResponseDTO {
     public AuthenticationResponseDTO() {
     }
 
-    public AuthenticationResponseDTO(User user, String token) {
+    public AuthenticationResponseDTO(LoggedUserDTO user, String token) {
         this.user = user;
         this.token = token;
     }
 
-    public User getUser() {
+    public LoggedUserDTO getUser() {
         return user;
     }
 
-    public void setUser(User user) {
+    public void setUser(LoggedUserDTO user) {
         this.user = user;
     }
 

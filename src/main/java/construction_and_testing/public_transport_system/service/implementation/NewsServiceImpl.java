@@ -3,10 +3,12 @@ package construction_and_testing.public_transport_system.service.implementation;
 import construction_and_testing.public_transport_system.domain.News;
 import construction_and_testing.public_transport_system.repository.NewsRepository;
 import construction_and_testing.public_transport_system.service.definition.NewsService;
+import org.hibernate.mapping.Collection;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -18,7 +20,9 @@ public class NewsServiceImpl implements NewsService {
 
     @Override
     public List<News> getAll() {
-        return newsRepository.findAll();
+        List<News> news = newsRepository.findAll();
+        Collections.sort(news);
+        return news;
     }
 
     @Override

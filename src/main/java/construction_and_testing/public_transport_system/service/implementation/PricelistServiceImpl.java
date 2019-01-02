@@ -8,6 +8,7 @@ import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -46,5 +47,16 @@ public class PricelistServiceImpl implements PricelistService {
     @Override
     public Pricelist findPricelistById(long id) {
         return this.pricelistRepository.findById(id).get();
+    }
+
+    @Override
+    public Pricelist findValid() {
+        List<Pricelist> pricelists = pricelistRepository.findAll();
+        LocalDateTime now = LocalDateTime.now();
+        for(Pricelist p : pricelists){
+            if(p.getStartDate().isBefore(now) && p.getEndDate().isAfter(now));
+            return p;
+        }
+        return null;
     }
 }
