@@ -15,4 +15,7 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
 
     @Query(value = "SELECT SUM(i.cost) FROM Ticket t, Pricelist_item pli, Item i WHERE t.price_list_item_id = pli.id AND pli.item_id = i.id AND i.vehicle_type = ?3 AND t.purchase_date BETWEEN ?1 AND ?2", nativeQuery = true)
     Long getPrice(LocalDate date1, LocalDate date2, int i);
+
+    @Query( value = "SELECT * FROM Ticket t WHERE t.purchase_date BETWEEN ?1 AND ?2", nativeQuery = true)
+    List<Ticket> getTicketsBetween(LocalDate date1, LocalDate date2);
 }

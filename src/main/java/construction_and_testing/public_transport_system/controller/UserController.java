@@ -2,10 +2,7 @@ package construction_and_testing.public_transport_system.controller;
 
 import construction_and_testing.public_transport_system.converter.RegisteredUserConverter;
 import construction_and_testing.public_transport_system.converter.UserConverter;
-import construction_and_testing.public_transport_system.domain.DTO.AuthenticationRequestDTO;
-import construction_and_testing.public_transport_system.domain.DTO.AuthenticationResponseDTO;
-import construction_and_testing.public_transport_system.domain.DTO.RegisteringUserDTO;
-import construction_and_testing.public_transport_system.domain.DTO.UserDTO;
+import construction_and_testing.public_transport_system.domain.DTO.*;
 import construction_and_testing.public_transport_system.domain.RegisteredUser;
 import construction_and_testing.public_transport_system.domain.User;
 import construction_and_testing.public_transport_system.domain.Validator;
@@ -248,10 +245,12 @@ public class UserController {
     }
 
     @PostMapping("/addValidator")
-    ResponseEntity<Boolean> addValidator(@RequestBody UserDTO userDTO) {
+    ResponseEntity<Boolean> addValidator(@RequestBody ValidatorDTO userDTO) {
+
         if (userDTO.getId() != null)
             return new ResponseEntity<>(false, HttpStatus.CONFLICT);
         else {
+            userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
             Validator newValidator = new Validator( UserConverter.toEntity(userDTO) );
             try{
                 this.userService.save(newValidator);

@@ -16,7 +16,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.DayOfWeek;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.temporal.TemporalAdjusters;
 import java.util.*;
 
 import static java.lang.Math.toIntExact;
@@ -122,6 +125,55 @@ public class TicketServiceImpl implements TicketService {
 
         return prices;
 
+    }
 
+    @Override
+    public HashMap<String, Integer> getVisitsByWeek(LocalDate date1, LocalDate date2){
+
+
+    HashMap<String, Integer> totalVisitsPerWeek = new HashMap<String, Integer>();
+
+        List<Ticket> ticketList = ticketRepository.getTicketsBetween(date1, date2);
+
+        for (Ticket selectedTicket: ticketList) {
+
+            String week = generateWeek(selectedTicket.getPurchaseDate());
+
+            // Ako ne postoji ubacuje 1 kao vrednost, inace poveacava vrednost za 1
+            totalVisitsPerWeek.merge(week, 1, Integer::sum);
+        }
+
+        return totalVisitsPerWeek;
+    }
+
+    @Override
+    public HashMap<String, Integer> getVisitsByMonth(LocalDate date1, LocalDate date2) {
+
+        HashMap<String, Integer> totalVisitsPerMonth = new HashMap<String, Integer>();
+
+        List<Ticket> ticketList = ticketRepository.getTicketsBetween(date1, date2);
+
+        for (Ticket selectedTicket : ticketList) {
+            String week = generateMonth(selectedTicket.getPurchaseDate());
+
+            // Ako ne postoji ubacuje 1 kao vrednost, inace poveacava vrednost za 1
+            totalVisitsPerMonth.merge(week, 1, Integer::sum);
+        }
+
+        return totalVisitsPerMonth;
+
+    }
+
+    private String generateWeek(LocalDateTime d) {
+        LocalDateTime previous = d.with(TemporalAdjusters.next(DayOfWeek.MONDAY));
+        LocalDateTime next = d.with(TemporalAdjusters.previous(DayOfWeek.MONDAY));
+        String retVal = previous.toString() + "," + next.toString();
+        return retVal;
+    }
+
+    private String generateMonth(LocalDateTime d) {
+
+        String retVal = d.getYear() + "-" +  d.getMonth();
+        return retVal;
     }
 }
