@@ -1,8 +1,7 @@
 package construction_and_testing.public_transport_system.selenium.util;
 
-import org.springframework.util.ResourceUtils;
-
-import java.io.FileNotFoundException;
+import java.io.File;
+import java.nio.file.Paths;
 
 public class SeleniumProperties {
 
@@ -10,19 +9,14 @@ public class SeleniumProperties {
 
     static {
         if (System.getProperty("os.name").contains("nux")) {
-            try {
-                CHROME_DRIVER_PATH = ResourceUtils
-                        .getURL("classpath:drivers/linux/chromedriver")
-                        .getPath();
-            } catch (FileNotFoundException e) {
-                CHROME_DRIVER_PATH = "";
-            }
-        } else if (System.getProperty("os.name").startsWith("Windows")) {
-            CHROME_DRIVER_PATH = "...";
+            CHROME_DRIVER_PATH = (new File(Paths
+                    .get("src", "test", "java", "resources", "drivers", "linux", "chromedriver")
+                    .toString())).getAbsolutePath();
         } else {
-            CHROME_DRIVER_PATH = "...";
+            CHROME_DRIVER_PATH = (new File(Paths
+                    .get("src", "test", "java", "resources", "drivers", "windows", "chromedriver")
+                    .toString())).getAbsolutePath();
         }
     }
-
 
 }
