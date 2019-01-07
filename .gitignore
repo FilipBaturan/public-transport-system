@@ -25,3 +25,5 @@
 /.nb-gradle/
 
 node_modules/
+
+src/test/java/resources/drivers/*

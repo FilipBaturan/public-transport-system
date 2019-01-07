@@ -1,5 +1,7 @@
 package construction_and_testing.public_transport_system.domain.DTO;
 
+import construction_and_testing.public_transport_system.domain.Validator;
+
 public class ValidatorDTO {
 
     private Long id;
@@ -16,8 +18,7 @@ public class ValidatorDTO {
 
     }
 
-    public ValidatorDTO(Long id, String name, String lastName, String email, String password, String username,
-                      boolean active  ) {
+    public ValidatorDTO(Long id, String name, String lastName, String email, String password, String username) {
         this.id = id;
         this.name = name;
         this.lastName = lastName;
@@ -37,6 +38,18 @@ public class ValidatorDTO {
         this.password = password;
         this.telephone = telephone;
         this.active = true;
+    }
+
+    public ValidatorDTO(Validator u) {
+        this.id = u.getId();
+        this.name = u.getName();
+        this.lastName = u.getLastName();
+        this.email = u.getEmail();
+        this.username = u.getUsername();
+        this.password = u.getPassword();
+        this.telephone = u.getTelephone();
+        this.active = u.isActive();
+
     }
 
     public Long getId() {

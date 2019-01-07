@@ -1,7 +1,6 @@
 package construction_and_testing.public_transport_system.service.security;
 
 import construction_and_testing.public_transport_system.domain.User;
-import construction_and_testing.public_transport_system.domain.enums.AuthorityType;
 import construction_and_testing.public_transport_system.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -34,9 +33,11 @@ public class UserDetailsServiceImpl implements UserDetailsService {
             );
         }
 
-        AuthorityType type = AuthorityType.REGISTERED_USER;
+        return UserDetailsFactory.create(user);
 
-        return org.springframework.security.core.userdetails.User//
+        //AuthorityType type = AuthorityType.REGISTERED_USER;
+
+        /*return org.springframework.security.core.userdetails.User//
                 .withUsername(username)//+
                 .password(user.getPassword())
                 //.passwordEncoder(new BCryptPasswordEncoder()::encode)//
@@ -45,7 +46,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
                 .accountLocked(false)//
                 .credentialsExpired(false)//
                 .disabled(false)//
-                .build();
+                .build();*/
 
         //return UserDetailsFactory.create(user);
     }

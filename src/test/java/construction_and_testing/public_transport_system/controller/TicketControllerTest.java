@@ -13,6 +13,7 @@ import org.springframework.http.*;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import static construction_and_testing.public_transport_system.constants.TicketConstants.*;
@@ -58,8 +59,7 @@ public class TicketControllerTest {
 //    }
 
     @Test
-    public void getTicketsForUserValid()
-    {
+    public void getTicketsForUserValid() {
         ResponseEntity<TicketReportDTO[]> result = testRestTemplate
                 .getForEntity(this.URL + "/getTicketsForUser/" + DB_USER_ID, TicketReportDTO[].class);
 
@@ -74,8 +74,7 @@ public class TicketControllerTest {
     }
 
     @Test
-    public void getTicketsForUserInvalid()
-    {
+    public void getTicketsForUserInvalid() {
         ResponseEntity<TicketReportDTO[]> result = testRestTemplate
                 .getForEntity(this.URL + "/getTicketsForUser/" + DB_ID_INVALID, TicketReportDTO[].class);
 
@@ -88,8 +87,7 @@ public class TicketControllerTest {
 
 
     @Test
-    public void updateTicketValid()
-    {
+    public void updateTicketValid() {
         ResponseEntity<Boolean> result = testRestTemplate
                 .exchange(this.URL + "/updateTicket/", HttpMethod.PUT,
                         new HttpEntity<TicketReportDTO>(DB_TICKET_DTO), Boolean.class);
@@ -102,8 +100,7 @@ public class TicketControllerTest {
     }
 
     @Test
-    public void updateTicketInvalid()
-    {
+    public void updateTicketInvalid() {
         ResponseEntity<Boolean> result = testRestTemplate
                 .exchange(this.URL + "/updateTicket/", HttpMethod.PUT,
                         new HttpEntity<TicketReportDTO>(DB_INVALID_TICKET_DTO), Boolean.class);
@@ -116,62 +113,136 @@ public class TicketControllerTest {
     }
 
     @Test
-    public void getReportValid()
-    {
+    public void getReportValid() {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<String>("", headers);
 
-        ParameterizedTypeReference<Map<VehicleType, Integer>> responseType = new ParameterizedTypeReference<Map<VehicleType, Integer>>() {};
+        ParameterizedTypeReference<Map<VehicleType, Integer>> responseType = new ParameterizedTypeReference<Map<VehicleType, Integer>>() {
+        };
         ResponseEntity<Map<VehicleType, Integer>> result = testRestTemplate
-                .exchange(this.URL + "/reprot/2015-01-01/2018-12-12", HttpMethod.GET,entity, responseType);
+                .exchange(this.URL + "/reprot/2015-01-01/2018-12-12", HttpMethod.GET, entity, responseType);
 
         Map<VehicleType, Integer> prices = result.getBody();
         assertThat(prices).isNotEmpty();
         assertEquals(result.getStatusCode(), HttpStatus.OK);
         assertThat(prices.get(VehicleType.BUS)).isEqualTo(300);
         assertThat(prices.get(VehicleType.METRO)).isEqualTo(0);
-        assertThat(prices.get(VehicleType.TRAMVAJ)).isEqualTo(0);
+        assertThat(prices.get(VehicleType.TRAM)).isEqualTo(0);
     }
 
     @Test
-    public void getReportSwappedDates()
-    {
+    public void getReportSwappedDates() {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<String>("", headers);
 
-        ParameterizedTypeReference<Map<VehicleType, Integer>> responseType = new ParameterizedTypeReference<Map<VehicleType, Integer>>() {};
+        ParameterizedTypeReference<Map<VehicleType, Integer>> responseType = new ParameterizedTypeReference<Map<VehicleType, Integer>>() {
+        };
         ResponseEntity<Map<VehicleType, Integer>> result = testRestTemplate
-                .exchange(this.URL + "/reprot/2018-01-01/2015-12-12", HttpMethod.GET,entity, responseType);
+                .exchange(this.URL + "/reprot/2018-01-01/2015-12-12", HttpMethod.GET, entity, responseType);
 
         Map<VehicleType, Integer> prices = result.getBody();
         assertThat(prices).isNotEmpty();
         assertEquals(result.getStatusCode(), HttpStatus.OK);
         assertThat(prices.get(VehicleType.BUS)).isEqualTo(-1);
         assertThat(prices.get(VehicleType.METRO)).isEqualTo(-1);
-        assertThat(prices.get(VehicleType.TRAMVAJ)).isEqualTo(-1);
+        assertThat(prices.get(VehicleType.TRAM)).isEqualTo(-1);
     }
 
     /**
      * Date1 is not provided in correct form
      */
     @Test
-    public void getReportInvalid()
-    {
+    public void getReportInvalid() {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<String>("", headers);
 
-        ParameterizedTypeReference<Map<VehicleType, Integer>> responseType = new ParameterizedTypeReference<Map<VehicleType, Integer>>() {};
+        ParameterizedTypeReference<Map<VehicleType, Integer>> responseType = new ParameterizedTypeReference<Map<VehicleType, Integer>>() {
+        };
         ResponseEntity<Map<VehicleType, Integer>> result = testRestTemplate
-                .exchange(this.URL + "/reprot/2015-01-0sfdf1/2018-12-12", HttpMethod.GET,entity, responseType);
+                .exchange(this.URL + "/reprot/2015-01-0asdsd1/2018-12-12", HttpMethod.GET, entity, responseType);
 
         Map<VehicleType, Integer> prices = result.getBody();
         assertThat(prices).isEmpty();
         assertEquals(result.getStatusCode(), HttpStatus.NOT_ACCEPTABLE);
+    }
+
+    @Test
+    public void getVisitsPerWeekValid()
+    {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> entity = new HttpEntity<String>("", headers);
+
+        ParameterizedTypeReference<Map<String, Integer>> responseType = new ParameterizedTypeReference<Map<String, Integer>>() {
+        };
+        ResponseEntity<Map<String, Integer>> result = testRestTemplate
+                .exchange(this.URL + "/getVisitsPerWeek/2015-01-01/2018-12-12", HttpMethod.GET, entity, responseType);
+
+        Map<String, Integer> prices = result.getBody();
+        assertThat(prices).isNotEmpty();
+        assertEquals(result.getStatusCode(), HttpStatus.OK);
+        assertThat(prices.size()).isEqualTo(1);
+        assertThat(prices.get("2016-12-26T00:00,2016-12-19T00:00")).isEqualTo(2);
+
+    }
+
+    @Test
+    public void getVisitsPerWeekInvalid()
+    {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> entity = new HttpEntity<String>("", headers);
+
+        ParameterizedTypeReference<Map<String, Integer>> responseType = new ParameterizedTypeReference<Map<String, Integer>>() {
+        };
+        ResponseEntity<Map<String, Integer>> result = testRestTemplate
+                .exchange(this.URL + "/getVisitsPerWeek/2015-01-01qwewewe/2018-12-12", HttpMethod.GET, entity, responseType);
+
+        Map<String, Integer> prices = result.getBody();
+        assertThat(prices).isEmpty();
+        assertEquals(result.getStatusCode(), HttpStatus.NOT_ACCEPTABLE);
+    }
+
+    @Test
+    public void getVisitsPerMonthValid()
+    {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> entity = new HttpEntity<>("", headers);
+
+        ParameterizedTypeReference<Map<String, Integer>> responseType = new ParameterizedTypeReference<Map<String, Integer>>() {
+        };
+        ResponseEntity<Map<String, Integer>> result = testRestTemplate
+                .exchange(this.URL + "/getVisitsPerMonth/2015-01-01/2018-12-12", HttpMethod.GET, entity, responseType);
+
+        Map<String, Integer> prices = result.getBody();
+        assertThat(prices).isNotEmpty();
+        assertEquals(result.getStatusCode(), HttpStatus.OK);
+        assertThat(prices.size()).isEqualTo(1);
+        assertThat(prices.get("2016-DECEMBER")).isEqualTo(2);
+    }
+
+    @Test
+    public void getVisitsPerMonthInvalid()
+    {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+        HttpEntity<String> entity = new HttpEntity<>("", headers);
+
+        ParameterizedTypeReference<Map<String, Integer>> responseType = new ParameterizedTypeReference<Map<String, Integer>>() {
+        };
+        ResponseEntity<Map<String, Integer>> result = testRestTemplate
+                .exchange(this.URL + "/getVisitsPerMonth/2015-01-01/2018-asdsd2-12", HttpMethod.GET, entity, responseType);
+
+        Map<String, Integer> prices = result.getBody();
+        assertThat(prices).isEmpty();
+        assertEquals(result.getStatusCode(), HttpStatus.NOT_ACCEPTABLE);
+
     }
 }

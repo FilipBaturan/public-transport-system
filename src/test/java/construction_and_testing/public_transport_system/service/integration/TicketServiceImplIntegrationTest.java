@@ -60,8 +60,7 @@ public class TicketServiceImplIntegrationTest {
 
     @Transactional
     @Test
-    public void saveChangedValidTest()
-    {
+    public void saveChangedValidTest() {
         Ticket t1 = ticketService.findTicketById(DB_ID);
         t1.setPurchaseDate(DB_RANDOM_DATE);
         Ticket savedTicket = ticketService.saveTicket(t1);
@@ -79,8 +78,7 @@ public class TicketServiceImplIntegrationTest {
 
     @Test
     @Transactional
-    public void saveNewValidTest()
-    {
+    public void saveNewValidTest() {
         Ticket ticket = ticketService.findTicketById(DB_ID);
 
 
@@ -99,18 +97,16 @@ public class TicketServiceImplIntegrationTest {
 
     @Transactional
     @Test(expected = GeneralException.class)
-    public void saveInvalidLine()
-    {
+    public void saveInvalidLine() {
         Ticket t1 = ticketService.findTicketById(DB_ID);
         t1.getLine().setId(DB_TL_INVALID_ID);
-        Ticket savedTicket =  ticketService.saveTicket(t1);
+        Ticket savedTicket = ticketService.saveTicket(t1);
 
     }
 
     @Transactional
     @Test(expected = GeneralException.class)
-    public void saveNullLine()
-    {
+    public void saveNullLine() {
         Ticket t1 = ticketService.findTicketById(DB_ID);
         t1.getLine().setId(null);
         ticketService.saveTicket(t1);
@@ -118,16 +114,14 @@ public class TicketServiceImplIntegrationTest {
     }
 
     @Test(expected = GeneralException.class)
-    public void saveInvalidReservation()
-    {
+    public void saveInvalidReservation() {
         Ticket t1 = ticketService.findTicketById(DB_ID);
         t1.getReservation().setId(DB_RES_INVALID_ID);
         ticketService.saveTicket(t1);
     }
 
     @Test(expected = GeneralException.class)
-    public void saveNullReservation()
-    {
+    public void saveNullReservation() {
         Ticket t1 = ticketService.findTicketById(DB_ID);
         t1.getReservation().setId(null);
         ticketService.saveTicket(t1);
@@ -135,8 +129,7 @@ public class TicketServiceImplIntegrationTest {
 
     @Transactional
     @Test
-    public void removeValidTest()
-    {
+    public void removeValidTest() {
         ticketService.remove(DB_ID);
         Ticket removedTicket = ticketService.findTicketById(DB_ID);
         assertFalse(removedTicket.isActive());
@@ -144,8 +137,7 @@ public class TicketServiceImplIntegrationTest {
 
     @Transactional
     @Test(expected = EntityNotFoundException.class)
-    public void removeUnknownTest()
-    {
+    public void removeUnknownTest() {
         ticketService.remove(DB_ID_INVALID);
         Ticket removedTicket = ticketService.findTicketById(DB_ID);
         assertFalse(removedTicket.isActive());
@@ -153,14 +145,12 @@ public class TicketServiceImplIntegrationTest {
 
     @Transactional
     @Test(expected = EntityNotFoundException.class)
-    public void removeNullParameter()
-    {
+    public void removeNullParameter() {
         ticketService.remove(DB_ID_INVALID);
     }
 
     @Test
-    public void getTicketsForResValid()
-    {
+    public void getTicketsForResValid() {
         List<Ticket> usersTickets = ticketService.getTiketsForReservation(DB_RESERVATION_ID);
         assertThat(usersTickets).isNotNull();
         assertThat(usersTickets).hasSize(2);
@@ -170,8 +160,7 @@ public class TicketServiceImplIntegrationTest {
     }
 
     @Test
-    public void getTicketsForResInvalid()
-    {
+    public void getTicketsForResInvalid() {
         List<Ticket> usersTickets = ticketService.getTiketsForReservation(DB_RES_INVALID_ID);
         assertThat(usersTickets).isEmpty();
         assertThat(usersTickets).hasSize(0);
@@ -179,8 +168,7 @@ public class TicketServiceImplIntegrationTest {
     }
 
     @Test()
-    public void getTicketsForResNull()
-    {
+    public void getTicketsForResNull() {
         List<Ticket> usersTickets = ticketService.getTiketsForReservation(null);
         assertThat(usersTickets).isEmpty();
         assertThat(usersTickets).hasSize(0);
@@ -188,8 +176,7 @@ public class TicketServiceImplIntegrationTest {
     }
 
     @Test
-    public void getReportValid()
-    {
+    public void getReportValid() {
         LocalDate date1 = LocalDate.of(2015, 12, 21);
         LocalDate date2 = LocalDate.of(2018, 3, 8);
 
@@ -197,12 +184,11 @@ public class TicketServiceImplIntegrationTest {
         assertThat(prices).isNotEmpty();
         assertThat(prices.get(VehicleType.BUS)).isEqualTo(300);
         assertThat(prices.get(VehicleType.METRO)).isEqualTo(0);
-        assertThat(prices.get(VehicleType.TRAMVAJ)).isEqualTo(0);
+        assertThat(prices.get(VehicleType.TRAM)).isEqualTo(0);
     }
 
     @Test
-    public void getReportReverseDates()
-    {
+    public void getReportReverseDates() {
         LocalDate date1 = LocalDate.of(2015, 12, 21);
         LocalDate date2 = LocalDate.of(2018, 3, 8);
 
@@ -210,17 +196,50 @@ public class TicketServiceImplIntegrationTest {
         assertThat(prices).isNotEmpty();
         assertThat(prices.get(VehicleType.BUS)).isEqualTo(-1);
         assertThat(prices.get(VehicleType.METRO)).isEqualTo(-1);
-        assertThat(prices.get(VehicleType.TRAMVAJ)).isEqualTo(-1);
+        assertThat(prices.get(VehicleType.TRAM)).isEqualTo(-1);
     }
 
     @Test(expected = NullPointerException.class)
-    public void getReportNullDates()
-    {
+    public void getReportNullDates() {
         Map<VehicleType, Integer> prices = ticketService.getReport(null, null);
         assertThat(prices).isNotEmpty();
         assertThat(prices.get(VehicleType.BUS)).isEqualTo(0);
         assertThat(prices.get(VehicleType.METRO)).isEqualTo(0);
-        assertThat(prices.get(VehicleType.TRAMVAJ)).isEqualTo(0);
+        assertThat(prices.get(VehicleType.TRAM)).isEqualTo(0);
+    }
+
+    @Test
+    public void getVisitsByWeekValid()
+    {
+        Map<String, Integer> prices = ticketService.getVisitsByWeek(DB_REPORT_START_DATE, DB_REPORT_END_DATE);
+        assertThat(prices).isNotEmpty();
+        assertThat(prices.size()).isEqualTo(1);
+        assertThat(prices.get("2016-12-26T00:00,2016-12-19T00:00")).isEqualTo(2);
+    }
+
+    @Test
+    public void getVisitsByWeekInvalid()
+    {
+        Map<String, Integer> prices = ticketService.getVisitsByWeek(DB_REPORT_END_DATE, DB_REPORT_START_DATE);
+        assertThat(prices).isEmpty();
+        assertThat(prices.size()).isEqualTo(0);
+    }
+
+    @Test
+    public void getVisitsByMonthValid()
+    {
+        Map<String, Integer> prices = ticketService.getVisitsByMonth(DB_REPORT_START_DATE, DB_REPORT_END_DATE);
+        assertThat(prices).isNotEmpty();
+        assertThat(prices.size()).isEqualTo(1);
+        assertThat(prices.get("2016-DECEMBER")).isEqualTo(2);
+    }
+
+    @Test
+    public void getVisitsByMonthInvalid()
+    {
+        Map<String, Integer> prices = ticketService.getVisitsByMonth(DB_REPORT_END_DATE, DB_REPORT_START_DATE);
+        assertThat(prices).isEmpty();
+        assertThat(prices.size()).isEqualTo(0);
     }
 
 }

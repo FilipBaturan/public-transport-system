@@ -19,6 +19,10 @@ public class StationConstants {
 
     public static final Long NEW_ID = 77L;
     public static final String NEW_NAME = "Kamenica1";
+    public static final String NEW_NAME_SHORT_LENGTH = "";
+    public static final String NEW_NAME_LONG_LENGTH = "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnnn";
+    public static final String NEW_NAME_MIN_LENGTH = "bbb";
+    public static final String NEW_NAME_MAX_LENGTH = "nnnnnnnnnnnnnnnnnnnnnnnnnnnnnn";
     public static final VehicleType NEW_TYPE = VehicleType.METRO;
     public static final StationPosition NEW_POSITION =
             new StationPosition(null, 45.24, 26.74, true, null);
@@ -28,7 +32,7 @@ public class StationConstants {
     public static final Long DEL_ID_INVALID = 33L;
 
     public static final List<Station> NEW_STATIONS = new ArrayList<Station>() {{
-        add(new Station(null, "Sajmiste1", new StationPosition(), VehicleType.TRAMVAJ, true));
+        add(new Station(null, "Sajmiste1", new StationPosition(), VehicleType.TRAM, true));
         add(new Station(null, "Sajmiste2", new StationPosition(), VehicleType.METRO, true));
     }};
 

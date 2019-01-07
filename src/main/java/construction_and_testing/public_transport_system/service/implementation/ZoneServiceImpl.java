@@ -12,6 +12,8 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Optional;
@@ -49,6 +51,7 @@ public class ZoneServiceImpl implements ZoneService {
     @Override
     public Zone save(Zone zone) {
         try {
+            this.validate(zone);
             if (zone.getLines() == null) {
                 zone.setLines(new HashSet<>());
             } else {
@@ -68,7 +71,7 @@ public class ZoneServiceImpl implements ZoneService {
     @Override
     public void remove(Long id) {
         if (id == 1) {
-            throw new GeneralException("Zone can not be removed!", HttpStatus.BAD_REQUEST);
+            throw new GeneralException("Default zone can not be removed!", HttpStatus.BAD_REQUEST);
         }
         Optional<Zone> entity = zoneRepository.findById(id);
         if (entity.isPresent()) {
@@ -80,6 +83,23 @@ public class ZoneServiceImpl implements ZoneService {
             zoneRepository.save(zone);
         } else {
             throw new GeneralException("Requested zone does not exist!", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    /**
+     * @param zone that needs to be validated
+     */
+    private void validate(Zone zone) {
+        Set<ConstraintViolation<Zone>> violations = Validation.buildDefaultValidatorFactory()
+                .getValidator().validate(zone);
+        if (!violations.isEmpty()) {
+            StringBuilder builder = new StringBuilder();
+            builder.append("Name ");
+            for (ConstraintViolation<Zone> violation : violations) {
+                builder.append(violation.getMessage());
+                builder.append("\n");
+            }
+            throw new GeneralException(builder.toString(), HttpStatus.BAD_REQUEST);
         }
     }
 }

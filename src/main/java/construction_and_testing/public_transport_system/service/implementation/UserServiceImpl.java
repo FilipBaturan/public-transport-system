@@ -44,8 +44,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> findAll()
-    {
+    public List<User> findAll() {
         return userRepository.findAll();
     }
 
@@ -68,23 +67,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public User findById(Long id) {
 
-        try
-        {
+        try {
             return userRepository.findById(id).get();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             throw new GeneralException("Requested user does not exist!", HttpStatus.BAD_REQUEST);
         }
 
     }
 
     @Override
-    public User save(User u)
-    {
+    public User save(User u) {
         try {
             return userRepository.save(u);
-        }
-        catch (DataIntegrityViolationException e) {
+        } catch (DataIntegrityViolationException e) {
             throw new GeneralException("User does not have valid attributes!", HttpStatus.BAD_REQUEST);
         }
     }

@@ -13,7 +13,7 @@ import java.util.Objects;
  */
 @Entity
 @Where(clause = "active =1")
-public class News implements Serializable {
+public class News implements Serializable, Comparable<News> {
 
     private static final long serialVersionUID = 1L;
 
@@ -112,5 +112,16 @@ public class News implements Serializable {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    @Override
+    public int compareTo(News o) {
+        if (this.getDate().isBefore(o.getDate())) {
+            return 1;
+        }
+        if (this.getDate().isAfter(o.getDate())) {
+            return -1;
+        }
+        return 0;
     }
 }

@@ -10,8 +10,11 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
 import java.util.List;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class VehicleServiceImpl implements VehicleService {
@@ -40,18 +43,16 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public Vehicle save(Vehicle vehicle) {
-        try {
+        this.validate(vehicle);
+        if (vehicle.getCurrentLine() != null) {
             vehicle.setCurrentLine(transportLineRepository.findById(vehicle.getCurrentLine().getId())
-                    .orElseThrow(() -> new GeneralException("Invalid transport line data associated!", HttpStatus.BAD_REQUEST)));
+                    .orElseThrow(() -> new GeneralException("Invalid transport line data associated!",
+                            HttpStatus.BAD_REQUEST)));
             if (vehicle.getType() != vehicle.getCurrentLine().getType()) {
                 throw new GeneralException("Invalid transport line and vehicle types!", HttpStatus.BAD_REQUEST);
             }
-            return vehicleRepository.save(vehicle);
-        } catch (NullPointerException e) {
-            throw new GeneralException("Invalid transport line and vehicle types!", HttpStatus.BAD_REQUEST);
         }
-
-
+        return vehicleRepository.save(vehicle);
     }
 
     @Override
@@ -62,7 +63,24 @@ public class VehicleServiceImpl implements VehicleService {
             vehicle.setActive(false);
             vehicleRepository.save(vehicle);
         } else {
-            throw new GeneralException("Vehicle with id:" + id + " does not exist!", HttpStatus.BAD_REQUEST);
+            throw new GeneralException("Requested vehicle does not exist!", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    /**
+     * @param vehicle that needs to be validated
+     */
+    private void validate(Vehicle vehicle) {
+        Set<ConstraintViolation<Vehicle>> violations = Validation.buildDefaultValidatorFactory()
+                .getValidator().validate(vehicle);
+        if (!violations.isEmpty()) {
+            StringBuilder builder = new StringBuilder();
+            builder.append("Name ");
+            for (ConstraintViolation<Vehicle> violation : violations) {
+                builder.append(violation.getMessage());
+                builder.append("\n");
+            }
+            throw new GeneralException(builder.toString(), HttpStatus.BAD_REQUEST);
         }
     }
 

@@ -17,18 +17,21 @@ public class NewsDTO implements Serializable {
 
     private LocalDateTime date;
 
+    private Long operator;
+
     private boolean active;
 
     public NewsDTO() {
         active = true;
     }
 
-    public NewsDTO(Long id, String title, String content, LocalDateTime date) {
+    public NewsDTO(Long id, String title, String content, LocalDateTime date, Long operator) {
         this.id = id;
         this.title = title;
         this.content = content;
         this.date = date;
         this.active = true;
+        this.operator = operator;
     }
 
     public NewsDTO(News news) {
@@ -37,6 +40,7 @@ public class NewsDTO implements Serializable {
         this.content = news.getContent();
         this.date = news.getDate();
         this.active = news.isActive();
+        this.operator = news.getOperator().getId();
     }
 
     public static long getSerialVersionUID() {
@@ -81,5 +85,13 @@ public class NewsDTO implements Serializable {
 
     public void setActive(boolean active) {
         this.active = active;
+    }
+
+    public Long getOperator() {
+        return operator;
+    }
+
+    public void setOperator(Long operator) {
+        this.operator = operator;
     }
 }

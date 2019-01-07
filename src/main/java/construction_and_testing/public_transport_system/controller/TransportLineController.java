@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -62,6 +63,7 @@ public class TransportLineController extends ValidationController {
      * @return saved transportLine
      */
     @PostMapping()
+    @PreAuthorize("hasAuthority('OPERATER')")
     public ResponseEntity<TransportLineDTO> save(@RequestBody String transportLine) throws IOException,
             ValidationException {
         logger.info("Saving transport line with at time {}.", Calendar.getInstance().getTime());
@@ -78,6 +80,7 @@ public class TransportLineController extends ValidationController {
      * @return added transport lines
      */
     @PostMapping("/replace")
+    @PreAuthorize("hasAuthority('OPERATER')")
     public ResponseEntity<List<TransportLineDTO>> replaceAll(@RequestBody String transportLines) throws
             IOException, ValidationException {
         logger.info("Replacing all transport lines at time {}.", Calendar.getInstance().getTime());
@@ -90,19 +93,16 @@ public class TransportLineController extends ValidationController {
     }
 
     /**
-     * DELETE /api/transportLine
+     * DELETE /api/transportLine/{id}
      *
-     * @param transportLine that needs to be deleted
+     * @param id of transport line that needs to be deleted
      * @return message about action results
      */
-    @DeleteMapping()
-    public ResponseEntity<String> delete(@RequestBody String transportLine) throws IOException,
-            ValidationException {
+    @DeleteMapping("{id}")
+    @PreAuthorize("hasAuthority('OPERATER')")
+    public ResponseEntity<String> delete(@PathVariable String id) throws ValidationException {
         logger.info("Deleting transportLine with id at time {}.", Calendar.getInstance().getTime());
-        validateJSON(transportLine, "transportLineCollection.json");
-        ObjectMapper mapper = new ObjectMapper();
-        transportLineService.remove((new TransportLine(mapper.readValue(transportLine,
-                TransportLineDTO.class))).getId());
-        return new ResponseEntity<>("TransportLine successfully deleted!", HttpStatus.OK);
+        transportLineService.remove(Long.parseLong(id));
+        return new ResponseEntity<>("Transport line successfully deleted!", HttpStatus.OK);
     }
 }

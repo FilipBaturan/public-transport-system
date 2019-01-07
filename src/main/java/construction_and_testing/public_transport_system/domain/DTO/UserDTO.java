@@ -36,8 +36,7 @@ public class UserDTO {
         this.active = false;
     }
 
-    public UserDTO(Long id, String name, String lastName, String email, String password, String username)
-    {
+    public UserDTO(Long id, String name, String lastName, String email, String password, String username) {
         this.id = id;
         this.firstName = name;
         this.lastName = lastName;

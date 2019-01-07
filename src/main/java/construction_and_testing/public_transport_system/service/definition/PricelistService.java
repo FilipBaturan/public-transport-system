@@ -14,4 +14,5 @@ public interface PricelistService {
 
     Pricelist findPricelistById(long id);
 
+    Pricelist findValid();
 }

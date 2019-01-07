@@ -1,6 +1,8 @@
 package construction_and_testing.public_transport_system.controller;
 
 
+import construction_and_testing.public_transport_system.converter.PriceListConverter;
+import construction_and_testing.public_transport_system.domain.DTO.PricelistDTO;
 import construction_and_testing.public_transport_system.domain.Pricelist;
 import construction_and_testing.public_transport_system.service.definition.PricelistService;
 import construction_and_testing.public_transport_system.util.GeneralException;
@@ -25,7 +27,6 @@ public class PricelistController {
     @Autowired
     private PricelistService pricelistService;
 
-
     /**
      * POST /api/pricelist
      * <p>
@@ -43,6 +44,12 @@ public class PricelistController {
         } else {
             throw new GeneralException("Pricelist with given name already exist!", HttpStatus.BAD_REQUEST);
         }
+    }
+
+    @GetMapping("findActive")
+    public ResponseEntity<PricelistDTO> findActive() {
+        Pricelist p = pricelistService.findValid();
+        return new ResponseEntity<>(PriceListConverter.fromEntity(p), HttpStatus.OK);
     }
 
     /**

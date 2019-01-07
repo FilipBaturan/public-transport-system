@@ -30,7 +30,7 @@ public class Schedule implements Serializable {
     @Enumerated(EnumType.ORDINAL)
     private DayOfWeek dayOfWeek;
 
-    @ElementCollection(targetClass = String.class)
+    @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
     @CollectionTable(name = "schedule_departures")
     @Column(name = "departure", nullable = false)
     private List<String> departures;
@@ -56,6 +56,7 @@ public class Schedule implements Serializable {
         this.active = active;
     }
 
+
     public Schedule(ScheduleDTO schedule) {
         this.id = schedule.getId();
         this.transportLine = new TransportLine(schedule.getTransportLine().getId());
@@ -74,7 +75,7 @@ public class Schedule implements Serializable {
 
     public Schedule(Schedule schedule) {
         this.id = schedule.getId();
-        this.transportLine = schedule.getTransportLine();
+        this.transportLine = new TransportLine(schedule.getTransportLine());
         this.departures = schedule.getDepartures();
         this.dayOfWeek = schedule.getDayOfWeek();
         this.active = schedule.isActive();

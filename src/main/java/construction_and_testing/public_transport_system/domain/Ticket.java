@@ -59,6 +59,16 @@ public class Ticket implements Serializable {
         this.reservation = reservation;
     }
 
+    public Ticket(Ticket ticket) {
+        this.id = ticket.getId();
+        this.purchaseDate = ticket.getPurchaseDate();
+        this.expiryDate = ticket.getExpiryDate();
+        this.active = ticket.isActive();
+        this.priceListItem = ticket.getPriceList();
+        this.reservation = ticket.getReservation();
+        this.line = new TransportLine(ticket.getLine());
+    }
+
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }
@@ -70,7 +80,6 @@ public class Ticket implements Serializable {
     public void setId(Long id) {
         this.id = id;
     }
-
 
     public String getToken() {
         return token;
@@ -133,7 +142,14 @@ public class Ticket implements Serializable {
         if (this == o) return true;
         if (!(o instanceof Ticket)) return false;
         Ticket ticket = (Ticket) o;
-        return Objects.equals(id, ticket.id);
+        return active == ticket.active &&
+                Objects.equals(id, ticket.id) &&
+                Objects.equals(purchaseDate, ticket.purchaseDate) &&
+                Objects.equals(expiryDate, ticket.expiryDate) &&
+                Objects.equals(token, ticket.token) &&
+                Objects.equals(priceListItem, ticket.priceListItem) &&
+                Objects.equals(line, ticket.line) &&
+                Objects.equals(reservation, ticket.reservation);
     }
 
     @Override

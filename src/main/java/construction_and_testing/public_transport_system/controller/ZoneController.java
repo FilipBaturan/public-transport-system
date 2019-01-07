@@ -11,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -37,7 +38,7 @@ public class ZoneController extends ValidationController {
     @GetMapping
     public ResponseEntity<List<ZoneDTO>> getAll() {
         logger.info("Requesting all available zones at time {}.", Calendar.getInstance().getTime());
-        return new ResponseEntity<>(ZoneConverter.fromEntityList(zoneService.getAll(), ZoneDTO::new), HttpStatus.OK);
+        return new ResponseEntity<>(ZoneConverter.fromEntityList(zoneService.getAll(), e -> ZoneConverter.fromEntity(e)), HttpStatus.OK);
     }
 
     /**
@@ -59,6 +60,7 @@ public class ZoneController extends ValidationController {
      * @return added zone
      */
     @PostMapping
+    @PreAuthorize("hasAuthority('OPERATER')")
     public ResponseEntity<ZoneDTO> save(@RequestBody String zone) throws IOException, ValidationException {
         logger.info("Saving zone at time {}.", Calendar.getInstance().getTime());
         validateJSON(zone, "zone.json");
@@ -68,17 +70,16 @@ public class ZoneController extends ValidationController {
     }
 
     /**
-     * DELETE /api/zone
+     * DELETE /api/zone/id
      *
-     * @param zone that needs to be deleted
+     * @param id of zone that needs to be deleted
      * @return message about action results
      */
-    @DeleteMapping()
-    public ResponseEntity<String> delete(@RequestBody String zone) throws IOException, ValidationException {
+    @DeleteMapping("{id}")
+    @PreAuthorize("hasAuthority('OPERATER')")
+    public ResponseEntity<String> delete(@PathVariable String id) throws ValidationException {
         logger.info("Deleting zone at time {}.", Calendar.getInstance().getTime());
-        validateJSON(zone, "zone.json");
-        ObjectMapper mapper = new ObjectMapper();
-        zoneService.remove((new Zone(mapper.readValue(zone, ZoneDTO.class)).getId()));
+        zoneService.remove(Long.parseLong(id));
         return new ResponseEntity<>("Zone successfully deleted!", HttpStatus.OK);
     }
 }

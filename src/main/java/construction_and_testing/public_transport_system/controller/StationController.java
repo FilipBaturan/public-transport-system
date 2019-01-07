@@ -12,6 +12,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
@@ -62,6 +63,7 @@ public class StationController extends ValidationController {
      * @return added station
      */
     @PostMapping
+    @PreAuthorize("hasAuthority('OPERATER')")
     public ResponseEntity<StationDTO> save(@RequestBody String station) throws IOException, ValidationException {
         logger.info("Saving station at time {}.", Calendar.getInstance().getTime());
         validateJSON(station, "station.json");
@@ -78,6 +80,7 @@ public class StationController extends ValidationController {
      * @return added station
      */
     @PostMapping("/replace")
+    @PreAuthorize("hasAuthority('OPERATER')")
     public ResponseEntity<List<StationDTO>> replaceAll(@RequestBody String stations) throws
             IOException, ValidationException {
         logger.info("Replacing all stations at time {}.", Calendar.getInstance().getTime());
@@ -91,15 +94,14 @@ public class StationController extends ValidationController {
     /**
      * DELETE /api/station
      *
-     * @param station that needs to be deleted
+     * @param id of station that needs to be deleted
      * @return message about action results
      */
-    @DeleteMapping()
-    public ResponseEntity<String> delete(@RequestBody String station) throws IOException, ValidationException {
+    @DeleteMapping("{id}")
+    @PreAuthorize("hasAuthority('OPERATER')")
+    public ResponseEntity<String> delete(@PathVariable String id) throws ValidationException {
         logger.info("Deleting station at time {}.", Calendar.getInstance().getTime());
-        validateJSON(station, "station.json");
-        ObjectMapper mapper = new ObjectMapper();
-        stationService.remove((new Station(mapper.readValue(station, StationDTO.class))).getId());
+        stationService.remove(Long.parseLong(id));
         return new ResponseEntity<>("Station successfully deleted!", HttpStatus.OK);
     }
 

@@ -48,8 +48,9 @@ public class User implements Serializable {
     @Column(nullable = false, name = "active")
     private boolean active;
 
-    //    @ElementCollection(targetClass = AuthorityType.class, fetch = FetchType.EAGER)
+    //@ElementCollection(targetClass = AuthorityType.class, fetch = FetchType.EAGER)
     @Column(nullable = false, name = "authority")
+
     private AuthorityType authorityType;
 
     public User() {

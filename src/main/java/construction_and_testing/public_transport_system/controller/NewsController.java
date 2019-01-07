@@ -1,6 +1,9 @@
 package construction_and_testing.public_transport_system.controller;
 
 
+import construction_and_testing.public_transport_system.converter.NewsConverter;
+import construction_and_testing.public_transport_system.domain.DTO.AddNewsDTO;
+import construction_and_testing.public_transport_system.domain.DTO.NewsDTO;
 import construction_and_testing.public_transport_system.domain.News;
 import construction_and_testing.public_transport_system.service.definition.NewsService;
 import construction_and_testing.public_transport_system.util.GeneralException;
@@ -33,10 +36,10 @@ public class NewsController {
      * @return all news
      */
     @GetMapping
-    @PreAuthorize("isAuthenticated()")
-    public ResponseEntity<List<News>> getAll() {
+    //@PreAuthorize("isAuthenticated()")
+    public ResponseEntity<List<NewsDTO>> getAll() {
         logger.info("Fetching all news...");
-        List<News> allNews = newsService.getAll();
+        List<NewsDTO> allNews = NewsConverter.fromEntityList(newsService.getAll(), e -> NewsConverter.fromEntity(e));
         return new ResponseEntity<>(allNews, HttpStatus.OK);
     }
 
@@ -72,11 +75,12 @@ public class NewsController {
      */
     @PostMapping
     //@PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<News> create(@RequestBody News news) {
-        boolean succeeded = newsService.addNew(news);
+    public ResponseEntity<News> create(@RequestBody AddNewsDTO news) {
+        News entity = NewsConverter.toAddingEntity(news);
+        boolean succeeded = newsService.addNew(entity);
         if (succeeded) {
             logger.info("News added.");
-            return new ResponseEntity<>(news, HttpStatus.OK);
+            return new ResponseEntity<>(entity, HttpStatus.OK);
         } else {
             logger.warn("Cannot save news, probably some unique information are already exist!");
             return new ResponseEntity<>(HttpStatus.CONFLICT);
