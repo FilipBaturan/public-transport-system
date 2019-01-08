@@ -60,7 +60,6 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-
     /**
      * GET /api/user
      * <p>
@@ -71,6 +70,11 @@ public class UserController {
     @GetMapping
     public void getAll() {
         //add integration later
+    }
+
+    @GetMapping("/getByUsername/{username}")
+    public ValidatorDTO getByUsername(@PathVariable String username){
+        return UserConverter.fromEntity( (Validator) userService.findByUsername(username) );
     }
 
     /**
@@ -202,9 +206,9 @@ public class UserController {
     }
 
     @GetMapping("/getValidators")
-    public ResponseEntity<List<UserDTO>> getValidators() {
+    public ResponseEntity<List<ValidatorDTO>> getValidators() {
         List<Validator> listOfValidators = userService.getValidators();
-        List<UserDTO> listOfDTOValidators = new ArrayList<>();
+        List<ValidatorDTO> listOfDTOValidators = new ArrayList<>();
         for (Validator user : listOfValidators) {
             listOfDTOValidators.add(UserConverter.fromEntity(user));
         }
@@ -214,7 +218,7 @@ public class UserController {
     }
 
     @PutMapping("/updateValidator")
-    public ResponseEntity<Boolean> updateValidator(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<Boolean> updateValidator(@RequestBody ValidatorDTO userDTO) {
 
         User validator = null;
 
@@ -240,12 +244,14 @@ public class UserController {
     }
 
     @PostMapping("/addValidator")
-    ResponseEntity<Boolean> addValidator(@RequestBody UserDTO userDTO) {
+    ResponseEntity<Boolean> addValidator(@RequestBody ValidatorDTO userDTO) {
+
         if (userDTO.getId() != null)
             return new ResponseEntity<>(false, HttpStatus.CONFLICT);
         else {
-            Validator newValidator = new Validator(UserConverter.toEntity(userDTO));
-            try {
+            try{
+                userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
+                Validator newValidator = new Validator( UserConverter.toEntity(userDTO) );
                 this.userService.save(newValidator);
             } catch (GeneralException ge) {
                 return new ResponseEntity<>(false, HttpStatus.NOT_ACCEPTABLE);

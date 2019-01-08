@@ -1,5 +1,6 @@
 package construction_and_testing.public_transport_system.domain;
 
+import construction_and_testing.public_transport_system.domain.DTO.ValidatorDTO;
 import construction_and_testing.public_transport_system.domain.enums.AuthorityType;
 
 import javax.persistence.DiscriminatorValue;
@@ -22,6 +23,12 @@ public class Validator extends User implements Serializable {
 
     public Validator(User user) {
         super(user.id, user.name, user.lastName, user.username, user.password, user.email, user.telephone, user.isActive());
+        this.setAuthorityType(AuthorityType.VALIDATOR);
+    }
+
+    public Validator(ValidatorDTO user) {
+        super(user.getId(), user.getName(), user.getLastName(), user.getUsername(), user.getPassword(),
+                user.getEmail(), user.getTelephone(), user.isActive());
         this.setAuthorityType(AuthorityType.VALIDATOR);
     }
 

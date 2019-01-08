@@ -2,6 +2,7 @@ package construction_and_testing.public_transport_system.controller;
 
 
 import construction_and_testing.public_transport_system.domain.DTO.UserDTO;
+import construction_and_testing.public_transport_system.domain.DTO.ValidatorDTO;
 import construction_and_testing.public_transport_system.domain.User;
 import construction_and_testing.public_transport_system.domain.enums.UsersDocumentsStatus;
 import construction_and_testing.public_transport_system.service.definition.UserService;
@@ -160,12 +161,12 @@ public class UserControllerTest {
 
     @Test
     public void updateValidAtor() {
-        UserDTO userDTO = new UserDTO(2L, "name", "lastName", "email", "username", "pass");
+        ValidatorDTO userDTO = new ValidatorDTO(2L, "name", "lastName", "email", "username", "pass");
         userDTO.setEmail("newEmail");
 
         ResponseEntity<Boolean> result = testRestTemplate
                 .exchange(this.URL + "/updateValidator/", HttpMethod.PUT,
-                        new HttpEntity<UserDTO>(userDTO), Boolean.class);
+                        new HttpEntity<ValidatorDTO>(userDTO), Boolean.class);
 
         Boolean body = result.getBody();
 
@@ -231,15 +232,15 @@ public class UserControllerTest {
 
     @Test
     public void getValidAtors() {
-        ResponseEntity<UserDTO[]> result = testRestTemplate
-                .getForEntity(this.URL + "/getValidators/", UserDTO[].class);
+        ResponseEntity<ValidatorDTO[]> result = testRestTemplate
+                .getForEntity(this.URL + "/getValidators/", ValidatorDTO[].class);
 
-        UserDTO[] body = result.getBody();
+        ValidatorDTO[] body = result.getBody();
         assertThat(body).isNotNull();
         Long valId = 2L;
         assertEquals(body[0].getId(), valId);
-        assertEquals(body[0].getFirstName(), DB_VAL_FIRST_NAME);
-        assertEquals(body[0].getLast(), DB_VAL_LAST_NAME);
+        assertEquals(body[0].getName(), DB_VAL_FIRST_NAME);
+        assertEquals(body[0].getLastName(), DB_VAL_LAST_NAME);
         assertEquals(body[0].isActive(), true);
         assertEquals(body[0].getEmail(), DB_VAL_EMAIL);
         assertEquals(body[0].getPassword(), DB_VAL_PASSWORD);
@@ -248,7 +249,7 @@ public class UserControllerTest {
 
     @Test
     public void addValidAtor() {
-        UserDTO newValidator = new UserDTO(null, "newFirstName", "newLastName",
+        ValidatorDTO newValidator = new ValidatorDTO(null, "newFirstName", "newLastName",
                 "newEmail", "newPass", "newUser");
 
         int size = userService.getValidators().size();
@@ -261,7 +262,6 @@ public class UserControllerTest {
         assertEquals(result.getStatusCode(), HttpStatus.OK);
         User savedValidator = userService.findByUsername(newValidator.getUsername());
         assertEquals(savedValidator.getEmail(), "newEmail");
-        assertEquals(savedValidator.getPassword(), "newPass");
         assertEquals(savedValidator.getName(), "newFirstName");
         assertEquals(savedValidator.getLastName(), "newLastName");
 
@@ -273,7 +273,7 @@ public class UserControllerTest {
     @Test
     public void addInvalidator() {
         Long randomId = 12343L;
-        UserDTO newValidator = new UserDTO(randomId, "newFirstName", "newLastName",
+        ValidatorDTO newValidator = new ValidatorDTO(randomId, "newFirstName", "newLastName",
                 "newEmail", "newUser", "newPass");
 
         int size = userService.getValidators().size();
@@ -294,9 +294,9 @@ public class UserControllerTest {
      * Parameter pass is missing
      */
     @Test
-    public void addValidatorNullParamter() {
-        UserDTO newValidator = new UserDTO(null, "newFirstName", "newLastName",
-                "newEmail", null, "newPass");
+    public void addValidatorNullParameter() {
+        ValidatorDTO newValidator = new ValidatorDTO(null, null, "newLastName",
+                "newEmail", "asdasd", "userName");
 
         int size = userService.getValidators().size();
 

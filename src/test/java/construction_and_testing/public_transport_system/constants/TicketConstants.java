@@ -41,7 +41,8 @@ public class TicketConstants {
     public static final LocalDateTime DB_PUR_DATE = LocalDateTime.of(2016, 12, 20, 0, 0, 0);
     public static final LocalDateTime DB_EXP_DATE = LocalDateTime.of(2018, 04, 24, 07, 39, 16);
     public static final LocalDateTime DB_RANDOM_DATE = LocalDateTime.of(2014, 11, 15, 07, 21, 48);
-
+    public static final LocalDate DB_REPORT_START_DATE = LocalDate.of(2016, 01, 20);
+    public static final LocalDate DB_REPORT_END_DATE = LocalDate.of(2017, 12, 20);
 
     public static final Long DB_RESERVATION_ID = 1L;
     public static final Long DB_RES_INVALID_ID = 324L;
@@ -52,9 +53,11 @@ public class TicketConstants {
     public static final Ticket DB_TICKET = new Ticket(DB_ID, DB_PUR_DATE, DB_EXP_DATE, "", true, DB_PRICE_LIST_ITEM, DB_LINE, DB_RESERVATION);
     public static final Ticket DB_NEW_TICKET = new Ticket(null, DB_PUR_DATE, DB_EXP_DATE, "", true, DB_PRICE_LIST_ITEM, DB_LINE, DB_RESERVATION);
     public static final Ticket DB_SAVED_TICKET = new Ticket(3L, DB_PUR_DATE, DB_EXP_DATE, "", true, DB_PRICE_LIST_ITEM, DB_LINE, DB_RESERVATION);
+    public static final Ticket DB_CHANGED_TICKET_TO_SAVE = new Ticket(DB_ID, DB_RANDOM_DATE, DB_EXP_DATE, "", true, DB_PRICE_LIST_ITEM, DB_LINE, DB_RESERVATION);
     public static final Ticket DB_CHANGED_TICKET = new Ticket(DB_ID, DB_RANDOM_DATE, DB_EXP_DATE, "changed", true, DB_PRICE_LIST_ITEM, DB_LINE, DB_RESERVATION);
     public static final Ticket DB_REMOVED_TICKET = new Ticket(DB_ID_REMOVE, DB_PUR_DATE, DB_EXP_DATE, "", false, DB_PRICE_LIST_ITEM, DB_LINE, DB_RESERVATION);
     public static final Ticket DB_INVALID_TICKET = new Ticket(DB_ID_INVALID, DB_PUR_DATE, DB_EXP_DATE, "", true, DB_PRICE_LIST_ITEM, DB_LINE, DB_RESERVATION);
+    public static final Ticket DB_BOUGHT_TICKET2 = new Ticket(DB_ID, LocalDateTime.of(2016, 12, 23, 00, 00, 00), DB_EXP_DATE, "", true, DB_PRICE_LIST_ITEM, DB_LINE, DB_RESERVATION);
 
     public static final TicketReportDTO DB_TICKET_DTO = new TicketReportDTO(DB_TICKET);
     public static final TicketReportDTO DB_DELETED_TICKET_DTO = new TicketReportDTO(DB_REMOVED_TICKET);

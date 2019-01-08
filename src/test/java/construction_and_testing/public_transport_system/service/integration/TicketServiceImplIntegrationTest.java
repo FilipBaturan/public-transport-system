@@ -208,4 +208,38 @@ public class TicketServiceImplIntegrationTest {
         assertThat(prices.get(VehicleType.TRAM)).isEqualTo(0);
     }
 
+    @Test
+    public void getVisitsByWeekValid()
+    {
+        Map<String, Integer> prices = ticketService.getVisitsByWeek(DB_REPORT_START_DATE, DB_REPORT_END_DATE);
+        assertThat(prices).isNotEmpty();
+        assertThat(prices.size()).isEqualTo(1);
+        assertThat(prices.get("2016-12-26T00:00,2016-12-19T00:00")).isEqualTo(2);
+    }
+
+    @Test
+    public void getVisitsByWeekInvalid()
+    {
+        Map<String, Integer> prices = ticketService.getVisitsByWeek(DB_REPORT_END_DATE, DB_REPORT_START_DATE);
+        assertThat(prices).isEmpty();
+        assertThat(prices.size()).isEqualTo(0);
+    }
+
+    @Test
+    public void getVisitsByMonthValid()
+    {
+        Map<String, Integer> prices = ticketService.getVisitsByMonth(DB_REPORT_START_DATE, DB_REPORT_END_DATE);
+        assertThat(prices).isNotEmpty();
+        assertThat(prices.size()).isEqualTo(1);
+        assertThat(prices.get("2016-DECEMBER")).isEqualTo(2);
+    }
+
+    @Test
+    public void getVisitsByMonthInvalid()
+    {
+        Map<String, Integer> prices = ticketService.getVisitsByMonth(DB_REPORT_END_DATE, DB_REPORT_START_DATE);
+        assertThat(prices).isEmpty();
+        assertThat(prices.size()).isEqualTo(0);
+    }
+
 }
