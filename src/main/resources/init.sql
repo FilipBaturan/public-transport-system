@@ -38,8 +38,12 @@ INSERT INTO `public_transport`.`transport_line_position` (`id`, `active`, `conte
 INSERT INTO `public_transport`.`transport_line_position` (`id`, `active`, `content`, `transport_line_id`) VALUES ('4', TRUE, ' 45.26398,19.83019 45.26543,19.84401 45.25417,19.84208 45.24891,19.81668 45.26039,19.80904 45.26395,19.83028(purple,w10|M5)', '4');
 
 
-INSERT INTO `public_transport`.`vehicle` (`id`, `active`, `name`, `type`, `current_line_id`) VALUES ('1', TRUE, 'bus1', '0', '1');
-INSERT INTO `public_transport`.`vehicle` (`id`, `active`, `name`, `type`, `current_line_id`) VALUES ('2', TRUE, 'bus2', '0', '1');
+INSERT INTO `public_transport`.`vehicle` (`id`, `active`, `name`, `type`, `current_line_id`) VALUES ('1', TRUE, 'NS-B-254-G1', '0', '1');
+INSERT INTO `public_transport`.`vehicle` (`id`, `active`, `name`, `type`, `current_line_id`) VALUES ('2', TRUE, 'NS-B-321-VF', '0', '3');
+INSERT INTO `public_transport`.`vehicle` (`id`, `active`, `name`, `type`) VALUES ('3', TRUE, 'NS-M-743-E5', '1');
+INSERT INTO `public_transport`.`vehicle` (`id`, `active`, `name`, `type`) VALUES ('4', TRUE, 'NS-B-235-C7', '0');
+INSERT INTO `public_transport`.`vehicle` (`id`, `active`, `name`, `type`) VALUES ('5', TRUE, 'NS-B-963-DN', '2');
+INSERT INTO `public_transport`.`vehicle` (`id`, `active`, `name`, `type`, `current_line_id`) VALUES ('6', TRUE, 'NS-B-851-L3', '0', '1');
 
 
 INSERT INTO `public_transport`.`item` (`id`, `active`, `age`, `cost`, `type`, `zone_id`, `vehicle_type`) VALUES ('1', TRUE, '0', '150', '1', '1', '0');
@@ -60,7 +64,7 @@ INSERT INTO `public_transport`.`schedule` (`id`, `active`, `transport_line_id`, 
 INSERT INTO `public_transport`.`user` (`type`, `id`, `active`, `authority`, `confirmation`, `email`, `last_name`, `name`, `password`, `telephone`, `username`, `balance`, `document`) VALUES ('REGISTERED_USER', '1', TRUE, '0', '2', 'asdasd.asd@gmail.com', 'LastName', 'FirstName', 'pass', '0120120012', 'username1', '100', 'asds');
 INSERT INTO `public_transport`.`user` (`type`, `id`, `active`, `authority`, `email`, `last_name`, `name`, `password`, `username`, `balance`, `document`) VALUES ('VALIDATOR', '2', TRUE, '2', 'asdasd.asd@gmail.com', '', 'nekoIme', '123123', 'username2', '100', 'asds');
 INSERT INTO `public_transport`.`user` (`type`, `id`, `active`, `authority`, `email`, `last_name`, `name`, `password`, `username`) VALUES ('VALIDATOR', '4', TRUE, '2', 'newEmail', '', 'newName', 'newPass', 'newUserName');
-
+INSERT INTO `public_transport`.`user` (`type`, `id`, `active`, `authority`, `email`, `last_name`, `name`, `password`, `username`) VALUES ('OPERATOR', '5', TRUE, '3', 'null@gmail.com', 'David', 'Davidovic', '$2a$04$CpdJcjORftUKRbJpynFIa.qUY2c/DoqNmta2dL.o6Wkw1I3ZLh79C', 'null');
 
 INSERT INTO `public_transport`.`schedule_departures` (`schedule_id`, `departure`) VALUES (100, '08:00');
 INSERT INTO `public_transport`.`schedule_departures` (`schedule_id`, `departure`) VALUES (100, '08:15');

@@ -12,10 +12,6 @@ public class Temp {
 
     private WebDriver browser;
 
-//    MenuPage menuPage;
-//    StudentListPage studentListPage;
-//    StudentEditPage studentEditPage;
-
     @BeforeMethod
     public void setupSelenium() {
         //instantiate browser
@@ -26,9 +22,6 @@ public class Temp {
         //navigate
         browser.navigate().to("http://localhost:4200");
 
-//        menuPage = PageFactory.initElements(browser, MenuPage.class);
-//        studentListPage = PageFactory.initElements(browser, StudentListPage.class);
-//        studentEditPage = PageFactory.initElements(browser, StudentEditPage.class);
     }
 
     @Test

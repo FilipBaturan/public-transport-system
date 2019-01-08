@@ -19,9 +19,8 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.time.LocalDateTime;
+import java.util.*;
 
 import static construction_and_testing.public_transport_system.constants.TicketConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -54,7 +53,7 @@ public class TicketServiceImplUnitTest {
         when(transportLineRepository.findById(DB_LINE_ID)).thenReturn(Optional.of(DB_LINE));
 
         when(ticketRepository.save(DB_NEW_TICKET)).thenReturn(DB_SAVED_TICKET);
-        when(ticketRepository.save(DB_CHANGED_TICKET)).thenReturn(DB_CHANGED_TICKET);
+        when(ticketRepository.save(DB_CHANGED_TICKET_TO_SAVE)).thenReturn(DB_CHANGED_TICKET);
 
         when(ticketRepository.findAll()).thenReturn(DB_TICKET_LIST);
 
@@ -69,6 +68,12 @@ public class TicketServiceImplUnitTest {
         when(ticketRepository.getPrice(DB_DATE1, DB_DATE2, 0)).thenReturn(300L);
         when(ticketRepository.getPrice(DB_DATE1, DB_DATE2, 1)).thenReturn(0L);
         when(ticketRepository.getPrice(DB_DATE1, DB_DATE2, 2)).thenReturn(0L);
+
+        List<Ticket> ticketList = new ArrayList<>();
+        ticketList.add(DB_TICKET);
+        ticketList.add(DB_BOUGHT_TICKET2);
+
+        when(ticketRepository.getTicketsBetween(DB_REPORT_START_DATE, DB_REPORT_END_DATE)).thenReturn(ticketList);
     }
 
 
@@ -88,7 +93,7 @@ public class TicketServiceImplUnitTest {
         List<Ticket> tickets = ticketService.findAllTickets();
         assertThat(tickets.size()).isEqualTo(DB_COUNT);
 
-        verify(ticketRepository, times(1)).save(DB_CHANGED_TICKET);
+        verify(ticketRepository, times(1)).save(DB_CHANGED_TICKET_TO_SAVE);
         verify(transportLineRepository, times(1)).findById(DB_LINE_ID);
         verify(reservationRepository, times(1)).findById(DB_RESERVATION_ID);
 
@@ -243,5 +248,44 @@ public class TicketServiceImplUnitTest {
         assertThat(prices.get(VehicleType.METRO)).isEqualTo(0);
         assertThat(prices.get(VehicleType.TRAM)).isEqualTo(0);
     }
+
+    @Test
+    public void getVisitsByWeekValid()
+    {
+        Map<String, Integer> prices = ticketService.getVisitsByWeek(DB_REPORT_START_DATE, DB_REPORT_END_DATE);
+        verify(ticketRepository, times(1)).getTicketsBetween(DB_REPORT_START_DATE, DB_REPORT_END_DATE);
+        assertThat(prices).isNotEmpty();
+        assertThat(prices.size()).isEqualTo(1);
+        assertThat(prices.get("2016-12-26T00:00,2016-12-19T00:00")).isEqualTo(2);
+    }
+
+    @Test
+    public void getVisitsByWeekInvalid()
+    {
+        Map<String, Integer> prices = ticketService.getVisitsByWeek(DB_REPORT_END_DATE, DB_REPORT_START_DATE);
+        assertThat(prices).isEmpty();
+        assertThat(prices.size()).isEqualTo(0);
+        verify(ticketRepository, times(1)).getTicketsBetween(DB_REPORT_END_DATE, DB_REPORT_START_DATE);
+    }
+
+    @Test
+    public void getVisitsByMonthValid()
+    {
+        Map<String, Integer> prices = ticketService.getVisitsByMonth(DB_REPORT_START_DATE, DB_REPORT_END_DATE);
+        verify(ticketRepository, times(1)).getTicketsBetween(DB_REPORT_START_DATE, DB_REPORT_END_DATE);
+        assertThat(prices).isNotEmpty();
+        assertThat(prices.size()).isEqualTo(1);
+        assertThat(prices.get("2016-DECEMBER")).isEqualTo(2);
+    }
+
+    @Test
+    public void getVisitsByMonthInvalid()
+    {
+        Map<String, Integer> prices = ticketService.getVisitsByMonth(DB_REPORT_END_DATE, DB_REPORT_START_DATE);
+        verify(ticketRepository, times(1)).getTicketsBetween(DB_REPORT_END_DATE, DB_REPORT_START_DATE);
+        assertThat(prices).isEmpty();
+        assertThat(prices.size()).isEqualTo(0);
+    }
+
 
 }
