@@ -3,6 +3,7 @@ package construction_and_testing.public_transport_system.controller;
 import construction_and_testing.public_transport_system.converter.RegisteredUserConverter;
 import construction_and_testing.public_transport_system.converter.UserConverter;
 import construction_and_testing.public_transport_system.domain.DTO.*;
+import construction_and_testing.public_transport_system.domain.Operator;
 import construction_and_testing.public_transport_system.domain.RegisteredUser;
 import construction_and_testing.public_transport_system.domain.User;
 import construction_and_testing.public_transport_system.domain.Validator;
@@ -246,6 +247,60 @@ public class UserController {
             Validator newValidator = new Validator(UserConverter.toEntity(userDTO));
             try {
                 this.userService.save(newValidator);
+            } catch (GeneralException ge) {
+                return new ResponseEntity<>(false, HttpStatus.NOT_ACCEPTABLE);
+            }
+
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        }
+    }
+
+    @GetMapping("/getOperators")
+    public ResponseEntity<List<UserDTO>> getOperators() {
+        List<Operator> listOfOperators = userService.getOperators();
+        List<UserDTO> listOfDTOOperators = new ArrayList<>();
+        for (Operator user : listOfOperators) {
+            listOfDTOOperators.add(UserConverter.fromEntity(user));
+        }
+
+        return new ResponseEntity<>(listOfDTOOperators, HttpStatus.OK);
+
+    }
+
+    @PutMapping("/updateOperator")
+    public ResponseEntity<Boolean> updateOperator(@RequestBody UserDTO userDTO) {
+
+        User operator = null;
+
+        try {
+            operator = this.userService.findById(userDTO.getId());
+        } catch (GeneralException ge) {
+            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+        }
+
+
+        if (operator.getAuthorityType() != AuthorityType.OPERATER)
+            return new ResponseEntity<>(false, HttpStatus.I_AM_A_TEAPOT);
+
+        ModelMapper mapper = new ModelMapper();
+        mapper.map(userDTO, operator);
+        try {
+            this.userService.save(operator);
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        } catch (GeneralException e) {
+            return new ResponseEntity<>(false, HttpStatus.NOT_ACCEPTABLE);
+        }
+
+    }
+
+    @PostMapping("/addOperator")
+    ResponseEntity<Boolean> addOperator(@RequestBody UserDTO userDTO) {
+        if (userDTO.getId() != null)
+            return new ResponseEntity<>(false, HttpStatus.CONFLICT);
+        else {
+            Operator newOperator = new Operator(UserConverter.toEntity(userDTO));
+            try {
+                this.userService.save(newOperator);
             } catch (GeneralException ge) {
                 return new ResponseEntity<>(false, HttpStatus.NOT_ACCEPTABLE);
             }
