@@ -13,8 +13,7 @@ public class ValidatorDTO {
     private String telephone;
     private boolean active;
 
-    public ValidatorDTO()
-    {
+    public ValidatorDTO() {
 
     }
 
@@ -29,8 +28,7 @@ public class ValidatorDTO {
     }
 
     public ValidatorDTO(String name, String lastName, String email, String password, String username, String telephone,
-                        boolean active)
-    {
+                        boolean active) {
         this.name = name;
         this.lastName = lastName;
         this.email = email;

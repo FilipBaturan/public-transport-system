@@ -72,8 +72,8 @@ public class UserController {
     }
 
     @GetMapping("/getByUsername/{username}")
-    public ValidatorDTO getByUsername(@PathVariable String username){
-        return UserConverter.fromEntity( (Validator) userService.findByUsername(username) );
+    public ValidatorDTO getByUsername(@PathVariable String username) {
+        return UserConverter.fromEntity((Validator) userService.findByUsername(username));
     }
 
     /**
@@ -248,9 +248,9 @@ public class UserController {
         if (userDTO.getId() != null)
             return new ResponseEntity<>(false, HttpStatus.CONFLICT);
         else {
-            try{
+            try {
                 userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-                Validator newValidator = new Validator( UserConverter.toEntity(userDTO) );
+                Validator newValidator = new Validator(UserConverter.toEntity(userDTO));
                 this.userService.save(newValidator);
             } catch (GeneralException ge) {
                 return new ResponseEntity<>(false, HttpStatus.NOT_ACCEPTABLE);

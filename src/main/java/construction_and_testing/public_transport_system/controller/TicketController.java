@@ -143,33 +143,27 @@ public class TicketController {
     }
 
     @GetMapping("/getVisitsPerWeek/{stringDate1}/{stringDate2}")
-    ResponseEntity<Map<String, Integer>> getVisitsPerWeek(@PathVariable String stringDate1, @PathVariable String stringDate2)
-    {
-        try{
+    ResponseEntity<Map<String, Integer>> getVisitsPerWeek(@PathVariable String stringDate1, @PathVariable String stringDate2) {
+        try {
             LocalDate date1 = LocalDate.parse(stringDate1);
             LocalDate date2 = LocalDate.parse(stringDate2);
 
             Map<String, Integer> prices = this.ticketService.getVisitsByWeek(date1, date2);
             return new ResponseEntity<>(prices, HttpStatus.OK);
-        }
-        catch (DateTimeParseException de)
-        {
+        } catch (DateTimeParseException de) {
             return new ResponseEntity<>(new HashMap<>(), HttpStatus.NOT_ACCEPTABLE);
         }
     }
 
     @GetMapping("/getVisitsPerMonth/{stringDate1}/{stringDate2}")
-    ResponseEntity<Map<String, Integer>> getVisitsPerMonth(@PathVariable String stringDate1, @PathVariable String stringDate2)
-    {
-        try{
+    ResponseEntity<Map<String, Integer>> getVisitsPerMonth(@PathVariable String stringDate1, @PathVariable String stringDate2) {
+        try {
             LocalDate date1 = LocalDate.parse(stringDate1);
             LocalDate date2 = LocalDate.parse(stringDate2);
 
             Map<String, Integer> prices = this.ticketService.getVisitsByMonth(date1, date2);
             return new ResponseEntity<>(prices, HttpStatus.OK);
-        }
-        catch (DateTimeParseException de)
-        {
+        } catch (DateTimeParseException de) {
             return new ResponseEntity<>(new HashMap<>(), HttpStatus.NOT_ACCEPTABLE);
         }
     }
