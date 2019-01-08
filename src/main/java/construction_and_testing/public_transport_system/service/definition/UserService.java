@@ -1,5 +1,6 @@
 package construction_and_testing.public_transport_system.service.definition;
 
+import construction_and_testing.public_transport_system.domain.Operator;
 import construction_and_testing.public_transport_system.domain.RegisteredUser;
 import construction_and_testing.public_transport_system.domain.User;
 import construction_and_testing.public_transport_system.domain.Validator;
@@ -75,6 +76,12 @@ public interface UserService {
      * @return list of all validators
      */
     List<Validator> getValidators();
+
+    /**
+     *
+     * @return list of all operators
+     */
+    List<Operator> getOperators();
 
     /**
      * @returns all registered users in the system
