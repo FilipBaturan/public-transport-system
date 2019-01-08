@@ -50,7 +50,6 @@ public class User implements Serializable {
 
     //@ElementCollection(targetClass = AuthorityType.class, fetch = FetchType.EAGER)
     @Column(nullable = false, name = "authority")
-
     private AuthorityType authorityType;
 
     public User() {
