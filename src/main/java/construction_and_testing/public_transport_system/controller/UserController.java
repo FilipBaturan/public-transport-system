@@ -246,11 +246,14 @@ public class UserController {
     ResponseEntity<Boolean> addValidator(@RequestBody ValidatorDTO userDTO) {
 
         if (userDTO.getId() != null)
-            return new ResponseEntity<>(false, HttpStatus.CONFLICT);
+            return new ResponseEntity<>(false, HttpStatus.NOT_ACCEPTABLE);
         else {
             try{
+                if (this.userService.findByUsername(userDTO.getUsername()) != null)
+                    return new ResponseEntity<>(false, HttpStatus.CONFLICT);
                 userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
                 Validator newValidator = new Validator( UserConverter.toEntity(userDTO) );
+                newValidator.setConfirmation(UsersDocumentsStatus.UNCHECKED);
                 this.userService.save(newValidator);
             } catch (GeneralException ge) {
                 return new ResponseEntity<>(false, HttpStatus.NOT_ACCEPTABLE);
