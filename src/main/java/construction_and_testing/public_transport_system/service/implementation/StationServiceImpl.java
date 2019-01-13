@@ -68,6 +68,8 @@ public class StationServiceImpl implements StationService {
     }
 
     /**
+     * Validates station properties
+     *
      * @param station that needs to be validated
      */
     private void validate(Station station) {
@@ -85,6 +87,8 @@ public class StationServiceImpl implements StationService {
     }
 
     /**
+     * Validates stations properties
+     *
      * @param stations that need to be validated
      */
     private void validate(Iterable<Station> stations) {

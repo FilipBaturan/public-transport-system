@@ -7,6 +7,8 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.List;
+
 public class MapPage {
 
     private WebDriver driver;
@@ -56,6 +58,9 @@ public class MapPage {
 
     public int numberOfTransportLines(){
         return driver.findElements(By.cssSelector("button.view")).size();
+    }
+    public List<WebElement> getTransportLines() {
+        return driver.findElements(By.cssSelector("button.view"));
     }
 
     public WebElement getSvgMapViewer() {

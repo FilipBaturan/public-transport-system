@@ -27,4 +27,10 @@ public interface VehicleService {
      * @param id of vehicle that needs to be removed
      */
     void remove(Long id);
+
+
+    /**
+     * @return vehicles that have current line
+     */
+    List<Vehicle> getAllVehiclesWithLines();
 }

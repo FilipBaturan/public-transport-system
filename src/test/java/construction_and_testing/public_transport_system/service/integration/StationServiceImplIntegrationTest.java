@@ -62,14 +62,7 @@ public class StationServiceImplIntegrationTest {
      */
     @Test(expected = GeneralException.class)
     public void findByNullId() {
-        Station station = stationService.findById(null);
-        assertThat(station).isNotNull();
-
-        assertThat(station.getId()).isEqualTo(DB_ID);
-        assertThat(station.getName()).isEqualTo(DB_NAME);
-        assertThat(station.getType()).isEqualTo(DB_TYPE);
-        assertThat(station.getPosition().getId()).isEqualTo(DB_POSITION);
-        assertThat(station.isActive()).isEqualTo(DB_ACTIVE);
+        stationService.findById(null);
     }
 
     /**
@@ -96,21 +89,10 @@ public class StationServiceImplIntegrationTest {
     /**
      * Test with null values
      */
-    @Test(expected = DataIntegrityViolationException.class)
-    @Transactional
+    @Test(expected = GeneralException.class)
     public void saveWithNullValues() {
         Station station = new Station(null, null, null, null, true);
-        int countBefore = stationService.getAll().size();
-
-        Station dbStation = stationService.save(station);
-        assertThat(dbStation).isNotNull();
-
-        assertThat(stationService.getAll().size()).isEqualTo(countBefore + 1);
-        assertThat(dbStation.getName()).isEqualTo(station.getName());
-        assertThat(dbStation.getType()).isEqualTo(station.getType());
-        assertThat(dbStation.getPosition()).isEqualTo(station.getPosition());
-        assertThat(dbStation.isActive()).isEqualTo(station.isActive());
-
+        stationService.save(station);
     }
 
     /**
@@ -121,16 +103,7 @@ public class StationServiceImplIntegrationTest {
     public void saveWithShortName() {
         Station station = new Station(null, NEW_NAME_SHORT_LENGTH, new StationPosition(), NEW_TYPE, NEW_ACTIVE);
         station.getPosition().setStation(station);
-        int countBefore = stationService.getAll().size();
-
-        Station dbStation = stationService.save(station);
-        assertThat(dbStation).isNotNull();
-
-        assertThat(stationService.getAll().size()).isEqualTo(countBefore + 1);
-        assertThat(dbStation.getName()).isEqualTo(station.getName());
-        assertThat(dbStation.getType()).isEqualTo(station.getType());
-        assertThat(dbStation.getPosition()).isEqualTo(station.getPosition());
-        assertThat(dbStation.isActive()).isEqualTo(station.isActive());
+        stationService.save(station);
     }
 
     /**
@@ -141,16 +114,7 @@ public class StationServiceImplIntegrationTest {
     public void saveWithLongName() {
         Station station = new Station(null, NEW_NAME_LONG_LENGTH, new StationPosition(), NEW_TYPE, NEW_ACTIVE);
         station.getPosition().setStation(station);
-        int countBefore = stationService.getAll().size();
-
-        Station dbStation = stationService.save(station);
-        assertThat(dbStation).isNotNull();
-
-        assertThat(stationService.getAll().size()).isEqualTo(countBefore + 1);
-        assertThat(dbStation.getName()).isEqualTo(station.getName());
-        assertThat(dbStation.getType()).isEqualTo(station.getType());
-        assertThat(dbStation.getPosition()).isEqualTo(station.getPosition());
-        assertThat(dbStation.isActive()).isEqualTo(station.isActive());
+        stationService.save(station);
     }
 
     /**
@@ -159,17 +123,22 @@ public class StationServiceImplIntegrationTest {
     @Test
     @Transactional
     public void saveWithMinLengthName() {
-        Station station = new Station(null, NEW_NAME_MIN_LENGTH, new StationPosition(), NEW_TYPE, NEW_ACTIVE);
+        Station station = new Station(DB_ID, NEW_NAME_MIN_LENGTH,
+                new StationPosition(DB_POSITION, 45.32, 45.21, true, null),
+                NEW_TYPE, NEW_ACTIVE);
         station.getPosition().setStation(station);
         int countBefore = stationService.getAll().size();
 
         Station dbStation = stationService.save(station);
         assertThat(dbStation).isNotNull();
 
-        assertThat(stationService.getAll().size()).isEqualTo(countBefore + 1);
+        assertThat(stationService.getAll().size()).isEqualTo(countBefore);
+        assertThat(dbStation.getId()).isEqualTo(station.getId());
         assertThat(dbStation.getName()).isEqualTo(station.getName());
         assertThat(dbStation.getType()).isEqualTo(station.getType());
-        assertThat(dbStation.getPosition()).isEqualTo(station.getPosition());
+        assertThat(dbStation.getPosition().getId()).isEqualTo(station.getPosition().getId());
+        assertThat(dbStation.getPosition().getLatitude()).isEqualTo(station.getPosition().getLatitude());
+        assertThat(dbStation.getPosition().getLongitude()).isEqualTo(station.getPosition().getLongitude());
         assertThat(dbStation.isActive()).isEqualTo(station.isActive());
     }
 
@@ -238,13 +207,8 @@ public class StationServiceImplIntegrationTest {
     @Test(expected = GeneralException.class)
     @Transactional
     public void replaceAllWithShortName() {
-        List<Station> stationsBefore = stationService.getAll();
         NEW_STATIONS.get(0).setName(NEW_NAME_SHORT_LENGTH);
-        List<Station> stations = stationService.replaceAll(NEW_STATIONS);
-
-        assertThat(stations).isNotNull();
-        assertThat(stations.size()).isEqualTo(NEW_STATIONS.size());
-        assertThat(stations).doesNotContainSequence(stationsBefore);
+        stationService.replaceAll(NEW_STATIONS);
     }
 
     /**
@@ -253,13 +217,8 @@ public class StationServiceImplIntegrationTest {
     @Test(expected = GeneralException.class)
     @Transactional
     public void replaceAllWithLongName() {
-        List<Station> stationsBefore = stationService.getAll();
         NEW_STATIONS.get(0).setName(NEW_NAME_LONG_LENGTH);
-        List<Station> stations = stationService.replaceAll(NEW_STATIONS);
-
-        assertThat(stations).isNotNull();
-        assertThat(stations.size()).isEqualTo(NEW_STATIONS.size());
-        assertThat(stations).doesNotContainSequence(stationsBefore);
+        stationService.replaceAll(NEW_STATIONS);
     }
 
     /**

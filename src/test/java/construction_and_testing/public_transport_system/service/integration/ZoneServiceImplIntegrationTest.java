@@ -64,13 +64,7 @@ public class ZoneServiceImplIntegrationTest {
      */
     @Test(expected = GeneralException.class)
     public void findByNullId() {
-        Zone dbZone = zoneService.findById(null);
-        assertThat(dbZone).isNull();
-
-        assertThat(dbZone.getId()).isEqualTo(DB_ID);
-        assertThat(dbZone.getName()).isEqualTo(DB_NAME);
-        assertThat(dbZone.isActive()).isEqualTo(DB_ACTIVE);
-        assertThat(dbZone.getLines()).hasSize(DB_TR_COUNT);
+        zoneService.findById(null);
     }
 
     /**
@@ -118,21 +112,10 @@ public class ZoneServiceImplIntegrationTest {
      * Test with invalid transport lines data associated
      */
     @Test(expected = GeneralException.class)
-    @Transactional
     public void saveWithInvalidLines() {
         Zone zone = new Zone(null, NEW_NAME, NEW_LINES_INVALID, true);
         zone.getLines().forEach(transportLine -> transportLine.setZone(zone));
-        int countBefore = zoneService.getAll().size();
-
-        Zone dbZone = zoneService.save(zone);
-        assertThat(dbZone).isNotNull();
-
-        assertThat(zoneService.getAll()).hasSize(countBefore + 1);
-
-        assertThat(dbZone.getName()).isEqualTo(zone.getName());
-        assertThat(dbZone.isActive()).isEqualTo(zone.isActive());
-        assertThat(dbZone.getLines()).isEqualTo(zone.getLines());
-
+        zoneService.save(zone);
     }
 
     /**
@@ -158,21 +141,10 @@ public class ZoneServiceImplIntegrationTest {
     /**
      * Test with null values
      */
-    @Test(expected = DataIntegrityViolationException.class)
-    @Transactional
+    @Test(expected = GeneralException.class)
     public void saveWithNullValues() {
         Zone zone = new Zone(null, null, NEW_LINES, true);
-        int countBefore = zoneService.getAll().size();
-
-        Zone dbZone = zoneService.save(zone);
-        assertThat(dbZone).isNotNull();
-
-        assertThat(zoneService.getAll()).hasSize(countBefore + 1);
-
-        assertThat(dbZone.getName()).isEqualTo(zone.getName());
-        assertThat(dbZone.isActive()).isEqualTo(zone.isActive());
-        assertThat(dbZone.getLines()).isEqualTo(zone.getLines());
-
+        zoneService.save(zone);
     }
 
     /**
@@ -186,9 +158,7 @@ public class ZoneServiceImplIntegrationTest {
         Zone dbZone1 = zoneService.save(zone1);
         assertThat(dbZone1).isNotNull();
 
-        Zone dbZone2 = zoneService.save(zone2);
-        assertThat(dbZone2).isNotNull();
-
+        zoneService.save(zone2);
     }
 
     /**
@@ -199,16 +169,7 @@ public class ZoneServiceImplIntegrationTest {
     public void saveWithShortName() {
         Zone zone = new Zone(null, NEW_NAME_SHORT_LENGTH, NEW_LINES, true);
         zone.getLines().forEach((TransportLine t) -> t.setZone(zone));
-        int countBefore = zoneService.getAll().size();
-
-        Zone dbZone = zoneService.save(zone);
-        assertThat(dbZone).isNotNull();
-
-        assertThat(zoneService.getAll()).hasSize(countBefore + 1);
-
-        assertThat(dbZone.getName()).isEqualTo(zone.getName());
-        assertThat(dbZone.isActive()).isEqualTo(zone.isActive());
-        assertThat(dbZone.getLines()).isEqualTo(zone.getLines());
+        zoneService.save(zone);
     }
 
     /**
@@ -219,16 +180,7 @@ public class ZoneServiceImplIntegrationTest {
     public void saveWithLongName() {
         Zone zone = new Zone(null, NEW_NAME_LONG_LENGTH, NEW_LINES, true);
         zone.getLines().forEach((TransportLine t) -> t.setZone(zone));
-        int countBefore = zoneService.getAll().size();
-
-        Zone dbZone = zoneService.save(zone);
-        assertThat(dbZone).isNotNull();
-
-        assertThat(zoneService.getAll()).hasSize(countBefore + 1);
-
-        assertThat(dbZone.getName()).isEqualTo(zone.getName());
-        assertThat(dbZone.isActive()).isEqualTo(zone.isActive());
-        assertThat(dbZone.getLines()).isEqualTo(zone.getLines());
+        zoneService.save(zone);
     }
 
     /**
@@ -237,14 +189,14 @@ public class ZoneServiceImplIntegrationTest {
     @Test
     @Transactional
     public void saveWithMinLengthName() {
-        Zone zone = new Zone(null, NEW_NAME_MIN_LENGTH, NEW_LINES, true);
+        Zone zone = new Zone(DB_ID, NEW_NAME_MIN_LENGTH, NEW_LINES, true);
         zone.getLines().forEach((TransportLine t) -> t.setZone(zone));
         int countBefore = zoneService.getAll().size();
 
         Zone dbZone = zoneService.save(zone);
         assertThat(dbZone).isNotNull();
 
-        assertThat(zoneService.getAll()).hasSize(countBefore + 1);
+        assertThat(zoneService.getAll()).hasSize(countBefore);
 
         assertThat(dbZone.getName()).isEqualTo(zone.getName());
         assertThat(dbZone.isActive()).isEqualTo(zone.isActive());
@@ -278,11 +230,13 @@ public class ZoneServiceImplIntegrationTest {
     @Test
     @Transactional
     public void remove() {
+        int countBefore = zoneService.getAll().size();
         zoneService.remove(DEL_ID);
         Zone zone = zoneService.findById(DEL_ID);
         assertThat(zone.isActive()).isFalse();
         zone.getLines().forEach(transportLine ->
                 assertThat(transportLine.getZone().getId()).isEqualTo(DEFAULT_ZONE_ID));
+        assertThat(zoneService.getAll()).hasSize(countBefore - 1);
     }
 
     /**
@@ -292,10 +246,6 @@ public class ZoneServiceImplIntegrationTest {
     @Transactional
     public void removeNotValidId() {
         zoneService.remove(DEL_ID_INVALID);
-        Zone zone = zoneService.findById(DEL_ID);
-        assertThat(zone.isActive()).isFalse();
-        zone.getLines().forEach(transportLine ->
-                assertThat(transportLine.getZone().getId()).isEqualTo(DEFAULT_ZONE_ID));
     }
 
     /**
@@ -305,9 +255,5 @@ public class ZoneServiceImplIntegrationTest {
     @Transactional
     public void removeDefaultZone() {
         zoneService.remove(DEFAULT_ZONE_ID);
-        Zone zone = zoneService.findById(DEL_ID);
-        assertThat(zone.isActive()).isFalse();
-        zone.getLines().forEach(transportLine ->
-                assertThat(transportLine.getZone().getId()).isEqualTo(DEFAULT_ZONE_ID));
     }
 }

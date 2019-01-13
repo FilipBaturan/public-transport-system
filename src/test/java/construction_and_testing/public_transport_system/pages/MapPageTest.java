@@ -4,9 +4,12 @@ import construction_and_testing.public_transport_system.pages.MapPage;
 import construction_and_testing.public_transport_system.pages.NavigationBarPage;
 import construction_and_testing.public_transport_system.pages.WelcomePage;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -14,6 +17,8 @@ import org.testng.annotations.Test;
 import static construction_and_testing.public_transport_system.pages.util.SeleniumProperties.CHROME_DRIVER_PATH;
 import static org.assertj.core.api.Assertions.assertThat;
 
+
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class MapPageTest {
 
     private WebDriver browser;
@@ -84,6 +89,9 @@ public class MapPageTest {
         mapPage.ensureIsDisplayedButtonEdit();
 
         assertThat(mapPage.numberOfTransportLines()).isEqualTo(beforeCount + 1);
+        assertThat(mapPage.getTransportLines()
+                .get(mapPage.getTransportLines().size() - 1)
+                .getText()).contains("gener@ted");
     }
 
     @AfterMethod

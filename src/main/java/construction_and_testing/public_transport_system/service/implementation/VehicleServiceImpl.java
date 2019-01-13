@@ -67,7 +67,15 @@ public class VehicleServiceImpl implements VehicleService {
         }
     }
 
+    @Override
+    public List<Vehicle> getAllVehiclesWithLines() {
+        List<Vehicle> temp = vehicleRepository.findByNotNullTransportLine();
+        return vehicleRepository.findByNotNullTransportLine();
+    }
+
     /**
+     * Validates vehicle properties
+     *
      * @param vehicle that needs to be validated
      */
     private void validate(Vehicle vehicle) {

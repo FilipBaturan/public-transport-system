@@ -1,7 +1,11 @@
 package construction_and_testing.public_transport_system.service.integration;
 
+import construction_and_testing.public_transport_system.domain.Schedule;
 import construction_and_testing.public_transport_system.domain.TransportLine;
 import construction_and_testing.public_transport_system.domain.TransportLinePosition;
+import construction_and_testing.public_transport_system.domain.Vehicle;
+import construction_and_testing.public_transport_system.domain.enums.DayOfWeek;
+import construction_and_testing.public_transport_system.domain.enums.VehicleType;
 import construction_and_testing.public_transport_system.repository.ScheduleRepository;
 import construction_and_testing.public_transport_system.repository.TicketRepository;
 import construction_and_testing.public_transport_system.repository.VehicleRepository;
@@ -15,6 +19,7 @@ import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -79,16 +84,7 @@ public class TransportLineServiceImplIntegrationTest {
      */
     @Test(expected = GeneralException.class)
     public void findByNullId() {
-        TransportLine transportLine = transportLineService.findById(null);
-        assertThat(transportLine).isNotNull();
-
-        assertThat(transportLine.getId()).isEqualTo(DB_ID);
-        assertThat(transportLine.getName()).isEqualTo(DB_NAME);
-        assertThat(transportLine.getType()).isEqualTo(DB_TYPE);
-        assertThat(transportLine.getPositions().getId()).isEqualTo(DB_POSITION.getId());
-        assertThat(transportLine.getSchedule().size()).isEqualTo(DB_SCHEDULE_COUNT);
-        assertThat(transportLine.getZone().getId()).isEqualTo(DB_ZONE.getId());
-        assertThat(transportLine.isActive()).isEqualTo(DB_ACTIVE);
+        transportLineService.findById(null);
     }
 
     /**
@@ -117,6 +113,65 @@ public class TransportLineServiceImplIntegrationTest {
     }
 
     /**
+     * Test valid transport line saving with updated
+     * Vehicles associated with transport line should be updated
+     * with null current line
+     */
+    @Test
+    @Transactional
+    public void saveTransportLineWithUpdatedType() {
+        TransportLine transportLine =
+                new TransportLine(DB_ID, DB_NAME, VehicleType.METRO,
+                        DB_POSITION, new HashSet<>() , DB_ZONE, true);
+        transportLine.getPositions().setTransportLine(transportLine);
+
+        Schedule schedule1 = new Schedule(100L, transportLine, DayOfWeek.WORKDAY, new ArrayList<String>() {{
+            add("08:00");
+            add("08:15");
+            add("8:30");
+            add("08:45");
+            add("09:00");
+        }}, true);
+
+        Schedule schedule2 = new Schedule(103L, transportLine, DayOfWeek.SATURDAY, new ArrayList<String>() {{
+            add("18:00");
+            add("18:15");
+            add("18:30");
+            add("18:45");
+            add("19:00");
+        }}, true);
+
+        Schedule schedule3 = new Schedule(105L, transportLine, DayOfWeek.SUNDAY, new ArrayList<String>() {{
+            add("22:00");
+            add("22:15");
+            add("22:30");
+            add("22:45");
+            add("23:00");
+        }}, true);
+
+        transportLine.getSchedule().add(schedule1);
+        transportLine.getSchedule().add(schedule2);
+        transportLine.getSchedule().add(schedule3);
+
+        int countBefore = transportLineService.getAll().size();
+
+        TransportLine dbTransportLine = transportLineService.save(transportLine);
+        assertThat(dbTransportLine).isNotNull();
+
+        List<Vehicle> vehicles = vehicleRepository.findAll();
+
+        assertThat(transportLineService.getAll().size()).isEqualTo(countBefore);
+        assertThat(dbTransportLine.getName()).isEqualTo(transportLine.getName());
+        assertThat(dbTransportLine.getType()).isEqualTo(VehicleType.METRO);
+        assertThat(dbTransportLine.getPositions().getId()).isNotNull();
+        assertThat(dbTransportLine.getPositions().getContent()).isEqualTo(transportLine.getPositions().getContent());
+        assertThat(dbTransportLine.getSchedule().size()).isEqualTo(transportLine.getSchedule().size());
+        assertThat(dbTransportLine.getZone().getId()).isEqualTo(transportLine.getZone().getId());
+
+        vehicles.forEach(vehicle -> assertThat(vehicle.getCurrentLine()).isNull());
+    }
+
+    /**
      * Test with null values
      */
     @Test(expected = GeneralException.class)
@@ -125,17 +180,7 @@ public class TransportLineServiceImplIntegrationTest {
         TransportLine transportLine =
                 new TransportLine(null, null, null, null,
                         null, null, true);
-        int countBefore = transportLineService.getAll().size();
-
-        TransportLine dbTransportLine = transportLineService.save(transportLine);
-        assertThat(dbTransportLine).isNotNull();
-
-        assertThat(transportLineService.getAll().size()).isEqualTo(countBefore + 1);
-        assertThat(dbTransportLine.getName()).isEqualTo(transportLine.getName());
-        assertThat(dbTransportLine.getType()).isEqualTo(transportLine.getType());
-        assertThat(dbTransportLine.getPositions().getId()).isNotNull();
-        assertThat(dbTransportLine.getSchedule().size()).isEqualTo(0);
-        assertThat(dbTransportLine.getZone().getId()).isEqualTo(DB_ZONE.getId());
+        transportLineService.save(transportLine);
     }
 
     /**
@@ -148,17 +193,7 @@ public class TransportLineServiceImplIntegrationTest {
                 new TransportLine(null, NEW_NAME, NEW_TYPE,
                         new TransportLinePosition(22L, "", null, true),
                         new HashSet<>(), DB_ZONE, true);
-        int countBefore = transportLineService.getAll().size();
-
-        TransportLine dbTransportLine = transportLineService.save(transportLine);
-        assertThat(dbTransportLine).isNotNull();
-
-        assertThat(transportLineService.getAll().size()).isEqualTo(countBefore + 1);
-        assertThat(dbTransportLine.getName()).isEqualTo(transportLine.getName());
-        assertThat(dbTransportLine.getType()).isEqualTo(transportLine.getType());
-        assertThat(dbTransportLine.getPositions().getId()).isNotNull();
-        assertThat(dbTransportLine.getSchedule().size()).isEqualTo(0);
-        assertThat(dbTransportLine.getZone().getId()).isEqualTo(DB_ZONE.getId());
+        transportLineService.save(transportLine);
     }
 
     /**
@@ -183,17 +218,7 @@ public class TransportLineServiceImplIntegrationTest {
                         new TransportLinePosition(null, "", null, true),
                         new HashSet<>(), DB_ZONE, true);
         transportLine.getPositions().setTransportLine(transportLine);
-        int countBefore = transportLineService.getAll().size();
-
-        TransportLine dbTransportLine = transportLineService.save(transportLine);
-        assertThat(dbTransportLine).isNotNull();
-
-        assertThat(transportLineService.getAll().size()).isEqualTo(countBefore + 1);
-        assertThat(dbTransportLine.getName()).isEqualTo(transportLine.getName());
-        assertThat(dbTransportLine.getType()).isEqualTo(transportLine.getType());
-        assertThat(dbTransportLine.getPositions().getId()).isNotNull();
-        assertThat(dbTransportLine.getSchedule().size()).isEqualTo(0);
-        assertThat(dbTransportLine.getZone().getId()).isEqualTo(DB_ZONE.getId());
+        transportLineService.save(transportLine);
     }
 
     /**
@@ -207,17 +232,7 @@ public class TransportLineServiceImplIntegrationTest {
                         new TransportLinePosition(null, "", null, true),
                         new HashSet<>(), DB_ZONE, true);
         transportLine.getPositions().setTransportLine(transportLine);
-        int countBefore = transportLineService.getAll().size();
-
-        TransportLine dbTransportLine = transportLineService.save(transportLine);
-        assertThat(dbTransportLine).isNotNull();
-
-        assertThat(transportLineService.getAll().size()).isEqualTo(countBefore + 1);
-        assertThat(dbTransportLine.getName()).isEqualTo(transportLine.getName());
-        assertThat(dbTransportLine.getType()).isEqualTo(transportLine.getType());
-        assertThat(dbTransportLine.getPositions().getId()).isNotNull();
-        assertThat(dbTransportLine.getSchedule().size()).isEqualTo(0);
-        assertThat(dbTransportLine.getZone().getId()).isEqualTo(DB_ZONE.getId());
+        transportLineService.save(transportLine);
     }
 
     /**
@@ -276,9 +291,11 @@ public class TransportLineServiceImplIntegrationTest {
     @Test
     @Transactional
     public void remove() {
+        int countBefore = transportLineService.getAll().size();
         transportLineService.remove(DEL_ID);
         TransportLine transportLine = transportLineService.findById(DEL_ID);
         assertThat(transportLine.isActive()).isFalse();
+        assertThat(transportLineService.getAll().size()).isEqualTo(countBefore - 1);
     }
 
     /**
@@ -320,14 +337,7 @@ public class TransportLineServiceImplIntegrationTest {
     @Test(expected = GeneralException.class)
     @Transactional
     public void replaceAllWithInvalidScheduleAssociation() {
-        int countBefore = scheduleRepository.findAll().size();
-
-        List<TransportLine> transportLines = transportLineService
-                .replaceAll(NEW_TRANSPORT_LINES_INVALID_SCHEDULE_ASSOCIATION);
-
-        assertThat(transportLines).isNotNull();
-        assertThat(transportLines.size()).isEqualTo(NEW_TRANSPORT_LINES_INVALID_SCHEDULE_ASSOCIATION.size());
-        assertThat(scheduleRepository.findAll().size()).isEqualTo(countBefore - DEL_SCHEDULE_COUNT);
+        transportLineService.replaceAll(NEW_TRANSPORT_LINES_INVALID_SCHEDULE_ASSOCIATION);
     }
 
     /**
@@ -377,17 +387,8 @@ public class TransportLineServiceImplIntegrationTest {
     @Test(expected = GeneralException.class)
     @Transactional
     public void replaceAllWithShortName() {
-        int countBeforeSchedule = scheduleRepository.findAll().size();
-        int countBeforeTicket = ticketRepository.findAll().size();
-
         NEW_TRANSPORT_LINES.get(0).setName(NEW_NAME_SHORT_LENGTH);
-        List<TransportLine> transportLines = transportLineService.replaceAll(NEW_TRANSPORT_LINES);
-
-        assertThat(transportLines).isNotNull();
-        assertThat(transportLines.size()).isEqualTo(NEW_TRANSPORT_LINES.size());
-        assertThat(scheduleRepository.findAll().size()).isEqualTo(countBeforeSchedule - DEL_SCHEDULE_COUNT);
-        vehicleRepository.findAll().forEach(vehicle -> assertThat(vehicle.getCurrentLine()).isNotNull());
-        assertThat(ticketRepository.findAll().size()).isEqualTo(countBeforeTicket);
+        transportLineService.replaceAll(NEW_TRANSPORT_LINES);
     }
 
     /**
@@ -396,17 +397,8 @@ public class TransportLineServiceImplIntegrationTest {
     @Test(expected = GeneralException.class)
     @Transactional
     public void replaceAllWithLongName() {
-        int countBeforeSchedule = scheduleRepository.findAll().size();
-        int countBeforeTicket = ticketRepository.findAll().size();
-
         NEW_TRANSPORT_LINES.get(0).setName(NEW_NAME_LONG_LENGTH);
-        List<TransportLine> transportLines = transportLineService.replaceAll(NEW_TRANSPORT_LINES);
-
-        assertThat(transportLines).isNotNull();
-        assertThat(transportLines.size()).isEqualTo(NEW_TRANSPORT_LINES.size());
-        assertThat(scheduleRepository.findAll().size()).isEqualTo(countBeforeSchedule - DEL_SCHEDULE_COUNT);
-        vehicleRepository.findAll().forEach(vehicle -> assertThat(vehicle.getCurrentLine()).isNotNull());
-        assertThat(ticketRepository.findAll().size()).isEqualTo(countBeforeTicket);
+        transportLineService.replaceAll(NEW_TRANSPORT_LINES);
     }
 
     /**

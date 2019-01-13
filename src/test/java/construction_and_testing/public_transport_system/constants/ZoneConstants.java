@@ -35,7 +35,7 @@ public class ZoneConstants {
     public static final HashSet<TransportLine> DB_TR_SAT = new HashSet<>(DB_TR);
 
     public static final ArrayList<Zone> DB_ZONES = new ArrayList<Zone>() {{
-        add(new Zone());
+        add(new Zone(DB_ID, DEL_NAME, DB_TR_SAT, true));
         add(new Zone());
         add(new Zone());
     }};

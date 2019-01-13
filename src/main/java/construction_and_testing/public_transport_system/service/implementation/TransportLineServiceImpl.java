@@ -62,6 +62,7 @@ public class TransportLineServiceImpl implements TransportLineService {
             this.validate(transportLine);
             this.placeSchedulesInTransportLine(scheduleRepository.findAllById(transportLine.getSchedule()
                     .stream().map(Schedule::getId).collect(Collectors.toList())), transportLine);
+            this.performVehicleConsistency(transportLine);
             transportLineRepository.save(transportLine);
             return transportLinePositionRepository.save(transportLine.getPositions()).getTransportLine();
         } catch (DataIntegrityViolationException e) {
@@ -85,11 +86,11 @@ public class TransportLineServiceImpl implements TransportLineService {
     }
 
     /**
-     * get all schedules
-     * delete schedules that are not associated with any transport line
-     * creates empty schedules for new transport lines
-     * delete all transport routes in database
-     * save new transport lines
+     * Gets all schedules
+     * Deletes schedules that are not associated with any transport line
+     * Creates empty schedules for new transport lines
+     * Deletes all transport routes in database
+     * Saves new transport lines
      *
      * @param transportLines that need to be saved
      * @return save transport lines
@@ -107,7 +108,7 @@ public class TransportLineServiceImpl implements TransportLineService {
         this.associateDefaultZoneToNewTransportLines(transportLines);
         this.filterAssociatedTransportLines(dbTransportLines, transportLines);
         if (!dbTransportLines.isEmpty()) {
-            this.removeStationsFromTransportLines(dbTransportLines);
+            this.removeVehiclesFromTransportLines(dbTransportLines);
             this.removeTicketsFromTransportLines(dbTransportLines);
         }
 
@@ -124,6 +125,8 @@ public class TransportLineServiceImpl implements TransportLineService {
     }
 
     /**
+     * Places schedules to transport line
+     *
      * @param schedules     that need to be placed in transport line
      * @param transportLine target transport line
      */
@@ -141,6 +144,8 @@ public class TransportLineServiceImpl implements TransportLineService {
     }
 
     /**
+     * Validate schedule that are associated with transport lines
+     *
      * @param transportLines      that contain schedules that need to be validated
      * @param schedules           valid schedules in database
      * @param associatedSchedules valid schedules that are associated to transport lines
@@ -185,6 +190,8 @@ public class TransportLineServiceImpl implements TransportLineService {
     }
 
     /**
+     * Finds schedule with targeted id
+     *
      * @param schedules which search is performed
      * @param id        of target schedule
      * @return founded schedule or null if does not exist in collection
@@ -199,6 +206,8 @@ public class TransportLineServiceImpl implements TransportLineService {
     }
 
     /**
+     * Filters and removes schedule that needs to be removed
+     *
      * @param schedules           valid schedules in database
      * @param associatedSchedules with transport lines
      */
@@ -213,7 +222,9 @@ public class TransportLineServiceImpl implements TransportLineService {
     }
 
     /**
-     * @param transportLines contains new transport lines
+     * Adds new transport lines to default zone
+     *
+     * @param transportLines contain new transport lines
      */
     private void associateDefaultZoneToNewTransportLines(Iterable<TransportLine> transportLines) {
         // associate new transport lines with default zone
@@ -227,6 +238,8 @@ public class TransportLineServiceImpl implements TransportLineService {
     }
 
     /**
+     * Filters transport lines that needs to be removed
+     *
      * @param dbTransportLines valid transport lines in database
      * @param transportLines   that need to be saved
      */
@@ -247,16 +260,21 @@ public class TransportLineServiceImpl implements TransportLineService {
     }
 
     /**
+     * Sets null to vehicles that are associated with transport lines
+     *
      * @param dbTransportLines valid transport lines in database
      */
-    private void removeStationsFromTransportLines(List<TransportLine> dbTransportLines) {
+    private void removeVehiclesFromTransportLines(List<TransportLine> dbTransportLines) {
         List<Vehicle> vehicles = vehicleRepository
-                .findByTransportLine(dbTransportLines.stream().map(TransportLine::getId).collect(Collectors.toList()));
+                .findByTransportLine(dbTransportLines.stream()
+                        .map(TransportLine::getId).collect(Collectors.toList()));
         vehicles.forEach(vehicle -> vehicle.setCurrentLine(null));
         vehicleRepository.saveAll(vehicles);
     }
 
     /**
+     * Removes tickets that are associated with transport line
+     *
      * @param dbTransportLines valid transport lines in database
      */
     private void removeTicketsFromTransportLines(List<TransportLine> dbTransportLines) {
@@ -266,6 +284,27 @@ public class TransportLineServiceImpl implements TransportLineService {
     }
 
     /**
+     * Sets null to vehicles that are associated with transport line
+     * if type of transport line is changed
+     *
+     * @param transportLine that is updated
+     */
+    private void performVehicleConsistency(TransportLine transportLine) {
+        List<Vehicle> vehicles = vehicleRepository.findByTransportLine(
+                new ArrayList<Long>() {{
+                    add(transportLine.getId());
+                }});
+        if (!vehicles.isEmpty()) {
+            if (vehicles.get(0).getType() != transportLine.getType()) {
+                vehicles.forEach(vehicle -> vehicle.setCurrentLine(null));
+                vehicleRepository.saveAll(vehicles);
+            }
+        }
+    }
+
+    /**
+     * Validate transport line properties
+     *
      * @param transportLine that needs to be validated
      */
     private void validate(TransportLine transportLine) {
@@ -283,6 +322,8 @@ public class TransportLineServiceImpl implements TransportLineService {
     }
 
     /**
+     * Validates transport lines properties
+     *
      * @param transportLines that need to be validated
      */
     private void validate(Iterable<TransportLine> transportLines) {

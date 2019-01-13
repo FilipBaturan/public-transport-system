@@ -42,7 +42,7 @@ INSERT INTO `public_transport`.`vehicle` (`id`, `active`, `name`, `type`, `curre
 INSERT INTO `public_transport`.`vehicle` (`id`, `active`, `name`, `type`, `current_line_id`) VALUES ('2', TRUE, 'NS-B-321-VF', '0', '3');
 INSERT INTO `public_transport`.`vehicle` (`id`, `active`, `name`, `type`, `current_line_id`) VALUES ('3', TRUE, 'NS-M-743-E5', '1', '4');
 INSERT INTO `public_transport`.`vehicle` (`id`, `active`, `name`, `type`) VALUES ('4', TRUE, 'NS-B-235-C7', '0');
-INSERT INTO `public_transport`.`vehicle` (`id`, `active`, `name`, `type`) VALUES ('5', TRUE, 'NS-B-963-DN', '2');
+INSERT INTO `public_transport`.`vehicle` (`id`, `active`, `name`, `type`, `current_line_id`) VALUES ('5', TRUE, 'NS-T-963-DN', '2', '2');
 INSERT INTO `public_transport`.`vehicle` (`id`, `active`, `name`, `type`, `current_line_id`) VALUES ('6', TRUE, 'NS-B-851-L3', '0', '1');
 
 

@@ -10,6 +10,9 @@ import java.util.List;
 
 public interface VehicleRepository extends JpaRepository<Vehicle, Long> {
 
-    @Query("SELECT v from Vehicle v WHERE v.currentLine.id IN :lines")
+    @Query("SELECT v FROM Vehicle v WHERE v.currentLine.id IN :lines")
     List<Vehicle> findByTransportLine(@Param("lines") List<Long> transportLineIds);
+
+    @Query("SELECT v FROM Vehicle v JOIN v.currentLine cl WHERE cl IS NOT NULL")
+    List<Vehicle> findByNotNullTransportLine();
 }

@@ -8,6 +8,8 @@ import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.PageFactory;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.annotation.Rollback;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
@@ -17,6 +19,7 @@ import java.util.List;
 import static construction_and_testing.public_transport_system.pages.util.SeleniumProperties.CHROME_DRIVER_PATH;
 import static org.assertj.core.api.Assertions.assertThat;
 
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class VehiclePageTest {
 
     private WebDriver browser;
@@ -62,6 +65,7 @@ public class VehiclePageTest {
      * Test valid vehicle adding
      */
     @Test
+    @Rollback
     public void testAddVehicle() {
 
         vehiclePage.ensureIsDisplayed();
@@ -101,6 +105,7 @@ public class VehiclePageTest {
      * Test valid vehicle editing
      */
     @Test
+    @Rollback
     public void testEditVehicle() {
 
         vehiclePage.ensureIsDisplayed();
@@ -138,6 +143,7 @@ public class VehiclePageTest {
      * Test valid vehicle deletion
      */
     @Test
+    @Rollback
     public void testRemoveVehicle() {
 
         vehiclePage.ensureIsDisplayed();
@@ -156,6 +162,7 @@ public class VehiclePageTest {
      * Test valid vehicle saving with minimum name length
      */
     @Test
+    @Rollback
     public void testSaveVehicleWithMinimumNameLength() {
 
         vehiclePage.ensureIsDisplayed();
@@ -195,6 +202,7 @@ public class VehiclePageTest {
      * Test valid vehicle saving with maximum name length
      */
     @Test
+    @Rollback
     public void testSaveVehicleWithMaximumNameLength() {
 
         vehiclePage.ensureIsDisplayed();
@@ -234,6 +242,7 @@ public class VehiclePageTest {
      * Test invalid vehicle saving with null name and type
      */
     @Test
+    @Rollback
     public void testSaveVehicleWithNullNameAndType() {
 
         vehiclePage.ensureIsDisplayed();
@@ -262,6 +271,7 @@ public class VehiclePageTest {
      * Test invalid vehicle saving with null name
      */
     @Test
+    @Rollback
     public void testSaveVehicleWithNullName() {
 
         vehiclePage.ensureIsDisplayed();
@@ -290,6 +300,7 @@ public class VehiclePageTest {
      * Test invalid vehicle saving with short name
      */
     @Test
+    @Rollback
     public void testSaveVehicleWithShortName() {
 
         vehiclePage.ensureIsDisplayed();
@@ -319,6 +330,7 @@ public class VehiclePageTest {
      * Test invalid vehicle saving with long name
      */
     @Test
+    @Rollback
     public void testSaveVehicleWithLongName() {
 
         vehiclePage.ensureIsDisplayed();
@@ -348,6 +360,7 @@ public class VehiclePageTest {
      * Test invalid vehicle saving with null type
      */
     @Test
+    @Rollback
     public void testSaveVehicleWithNullType() {
 
         vehiclePage.ensureIsDisplayed();

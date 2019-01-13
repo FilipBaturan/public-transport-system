@@ -34,19 +34,27 @@ public class VehicleServiceImplUnitTest {
     private VehicleService vehicleService;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         Mockito.when(transportLineRepository.findById(DB_TR_ID)).thenReturn(Optional.of(DB_TR));
         Mockito.when(transportLineRepository.findById(NEW_LINE_INVALID_ID)).thenReturn(Optional.of(NEW_LINE_INVALID));
         Mockito.when(vehicleRepository.findById(DEL_ID)).thenReturn(Optional.of(DB_VEHICLE))
                 .thenReturn(Optional.of(DEL_VEHICLE));
         Mockito.when(vehicleRepository.findById(DEL_ID_INVALID)).thenReturn(Optional.empty());
-        Mockito.when(vehicleRepository.findAll()).thenReturn(DB_VEHICLES);
+        Mockito.when(vehicleRepository.findAll()).then(invocation -> {
+            DB_VEHICLES.removeIf(vehicle -> !vehicle.isActive());
+            return DB_VEHICLES;
+        });
         Mockito.when(vehicleRepository.save(any(Vehicle.class))).then(invocationOnMock -> {
             Object[] arguments = invocationOnMock.getArguments();
             if (arguments != null && arguments.length > 0 && arguments[0] != null) {
                 Vehicle vehicle = (Vehicle) arguments[0];
                 if (DEL_ID.equals(vehicle.getId())) {
-                    DEL_VEHICLE = vehicle;
+                    DB_VEHICLES.forEach(vehicle1 -> {
+                        if (vehicle1.getId().equals(vehicle.getId())){
+                            vehicle1.setActive(false);
+                            DEL_VEHICLE = vehicle1;
+                        }
+                    });
                 } else {
                     vehicle.setId(NEW_ID);
                     DB_VEHICLES.add(vehicle);
@@ -84,19 +92,7 @@ public class VehicleServiceImplUnitTest {
     @Test(expected = GeneralException.class)
     public void saveWithInvalidType() {
         Vehicle vehicle = new Vehicle(null, NEW_NAME, NEW_TYPE_INVALID, NEW_LINE, true);
-        int countBefore = vehicleService.getAll().size();
-
-        Vehicle dbVehicle = vehicleService.save(vehicle);
-        assertThat(dbVehicle).isNotNull();
-
-        assertThat(vehicleService.getAll().size()).isEqualTo(countBefore + 1);
-        assertThat(dbVehicle.getName()).isEqualTo(vehicle.getName());
-        assertThat(dbVehicle.getType()).isEqualTo(vehicle.getType());
-        assertThat(dbVehicle.getCurrentLine().getId()).isEqualTo(vehicle.getCurrentLine().getId());
-        assertThat(dbVehicle.isActive()).isEqualTo(vehicle.isActive());
-
-        Mockito.verify(transportLineRepository, Mockito.times(1)).findById(DB_TR_ID);
-        Mockito.verify(vehicleRepository, Mockito.never()).save(any(Vehicle.class));
+        vehicleService.save(vehicle);
     }
 
     /**
@@ -105,19 +101,7 @@ public class VehicleServiceImplUnitTest {
     @Test(expected = GeneralException.class)
     public void saveWithInvalidLine() {
         Vehicle vehicle = new Vehicle(null, NEW_NAME, NEW_TYPE, NEW_LINE_INVALID, true);
-        int countBefore = vehicleService.getAll().size();
-
-        Vehicle dbVehicle = vehicleService.save(vehicle);
-        assertThat(dbVehicle).isNotNull();
-
-        assertThat(vehicleService.getAll().size()).isEqualTo(countBefore + 1);
-        assertThat(dbVehicle.getName()).isEqualTo(vehicle.getName());
-        assertThat(dbVehicle.getType()).isEqualTo(vehicle.getType());
-        assertThat(dbVehicle.getCurrentLine().getId()).isEqualTo(vehicle.getCurrentLine().getId());
-        assertThat(dbVehicle.isActive()).isEqualTo(vehicle.isActive());
-
-        Mockito.verify(transportLineRepository, Mockito.times(1)).findById(DB_TR_ID);
-        Mockito.verify(vehicleRepository, Mockito.never()).save(any(Vehicle.class));
+        vehicleService.save(vehicle);
     }
 
     /**
@@ -147,19 +131,7 @@ public class VehicleServiceImplUnitTest {
     @Test(expected = GeneralException.class)
     public void saveWithNullValues() {
         Vehicle vehicle = new Vehicle(null, null, null, NEW_LINE, true);
-        int countBefore = vehicleService.getAll().size();
-
-        Vehicle dbVehicle = vehicleService.save(vehicle);
-        assertThat(dbVehicle).isNotNull();
-
-        assertThat(vehicleService.getAll().size()).isEqualTo(countBefore + 1);
-        assertThat(dbVehicle.getName()).isEqualTo(vehicle.getName());
-        assertThat(dbVehicle.getType()).isEqualTo(vehicle.getType());
-        assertThat(dbVehicle.getCurrentLine().getId()).isEqualTo(vehicle.getCurrentLine().getId());
-        assertThat(dbVehicle.isActive()).isEqualTo(vehicle.isActive());
-
-        Mockito.verify(transportLineRepository, Mockito.never()).findById(DB_TR_ID);
-        Mockito.verify(vehicleRepository, Mockito.never()).save(any(Vehicle.class));
+        vehicleService.save(vehicle);
     }
 
     /**
@@ -168,19 +140,7 @@ public class VehicleServiceImplUnitTest {
     @Test(expected = GeneralException.class)
     public void saveWithShortName() {
         Vehicle vehicle = new Vehicle(null, NEW_NAME_SHORT_LENGTH, NEW_TYPE, NEW_LINE, true);
-        int countBefore = vehicleService.getAll().size();
-
-        Vehicle dbVehicle = vehicleService.save(vehicle);
-        assertThat(dbVehicle).isNotNull();
-
-        assertThat(vehicleService.getAll().size()).isEqualTo(countBefore + 1);
-        assertThat(dbVehicle.getName()).isEqualTo(vehicle.getName());
-        assertThat(dbVehicle.getType()).isEqualTo(vehicle.getType());
-        assertThat(dbVehicle.getCurrentLine().getId()).isEqualTo(vehicle.getCurrentLine().getId());
-        assertThat(dbVehicle.isActive()).isEqualTo(vehicle.isActive());
-
-        Mockito.verify(transportLineRepository, Mockito.never()).findById(DB_TR_ID);
-        Mockito.verify(vehicleRepository, Mockito.never()).save(any(Vehicle.class));
+        vehicleService.save(vehicle);
     }
 
     /**
@@ -189,16 +149,7 @@ public class VehicleServiceImplUnitTest {
     @Test(expected = GeneralException.class)
     public void saveWithLongName() {
         Vehicle vehicle = new Vehicle(null, NEW_NAME_LONG_LENGTH, NEW_TYPE, NEW_LINE, true);
-        int countBefore = vehicleService.getAll().size();
-
-        Vehicle dbVehicle = vehicleService.save(vehicle);
-        assertThat(dbVehicle).isNotNull();
-
-        assertThat(vehicleService.getAll().size()).isEqualTo(countBefore + 1);
-        assertThat(dbVehicle.getName()).isEqualTo(vehicle.getName());
-        assertThat(dbVehicle.getType()).isEqualTo(vehicle.getType());
-        assertThat(dbVehicle.getCurrentLine().getId()).isEqualTo(vehicle.getCurrentLine().getId());
-        assertThat(dbVehicle.isActive()).isEqualTo(vehicle.isActive());
+        vehicleService.save(vehicle);
     }
 
     /**
@@ -206,13 +157,13 @@ public class VehicleServiceImplUnitTest {
      */
     @Test
     public void saveWithMinLengthName() {
-        Vehicle vehicle = new Vehicle(null, NEW_NAME_MIN_LENGTH, NEW_TYPE, NEW_LINE, true);
+        Vehicle vehicle = new Vehicle(DB_ID, NEW_NAME_MIN_LENGTH, NEW_TYPE, NEW_LINE, true);
         int countBefore = vehicleService.getAll().size();
 
         Vehicle dbVehicle = vehicleService.save(vehicle);
         assertThat(dbVehicle).isNotNull();
 
-        assertThat(vehicleService.getAll().size()).isEqualTo(countBefore + 1);
+        assertThat(vehicleService.getAll().size()).isEqualTo(countBefore);
         assertThat(dbVehicle.getName()).isEqualTo(vehicle.getName());
         assertThat(dbVehicle.getType()).isEqualTo(vehicle.getType());
         assertThat(dbVehicle.getCurrentLine().getId()).isEqualTo(vehicle.getCurrentLine().getId());
@@ -248,11 +199,14 @@ public class VehicleServiceImplUnitTest {
      */
     @Test
     public void remove() {
+        int countBefore = vehicleService.getAll().size();
+
         vehicleService.remove(DEL_ID);
 
         Mockito.verify(vehicleRepository, Mockito.times(1)).findById(DEL_ID);
         Mockito.verify(vehicleRepository, Mockito.times(1)).save(any(Vehicle.class));
 
+        assertThat(vehicleService.getAll().size()).isEqualTo(countBefore - 1);
         Vehicle vehicle = vehicleService.findById(DEL_ID);
         assertThat(vehicle.isActive()).isFalse();
     }
@@ -263,8 +217,5 @@ public class VehicleServiceImplUnitTest {
     @Test(expected = GeneralException.class)
     public void removeWithInvalidID() {
         vehicleService.remove(DEL_ID_INVALID);
-
-        Mockito.verify(vehicleRepository, Mockito.times(1)).findById(DEL_ID_INVALID);
-        Mockito.verify(vehicleRepository, Mockito.times(1)).save(any(Vehicle.class));
     }
 }
