@@ -20,7 +20,6 @@ public class ReservationConverter extends AbstractConverter {
         Reservation entity = new Reservation();
         RegisteredUser u = new RegisteredUser();
         u.setId(dto.getOwner());
-        System.out.println("Korisnikov id: " + dto.getOwner());
         entity.setOwner(u);
         Set<Ticket> tickets = new HashSet<>();
         for (TicketDTO tDTO : dto.getTickets()) {

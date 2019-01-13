@@ -5,7 +5,7 @@ import construction_and_testing.public_transport_system.domain.User;
 public class UserDTO {
 
     private Long id;
-    private String firstName;
+    private String name;
     private String lastName;
     private String username;
     private String password;
@@ -29,7 +29,7 @@ public class UserDTO {
     }
 
     public UserDTO() {
-        this.firstName = "";
+        this.name = "";
         this.lastName = "";
         this.email = "";
         this.password = "";
@@ -38,7 +38,7 @@ public class UserDTO {
 
     public UserDTO(Long id, String name, String lastName, String email, String password, String username) {
         this.id = id;
-        this.firstName = name;
+        this.name = name;
         this.lastName = lastName;
         this.email = email;
         this.username = username;
@@ -48,7 +48,7 @@ public class UserDTO {
 
     public UserDTO(User u) {
         this.id = u.getId();
-        this.firstName = u.getName();
+        this.name = u.getName();
         this.lastName = u.getLastName();
         this.email = u.getEmail();
         this.username = u.getUsername();
@@ -89,12 +89,12 @@ public class UserDTO {
     }
 
 
-    public String getFirstName() {
-        return firstName;
+    public String getName() {
+        return name;
     }
 
-    public void setFirstName(String firstName) {
-        this.firstName = firstName;
+    public void setName(String firstName) {
+        this.name = firstName;
     }
 
     public String getLast() {

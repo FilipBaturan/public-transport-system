@@ -1,6 +1,8 @@
 package construction_and_testing.public_transport_system.controller;
 
 
+import construction_and_testing.public_transport_system.converter.RegisteredUserConverter;
+import construction_and_testing.public_transport_system.domain.DTO.RegisteringUserDTO;
 import construction_and_testing.public_transport_system.domain.RegisteredUser;
 import construction_and_testing.public_transport_system.service.definition.RegisteredUserService;
 import construction_and_testing.public_transport_system.util.GeneralException;
@@ -86,18 +88,17 @@ public class RegisteredUserController {
      * <p>
      * Modifiyng existing registered user
      *
-     * @param id   - id of user with old information
      * @param user - new information
      * @return modified user
      */
-    @PutMapping("/{id}")
+    @PutMapping()
     //@PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<RegisteredUser> update(@PathVariable Long id, @RequestBody RegisteredUser user) {
-        user.setId(id);
-        boolean succeeded = registeredUserService.modify(user);
+    public ResponseEntity<RegisteredUser> update(@RequestBody RegisteringUserDTO user) {
+        RegisteredUser changed = RegisteredUserConverter.fromRegisteringUserDTO(user);
+        boolean succeeded = registeredUserService.modify(changed);
         if (succeeded) {
             logger.info("User successfully modified.");
-            return new ResponseEntity<>(user, HttpStatus.OK);
+            return new ResponseEntity<>(changed, HttpStatus.OK);
         } else {
             logger.warn("Cannot modify user, probably user with given id doesn't exists!");
             return new ResponseEntity<>(HttpStatus.CONFLICT);

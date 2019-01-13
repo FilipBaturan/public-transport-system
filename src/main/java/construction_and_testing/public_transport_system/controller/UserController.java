@@ -10,6 +10,7 @@ import construction_and_testing.public_transport_system.domain.Validator;
 import construction_and_testing.public_transport_system.domain.enums.AuthorityType;
 import construction_and_testing.public_transport_system.domain.enums.UsersDocumentsStatus;
 import construction_and_testing.public_transport_system.security.TokenUtils;
+import construction_and_testing.public_transport_system.service.definition.RegisteredUserService;
 import construction_and_testing.public_transport_system.service.definition.UserService;
 import construction_and_testing.public_transport_system.util.GeneralException;
 import org.modelmapper.ModelMapper;
@@ -41,6 +42,9 @@ public class UserController {
 
     @Autowired
     private UserDetailsService userDetailsService;
+
+    @Autowired
+    private RegisteredUserService registeredUserService;
 
     @Autowired
     private UserService userService;
@@ -138,6 +142,33 @@ public class UserController {
         logger.info("Failed to register user, user with given username already exists!");
         return new ResponseEntity<>(false, HttpStatus.CONFLICT);
     }
+
+    /**
+     * PUT /api/user/modifyRegistered
+     * <p>
+     * Modifiyng existing registered user
+     *
+     * @param user - new information
+     * @return modified user
+     */
+    @PutMapping("/modifyRegistered/{id}")
+    //@PreAuthorize("hasAuthority('ADMIN')")
+    public ResponseEntity<RegisteredUser> update(@PathVariable Long id, @RequestBody RegisteringUserDTO user) {
+        RegisteredUser changed = RegisteredUserConverter.fromRegisteringUserDTO(user);
+        changed.setId(id);
+        if(!changed.getPassword().startsWith("$")){
+            changed.setPassword(passwordEncoder.encode(changed.getPassword()));
+        }
+        boolean succeeded = registeredUserService.modify(changed);
+        if (succeeded) {
+            logger.info("User successfully modified.");
+            return new ResponseEntity<>(changed, HttpStatus.OK);
+        } else {
+            logger.warn("Cannot modify user, probably user with given id doesn't exists!");
+            return new ResponseEntity<>(HttpStatus.CONFLICT);
+        }
+    }
+
 
     /**
      * GET /api/user/unvalidatedUsers
