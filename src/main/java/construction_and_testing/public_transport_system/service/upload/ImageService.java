@@ -51,7 +51,6 @@ public class ImageService {
         if (!directory.exists()) {
             if (!directory.mkdirs()) {
                 return null;
-                //throw new GeneralException("Can not upload image.", HttpStatus.INTERNAL_SERVER_ERROR);
             }
         }
         return directory;
@@ -64,7 +63,7 @@ public class ImageService {
 
         String current = new File(".").getCanonicalPath();
         return Paths.get(current, "src", "main", "resources", "static",
-                "documents", "profile_images").toString();
+                "documents").toString();
 
 
     }
@@ -77,11 +76,6 @@ public class ImageService {
 
 
         String[] tokens = imageFile.split("\\.");
-        //String current = new File(".").getCanonicalPath();
-        //String path = Paths.get(current, "src", "main", "resources", "static",
-        //      "documents", "profile_images").toString();
-
-        //String path = null;
         try {
             String path = this.getAbsolutePath();
             File directory = this.checkDirectory(path);
@@ -93,15 +87,8 @@ public class ImageService {
                 return new UploadResponse(Paths.get(File.separator, "upload",
                         "img_0_0." + tokens[tokens.length - 1]).toString(),
                         Paths.get(path, "img_0_0." + tokens[tokens.length - 1]).toString());
-//            return new UploadResponse(File.separator + "upload" + File.separator + "img-1-1." +
-//                    tokens[tokens.length - 1],
-//                    path + File.separator + "img-1-1." + tokens[tokens.length - 1]);
             } else {
                 int count = files.length;
-//                return new UploadResponse(Paths.get(File.separator, "upload", "img_" + ++count + "_" + count +
-//                        "." + tokens[tokens.length - 1]).toString(),
-//                        Paths.get(path, "img_" + count + "_" + count + "."
-//                                + tokens[tokens.length - 1]).toString());
                 return new UploadResponse(Paths.get("img_" + ++count + "_" + count +
                         "." + tokens[tokens.length - 1]).toString(),
                         Paths.get(path, "img_" + count + "_" + count + "."
@@ -110,16 +97,6 @@ public class ImageService {
         } catch (IOException e) {
             throw new GeneralException("Can not upload image.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
-//        String path = current + File.separator + "src" + File.separator + "main" + File.separator +
-//                "resources" + File.separator + "static" + File.separator + "img" + File.separator + "props";
-//        File directory = new File(path);
-//        if(!directory.exists()){
-//            if (!directory.mkdirs()){
-//                throw new GeneralException("Can not upload image.", HttpStatus.INTERNAL_SERVER_ERROR);
-//            }
-//        }
-
-
     }
 
     /**

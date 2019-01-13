@@ -209,8 +209,7 @@ public class TicketServiceImplIntegrationTest {
     }
 
     @Test
-    public void getVisitsByWeekValid()
-    {
+    public void getVisitsByWeekValid() {
         Map<String, Integer> prices = ticketService.getVisitsByWeek(DB_REPORT_START_DATE, DB_REPORT_END_DATE);
         assertThat(prices).isNotEmpty();
         assertThat(prices.size()).isEqualTo(1);
@@ -218,16 +217,14 @@ public class TicketServiceImplIntegrationTest {
     }
 
     @Test
-    public void getVisitsByWeekInvalid()
-    {
+    public void getVisitsByWeekInvalid() {
         Map<String, Integer> prices = ticketService.getVisitsByWeek(DB_REPORT_END_DATE, DB_REPORT_START_DATE);
         assertThat(prices).isEmpty();
         assertThat(prices.size()).isEqualTo(0);
     }
 
     @Test
-    public void getVisitsByMonthValid()
-    {
+    public void getVisitsByMonthValid() {
         Map<String, Integer> prices = ticketService.getVisitsByMonth(DB_REPORT_START_DATE, DB_REPORT_END_DATE);
         assertThat(prices).isNotEmpty();
         assertThat(prices.size()).isEqualTo(1);
@@ -235,8 +232,7 @@ public class TicketServiceImplIntegrationTest {
     }
 
     @Test
-    public void getVisitsByMonthInvalid()
-    {
+    public void getVisitsByMonthInvalid() {
         Map<String, Integer> prices = ticketService.getVisitsByMonth(DB_REPORT_END_DATE, DB_REPORT_START_DATE);
         assertThat(prices).isEmpty();
         assertThat(prices.size()).isEqualTo(0);

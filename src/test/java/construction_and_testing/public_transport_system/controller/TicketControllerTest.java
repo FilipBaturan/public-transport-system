@@ -13,7 +13,6 @@ import org.springframework.http.*;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import java.util.HashMap;
 import java.util.Map;
 
 import static construction_and_testing.public_transport_system.constants.TicketConstants.*;
@@ -173,8 +172,7 @@ public class TicketControllerTest {
     }
 
     @Test
-    public void getVisitsPerWeekValid()
-    {
+    public void getVisitsPerWeekValid() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<String>("", headers);
@@ -193,8 +191,7 @@ public class TicketControllerTest {
     }
 
     @Test
-    public void getVisitsPerWeekInvalid()
-    {
+    public void getVisitsPerWeekInvalid() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<String>("", headers);
@@ -210,8 +207,7 @@ public class TicketControllerTest {
     }
 
     @Test
-    public void getVisitsPerMonthValid()
-    {
+    public void getVisitsPerMonthValid() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<>("", headers);
@@ -229,8 +225,7 @@ public class TicketControllerTest {
     }
 
     @Test
-    public void getVisitsPerMonthInvalid()
-    {
+    public void getVisitsPerMonthInvalid() {
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_JSON);
         HttpEntity<String> entity = new HttpEntity<>("", headers);

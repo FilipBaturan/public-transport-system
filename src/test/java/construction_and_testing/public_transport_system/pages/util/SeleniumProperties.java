@@ -1,4 +1,4 @@
-package construction_and_testing.public_transport_system.selenium.util;
+package construction_and_testing.public_transport_system.pages.util;
 
 import java.io.File;
 import java.nio.file.Paths;

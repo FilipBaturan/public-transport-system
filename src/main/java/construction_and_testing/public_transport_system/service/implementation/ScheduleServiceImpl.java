@@ -5,11 +5,15 @@ import construction_and_testing.public_transport_system.repository.ScheduleRepos
 import construction_and_testing.public_transport_system.repository.TransportLineRepository;
 import construction_and_testing.public_transport_system.service.definition.ScheduleService;
 import construction_and_testing.public_transport_system.util.GeneralException;
+
+
+import construction_and_testing.public_transport_system.util.TimeStringComparator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -25,7 +29,14 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     public List<Schedule> getAll() {
-        return scheduleRepository.findAll();
+
+        List<Schedule> schedules = scheduleRepository.findAll();
+
+        for (Schedule schedule: schedules) {
+            schedule.getDepartures().sort(new TimeStringComparator());
+        }
+
+        return schedules;
     }
 
     @Override

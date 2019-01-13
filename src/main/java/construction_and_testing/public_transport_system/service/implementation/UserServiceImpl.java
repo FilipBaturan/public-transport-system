@@ -1,5 +1,6 @@
 package construction_and_testing.public_transport_system.service.implementation;
 
+import construction_and_testing.public_transport_system.domain.Operator;
 import construction_and_testing.public_transport_system.domain.RegisteredUser;
 import construction_and_testing.public_transport_system.domain.User;
 import construction_and_testing.public_transport_system.domain.Validator;
@@ -87,6 +88,11 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<Validator> getValidators() {
         return userRepository.getValidators();
+    }
+
+    @Override
+    public List<Operator> getOperators() {
+        return userRepository.getOperators();
     }
 
     @Override
