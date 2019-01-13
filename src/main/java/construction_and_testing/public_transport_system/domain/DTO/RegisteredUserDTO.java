@@ -1,8 +1,6 @@
 package construction_and_testing.public_transport_system.domain.DTO;
 
-import construction_and_testing.public_transport_system.domain.User;
-
-public class LoggedUserDTO {
+public class RegisteredUserDTO {
 
     private Long id;
     private String name;
@@ -10,33 +8,24 @@ public class LoggedUserDTO {
     private String username;
     private String password;
     private String email;
-    private boolean active;
     private String telephone;
+    private boolean active;
 
-    public LoggedUserDTO() {
+    public RegisteredUserDTO(){
+
     }
 
-    public LoggedUserDTO(Long id, String firstName, String lastName, String username, String password, String email, boolean active, String telephone) {
+    public RegisteredUserDTO(Long id, String name, String lastName, String username, String password, String email, String telephone, boolean active) {
         this.id = id;
-        this.name = firstName;
+        this.name = name;
         this.lastName = lastName;
         this.username = username;
         this.password = password;
         this.email = email;
-        this.active = active;
         this.telephone = telephone;
+        this.active = active;
     }
 
-    public LoggedUserDTO(User entity) {
-        this.id = entity.getId();
-        this.name = entity.getName();
-        this.lastName = entity.getLastName();
-        this.username = entity.getUsername();
-        this.password = entity.getPassword();
-        this.email = entity.getEmail();
-        this.active = entity.isActive();
-        this.telephone = entity.getTelephone();
-    }
     public Long getId() {
         return id;
     }
@@ -85,19 +74,19 @@ public class LoggedUserDTO {
         this.email = email;
     }
 
-    public boolean isActive() {
-        return active;
-    }
-
-    public void setActive(boolean active) {
-        this.active = active;
-    }
-
     public String getTelephone() {
         return telephone;
     }
 
     public void setTelephone(String telephone) {
         this.telephone = telephone;
+    }
+
+    public boolean isActive() {
+        return active;
+    }
+
+    public void setActive(boolean active) {
+        this.active = active;
     }
 }

@@ -5,9 +5,12 @@ import construction_and_testing.public_transport_system.domain.Ticket;
 import construction_and_testing.public_transport_system.domain.enums.TicketType;
 import construction_and_testing.public_transport_system.repository.ReservationRepository;
 import construction_and_testing.public_transport_system.service.definition.ReservationService;
+import org.apache.tomcat.jni.Local;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.time.Month;
 import java.util.List;
 import java.util.Set;
 
@@ -43,7 +46,15 @@ public class ReservationServiceImpl implements ReservationService {
             } else if (type.equals(TicketType.DAILY)) {
                 t.setExpiryDate(t.getPurchaseDate().plusDays(1));
             } else if (type.equals(TicketType.MONTHLY)) {
-                t.setExpiryDate(t.getPurchaseDate().plusMonths(1));
+                LocalDateTime purchase = t.getPurchaseDate();
+                if(purchase.getMonth().equals(Month.DECEMBER)){
+                    t.setExpiryDate(LocalDateTime.of(purchase.getYear()+1, Month.JANUARY, 1, 0, 0));
+                }
+                else {
+                    LocalDateTime expiry = LocalDateTime.of(purchase.getYear(), purchase.getMonth(), 1, 0, 0);
+                    t.setExpiryDate(expiry.withMonth(expiry.getMonthValue() + 1));
+                }
+                System.out.println(t.getExpiryDate());
             } else {
                 t.setExpiryDate(t.getPurchaseDate().plusYears(1));
             }
