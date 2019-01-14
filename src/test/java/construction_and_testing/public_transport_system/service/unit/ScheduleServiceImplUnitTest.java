@@ -1,6 +1,7 @@
 package construction_and_testing.public_transport_system.service.unit;
 
 import construction_and_testing.public_transport_system.domain.Schedule;
+import construction_and_testing.public_transport_system.domain.TransportLine;
 import construction_and_testing.public_transport_system.repository.ScheduleRepository;
 import construction_and_testing.public_transport_system.repository.TransportLineRepository;
 import construction_and_testing.public_transport_system.service.implementation.ScheduleServiceImpl;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.Optional;
 
 import static construction_and_testing.public_transport_system.constants.ScheduleConstants.*;
+import static construction_and_testing.public_transport_system.constants.TransportLineConstants.DEL_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
@@ -40,9 +42,12 @@ public class ScheduleServiceImplUnitTest {
     @Before
     public void setUp() throws Exception {
         when(scheduleRepository.findAll()).thenReturn(DB_SCHEDULES);
-        when(scheduleRepository.findById(DB_VALID_ID)).thenReturn(Optional.of(DB_SCHEDULE))
-                .thenReturn(Optional.of(DB_SCHEDULE));
-        when(scheduleRepository.save(DB_NEW_SCHEDULE)).thenReturn(DB_SCHEDULE);
+        when(scheduleRepository.findById(DB_VALID_ID)).thenReturn(Optional.of(DB_SCHEDULE));
+        when(scheduleRepository.findById(DB_DEL_ID)).thenReturn(Optional.of(DB_SCHEDULE_1));
+        when(scheduleRepository.findById(DB_UPDATE_ID)).thenReturn(Optional.of(DB_SCHEDULE_1));
+        when(scheduleRepository.save(DB_NEW_SCHEDULE)).thenReturn(DB_NEW_SCHEDULE);
+        when(scheduleRepository.save(DB_UPDATE_SCHEDULE)).thenReturn(DB_UPDATE_SCHEDULE);
+        when(scheduleRepository.save(DB_NULL_SCHEDULE)).thenReturn(DB_NULL_SCHEDULE);
         //when(ticketRepository.save(DB_CHANGED_TICKET)).thenReturn(DB_CHANGED_TICKET);
     }
 
@@ -71,8 +76,6 @@ public class ScheduleServiceImplUnitTest {
         //assertThat(schedule.getDepartures()).isEqualTo(DB_VALID_DEPARTURES);
         assertThat(schedule.getDepartures().size()).isEqualTo(DB_VALID_DEPARTURES_SIZE);
         assertThat(schedule.isActive()).isEqualTo(DB_VALID_ACTIVE);
-
-        Mockito.verify(scheduleRepository, Mockito.times(1)).save(any(Schedule.class));
     }
 
     /**
@@ -104,18 +107,17 @@ public class ScheduleServiceImplUnitTest {
     @Test
     @Transactional
     public void save() {
-        Schedule schedule = DB_NEW_SCHEDULE;
         int countBefore = scheduleService.getAll().size();
 
-        Schedule newSchedule = scheduleService.save(schedule);
+        Schedule newSchedule = scheduleService.save(DB_NEW_SCHEDULE);
         assertThat(newSchedule).isNotNull();
 
-        assertThat(scheduleService.getAll().size()).isEqualTo(countBefore + 1);
+        //assertThat(scheduleService.getAll().size()).isEqualTo(countBefore + 1);
         //assertThat(newSchedule.getTransportLine().getName()).isEqualTo(DB_TL_NAME);
-        assertThat(newSchedule.getDayOfWeek()).isEqualTo(schedule.getDayOfWeek());
-        assertThat(newSchedule.getDepartures()).isEqualTo(schedule.getDepartures());
-        assertThat(newSchedule.getDepartures().size()).isEqualTo(schedule.getDepartures().size());
-        assertThat(newSchedule.isActive()).isEqualTo(schedule.isActive());
+        assertThat(newSchedule.getDayOfWeek()).isEqualTo(DB_NEW_SCHEDULE.getDayOfWeek());
+        assertThat(newSchedule.getDepartures()).isEqualTo(DB_NEW_SCHEDULE.getDepartures());
+        assertThat(newSchedule.getDepartures().size()).isEqualTo(DB_NEW_SCHEDULE.getDepartures().size());
+        assertThat(newSchedule.isActive()).isEqualTo(DB_NEW_SCHEDULE.isActive());
 
         Mockito.verify(scheduleRepository, Mockito.times(1)).save(any(Schedule.class));
     }
@@ -126,19 +128,19 @@ public class ScheduleServiceImplUnitTest {
     @Test
     @Transactional
     public void update() {
-        Schedule schedule = scheduleService.findById(DB_UPDATE_ID);
-        schedule.setDayOfWeek(DB_UPDATE_DAYOFWEEK);
-        Schedule updatedSchedule = this.scheduleService.save(schedule);
+        DB_UPDATE_SCHEDULE.setDayOfWeek(DB_UPDATE_DAYOFWEEK);
+        Schedule updatedSchedule = this.scheduleService.save(DB_UPDATE_SCHEDULE);
 
         int countBefore = scheduleService.getAll().size();
         assertThat(updatedSchedule).isNotNull();
+        System.out.println(updatedSchedule.getId());
 
         assertThat(scheduleService.getAll().size()).isEqualTo(countBefore);
         //assertThat(updatedSchedule.getTransportLine().getName()).isEqualTo(DB_TL_NAME);
         assertThat(updatedSchedule.getDayOfWeek()).isEqualTo(DB_UPDATE_DAYOFWEEK);
-        assertThat(updatedSchedule.getDepartures()).isEqualTo(schedule.getDepartures());
-        assertThat(updatedSchedule.getDepartures().size()).isEqualTo(schedule.getDepartures().size());
-        assertThat(updatedSchedule.isActive()).isEqualTo(schedule.isActive());
+        assertThat(updatedSchedule.getDepartures()).isEqualTo(DB_UPDATE_SCHEDULE.getDepartures());
+        assertThat(updatedSchedule.getDepartures().size()).isEqualTo(DB_UPDATE_SCHEDULE.getDepartures().size());
+        assertThat(updatedSchedule.isActive()).isEqualTo(DB_UPDATE_SCHEDULE.isActive());
 
         Mockito.verify(scheduleRepository, Mockito.times(1)).save(any(Schedule.class));
     }
@@ -149,17 +151,16 @@ public class ScheduleServiceImplUnitTest {
     @Test(expected = DataIntegrityViolationException.class)
     @Transactional
     public void saveWithNullValues() {
-        Schedule schedule = new Schedule(null, null, null, null, true);
+        Schedule schedule = DB_NULL_SCHEDULE;
         int countBefore = scheduleService.getAll().size();
 
         Schedule newSchedule = scheduleService.save(schedule);
         assertThat(newSchedule).isNotNull();
 
-        assertThat(scheduleService.getAll().size()).isEqualTo(countBefore + 1);
+        //assertThat(scheduleService.getAll().size()).isEqualTo(countBefore + 1);
         //assertThat(newSchedule.getTransportLine().getName()).isEqualTo(DB_TL_NAME);
         assertThat(newSchedule.getDayOfWeek()).isEqualTo(schedule.getDayOfWeek());
         assertThat(newSchedule.getDepartures()).isEqualTo(schedule.getDepartures());
-        assertThat(newSchedule.getDepartures().size()).isEqualTo(schedule.getDepartures());
         assertThat(newSchedule.isActive()).isEqualTo(schedule.isActive());
 
         Mockito.verify(scheduleRepository, Mockito.times(1)).save(any(Schedule.class));
@@ -172,9 +173,12 @@ public class ScheduleServiceImplUnitTest {
     @Transactional
     public void remove() {
         scheduleService.remove(DB_DEL_ID);
-        Schedule station = scheduleService.findById(DB_DEL_ID);
-        assertThat(station.isActive()).isFalse();
 
+        Mockito.verify(scheduleRepository, Mockito.times(1)).findById(DB_DEL_ID);
+        Mockito.verify(scheduleRepository, Mockito.times(1)).save(any(Schedule.class));
+
+        Schedule schedule = scheduleService.findById(DB_DEL_ID);
+        assertThat(schedule.isActive()).isFalse();
         Mockito.verify(scheduleRepository, Mockito.times(1)).save(any(Schedule.class));
     }
 

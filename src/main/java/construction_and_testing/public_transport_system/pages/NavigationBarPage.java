@@ -13,6 +13,12 @@ public class NavigationBarPage {
     @FindBy(xpath = "//*[@id=\"sidebar\"]/ul[1]/li[2]/a")
     private WebElement mapDropDown;
 
+    @FindBy(xpath = "//*[@id=\"sidebar\"]/ul[1]/li[5]/a")
+    private WebElement updateScheduleLink;
+
+    @FindBy(xpath = "//*[@id=\"sidebar\"]/ul[1]/li[4]/a")
+    private WebElement scheduleLink;
+
     @FindBy(xpath = "//*[@id=\"homeSubmenu\"]/li[3]/a")
     private WebElement vehicleLink;
 
@@ -45,6 +51,14 @@ public class NavigationBarPage {
 
     public WebElement getMapDropDown() {
         return mapDropDown;
+    }
+
+    public WebElement getUpdateScheduleLink() {
+        return updateScheduleLink;
+    }
+
+    public WebElement getScheduleLink() {
+        return scheduleLink;
     }
 
     public WebElement getVehicleLink() {

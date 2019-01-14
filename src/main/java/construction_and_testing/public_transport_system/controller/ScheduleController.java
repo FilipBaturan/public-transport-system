@@ -6,6 +6,7 @@ import construction_and_testing.public_transport_system.domain.DTO.ScheduleDTO;
 import construction_and_testing.public_transport_system.domain.Schedule;
 import construction_and_testing.public_transport_system.domain.User;
 import construction_and_testing.public_transport_system.domain.enums.AuthorityType;
+import construction_and_testing.public_transport_system.domain.enums.DayOfWeek;
 import construction_and_testing.public_transport_system.service.definition.ScheduleService;
 import construction_and_testing.public_transport_system.service.definition.TransportLineService;
 import construction_and_testing.public_transport_system.util.GeneralException;
@@ -19,6 +20,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.Optional;
@@ -63,17 +65,29 @@ public class ScheduleController extends ValidationController {
 
 
     /**
-     * GET /api/schedule/findByTransportLines/{id}
+     * GET /api/schedule/findByTransportLineIdAndDayOfWeek/{id}
      *
      * @param id        of a transport lines for which a schedule is requested
      * @param dayOfWeek day of week for which the schedule is requested
      * @return schedule for a transport line with requested id
      */
-    @GetMapping("/findByTransportLine/{id}")
+    @GetMapping("/findByTrLineIdAndDayOfWeek/{id}")
     public ResponseEntity<ScheduleDTO> findByTransportLineIdAndDayOfWeek(@PathVariable Long id, @RequestParam String dayOfWeek) {
         logger.info("Requesting schedule for transprot line with  {} at time {}.", id, Calendar.getInstance().getTime());
-        Schedule schedule = scheduleService.findByTransportLineIdAndDayOfWeek(id, Integer.parseInt(dayOfWeek));
+        Schedule schedule = scheduleService.findByTransportLineIdAndDayOfWeek(id, DayOfWeek.valueOf(dayOfWeek).ordinal());
         return new ResponseEntity<>(new ScheduleDTO(schedule), HttpStatus.OK);
+    }
+
+    /**
+     * GET /api/schedule/findByTransportLineId/{id}
+     *
+     * @param id        of a transport lines for which a schedule is requested
+     * @return schedule for a transport line with requested id
+     */
+    @GetMapping("/findByTransportLineId/{id}")
+    public ResponseEntity<List<ScheduleDTO>> findByTransportLineId(@PathVariable Long id) {
+        logger.info("Requesting schedule for transprot line with  {} at time {}.", id, Calendar.getInstance().getTime());
+        return new ResponseEntity<>(ScheduleConverter.fromEntityList(scheduleService.findByTransportLineId(id), ScheduleDTO::new), HttpStatus.OK);
     }
 
     /**
@@ -95,7 +109,6 @@ public class ScheduleController extends ValidationController {
 
     @PutMapping("/updateSchedule")
     ResponseEntity<Boolean> updateSchedule(@RequestBody ScheduleDTO scheduleDTO) {
-
         Schedule schedule = null;
 
         try {
@@ -113,7 +126,6 @@ public class ScheduleController extends ValidationController {
         } catch (GeneralException e) {
             return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
         }
-
     }
 
     /**
@@ -122,13 +134,13 @@ public class ScheduleController extends ValidationController {
      * @param schedule that needs to be deleted
      * @return message about action results
      */
-    @DeleteMapping("{/id}")
+    @DeleteMapping("{id}")
     //@PreAuthorize("")
-    public ResponseEntity<String> delete(@RequestBody String schedule) throws IOException, ValidationException {
+    public ResponseEntity<String> delete(@PathVariable("id") String id) throws IOException, ValidationException {
         logger.info("Deleting station at time {}.", Calendar.getInstance().getTime());
-        validateJSON(schedule, "schedule.json");
+        //validateJSON(id, "schedule.json");
         ObjectMapper mapper = new ObjectMapper();
-        scheduleService.remove((new Schedule(mapper.readValue(schedule, ScheduleDTO.class))).getId());
+        scheduleService.remove(Long.parseLong(id));//(new Schedule(mapper.readValue(id, ScheduleDTO.class))).getId());
         return new ResponseEntity<>("Schedule successfully deleted!", HttpStatus.OK);
     }
 }

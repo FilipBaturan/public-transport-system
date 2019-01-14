@@ -31,11 +31,9 @@ public class ScheduleServiceImpl implements ScheduleService {
     public List<Schedule> getAll() {
 
         List<Schedule> schedules = scheduleRepository.findAll();
-
         for (Schedule schedule: schedules) {
             schedule.getDepartures().sort(new TimeStringComparator());
         }
-
         return schedules;
     }
 
@@ -68,6 +66,25 @@ public class ScheduleServiceImpl implements ScheduleService {
 
     @Override
     public Schedule findByTransportLineIdAndDayOfWeek(Long id, Integer dayOfWeek) {
-        return this.scheduleRepository.findAllSchedulesByTransportLineIdAndDayOfWeek(id, dayOfWeek);
+        try {
+            Schedule schedule = this.scheduleRepository.findAllScheduleByTransportLineIdAndDayOfWeek(id, dayOfWeek);
+            schedule.getDepartures().sort(new TimeStringComparator());
+            return schedule;
+        }catch(Exception e){
+            throw new GeneralException("Requested schedule doesn't exist!", HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @Override
+    public List<Schedule> findByTransportLineId(Long id) {
+        try {
+            List<Schedule> schedules = this.scheduleRepository.findAllSchedulesByTransportLineId(id);
+            for (Schedule schedule: schedules) {
+                schedule.getDepartures().sort(new TimeStringComparator());
+            }
+            return schedules;
+        }catch(Exception e){
+            throw new GeneralException("Transport line doesn't exist!", HttpStatus.BAD_REQUEST);
+    }
     }
 }

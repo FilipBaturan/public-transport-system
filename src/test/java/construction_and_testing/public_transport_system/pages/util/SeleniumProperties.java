@@ -14,7 +14,7 @@ public class SeleniumProperties {
                     .toString())).getAbsolutePath();
         } else {
             CHROME_DRIVER_PATH = (new File(Paths
-                    .get("src", "test", "java", "resources", "drivers", "windows", "chromedriver")
+                    .get("src", "test", "java", "resources", "drivers", "windows", "chromedriver.exe")
                     .toString())).getAbsolutePath();
         }
     }

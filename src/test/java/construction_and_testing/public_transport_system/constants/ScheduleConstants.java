@@ -56,8 +56,11 @@ public class ScheduleConstants {
         }
     };
 
-    public static final Schedule DB_NEW_SCHEDULE = new Schedule(null, DB_NEW_TL, DB_VALID_DAY_OF_WEEK, DB_NEW_DEPARTURES, true);
+    public static final Schedule DB_NEW_SCHEDULE = new Schedule(1L, DB_NEW_TL, DB_VALID_DAY_OF_WEEK, DB_NEW_DEPARTURES, true);
 
+    public static final Schedule DB_UPDATE_SCHEDULE = new Schedule(2L, DB_NEW_TL, DB_VALID_DAY_OF_WEEK, DB_NEW_DEPARTURES, true);
+
+    public static final Schedule DB_NULL_SCHEDULE = new Schedule(null, null, null, null, true);
 
     public static final ArrayList<String> DB_VALID_TL_DEPARTURES = new ArrayList<String>() {
         {
