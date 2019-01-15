@@ -121,14 +121,14 @@ public class TicketServiceImpl implements TicketService {
     }
 
     @Override
-    public HashMap<String, Integer> getVisitsByWeek(LocalDate date1, LocalDate date2){
+    public HashMap<String, Integer> getVisitsByWeek(LocalDate date1, LocalDate date2) {
 
 
-    HashMap<String, Integer> totalVisitsPerWeek = new HashMap<String, Integer>();
+        HashMap<String, Integer> totalVisitsPerWeek = new HashMap<String, Integer>();
 
         List<Ticket> ticketList = ticketRepository.getTicketsBetween(date1, date2);
 
-        for (Ticket selectedTicket: ticketList) {
+        for (Ticket selectedTicket : ticketList) {
 
             String week = generateWeek(selectedTicket.getPurchaseDate());
 
@@ -166,7 +166,7 @@ public class TicketServiceImpl implements TicketService {
 
     private String generateMonth(LocalDateTime d) {
 
-        String retVal = d.getYear() + "-" +  d.getMonth();
+        String retVal = d.getYear() + "-" + d.getMonth();
         return retVal;
     }
 }

@@ -50,6 +50,13 @@ public class UnconfirmedUsersPage {
                 .until(ExpectedConditions.visibilityOf(table));
     }
 
+    public void ensureIsChanged(int numberOfTickets, int change) {
+        //wait for add button to be present
+        (new WebDriverWait(driver, 10))
+                .until(ExpectedConditions.numberOfElementsToBe(
+                        By.cssSelector("tr"), numberOfTickets + change));
+    }
+
     public WebElement getCheckLink(){ return checkLink; }
 
     public WebElement getAcceptButton() { return acceptButton; }

@@ -4,9 +4,13 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import construction_and_testing.public_transport_system.converter.ScheduleConverter;
 import construction_and_testing.public_transport_system.domain.DTO.ScheduleDTO;
 import construction_and_testing.public_transport_system.domain.Schedule;
+import construction_and_testing.public_transport_system.domain.User;
+import construction_and_testing.public_transport_system.domain.enums.AuthorityType;
 import construction_and_testing.public_transport_system.service.definition.ScheduleService;
 import construction_and_testing.public_transport_system.service.definition.TransportLineService;
+import construction_and_testing.public_transport_system.util.GeneralException;
 import org.everit.json.schema.ValidationException;
+import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +21,7 @@ import org.springframework.web.bind.annotation.*;
 import java.io.IOException;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/schedule")
@@ -86,6 +91,29 @@ public class ScheduleController extends ValidationController {
         temp.setTransportLine(transportLineService.findById(temp.getTransportLine().getId()));
         return new ResponseEntity<>(new ScheduleDTO(scheduleService.save(temp))
                 , HttpStatus.ACCEPTED);
+    }
+
+    @PutMapping("/updateSchedule")
+    ResponseEntity<Boolean> updateSchedule(@RequestBody ScheduleDTO scheduleDTO) {
+
+        Schedule schedule = null;
+
+        try {
+            schedule = this.scheduleService.findById(scheduleDTO.getId());
+        } catch (GeneralException ge) {
+            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+        }
+
+        ModelMapper mapper = new ModelMapper();
+        mapper.map(scheduleDTO, schedule);
+
+        try {
+            this.scheduleService.save(schedule);
+            return new ResponseEntity<>(true, HttpStatus.OK);
+        } catch (GeneralException e) {
+            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+        }
+
     }
 
     /**

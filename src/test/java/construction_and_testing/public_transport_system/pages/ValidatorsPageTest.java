@@ -1,5 +1,6 @@
 package construction_and_testing.public_transport_system.pages;
 
+import org.h2.store.Page;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -16,7 +17,7 @@ import javax.transaction.Transactional;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.concurrent.TimeUnit;
 
-import static construction_and_testing.public_transport_system.selenium.util.SeleniumProperties.CHROME_DRIVER_PATH;
+import static construction_and_testing.public_transport_system.pages.util.SeleniumProperties.CHROME_DRIVER_PATH;
 import static org.assertj.core.api.Java6Assertions.assertThat;
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
@@ -25,16 +26,11 @@ public class ValidatorsPageTest {
 
     private WebDriver browser;
 
-    WelcomePage welcomePage;
-    ValidatorsPage validatorsPage;
+    private WelcomePage welcomePage;
 
+    private  NavigationBarPage navigationBarPage;
 
-    public void logIn()
-    {
-        welcomePage.setUsername("a");
-        welcomePage.setPassword("a");
-        welcomePage.getLoginButton().click();
-    }
+    private ValidatorsPage validatorsPage;
 
     @BeforeMethod
     public void setupSelenium() {
@@ -47,16 +43,13 @@ public class ValidatorsPageTest {
         browser.navigate().to("http://localhost:4200");
 
         welcomePage = PageFactory.initElements(browser, WelcomePage.class);
+        navigationBarPage = PageFactory.initElements(browser, NavigationBarPage.class);
         validatorsPage = PageFactory.initElements(browser, ValidatorsPage.class);
-        logIn();
-        navigateToValidators();
 
-    }
+        welcomePage.login("b","b");
+        navigationBarPage.getUsersField().click();
+        navigationBarPage.getValidatorsLink().click();
 
-    private void navigateToValidators() {
-
-        welcomePage.getUsersField().click();
-        welcomePage.getValidatorsLink().click();
     }
 
     @Test
@@ -136,7 +129,6 @@ public class ValidatorsPageTest {
         assertEquals(validatorsPage.getLastTdFirstName().getText(), newFirstName);
 
     }
-
 
     @AfterMethod
     public void closeSelenium() {

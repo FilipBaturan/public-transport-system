@@ -7,24 +7,20 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import static construction_and_testing.public_transport_system.selenium.util.SeleniumProperties.CHROME_DRIVER_PATH;
+import static construction_and_testing.public_transport_system.pages.util.SeleniumProperties.CHROME_DRIVER_PATH;
 import static org.testng.AssertJUnit.assertEquals;
 
 public class RegUsersPageTest {
 
     private WebDriver browser;
 
-    WelcomePage welcomePage;
-    RegUsersPage regUsersPage;
+    private WelcomePage welcomePage;
+
+    private NavigationBarPage navigationBarPage;
+
+    private RegUsersPage regUsersPage;
 
 
-    public void logIn()
-    {
-        welcomePage.setUsername("b");
-        welcomePage.setPassword("b");
-        welcomePage.getLoginButton().click();
-        welcomePage.ensureTLogoutDisplayed();;
-    }
 
     @BeforeMethod
     public void setupSelenium() {
@@ -37,16 +33,15 @@ public class RegUsersPageTest {
         browser.navigate().to("http://localhost:4200");
 
         welcomePage = PageFactory.initElements(browser, WelcomePage.class);
+        navigationBarPage = PageFactory.initElements(browser, NavigationBarPage.class);
         regUsersPage = PageFactory.initElements(browser, RegUsersPage.class);
-        logIn();
-        navigateRegUsers();
+
+        welcomePage.ensureIsDisplayed();
+        welcomePage.login("b", "b");
+
+        navigationBarPage.getUsersField().click();
+        navigationBarPage.getRegUsersLink().click();
         regUsersPage.ensureRegUsersTableIsDisplayed();
-    }
-
-    private void navigateRegUsers() {
-
-        welcomePage.getUsersField().click();
-        welcomePage.getRegUsersLink().click();
     }
 
     @Test
@@ -76,11 +71,7 @@ public class RegUsersPageTest {
 
         regUsersPage.getDenyButton().click();
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        regUsersPage.ensureUsersTicketsTableIsDisplayed();
 
         int sizeAfter = regUsersPage.getUsersTicketsTableSize();
         assertEquals(sizeBeforeAdding, sizeAfter + 1);

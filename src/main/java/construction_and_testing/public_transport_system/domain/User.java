@@ -50,7 +50,6 @@ public class User implements Serializable {
 
     //@ElementCollection(targetClass = AuthorityType.class, fetch = FetchType.EAGER)
     @Column(nullable = false, name = "authority")
-
     private AuthorityType authorityType;
 
     public User() {
@@ -98,7 +97,7 @@ public class User implements Serializable {
 
     public User(UserDTO uDTO) {
         this.id = uDTO.getId();
-        this.name = uDTO.getFirstName();
+        this.name = uDTO.getName();
         this.lastName = uDTO.getLast();
         this.email = uDTO.getEmail();
         this.username = uDTO.getUsername();

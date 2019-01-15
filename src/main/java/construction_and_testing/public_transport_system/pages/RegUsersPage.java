@@ -38,20 +38,10 @@ public class RegUsersPage {
         return usersTicketsTable;
     }
 
-    public int getRegUsersTableSize() {
-        try {
-            return getRegUsersTable().findElements(By.tagName("tr")).size();
-        } catch (Exception e) {
-            // header
-            return 1;
-        }
-    }
-
     public int getUsersTicketsTableSize() {
         try {
             return getUsersTicketsTable().findElements(By.tagName("tr")).size();
         } catch (Exception e) {
-            // header
             return 1;
         }
     }

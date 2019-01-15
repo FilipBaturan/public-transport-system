@@ -43,7 +43,14 @@ public class RegisteredUserServiceImpl implements RegisteredUserService {
     @Override
     public boolean modify(RegisteredUser user) {
         if (registeredUserRepository.findById(user.getId()).isPresent()) {
-            registeredUserRepository.saveAndFlush(user);
+            RegisteredUser toChange = registeredUserRepository.findById(user.getId()).get();
+            toChange.setName(user.getName());
+            toChange.setLastName(user.getLastName());
+            toChange.setEmail(user.getEmail());
+            toChange.setUsername(user.getUsername());
+            toChange.setPassword(user.getPassword());
+            toChange.setTelephone(user.getTelephone());
+            registeredUserRepository.saveAndFlush(toChange);
             return true;
         }
         return false;
@@ -60,6 +67,5 @@ public class RegisteredUserServiceImpl implements RegisteredUserService {
             throw new EntityNotFoundException();
         }
     }
-
 
 }

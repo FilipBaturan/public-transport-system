@@ -7,7 +7,7 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import static construction_and_testing.public_transport_system.selenium.util.SeleniumProperties.CHROME_DRIVER_PATH;
+import static construction_and_testing.public_transport_system.pages.util.SeleniumProperties.CHROME_DRIVER_PATH;
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
@@ -15,15 +15,12 @@ public class ReportPageTest {
     private WebDriver browser;
 
     WelcomePage welcomePage;
-    ReportPage reportPage;
+
+    private NavigationBarPage navigationBarPage;
+
+    private ReportPage reportPage;
 
 
-    public void logIn()
-    {
-        welcomePage.setUsername("b");
-        welcomePage.setPassword("b");
-        welcomePage.getLoginButton().click();
-    }
 
     @BeforeMethod
     public void setupSelenium() {
@@ -36,16 +33,14 @@ public class ReportPageTest {
         browser.navigate().to("http://localhost:4200");
 
         welcomePage = PageFactory.initElements(browser, WelcomePage.class);
+        navigationBarPage = PageFactory.initElements(browser, NavigationBarPage.class);
         reportPage = PageFactory.initElements(browser, ReportPage.class);
-        logIn();
-        navigateRegUsers();
 
-    }
-
-    private void navigateRegUsers() {
-
-        welcomePage.getUsersField().click();
-        welcomePage.getReportLink().click();
+        welcomePage.ensureIsDisplayed();
+        welcomePage.login("b", "b");
+        navigationBarPage.getUsersField().click();
+        navigationBarPage.getReportLink().click();
+        reportPage.ensureIsDisplayed();
     }
 
     @Test

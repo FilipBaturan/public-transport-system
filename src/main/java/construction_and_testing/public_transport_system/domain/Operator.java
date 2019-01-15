@@ -1,5 +1,6 @@
 package construction_and_testing.public_transport_system.domain;
 
+import construction_and_testing.public_transport_system.domain.enums.AuthorityType;
 import construction_and_testing.public_transport_system.domain.enums.UsersDocumentsStatus;
 
 import javax.persistence.DiscriminatorValue;
@@ -22,6 +23,11 @@ public class Operator extends User implements Serializable {
     private Set<News> news;
 
     public Operator() {
+    }
+
+    public Operator(User user) {
+        super(user.id, user.name, user.lastName, user.username, user.password, user.email, user.telephone, user.isActive());
+        this.setAuthorityType(AuthorityType.OPERATER);
     }
 
     public Operator(Long id, String name, String lastName, String username, String password, String email,

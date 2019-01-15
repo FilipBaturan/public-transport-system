@@ -1,5 +1,6 @@
 package construction_and_testing.public_transport_system.pages;
 
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -10,44 +11,22 @@ public class WelcomePage {
 
     private WebDriver driver;
 
-    @FindBy(id = "signinButton")
-    private WebElement logInButton;
-
-    @FindBy(name = "username")
+    @FindBy(xpath = "//*[@id=\"content\"]/div/app-auth/form/input[1]")
     private WebElement inputUsername;
 
-    @FindBy(name = "password")
+    @FindBy(xpath = "//*[@id=\"content\"]/div/app-auth/form/input[2]")
     private WebElement inputPassword;
 
-    @FindBy(id = "validatorsLink")
-    private WebElement validatorsLink;
-
-    @FindBy(id = "unconfirmedUsersLink")
-    private WebElement unconfirmedUsersLink;
-
-    @FindBy(id = "regUsersLink")
-    private WebElement regUsersLink;
-
-    @FindBy(id = "reportLink")
-    private WebElement reportLink;
-
-    @FindBy(id = "usersField")
-    private WebElement usersField;
+    @FindBy(xpath = "//*[@id=\"signinButton\"]")
+    private WebElement logInButton;
 
     @FindBy(xpath = "//*[@id=\"sidebar\"]/ul[2]/li/a")
     private WebElement logoutButton;
 
     public WelcomePage(WebDriver driver) { this.driver = driver; }
 
-
     public WebElement getLoginButton() {
         return logInButton;
-    }
-
-    public void setUsername(String value) {
-        WebElement el = getInputUsername();
-        el.clear();
-        el.sendKeys(value);
     }
 
     private WebElement getInputUsername() {
@@ -58,32 +37,39 @@ public class WelcomePage {
         return inputPassword;
     }
 
-    public void setPassword(String value) {
-        WebElement el = getInputPassword();
-        el.clear();
-        el.sendKeys(value);
-    }
-
-    public WebElement getValidatorsLink(){
-        return validatorsLink;
-    }
-
-    public WebElement getUsersField(){
-        return usersField;
-    }
-
-    public WebElement getUnconfirmedUsersLink() {
-        return unconfirmedUsersLink;
-    }
-
-    public WebElement getRegUsersLink() { return regUsersLink; }
-
-    public WebElement getReportLink() { return reportLink; }
-
     public WebElement getLogoutButton() { return logoutButton; }
 
-    public void ensureTLogoutDisplayed() {
+    public void ensureLogoutDisplayed() {
         (new WebDriverWait(driver, 10))
                 .until(ExpectedConditions.visibilityOf(logoutButton));
+    }
+
+    public void login(String username, String password){
+        setInputUsername(username);
+        setInputPassword(password);
+        getButtonSignIn().click();
+    }
+
+
+    public void setInputUsername(String value) {
+        inputUsername.clear();
+        inputUsername.sendKeys(value);
+    }
+
+
+    public void setInputPassword(String value) {
+        inputPassword.clear();
+        inputPassword.sendKeys(value);
+    }
+
+
+    public WebElement getButtonSignIn() {
+        return logInButton;
+    }
+
+    public void ensureIsDisplayed() {
+        (new WebDriverWait(driver, 10))
+                .until(ExpectedConditions.presenceOfElementLocated(
+                        By.xpath("//*[@id=\"content\"]/div/app-auth/form/input[1]")));
     }
 }

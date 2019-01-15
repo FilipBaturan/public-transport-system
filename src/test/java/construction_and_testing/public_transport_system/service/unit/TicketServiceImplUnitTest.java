@@ -19,8 +19,10 @@ import org.springframework.test.context.junit4.SpringRunner;
 import javax.persistence.EntityNotFoundException;
 import javax.transaction.Transactional;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
 import static construction_and_testing.public_transport_system.constants.TicketConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -250,8 +252,7 @@ public class TicketServiceImplUnitTest {
     }
 
     @Test
-    public void getVisitsByWeekValid()
-    {
+    public void getVisitsByWeekValid() {
         Map<String, Integer> prices = ticketService.getVisitsByWeek(DB_REPORT_START_DATE, DB_REPORT_END_DATE);
         verify(ticketRepository, times(1)).getTicketsBetween(DB_REPORT_START_DATE, DB_REPORT_END_DATE);
         assertThat(prices).isNotEmpty();
@@ -260,8 +261,7 @@ public class TicketServiceImplUnitTest {
     }
 
     @Test
-    public void getVisitsByWeekInvalid()
-    {
+    public void getVisitsByWeekInvalid() {
         Map<String, Integer> prices = ticketService.getVisitsByWeek(DB_REPORT_END_DATE, DB_REPORT_START_DATE);
         assertThat(prices).isEmpty();
         assertThat(prices.size()).isEqualTo(0);
@@ -269,8 +269,7 @@ public class TicketServiceImplUnitTest {
     }
 
     @Test
-    public void getVisitsByMonthValid()
-    {
+    public void getVisitsByMonthValid() {
         Map<String, Integer> prices = ticketService.getVisitsByMonth(DB_REPORT_START_DATE, DB_REPORT_END_DATE);
         verify(ticketRepository, times(1)).getTicketsBetween(DB_REPORT_START_DATE, DB_REPORT_END_DATE);
         assertThat(prices).isNotEmpty();
@@ -279,8 +278,7 @@ public class TicketServiceImplUnitTest {
     }
 
     @Test
-    public void getVisitsByMonthInvalid()
-    {
+    public void getVisitsByMonthInvalid() {
         Map<String, Integer> prices = ticketService.getVisitsByMonth(DB_REPORT_END_DATE, DB_REPORT_START_DATE);
         verify(ticketRepository, times(1)).getTicketsBetween(DB_REPORT_END_DATE, DB_REPORT_START_DATE);
         assertThat(prices).isEmpty();

@@ -19,11 +19,6 @@ public class ReservationController {
     @Autowired
     private ReservationService reservationService;
 
-    @GetMapping
-    public void getAll() {
-        //add integration later
-    }
-
     /**
      * Saving new reservation
      *
@@ -34,8 +29,10 @@ public class ReservationController {
     public ResponseEntity<Object> reserve(@RequestBody ReservationDTO reservation) {
         boolean success = reservationService.reserve(ReservationConverter.toEntity(reservation), ReservationConverter.getTypes(reservation));
         if (success) {
+            logger.info("Successfully reserved tickets.");
             return new ResponseEntity<>(success, HttpStatus.OK);
         } else {
+            logger.warn("Failed to reserve tickets");
             return new ResponseEntity<>(success, HttpStatus.BAD_REQUEST);
         }
     }

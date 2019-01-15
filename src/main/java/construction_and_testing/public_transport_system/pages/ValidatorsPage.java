@@ -51,6 +51,16 @@ public class ValidatorsPage {
     @FindBy(xpath = "//*[@id=\"validatorsTable\"]/tbody/tr[last()]/td[5]")
     private WebElement changeButton;
 
+    @FindBy(css = "h1.title yt-formatted-string")
+    private WebElement naslov;
+
+    @FindBy(xpath = "//*[@id=\"info\"]")
+    private WebElement asd;
+
+    public WebElement getAsd() {
+        return asd;
+    }
+
     public ValidatorsPage(WebDriver driver) {
         this.driver = driver;
     }
@@ -88,14 +98,9 @@ public class ValidatorsPage {
 
 
     public int getTableSize(){
-        try {
-            return getTable().findElements(By.tagName("tr")).size();
-        }
-        catch (Exception e)
-        {
-            // header
-            return 1;
-        }
+
+        return getTable().findElements(By.tagName("tr")).size();
+
     }
 
     public void ensureButtonIsDisplayed() {

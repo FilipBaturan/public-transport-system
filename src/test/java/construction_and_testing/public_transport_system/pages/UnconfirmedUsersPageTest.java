@@ -7,28 +7,22 @@ import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import java.util.concurrent.ThreadLocalRandom;
-
-import static construction_and_testing.public_transport_system.selenium.util.SeleniumProperties.CHROME_DRIVER_PATH;
+import static construction_and_testing.public_transport_system.pages.util.SeleniumProperties.CHROME_DRIVER_PATH;
 import static org.testng.AssertJUnit.assertEquals;
 
 public class UnconfirmedUsersPageTest {
 
     private WebDriver browser;
 
-    WelcomePage welcomePage;
-    UnconfirmedUsersPage unconfirmedUsersPage;
+    private WelcomePage welcomePage;
 
+    private NavigationBarPage navigationBarPage;
 
-    public void logIn()
-    {
-        welcomePage.setUsername("b");
-        welcomePage.setPassword("b");
-        welcomePage.getLoginButton().click();
-    }
+    private UnconfirmedUsersPage unconfirmedUsersPage;
 
     @BeforeMethod
     public void setupSelenium() {
+
         //instantiate browser
         System.setProperty("webdriver.chrome.driver", CHROME_DRIVER_PATH);
         browser = new ChromeDriver();
@@ -38,27 +32,27 @@ public class UnconfirmedUsersPageTest {
         browser.navigate().to("http://localhost:4200");
 
         welcomePage = PageFactory.initElements(browser, WelcomePage.class);
+        navigationBarPage = PageFactory.initElements(browser, NavigationBarPage.class);
         unconfirmedUsersPage = PageFactory.initElements(browser, UnconfirmedUsersPage.class);
-        logIn();
-        navigateToUncheckedUsers();
 
-    }
+        welcomePage.ensureIsDisplayed();
+        welcomePage.login("b", "b");
 
-    private void navigateToUncheckedUsers() {
-
-        welcomePage.getUsersField().click();
-        welcomePage.getUnconfirmedUsersLink().click();
+        // navigate To Unchecked Users
+        navigationBarPage.ensureIsDisplayed();
+        navigationBarPage.getUsersField().click();
+        navigationBarPage.getUnconfirmedUsersLink().click();
 
     }
 
     @Test
     public void checkUsersDocuments()
     {
-        assertEquals("http://localhost:4200/unconfirmedUsers", browser.getCurrentUrl());
         unconfirmedUsersPage.ensureTableIsDisplayed();
+        assertEquals("http://localhost:4200/unconfirmedUsers", browser.getCurrentUrl());
         unconfirmedUsersPage.getCheckLink().click();
 
-        //browser.manage().timeouts().implicitlyWait(10, TimeUnit.MINUTES);
+
         try {
             Thread.sleep(1000);
         } catch (InterruptedException e) {
@@ -71,13 +65,14 @@ public class UnconfirmedUsersPageTest {
 
     @Test
     public void acceptUser() throws InterruptedException {
-        assertEquals("http://localhost:4200/unconfirmedUsers", browser.getCurrentUrl());
+
         unconfirmedUsersPage.ensureTableIsDisplayed();
+        assertEquals("http://localhost:4200/unconfirmedUsers", browser.getCurrentUrl());
 
         int sizeBeforeAdding =  unconfirmedUsersPage.getTableSize();
         unconfirmedUsersPage.getAcceptButton().click();
 
-        Thread.sleep(3000);
+        unconfirmedUsersPage.ensureIsChanged(sizeBeforeAdding, -1);
 
         int sizeAfter = unconfirmedUsersPage.getTableSize();
         assertEquals(sizeBeforeAdding, sizeAfter + 1);
@@ -91,7 +86,7 @@ public class UnconfirmedUsersPageTest {
         int sizeBeforeAdding =  unconfirmedUsersPage.getTableSize();
         unconfirmedUsersPage.getDenyButton().click();
 
-        Thread.sleep(2000);
+        unconfirmedUsersPage.ensureIsChanged(sizeBeforeAdding, -1);
 
         int sizeAfter = unconfirmedUsersPage.getTableSize();
         assertEquals(sizeBeforeAdding, sizeAfter + 1);
