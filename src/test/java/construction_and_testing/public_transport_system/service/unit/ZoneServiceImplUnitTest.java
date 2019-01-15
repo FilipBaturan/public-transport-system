@@ -38,7 +38,7 @@ public class ZoneServiceImplUnitTest {
     private ZoneService zoneService;
 
     @Before
-    public void setUp() throws Exception {
+    public void setUp() {
         Mockito.when(transportLineRepository.findAllById(DB_TR_ID)).thenReturn(DB_TR);
         Mockito.when(transportLineRepository.findAllById(new ArrayList<>())).thenReturn(new ArrayList<>());
         Mockito.when(transportLineRepository.findAllById(TR_ID_INVALID)).thenReturn(new ArrayList<>());
@@ -47,18 +47,28 @@ public class ZoneServiceImplUnitTest {
             if (arguments != null && arguments.length > 0 && arguments[0] != null) {
                 Zone zone = (Zone) arguments[0];
                 if (zone.getName().equals(NOT_UNIQUE_NAME)) {
-                    throw new DataIntegrityViolationException(null);
+                    throw new DataIntegrityViolationException("");
                 } else if (zone.getName().equals(DEL_NAME)) {
-                    DEL_ZONE = zone;
+                    DB_ZONES.forEach(zone1 -> {
+                        if (zone.getName().equals(zone1.getName())){
+                            zone1.setActive(false);
+                            DEL_ZONE = zone1;
+                        }
+                    });
                 } else {
-                    zone.setId(NEW_ID);
-                    DB_ZONES.add(zone);
+                    if (zone.getId() == null) {
+                        zone.setId(NEW_ID);
+                        DB_ZONES.add(zone);
+                    }
                 }
                 return zone;
             }
             return null;
         });
-        Mockito.when(zoneRepository.findAll()).thenReturn(DB_ZONES);
+        Mockito.when(zoneRepository.findAll()).then(invocation -> {
+            DB_ZONES.removeIf(zone -> !zone.isActive());
+            return DB_ZONES;
+        });
 
         Mockito.when(zoneRepository.findById(DB_ID)).thenReturn(Optional.of(DB_ZONE)).thenReturn(Optional.of(DEL_ZONE));
         Mockito.when(zoneRepository.findById(DEFAULT_ZONE_ID)).thenReturn(Optional.of(new Zone(DEFAULT_ZONE_ID)));
@@ -131,17 +141,7 @@ public class ZoneServiceImplUnitTest {
     @Test(expected = GeneralException.class)
     public void saveWithNullValues() {
         Zone zone = new Zone(null, null, NEW_LINES, true);
-        int countBefore = zoneService.getAll().size();
-
-        Zone dbZone = zoneService.save(zone);
-        assertThat(dbZone).isNotNull();
-
-        assertThat(zoneService.getAll()).hasSize(countBefore + 1);
-
-        assertThat(dbZone.getName()).isEqualTo(zone.getName());
-        assertThat(dbZone.isActive()).isEqualTo(zone.isActive());
-        assertThat(dbZone.getLines()).isEqualTo(zone.getLines());
-
+        zoneService.save(zone);
     }
 
     /**
@@ -150,18 +150,7 @@ public class ZoneServiceImplUnitTest {
     @Test(expected = GeneralException.class)
     public void saveWithInvalidName() {
         Zone zone = new Zone(null, NOT_UNIQUE_NAME, new HashSet<>(), true);
-        int countBefore = zoneService.getAll().size();
-
-        Zone dbZone = zoneService.save(zone);
-        assertThat(zoneService.getAll().size()).isEqualTo(countBefore + 1);
-        assertThat(dbZone.getId()).isEqualTo(NEW_ID);
-        assertThat(dbZone.getName()).isEqualTo(zone.getName());
-        assertThat(dbZone.getLines()).isEqualTo(zone.getLines());
-        assertThat(dbZone.isActive()).isEqualTo(zone.isActive());
-
-        Mockito.verify(transportLineRepository, Mockito.times(1)).findAllById(new ArrayList<>());
-        Mockito.verify(zoneRepository, Mockito.times(1)).save(any(Zone.class));
-
+        zoneService.save(zone);
     }
 
     /**
@@ -171,18 +160,7 @@ public class ZoneServiceImplUnitTest {
     public void saveWithInvalidLines() {
         Zone zone = new Zone(null, NEW_NAME, TR_INVALID, true);
         zone.getLines().forEach(transportLine -> transportLine.setZone(zone));
-        int countBefore = zoneService.getAll().size();
-
-        Zone dbZone = zoneService.save(zone);
-        assertThat(zoneService.getAll().size()).isEqualTo(countBefore + 1);
-        assertThat(dbZone.getId()).isEqualTo(NEW_ID);
-        assertThat(dbZone.getName()).isEqualTo(zone.getName());
-        assertThat(dbZone.getLines()).isEqualTo(zone.getLines());
-        assertThat(dbZone.isActive()).isEqualTo(zone.isActive());
-
-        Mockito.verify(transportLineRepository, Mockito.times(1)).findAllById(DB_TR_ID);
-        Mockito.verify(zoneRepository, Mockito.times(1)).save(any(Zone.class));
-
+        zoneService.save(zone);
     }
 
     /**
@@ -192,19 +170,7 @@ public class ZoneServiceImplUnitTest {
     public void saveWithShortName() {
         Zone zone = new Zone(null, NEW_NAME_SHORT_LENGTH, NEW_LINES, true);
         zone.getLines().forEach((TransportLine t) -> t.setZone(zone));
-        int countBefore = zoneService.getAll().size();
-
-        Zone dbZone = zoneService.save(zone);
-        assertThat(dbZone).isNotNull();
-
-        assertThat(zoneService.getAll()).hasSize(countBefore + 1);
-
-        assertThat(dbZone.getName()).isEqualTo(zone.getName());
-        assertThat(dbZone.isActive()).isEqualTo(zone.isActive());
-        assertThat(dbZone.getLines()).isEqualTo(zone.getLines());
-
-        Mockito.verify(transportLineRepository, Mockito.never()).findAllById(DB_TR_ID);
-        Mockito.verify(zoneRepository, Mockito.never()).save(any(Zone.class));
+        zoneService.save(zone);
     }
 
     /**
@@ -214,19 +180,7 @@ public class ZoneServiceImplUnitTest {
     public void saveWithLongName() {
         Zone zone = new Zone(null, NEW_NAME_LONG_LENGTH, NEW_LINES, true);
         zone.getLines().forEach((TransportLine t) -> t.setZone(zone));
-        int countBefore = zoneService.getAll().size();
-
-        Zone dbZone = zoneService.save(zone);
-        assertThat(dbZone).isNotNull();
-
-        assertThat(zoneService.getAll()).hasSize(countBefore + 1);
-
-        assertThat(dbZone.getName()).isEqualTo(zone.getName());
-        assertThat(dbZone.isActive()).isEqualTo(zone.isActive());
-        assertThat(dbZone.getLines()).isEqualTo(zone.getLines());
-
-        Mockito.verify(transportLineRepository, Mockito.never()).findAllById(DB_TR_ID);
-        Mockito.verify(zoneRepository, Mockito.never()).save(any(Zone.class));
+        zoneService.save(zone);
     }
 
     /**
@@ -234,13 +188,13 @@ public class ZoneServiceImplUnitTest {
      */
     @Test
     public void saveWithMinLengthName() {
-        Zone zone = new Zone(null, NEW_NAME_MIN_LENGTH, DB_TR_SAT, true);
+        Zone zone = new Zone(DB_ID, NEW_NAME_MIN_LENGTH, DB_TR_SAT, true);
         zone.getLines().forEach(transportLine -> transportLine.setZone(zone));
         int countBefore = zoneService.getAll().size();
 
         Zone dbZone = zoneService.save(zone);
-        assertThat(zoneService.getAll().size()).isEqualTo(countBefore + 1);
-        assertThat(dbZone.getId()).isEqualTo(NEW_ID);
+        assertThat(zoneService.getAll().size()).isEqualTo(countBefore);
+        assertThat(dbZone.getId()).isEqualTo(DB_ID);
         assertThat(dbZone.getName()).isEqualTo(zone.getName());
         assertThat(dbZone.getLines()).isEqualTo(zone.getLines());
         assertThat(dbZone.isActive()).isEqualTo(zone.isActive());
@@ -274,6 +228,8 @@ public class ZoneServiceImplUnitTest {
      */
     @Test
     public void remove() {
+        int countBefore = zoneService.getAll().size();
+
         zoneService.remove(DB_ID);
 
         Mockito.verify(zoneRepository, Mockito.times(1)).findById(DB_ID);
@@ -285,6 +241,7 @@ public class ZoneServiceImplUnitTest {
         assertThat(zone.isActive()).isFalse();
         zone.getLines().forEach(
                 transportLine -> assertThat(transportLine.getZone().getId()).isEqualTo(DEFAULT_ZONE_ID));
+        assertThat(zoneService.getAll()).hasSize(countBefore - 1);
     }
 
     /**
@@ -293,15 +250,6 @@ public class ZoneServiceImplUnitTest {
     @Test(expected = GeneralException.class)
     public void removeNotValidId() {
         zoneService.remove(DEL_ID_INVALID);
-
-        Mockito.verify(zoneRepository, Mockito.times(1)).findById(DEL_ID_INVALID);
-        Mockito.verify(zoneRepository, Mockito.never()).findById(DEFAULT_ZONE_ID);
-        Mockito.verify(zoneRepository, Mockito.never()).save(any(Zone.class));
-
-        Zone zone = zoneService.findById(DEL_ID);
-        assertThat(zone.isActive()).isFalse();
-        zone.getLines().forEach(transportLine ->
-                assertThat(transportLine.getZone().getId()).isEqualTo(DEFAULT_ZONE_ID));
     }
 
     /**
@@ -310,14 +258,5 @@ public class ZoneServiceImplUnitTest {
     @Test(expected = GeneralException.class)
     public void removeDefaultZone() {
         zoneService.remove(DEFAULT_ZONE_ID);
-
-        Mockito.verify(zoneRepository, Mockito.never()).findById(DEL_ID_INVALID);
-        Mockito.verify(zoneRepository, Mockito.never()).findById(DEFAULT_ZONE_ID);
-        Mockito.verify(zoneRepository, Mockito.never()).save(any(Zone.class));
-
-        Zone zone = zoneService.findById(DEL_ID);
-        assertThat(zone.isActive()).isFalse();
-        zone.getLines().forEach(transportLine ->
-                assertThat(transportLine.getZone().getId()).isEqualTo(DEFAULT_ZONE_ID));
     }
 }

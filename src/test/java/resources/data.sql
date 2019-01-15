@@ -27,56 +27,56 @@ INSERT INTO `vehicle` (`id`, `active`, `name`, `type`, `current_line_id`) VALUES
 INSERT INTO `vehicle` (`id`, `active`, `name`, `type`, `current_line_id`) VALUES ('2', TRUE, 'bus2', '0', '1');
 
 
-INSERT INTO `schedule` (`id`, `active`, `transport_line_id`, `day_of_week`) VALUES (100, TRUE, 1, 0);
-INSERT INTO `schedule` (`id`, `active`, `transport_line_id`, `day_of_week`) VALUES (101, TRUE, 2, 0);
-INSERT INTO `schedule` (`id`, `active`, `transport_line_id`, `day_of_week`) VALUES (102, TRUE, 3, 0);
-INSERT INTO `schedule` (`id`, `active`, `transport_line_id`, `day_of_week`) VALUES (103, TRUE, 1, 1);
+INSERT INTO `schedule` (`id`, `active`, `transport_line_id`, `day_of_week`) VALUES ('100', TRUE, 1, 0);
+INSERT INTO `schedule` (`id`, `active`, `transport_line_id`, `day_of_week`) VALUES ('101', TRUE, 2, 0);
+INSERT INTO `schedule` (`id`, `active`, `transport_line_id`, `day_of_week`) VALUES ('102', TRUE, 3, 0);
+INSERT INTO `schedule` (`id`, `active`, `transport_line_id`, `day_of_week`) VALUES ('103', TRUE, 1, 1);
 INSERT INTO `schedule` (`id`, `active`, `transport_line_id`, `day_of_week`) VALUES (104, TRUE, 2, 1);
-INSERT INTO `schedule` (`id`, `active`, `transport_line_id`, `day_of_week`) VALUES (105, TRUE, 1, 2);
-INSERT INTO `schedule` (`id`, `active`, `transport_line_id`, `day_of_week`) VALUES (106, TRUE, 2, 2);
+INSERT INTO `schedule` (`id`, `active`, `transport_line_id`, `day_of_week`) VALUES ('105', TRUE, 1, 2);
+INSERT INTO `schedule` (`id`, `active`, `transport_line_id`, `day_of_week`) VALUES ('106', TRUE, 2, 2);
 
 
-INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES (100, '08:00');
-INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES (100, '08:15');
-INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES (100, '08:30');
-INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES (100, '08:45');
-INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES (100, '09:00');
+INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('100', '08:00');
+INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('100', '08:15');
+INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('100', '08:30');
+INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('100', '08:45');
+INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('100', '09:00');
 
-INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES (101, '10:00');
-INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES (101, '10:15');
-INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES (101, '10:30');
-INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES (101, '10:45');
-INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES (101, '11:00');
+INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('101', '10:00');
+INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('101', '10:15');
+INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('101', '10:30');
+INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('101', '10:45');
+INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('101', '11:00');
 
-INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES (102, '12:00');
-INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES (102, '12:15');
-INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES (102, '12:30');
-INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES (102, '12:45');
-INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES (102, '13:00');
+INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('102', '12:00');
+INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('102', '12:15');
+INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('102', '12:30');
+INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('102', '12:45');
+INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('102', '13:00');
 
-INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES (103, '18:00');
-INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES (103, '18:15');
-INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES (103, '18:30');
-INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES (103, '18:45');
-INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES (103, '19:00');
+INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('103', '18:00');
+INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('103', '18:15');
+INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('103', '18:30');
+INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('103', '18:45');
+INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('103', '19:00');
 
-INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES (104, '15:10');
-INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES (104, '15:25');
-INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES (104, '15:40');
-INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES (104, '15:55');
-INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES (104, '16:05');
+INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('104', '15:10');
+INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('104', '15:25');
+INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('104', '15:40');
+INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('104', '15:55');
+INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('104', '16:05');
 
-INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES (105, '22:00');
-INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES (105, '22:15');
-INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES (105, '22:30');
-INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES (105, '22:45');
-INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES (105, '23:00');
+INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('105', '22:00');
+INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('105', '22:15');
+INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('105', '22:30');
+INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('105', '22:45');
+INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('105', '23:00');
 
-INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES (106, '23:00');
-INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES (106, '23:15');
-INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES (106, '23:30');
-INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES (106, '23:45');
-INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES (106, '00:00');
+INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('106', '23:00');
+INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('106', '23:15');
+INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('106', '23:30');
+INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('106', '23:45');
+INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('106', '00:00');
 
 INSERT INTO `user` (`type`, `id`, `active`, `authority`, `confirmation`, `email`, `last_name`, `name`, `password`, `telephone`, `username`, `balance`, `document`) VALUES ('REGISTERED_USER', '1', true, '0', '2', 'email@gmail.com', 'LastName', 'FirstName', 'password', '00213123', 'username', '100', 'asds');
 INSERT INTO `user` (`type`, `id`, `active`, `authority`, `email`, `last_name`, `name`, `password`, `username`) VALUES ('VALIDATOR', '2', true, '2', 'email@gmail.com', 'ValLastName', 'ValFirstName', 'valPassword', 'valUsername');

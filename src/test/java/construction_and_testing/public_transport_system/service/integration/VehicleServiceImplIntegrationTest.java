@@ -59,14 +59,7 @@ public class VehicleServiceImplIntegrationTest {
      */
     @Test(expected = GeneralException.class)
     public void findByNullId() {
-        Vehicle dbVehicle = vehicleService.findById(null);
-        assertThat(dbVehicle).isNull();
-
-        assertThat(dbVehicle.getId()).isEqualTo(DB_ID);
-        assertThat(dbVehicle.getName()).isEqualTo(DB_NAME);
-        assertThat(dbVehicle.getType()).isEqualTo(DB_TYPE);
-        assertThat(dbVehicle.getCurrentLine().getId()).isEqualTo(DB_LINE);
-        assertThat(dbVehicle.isActive()).isEqualTo(DB_ACTIVE);
+        vehicleService.findById(null);
     }
 
     /**
@@ -95,16 +88,7 @@ public class VehicleServiceImplIntegrationTest {
     @Transactional
     public void saveWithInvalidType() {
         Vehicle vehicle = new Vehicle(null, NEW_NAME, NEW_TYPE_INVALID, NEW_LINE, true);
-        int countBefore = vehicleService.getAll().size();
-
-        Vehicle dbVehicle = vehicleService.save(vehicle);
-        assertThat(dbVehicle).isNotNull();
-
-        assertThat(vehicleService.getAll().size()).isEqualTo(countBefore + 1);
-        assertThat(dbVehicle.getName()).isEqualTo(vehicle.getName());
-        assertThat(dbVehicle.getType()).isEqualTo(vehicle.getType());
-        assertThat(dbVehicle.getCurrentLine().getId()).isEqualTo(vehicle.getCurrentLine().getId());
-        assertThat(dbVehicle.isActive()).isEqualTo(vehicle.isActive());
+        vehicleService.save(vehicle);
     }
 
     /**
@@ -114,16 +98,7 @@ public class VehicleServiceImplIntegrationTest {
     @Transactional
     public void saveWithInvalidLine() {
         Vehicle vehicle = new Vehicle(null, NEW_NAME, NEW_TYPE, NEW_LINE_INVALID, true);
-        int countBefore = vehicleService.getAll().size();
-
-        Vehicle dbVehicle = vehicleService.save(vehicle);
-        assertThat(dbVehicle).isNotNull();
-
-        assertThat(vehicleService.getAll().size()).isEqualTo(countBefore + 1);
-        assertThat(dbVehicle.getName()).isEqualTo(vehicle.getName());
-        assertThat(dbVehicle.getType()).isEqualTo(vehicle.getType());
-        assertThat(dbVehicle.getCurrentLine().getId()).isEqualTo(vehicle.getCurrentLine().getId());
-        assertThat(dbVehicle.isActive()).isEqualTo(vehicle.isActive());
+        vehicleService.save(vehicle);
     }
 
     /**
@@ -152,16 +127,7 @@ public class VehicleServiceImplIntegrationTest {
     @Transactional
     public void saveWithNullValues() {
         Vehicle vehicle = new Vehicle(null, null, null, NEW_LINE, true);
-        int countBefore = vehicleService.getAll().size();
-
-        Vehicle dbVehicle = vehicleService.save(vehicle);
-        assertThat(dbVehicle).isNotNull();
-
-        assertThat(vehicleService.getAll().size()).isEqualTo(countBefore + 1);
-        assertThat(dbVehicle.getName()).isEqualTo(vehicle.getName());
-        assertThat(dbVehicle.getType()).isEqualTo(vehicle.getType());
-        assertThat(dbVehicle.getCurrentLine().getId()).isEqualTo(vehicle.getCurrentLine().getId());
-        assertThat(dbVehicle.isActive()).isEqualTo(vehicle.isActive());
+        vehicleService.save(vehicle);
     }
 
     /**
@@ -171,16 +137,7 @@ public class VehicleServiceImplIntegrationTest {
     @Transactional
     public void saveWithShortName() {
         Vehicle vehicle = new Vehicle(null, NEW_NAME_SHORT_LENGTH, NEW_TYPE, NEW_LINE, true);
-        int countBefore = vehicleService.getAll().size();
-
-        Vehicle dbVehicle = vehicleService.save(vehicle);
-        assertThat(dbVehicle).isNotNull();
-
-        assertThat(vehicleService.getAll().size()).isEqualTo(countBefore + 1);
-        assertThat(dbVehicle.getName()).isEqualTo(vehicle.getName());
-        assertThat(dbVehicle.getType()).isEqualTo(vehicle.getType());
-        assertThat(dbVehicle.getCurrentLine().getId()).isEqualTo(vehicle.getCurrentLine().getId());
-        assertThat(dbVehicle.isActive()).isEqualTo(vehicle.isActive());
+        vehicleService.save(vehicle);
     }
 
     /**
@@ -190,16 +147,7 @@ public class VehicleServiceImplIntegrationTest {
     @Transactional
     public void saveWithLongName() {
         Vehicle vehicle = new Vehicle(null, NEW_NAME_LONG_LENGTH, NEW_TYPE, NEW_LINE, true);
-        int countBefore = vehicleService.getAll().size();
-
-        Vehicle dbVehicle = vehicleService.save(vehicle);
-        assertThat(dbVehicle).isNotNull();
-
-        assertThat(vehicleService.getAll().size()).isEqualTo(countBefore + 1);
-        assertThat(dbVehicle.getName()).isEqualTo(vehicle.getName());
-        assertThat(dbVehicle.getType()).isEqualTo(vehicle.getType());
-        assertThat(dbVehicle.getCurrentLine().getId()).isEqualTo(vehicle.getCurrentLine().getId());
-        assertThat(dbVehicle.isActive()).isEqualTo(vehicle.isActive());
+        vehicleService.save(vehicle);
     }
 
     /**
@@ -208,13 +156,13 @@ public class VehicleServiceImplIntegrationTest {
     @Test
     @Transactional
     public void saveWithMinLengthName() {
-        Vehicle vehicle = new Vehicle(null, NEW_NAME_MIN_LENGTH, NEW_TYPE, NEW_LINE, true);
+        Vehicle vehicle = new Vehicle(DB_ID, NEW_NAME_MIN_LENGTH, NEW_TYPE, NEW_LINE, true);
         int countBefore = vehicleService.getAll().size();
 
         Vehicle dbVehicle = vehicleService.save(vehicle);
         assertThat(dbVehicle).isNotNull();
 
-        assertThat(vehicleService.getAll().size()).isEqualTo(countBefore + 1);
+        assertThat(vehicleService.getAll().size()).isEqualTo(countBefore);
         assertThat(dbVehicle.getName()).isEqualTo(vehicle.getName());
         assertThat(dbVehicle.getType()).isEqualTo(vehicle.getType());
         assertThat(dbVehicle.getCurrentLine().getId()).isEqualTo(vehicle.getCurrentLine().getId());
@@ -246,7 +194,10 @@ public class VehicleServiceImplIntegrationTest {
     @Test
     @Transactional
     public void remove() {
+        int countBefore = vehicleService.getAll().size();
+
         vehicleService.remove(DEL_ID);
+        assertThat(vehicleService.getAll().size()).isEqualTo(countBefore - 1);
         Vehicle vehicle = vehicleService.findById(DEL_ID);
         assertThat(vehicle.isActive()).isFalse();
     }

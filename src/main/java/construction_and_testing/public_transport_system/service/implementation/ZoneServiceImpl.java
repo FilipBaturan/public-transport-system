@@ -87,6 +87,8 @@ public class ZoneServiceImpl implements ZoneService {
     }
 
     /**
+     * Validates zone properties
+     *
      * @param zone that needs to be validated
      */
     private void validate(Zone zone) {

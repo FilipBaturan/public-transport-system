@@ -42,8 +42,8 @@ public class VehicleConstants {
                     new HashSet<>(), new Zone(2L), true);
 
     public static final ArrayList<Vehicle> DB_VEHICLES = new ArrayList<Vehicle>() {{
-        add(new Vehicle());
-        add(new Vehicle());
+        add(new Vehicle(DB_ID, DB_NAME, DB_TYPE, DB_TR, DB_ACTIVE));
+        add(new Vehicle(2L,  DB_NAME, DB_TYPE, DB_TR, DB_ACTIVE));
     }};
     public static final Vehicle DB_VEHICLE = new Vehicle(DEL_ID, DB_NAME, DB_TYPE, DB_TR, DB_ACTIVE);
     public static Vehicle DEL_VEHICLE = DB_VEHICLE;
