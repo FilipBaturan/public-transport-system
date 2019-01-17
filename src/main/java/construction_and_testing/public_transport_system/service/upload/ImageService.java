@@ -26,78 +26,17 @@ public class ImageService {
         add("BMP");
     }};
 
-    /**
-     * @param imageFile that needs to be checked
-     * @return is acceptable image format
-     */
-    private String getExtension(String imageFile) {
-        String[] tokens = imageFile.split("\\.");
-        if (imageFormats.contains(tokens[tokens.length - 1].toUpperCase())) {
-            return tokens[tokens.length - 1];
-        } else {
-            return null;
-        }
-    }
+    private String destinationFolder;
 
-
-    /**
-     * Tries to create directory if does not exist
-     *
-     * @param path to image directory
-     * @return File to image directory
-     */
-    private File checkDirectory(String path) {
-        File directory = new File(path);
-        if (!directory.exists()) {
-            if (!directory.mkdirs()) {
-                return null;
-            }
-        }
-        return directory;
-    }
-
-    /**
-     * @return absolute path to image directory
-     */
-    private String getAbsolutePath() throws IOException {
-
-        String current = new File(".").getCanonicalPath();
-        return Paths.get(current, "src", "main", "resources", "static",
-                "documents").toString();
-
-
-    }
-
-    /**
-     * @param imageFile that need be processed
-     * @return full path of generated name
-     */
-    private UploadResponse generateName(String imageFile) {
-
-
-        String[] tokens = imageFile.split("\\.");
+    public ImageService() {
         try {
-            String path = this.getAbsolutePath();
-            File directory = this.checkDirectory(path);
-            if (directory == null) {
-                throw new GeneralException("Can not upload image.", HttpStatus.INTERNAL_SERVER_ERROR);
-            }
-            File[] files = directory.listFiles();
-            if (files == null) {
-                return new UploadResponse(Paths.get(File.separator, "upload",
-                        "img_0_0." + tokens[tokens.length - 1]).toString(),
-                        Paths.get(path, "img_0_0." + tokens[tokens.length - 1]).toString());
-            } else {
-                int count = files.length;
-                return new UploadResponse(Paths.get("img_" + ++count + "_" + count +
-                        "." + tokens[tokens.length - 1]).toString(),
-                        Paths.get(path, "img_" + count + "_" + count + "."
-                                + tokens[tokens.length - 1]).toString());
-            }
+            destinationFolder = Paths.get(new File(".").getCanonicalPath(),
+                    "src", "main", "resources", "static", "documents").toString();
         } catch (IOException e) {
-            throw new GeneralException("Can not upload image.", HttpStatus.INTERNAL_SERVER_ERROR);
+            throw new GeneralException("Upload service is broken!", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
 
     /**
      * @param image that needs to be stored
@@ -135,7 +74,7 @@ public class ImageService {
                     HttpStatus.BAD_REQUEST);
         }
         try {
-            String path = this.getAbsolutePath();
+            String path = this.destinationFolder;
             if (this.checkDirectory(path) == null) {
                 throw new GeneralException("Can not get image.", HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -144,4 +83,64 @@ public class ImageService {
             throw new GeneralException("Can not get image.", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+
+    /**
+     * @param imageFile that needs to be checked
+     * @return is acceptable image format
+     */
+    private String getExtension(String imageFile) {
+        String[] tokens = imageFile.split("\\.");
+        if (imageFormats.contains(tokens[tokens.length - 1].toUpperCase())) {
+            return tokens[tokens.length - 1];
+        } else {
+            return null;
+        }
+    }
+
+
+    /**
+     * Tries to create directory if does not exist
+     *
+     * @param path to image directory
+     * @return File to image directory
+     */
+    private File checkDirectory(String path) {
+        File directory = new File(path);
+        if (!directory.exists()) {
+            if (!directory.mkdirs()) {
+                return null;
+            }
+        }
+        return directory;
+    }
+
+    /**
+     * @param imageFile that need be processed
+     * @return full path of generated name
+     */
+    private UploadResponse generateName(String imageFile) {
+
+        String[] tokens = imageFile.split("\\.");
+        String path = this.destinationFolder;
+        File directory = this.checkDirectory(path);
+        if (directory == null) {
+            throw new GeneralException("Can not upload image.", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+        File[] files = directory.listFiles();
+        if (files == null || files.length == 0) {
+            return new UploadResponse(Paths.get("img_1_1." + tokens[tokens.length - 1]).toString(),
+                    Paths.get(path, "img_1_1." + tokens[tokens.length - 1]).toString());
+        } else {
+            int count = files.length;
+            return new UploadResponse(Paths.get("img_" + ++count + "_" + count +
+                    "." + tokens[tokens.length - 1]).toString(),
+                    Paths.get(path, "img_" + count + "_" + count + "."
+                            + tokens[tokens.length - 1]).toString());
+        }
+    }
+
+    public void setDestinationFolder(String destinationFolder) {
+        this.destinationFolder = destinationFolder;
+    }
+
 }

@@ -12,6 +12,7 @@ import construction_and_testing.public_transport_system.service.unit.StationServ
 import construction_and_testing.public_transport_system.service.unit.TransportLineServiceImplUnitTest;
 import construction_and_testing.public_transport_system.service.unit.VehicleServiceImplUnitTest;
 import construction_and_testing.public_transport_system.service.unit.ZoneServiceImplUnitTest;
+import construction_and_testing.public_transport_system.service.upload.ImageServiceTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,7 +31,8 @@ import org.springframework.boot.test.context.SpringBootTest;
         VehicleControllerTest.class,
         ZoneServiceImplIntegrationTest.class,
         ZoneServiceImplUnitTest.class,
-        ZoneControllerTest.class
+        ZoneControllerTest.class,
+        ImageServiceTest.class
 })
 public class DanijelSuite {
 }

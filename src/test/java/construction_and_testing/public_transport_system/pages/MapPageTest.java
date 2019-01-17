@@ -1,24 +1,21 @@
 package construction_and_testing.public_transport_system.pages;
 
-import construction_and_testing.public_transport_system.pages.MapPage;
-import construction_and_testing.public_transport_system.pages.NavigationBarPage;
-import construction_and_testing.public_transport_system.pages.WelcomePage;
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.PageFactory;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.annotation.DirtiesContext;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import static construction_and_testing.public_transport_system.pages.util.SeleniumProperties.CHROME_DRIVER_PATH;
 import static org.assertj.core.api.Assertions.assertThat;
 
-
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
 public class MapPageTest {
 
     private WebDriver browser;
@@ -29,7 +26,7 @@ public class MapPageTest {
 
     private MapPage mapPage;
 
-    @BeforeMethod
+    @Before
     public void setupSelenium() {
         //instantiate browser
         System.setProperty("webdriver.chrome.driver", CHROME_DRIVER_PATH);
@@ -94,7 +91,7 @@ public class MapPageTest {
                 .getText()).contains("gener@ted");
     }
 
-    @AfterMethod
+    @After
     public void closeSelenium() {
         browser.quit();
     }

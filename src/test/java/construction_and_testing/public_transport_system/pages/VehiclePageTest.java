@@ -1,14 +1,10 @@
 package construction_and_testing.public_transport_system.pages;
 
-import construction_and_testing.public_transport_system.pages.NavigationBarPage;
-import construction_and_testing.public_transport_system.pages.VehiclePage;
-import construction_and_testing.public_transport_system.pages.WelcomePage;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.PageFactory;
-import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.annotation.Rollback;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
@@ -19,7 +15,7 @@ import java.util.List;
 import static construction_and_testing.public_transport_system.pages.util.SeleniumProperties.CHROME_DRIVER_PATH;
 import static org.assertj.core.api.Assertions.assertThat;
 
-@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
+
 public class VehiclePageTest {
 
     private WebDriver browser;
