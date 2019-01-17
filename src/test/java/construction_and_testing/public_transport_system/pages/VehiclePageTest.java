@@ -1,21 +1,26 @@
 package construction_and_testing.public_transport_system.pages;
 
+import org.junit.After;
+import org.junit.Before;
+import org.junit.Test;
+import org.junit.runner.RunWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.PageFactory;
-import org.springframework.test.annotation.Rollback;
-import org.testng.annotations.AfterMethod;
-import org.testng.annotations.BeforeMethod;
-import org.testng.annotations.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.test.annotation.DirtiesContext;
+import org.springframework.test.context.junit4.SpringRunner;
 
 import java.util.List;
 
 import static construction_and_testing.public_transport_system.pages.util.SeleniumProperties.CHROME_DRIVER_PATH;
 import static org.assertj.core.api.Assertions.assertThat;
 
-
+@RunWith(SpringRunner.class)
+@SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.DEFINED_PORT)
+@DirtiesContext(classMode = DirtiesContext.ClassMode.BEFORE_EACH_TEST_METHOD)
 public class VehiclePageTest {
 
     private WebDriver browser;
@@ -26,7 +31,7 @@ public class VehiclePageTest {
 
     private VehiclePage vehiclePage;
 
-    @BeforeMethod
+    @Before
     public void setupSelenium() {
         //instantiate browser
         System.setProperty("webdriver.chrome.driver", CHROME_DRIVER_PATH);
@@ -44,14 +49,20 @@ public class VehiclePageTest {
         welcomePage.login("null", "null");
 
         try {
-            Thread.sleep(1000);
+            Thread.sleep(3000);
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
 
         navigationBarPage.ensureIsDisplayed();
         navigationBarPage.getMapDropDown().click();
+        try {
+            Thread.sleep(1000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         navigationBarPage.getVehicleLink().click();
+
 
         assertThat("http://localhost:4200/vehicles").isEqualTo(browser.getCurrentUrl());
 
@@ -61,10 +72,10 @@ public class VehiclePageTest {
      * Test valid vehicle adding
      */
     @Test
-    @Rollback
     public void testAddVehicle() {
 
         vehiclePage.ensureIsDisplayed();
+
 
         int beforeCount = vehiclePage.numberOfVehicles();
 
@@ -78,7 +89,7 @@ public class VehiclePageTest {
         vehiclePage.setInputName("NS-B-023-R3");
         vehiclePage.getOptionBus().click();
 
-        String selectedTransportLineXPath = "/html/body/ngb-modal-window/div/div/div[2]/form/div/select[2]/option[3]";
+        String selectedTransportLineXPath = "/html/body/ngb-modal-window/div/div/div[2]/form/div[2]/div[2]/select/option[2]";
         String selectedTransportLineName = browser.findElement(By.xpath(selectedTransportLineXPath)).getText();
 
         browser.findElement(By.xpath(selectedTransportLineXPath)).click();
@@ -97,11 +108,12 @@ public class VehiclePageTest {
         assertThat(newVehicleCurrentLine.getText()).contains(selectedTransportLineName);
     }
 
+
+
     /**
      * Test valid vehicle editing
      */
     @Test
-    @Rollback
     public void testEditVehicle() {
 
         vehiclePage.ensureIsDisplayed();
@@ -139,7 +151,6 @@ public class VehiclePageTest {
      * Test valid vehicle deletion
      */
     @Test
-    @Rollback
     public void testRemoveVehicle() {
 
         vehiclePage.ensureIsDisplayed();
@@ -158,7 +169,6 @@ public class VehiclePageTest {
      * Test valid vehicle saving with minimum name length
      */
     @Test
-    @Rollback
     public void testSaveVehicleWithMinimumNameLength() {
 
         vehiclePage.ensureIsDisplayed();
@@ -198,7 +208,6 @@ public class VehiclePageTest {
      * Test valid vehicle saving with maximum name length
      */
     @Test
-    @Rollback
     public void testSaveVehicleWithMaximumNameLength() {
 
         vehiclePage.ensureIsDisplayed();
@@ -238,7 +247,6 @@ public class VehiclePageTest {
      * Test invalid vehicle saving with null name and type
      */
     @Test
-    @Rollback
     public void testSaveVehicleWithNullNameAndType() {
 
         vehiclePage.ensureIsDisplayed();
@@ -267,7 +275,6 @@ public class VehiclePageTest {
      * Test invalid vehicle saving with null name
      */
     @Test
-    @Rollback
     public void testSaveVehicleWithNullName() {
 
         vehiclePage.ensureIsDisplayed();
@@ -296,7 +303,6 @@ public class VehiclePageTest {
      * Test invalid vehicle saving with short name
      */
     @Test
-    @Rollback
     public void testSaveVehicleWithShortName() {
 
         vehiclePage.ensureIsDisplayed();
@@ -326,7 +332,6 @@ public class VehiclePageTest {
      * Test invalid vehicle saving with long name
      */
     @Test
-    @Rollback
     public void testSaveVehicleWithLongName() {
 
         vehiclePage.ensureIsDisplayed();
@@ -356,7 +361,6 @@ public class VehiclePageTest {
      * Test invalid vehicle saving with null type
      */
     @Test
-    @Rollback
     public void testSaveVehicleWithNullType() {
 
         vehiclePage.ensureIsDisplayed();
@@ -380,7 +384,7 @@ public class VehiclePageTest {
         assertThat(vehiclePage.numberOfVehicles()).isEqualTo(beforeCount);
     }
 
-    @AfterMethod
+    @After
     public void closeSelenium() {
         browser.quit();
     }

@@ -11,28 +11,28 @@ public class VehiclePage {
 
     private WebDriver driver;
 
-    @FindBy(xpath = "//*[@id=\"content\"]/div/div[7]/div/div")
+    @FindBy(css = "div.card-body:last-child")
     private WebElement buttonAdd;
 
-    @FindBy(xpath = "/html/body/ngb-modal-window/div/div/div[2]/form/div/input")
+    @FindBy(xpath = "/html/body/ngb-modal-window/div/div/div[2]/form/div[1]/div/input")
     private WebElement inputName;
 
-    @FindBy(xpath = "/html/body/ngb-modal-window/div/div/div[2]/form/div/select[1]")
+    @FindBy(xpath = "/html/body/ngb-modal-window/div/div/div[2]/form/div[2]/div[1]/select")
     private WebElement inputType;
 
-    @FindBy(xpath = "/html/body/ngb-modal-window/div/div/div[2]/form/div/select[2]")
+    @FindBy(xpath = "/html/body/ngb-modal-window/div/div/div[2]/form/div[2]/div[2]/select")
     private WebElement inputCurrentLine;
 
     @FindBy(xpath = "/html/body/ngb-modal-window/div/div/div[3]/button")
     private WebElement buttonSave;
 
-    @FindBy(xpath = "/html/body/ngb-modal-window/div/div/div[2]/form/div/select[1]/option[1]")
+    @FindBy(xpath = "/html/body/ngb-modal-window/div/div/div[2]/form/div[2]/div[1]/select/option[1]")
     private WebElement optionBus;
 
-    @FindBy(xpath = "/html/body/ngb-modal-window/div/div/div[2]/form/div/select[1]/option[2]")
+    @FindBy(xpath = "/html/body/ngb-modal-window/div/div/div[2]/form/div[2]/div[1]/select/option[2]")
     private WebElement optionMetro;
 
-    @FindBy(xpath = "/html/body/ngb-modal-window/div/div/div[2]/form/div/select[1]/option[3]")
+    @FindBy(xpath = "/html/body/ngb-modal-window/div/div/div[2]/form/div[2]/div[1]/select/option[3]")
     private WebElement optionTram;
 
     @FindBy(xpath = "//*[@id=\"content\"]/div/div[2]/div/div[2]/button[1]")

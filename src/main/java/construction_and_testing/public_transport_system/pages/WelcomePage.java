@@ -1,6 +1,5 @@
 package construction_and_testing.public_transport_system.pages;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -11,10 +10,13 @@ public class WelcomePage {
 
     private WebDriver driver;
 
-    @FindBy(xpath = "//*[@id=\"content\"]/div/app-auth/form/input[1]")
+    @FindBy(xpath = "//*[@id=\"content\"]/div/div[1]/div/div[3]/app-auth/form")
+    private WebElement formLogin;
+
+    @FindBy(xpath = "//*[@id=\"content\"]/div/div[1]/div/div[3]/app-auth/form/input[1]")
     private WebElement inputUsername;
 
-    @FindBy(xpath = "//*[@id=\"content\"]/div/app-auth/form/input[2]")
+    @FindBy(xpath = "//*[@id=\"content\"]/div/div[1]/div/div[3]/app-auth/form/input[2]")
     private WebElement inputPassword;
 
     @FindBy(xpath = "//*[@id=\"signinButton\"]")
@@ -68,8 +70,6 @@ public class WelcomePage {
     }
 
     public void ensureIsDisplayed() {
-        (new WebDriverWait(driver, 10))
-                .until(ExpectedConditions.presenceOfElementLocated(
-                        By.xpath("//*[@id=\"content\"]/div/app-auth/form/input[1]")));
+        (new WebDriverWait(driver, 10)).until(ExpectedConditions.visibilityOf(formLogin));
     }
 }
