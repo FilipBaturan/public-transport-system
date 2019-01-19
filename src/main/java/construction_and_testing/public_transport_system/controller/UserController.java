@@ -156,7 +156,7 @@ public class UserController {
     public ResponseEntity<RegisteredUser> update(@PathVariable Long id, @RequestBody RegisteringUserDTO user) {
         RegisteredUser changed = RegisteredUserConverter.fromRegisteringUserDTO(user);
         changed.setId(id);
-        if(!changed.getPassword().startsWith("$")){
+        if (!changed.getPassword().startsWith("$")) {
             changed.setPassword(passwordEncoder.encode(changed.getPassword()));
         }
         boolean succeeded = registeredUserService.modify(changed);
@@ -281,12 +281,12 @@ public class UserController {
             return new ResponseEntity<>(false, HttpStatus.NOT_ACCEPTABLE);
         else {
 
-            try{
+            try {
                 if (this.userService.findByUsername(userDTO.getUsername()) != null)
                     return new ResponseEntity<>(false, HttpStatus.CONFLICT);
 
                 userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
-                Validator newValidator = new Validator( UserConverter.toEntity(userDTO) );
+                Validator newValidator = new Validator(UserConverter.toEntity(userDTO));
                 newValidator.setConfirmation(UsersDocumentsStatus.UNCHECKED);
 
                 this.userService.save(newValidator);

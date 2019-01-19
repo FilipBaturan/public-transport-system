@@ -2,7 +2,7 @@ package construction_and_testing.public_transport_system.controller;
 
 import construction_and_testing.public_transport_system.domain.DTO.AuthenticationRequestDTO;
 import construction_and_testing.public_transport_system.domain.DTO.AuthenticationResponseDTO;
-import construction_and_testing.public_transport_system.domain.DTO.TransportLineColletionDTO;
+import construction_and_testing.public_transport_system.domain.DTO.TransportLineCollectionDTO;
 import construction_and_testing.public_transport_system.domain.DTO.TransportLineDTO;
 import construction_and_testing.public_transport_system.domain.TransportLine;
 import construction_and_testing.public_transport_system.domain.TransportLinePosition;
@@ -400,12 +400,12 @@ public class TransportLineControllerTest {
      */
     @Test
     public void replaceAll() {
-        TransportLineColletionDTO transportLines =
-                new TransportLineColletionDTO(NEW_TRANSPORT_LINES.stream()
+        TransportLineCollectionDTO transportLines =
+                new TransportLineCollectionDTO(NEW_TRANSPORT_LINES.stream()
                         .map(TransportLineDTO::new).collect(Collectors.toList()));
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Auth-Token", accessToken);
-        HttpEntity<TransportLineColletionDTO> httpEntity = new HttpEntity<>(transportLines, headers);
+        HttpEntity<TransportLineCollectionDTO> httpEntity = new HttpEntity<>(transportLines, headers);
 
         ResponseEntity<TransportLineDTO[]> result = testRestTemplate.exchange(this.URL + "/replace",
                 HttpMethod.POST, httpEntity, TransportLineDTO[].class);
@@ -428,12 +428,12 @@ public class TransportLineControllerTest {
      */
     @Test
     public void replaceAllWithInvalidScheduleAssociation() {
-        TransportLineColletionDTO transportLines =
-                new TransportLineColletionDTO(NEW_TRANSPORT_LINES_INVALID_SCHEDULE_ASSOCIATION.stream()
+        TransportLineCollectionDTO transportLines =
+                new TransportLineCollectionDTO(NEW_TRANSPORT_LINES_INVALID_SCHEDULE_ASSOCIATION.stream()
                         .map(TransportLineDTO::new).collect(Collectors.toList()));
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Auth-Token", accessToken);
-        HttpEntity<TransportLineColletionDTO> httpEntity = new HttpEntity<>(transportLines, headers);
+        HttpEntity<TransportLineCollectionDTO> httpEntity = new HttpEntity<>(transportLines, headers);
 
         ResponseEntity<String> result = testRestTemplate.exchange(this.URL + "/replace",
                 HttpMethod.POST, httpEntity, String.class);
@@ -442,7 +442,7 @@ public class TransportLineControllerTest {
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(body).isNotNull();
-        assertThat(body).isEqualTo("Schedule has already associated to another transport line!");
+        assertThat(body).isEqualTo("Transport lines have invalid schedule or position associated!");
     }
 
     /**
@@ -450,12 +450,12 @@ public class TransportLineControllerTest {
      */
     @Test
     public void replaceAllWithNoZone() {
-        TransportLineColletionDTO transportLines =
-                new TransportLineColletionDTO(NEW_TRANSPORT_LINES_NO_ZONE.stream()
+        TransportLineCollectionDTO transportLines =
+                new TransportLineCollectionDTO(NEW_TRANSPORT_LINES_NO_ZONE.stream()
                         .map(TransportLineDTO::new).collect(Collectors.toList()));
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Auth-Token", accessToken);
-        HttpEntity<TransportLineColletionDTO> httpEntity = new HttpEntity<>(transportLines, headers);
+        HttpEntity<TransportLineCollectionDTO> httpEntity = new HttpEntity<>(transportLines, headers);
 
         ResponseEntity<TransportLineDTO[]> result = testRestTemplate.exchange(this.URL + "/replace",
                 HttpMethod.POST, httpEntity, TransportLineDTO[].class);
@@ -475,12 +475,12 @@ public class TransportLineControllerTest {
      */
     @Test
     public void replaceAllWithNullSchedule() {
-        TransportLineColletionDTO transportLines =
-                new TransportLineColletionDTO(NEW_TRANSPORT_LINES_NO_SCHEDULE.stream()
+        TransportLineCollectionDTO transportLines =
+                new TransportLineCollectionDTO(NEW_TRANSPORT_LINES_NO_SCHEDULE.stream()
                         .map(TransportLineDTO::new).collect(Collectors.toList()));
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Auth-Token", accessToken);
-        HttpEntity<TransportLineColletionDTO> httpEntity = new HttpEntity<>(transportLines, headers);
+        HttpEntity<TransportLineCollectionDTO> httpEntity = new HttpEntity<>(transportLines, headers);
 
         ResponseEntity<TransportLineDTO[]> result = testRestTemplate.exchange(this.URL + "/replace",
                 HttpMethod.POST, httpEntity, TransportLineDTO[].class);
@@ -500,12 +500,12 @@ public class TransportLineControllerTest {
      */
     @Test
     public void replaceAllWithInvalidSchedule() {
-        TransportLineColletionDTO transportLines =
-                new TransportLineColletionDTO(NEW_TRANSPORT_LINES_INVALID_SCHEDULE.stream()
+        TransportLineCollectionDTO transportLines =
+                new TransportLineCollectionDTO(NEW_TRANSPORT_LINES_INVALID_SCHEDULE.stream()
                         .map(TransportLineDTO::new).collect(Collectors.toList()));
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Auth-Token", accessToken);
-        HttpEntity<TransportLineColletionDTO> httpEntity = new HttpEntity<>(transportLines, headers);
+        HttpEntity<TransportLineCollectionDTO> httpEntity = new HttpEntity<>(transportLines, headers);
 
         ResponseEntity<String> result = testRestTemplate.exchange(this.URL + "/replace",
                 HttpMethod.POST, httpEntity, String.class);
@@ -514,7 +514,7 @@ public class TransportLineControllerTest {
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(body).isNotNull();
-        assertThat(body).isEqualTo("Schedule associated to transport line N7 does not exist!");
+        assertThat(body).isEqualTo("Transport lines have invalid schedule or position associated!");
     }
 
     /**
@@ -523,12 +523,12 @@ public class TransportLineControllerTest {
     @Test
     public void replaceAllWithShortName() {
         NEW_TRANSPORT_LINES.get(0).setName(NEW_NAME_SHORT_LENGTH);
-        TransportLineColletionDTO transportLines =
-                new TransportLineColletionDTO(NEW_TRANSPORT_LINES.stream()
+        TransportLineCollectionDTO transportLines =
+                new TransportLineCollectionDTO(NEW_TRANSPORT_LINES.stream()
                         .map(TransportLineDTO::new).collect(Collectors.toList()));
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Auth-Token", accessToken);
-        HttpEntity<TransportLineColletionDTO> httpEntity = new HttpEntity<>(transportLines, headers);
+        HttpEntity<TransportLineCollectionDTO> httpEntity = new HttpEntity<>(transportLines, headers);
 
         ResponseEntity<String> result = testRestTemplate.exchange(this.URL + "/replace",
                 HttpMethod.POST, httpEntity, String.class);
@@ -545,12 +545,12 @@ public class TransportLineControllerTest {
     @Test
     public void replaceAllWithLongName() {
         NEW_TRANSPORT_LINES.get(0).setName(NEW_NAME_LONG_LENGTH);
-        TransportLineColletionDTO transportLines =
-                new TransportLineColletionDTO(NEW_TRANSPORT_LINES.stream()
+        TransportLineCollectionDTO transportLines =
+                new TransportLineCollectionDTO(NEW_TRANSPORT_LINES.stream()
                         .map(TransportLineDTO::new).collect(Collectors.toList()));
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Auth-Token", accessToken);
-        HttpEntity<TransportLineColletionDTO> httpEntity = new HttpEntity<>(transportLines, headers);
+        HttpEntity<TransportLineCollectionDTO> httpEntity = new HttpEntity<>(transportLines, headers);
 
         ResponseEntity<String> result = testRestTemplate.exchange(this.URL + "/replace",
                 HttpMethod.POST, httpEntity, String.class);
@@ -567,12 +567,12 @@ public class TransportLineControllerTest {
     @Test
     public void replaceAllWithMinLengthName() {
         NEW_TRANSPORT_LINES.get(0).setName(NEW_NAME_MIN_LENGTH);
-        TransportLineColletionDTO transportLines =
-                new TransportLineColletionDTO(NEW_TRANSPORT_LINES.stream()
+        TransportLineCollectionDTO transportLines =
+                new TransportLineCollectionDTO(NEW_TRANSPORT_LINES.stream()
                         .map(TransportLineDTO::new).collect(Collectors.toList()));
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Auth-Token", accessToken);
-        HttpEntity<TransportLineColletionDTO> httpEntity = new HttpEntity<>(transportLines, headers);
+        HttpEntity<TransportLineCollectionDTO> httpEntity = new HttpEntity<>(transportLines, headers);
 
         ResponseEntity<TransportLineDTO[]> result = testRestTemplate.exchange(this.URL + "/replace",
                 HttpMethod.POST, httpEntity, TransportLineDTO[].class);
@@ -591,12 +591,12 @@ public class TransportLineControllerTest {
     @Test
     public void replaceAllWithMaxLengthName() {
         NEW_TRANSPORT_LINES.get(0).setName(NEW_NAME_MAX_LENGTH);
-        TransportLineColletionDTO transportLines =
-                new TransportLineColletionDTO(NEW_TRANSPORT_LINES.stream()
+        TransportLineCollectionDTO transportLines =
+                new TransportLineCollectionDTO(NEW_TRANSPORT_LINES.stream()
                         .map(TransportLineDTO::new).collect(Collectors.toList()));
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Auth-Token", accessToken);
-        HttpEntity<TransportLineColletionDTO> httpEntity = new HttpEntity<>(transportLines, headers);
+        HttpEntity<TransportLineCollectionDTO> httpEntity = new HttpEntity<>(transportLines, headers);
 
         ResponseEntity<TransportLineDTO[]> result = testRestTemplate.exchange(this.URL + "/replace",
                 HttpMethod.POST, httpEntity, TransportLineDTO[].class);
@@ -616,12 +616,12 @@ public class TransportLineControllerTest {
     public void replaceAllUnauthorized() {
         setUnauthorizedUser();
 
-        TransportLineColletionDTO transportLines =
-                new TransportLineColletionDTO(NEW_TRANSPORT_LINES_NO_ZONE.stream()
+        TransportLineCollectionDTO transportLines =
+                new TransportLineCollectionDTO(NEW_TRANSPORT_LINES_NO_ZONE.stream()
                         .map(TransportLineDTO::new).collect(Collectors.toList()));
         HttpHeaders headers = new HttpHeaders();
         headers.add("X-Auth-Token", accessToken);
-        HttpEntity<TransportLineColletionDTO> httpEntity = new HttpEntity<>(transportLines, headers);
+        HttpEntity<TransportLineCollectionDTO> httpEntity = new HttpEntity<>(transportLines, headers);
 
         ResponseEntity<String> result = testRestTemplate.exchange(this.URL + "/replace",
                 HttpMethod.POST, httpEntity, String.class);

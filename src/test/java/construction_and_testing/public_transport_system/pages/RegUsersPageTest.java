@@ -21,7 +21,6 @@ public class RegUsersPageTest {
     private RegUsersPage regUsersPage;
 
 
-
     @BeforeMethod
     public void setupSelenium() {
         //instantiate browser
@@ -45,8 +44,7 @@ public class RegUsersPageTest {
     }
 
     @Test
-    public void checkUsersTickets()
-    {
+    public void checkUsersTickets() {
         assertEquals("http://localhost:4200/registeredUsers", browser.getCurrentUrl());
         regUsersPage.getTicketsLink().click();
 
@@ -56,8 +54,7 @@ public class RegUsersPageTest {
     }
 
     @Test
-    public void denyTicket()
-    {
+    public void denyTicket() {
         assertEquals("http://localhost:4200/registeredUsers", browser.getCurrentUrl());
         regUsersPage.getTicketsLink().click();
 
@@ -67,7 +64,7 @@ public class RegUsersPageTest {
 
         regUsersPage.ensureUsersTicketsTableIsDisplayed();
 
-        int sizeBeforeAdding =  regUsersPage.getUsersTicketsTableSize();
+        int sizeBeforeAdding = regUsersPage.getUsersTicketsTableSize();
 
         regUsersPage.getDenyButton().click();
 

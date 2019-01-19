@@ -43,14 +43,9 @@ public class MapPageTest {
         welcomePage.ensureIsDisplayed();
         welcomePage.login("null", "null");
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        navigationBarPage.ensureIsDisplayed();
+        navigationBarPage.ensureIsDisplayedLogout();
         navigationBarPage.getMapDropDown().click();
+        navigationBarPage.ensureIsDisplayedMapDropItems();
         navigationBarPage.getRouteLink().click();
 
         assertThat("http://localhost:4200/map").isEqualTo(browser.getCurrentUrl());
@@ -79,16 +74,348 @@ public class MapPageTest {
         new Actions(browser).moveByOffset(30, 170).click().build().perform();
         new Actions(browser).moveByOffset(110, -20).click().build().perform();
         new Actions(browser).moveByOffset(0, 0).click().build().perform();
+        new Actions(browser).moveByOffset(-5, 0).click().build().perform();
+
+        mapPage.ensureIsDisplayedTransportLinePopUp();
+        mapPage.getButtonWidth10().click();
+        mapPage.getButtonColorBlack().click();
 
         mapPage.getButtonApply().click();
 
-        mapPage.ensureIsAddedLine(beforeCount);
+        mapPage.ensureIsAddedTransportLine(beforeCount);
         mapPage.ensureIsDisplayedButtonEdit();
 
         assertThat(mapPage.numberOfTransportLines()).isEqualTo(beforeCount + 1);
         assertThat(mapPage.getTransportLines()
                 .get(mapPage.getTransportLines().size() - 1)
                 .getText()).contains("gener@ted");
+    }
+
+    /**
+     * Test valid transport line deletion
+     */
+    @Test
+    public void testRemoveTransportLine() {
+
+        mapPage.ensureIsDisplayed();
+
+        mapPage.ensureIsDisplayedButtonEdit();
+
+        int beforeCount = mapPage.numberOfTransportLines();
+
+        mapPage.getButtonEdit().click();
+        mapPage.ensureIsDisplayedEditor();
+
+        new Actions(browser).moveToElement(mapPage.getButtonDraw()).build().perform();
+
+        new Actions(browser).moveByOffset(260, 110).click().build().perform();
+        mapPage.getButtonRemoveTransportLine().click();
+        mapPage.getButtonApply().click();
+
+        mapPage.ensureIsRemovedTransportLine(beforeCount);
+        assertThat(mapPage.numberOfTransportLines()).isEqualTo(beforeCount - 1);
+
+    }
+
+    /**
+     * Test valid transport line adding
+     */
+    @Test
+    public void testEditTransportLine() {
+
+        mapPage.ensureIsDisplayed();
+
+        mapPage.ensureIsDisplayedButtonEdit();
+
+        int beforeCount = mapPage.numberOfTransportLines();
+
+        mapPage.getEditButtonTransportLine().click();
+        mapPage.ensureIsDisplayedButtonSave();
+
+        mapPage.setInputEditTransportLineName("M5");
+        mapPage.getSelectOptionMetro().click();
+        mapPage.getButtonSave().click();
+
+        mapPage.ensureIsEditedTransportLine("M5");
+
+        assertThat(mapPage.numberOfTransportLines()).isEqualTo(beforeCount);
+        assertThat(mapPage.getTransportLines().get(0).getText()).contains("M5");
+    }
+
+    /**
+     * Test saving transport line with min length name
+     */
+    @Test
+    public void testSaveTransportLineWithMinLengthName() {
+
+        mapPage.ensureIsDisplayed();
+
+        mapPage.ensureIsDisplayedButtonEdit();
+
+        int beforeCount = mapPage.numberOfTransportLines();
+
+        mapPage.getEditButtonTransportLine().click();
+        mapPage.ensureIsDisplayedButtonSave();
+
+        mapPage.setInputEditTransportLineName("a");
+        mapPage.getSelectOptionMetro().click();
+        mapPage.getButtonSave().click();
+
+        assertThat(mapPage.numberOfTransportLines()).isEqualTo(beforeCount);
+        assertThat(mapPage.getTransportLines().get(0).getText()).contains("a");
+    }
+
+    /**
+     * Test saving transport line with not unique name
+     */
+    @Test
+    public void testSaveTransportLineNotUniqueName() {
+
+        mapPage.ensureIsDisplayed();
+
+        mapPage.ensureIsDisplayedButtonEdit();
+
+        int beforeCount = mapPage.numberOfTransportLines();
+
+        mapPage.getEditButtonTransportLine().click();
+        mapPage.ensureIsDisplayedButtonSave();
+
+        mapPage.setInputEditTransportLineName(mapPage.getTransportLines().get(1).getText());
+        mapPage.getSelectOptionMetro().click();
+        mapPage.getButtonSave().click();
+
+        mapPage.ensureIsDisplayedButtonEdit();
+
+        assertThat(mapPage.numberOfTransportLines()).isEqualTo(beforeCount);
+    }
+
+    /**
+     * Test saving transport line with long name
+     */
+    @Test
+    public void testSaveTransportLineWithLongName() {
+
+        mapPage.ensureIsDisplayed();
+
+        mapPage.ensureIsDisplayedButtonEdit();
+
+        int beforeCount = mapPage.numberOfTransportLines();
+
+        mapPage.getEditButtonTransportLine().click();
+        mapPage.ensureIsDisplayedButtonSave();
+
+        mapPage.setInputEditTransportLineName("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        mapPage.getSelectOptionMetro().click();
+        mapPage.getButtonSave().click();
+
+        mapPage.ensureIsDisplayedFirstError();
+
+        assertThat(mapPage.getSpanFirstError().getText())
+                .isEqualTo("Transport line name must be maximum 30 characters long!");
+        assertThat(mapPage.numberOfTransportLines()).isEqualTo(beforeCount);
+    }
+
+    /**
+     * Test valid station adding
+     */
+    @Test
+    public void testAddStation() {
+
+        mapPage.ensureIsDisplayed();
+
+        mapPage.ensureIsDisplayedButtonEdit();
+
+        int beforeCount = mapPage.numberOfStations();
+
+        mapPage.getButtonEdit().click();
+        mapPage.ensureIsDisplayedEditor();
+
+        mapPage.getButtonDraw().getLocation();
+        new Actions(browser).moveToElement(mapPage.getButtonDraw()).moveByOffset(300, 0)
+                .contextClick().build().perform();
+
+        mapPage.ensureIsDisplayedStationPopUp();
+        mapPage.getInputStationName().sendKeys("SB33");
+        mapPage.getButtonTypeBus().click();
+
+        mapPage.getButtonApply().click();
+
+        mapPage.ensureIsAddedStations(beforeCount, 1);
+        mapPage.ensureIsDisplayedButtonEdit();
+
+        assertThat(mapPage.numberOfStations()).isEqualTo(beforeCount + 1);
+    }
+
+    /**
+     * Test valid station editing
+     */
+    @Test
+    public void testEditStation() {
+
+        mapPage.ensureIsDisplayed();
+
+        mapPage.ensureIsDisplayedButtonEdit();
+
+        int beforeCount = mapPage.numberOfStations();
+
+        mapPage.getButtonEdit().click();
+        mapPage.ensureIsDisplayedEditor();
+
+        new Actions(browser).click(mapPage.getStationsOnEditMap().get(0)).build().perform();
+        mapPage.ensureIsDisplayedStationEditPopUp();
+
+        mapPage.setInputEditStationName("SB55");
+        mapPage.getButtonEditRenameStation().click();
+
+        mapPage.getButtonApply().click();
+
+        mapPage.ensureIsDisplayedButtonEdit();
+        mapPage.ensureIsDeletedStations(beforeCount, 0);
+
+        assertThat(mapPage.numberOfStations()).isEqualTo(beforeCount);
+    }
+
+    /**
+     * Test saving station with min length name
+     */
+    @Test
+    public void testSaveStationWithMinLengthName() {
+
+        mapPage.ensureIsDisplayed();
+
+        mapPage.ensureIsDisplayedButtonEdit();
+
+        int beforeCount = mapPage.numberOfStations();
+
+        mapPage.getButtonEdit().click();
+        mapPage.ensureIsDisplayedEditor();
+
+        new Actions(browser).click(mapPage.getStationsOnEditMap().get(0)).build().perform();
+        mapPage.ensureIsDisplayedStationEditPopUp();
+
+        mapPage.setInputEditStationName("aaa");
+        mapPage.getButtonEditRenameStation().click();
+
+        mapPage.getButtonApply().click();
+
+        mapPage.ensureIsDisplayedButtonEdit();
+        mapPage.ensureIsDeletedStations(beforeCount, 0);
+
+        assertThat(mapPage.numberOfStations()).isEqualTo(beforeCount);
+    }
+
+    /**
+     * Test saving station with max length name
+     */
+    @Test
+    public void testSaveStationWithMaxLengthName() {
+
+        mapPage.ensureIsDisplayed();
+
+        mapPage.ensureIsDisplayedButtonEdit();
+
+        int beforeCount = mapPage.numberOfStations();
+
+        mapPage.getButtonEdit().click();
+        mapPage.ensureIsDisplayedEditor();
+
+        new Actions(browser).click(mapPage.getStationsOnEditMap().get(0)).build().perform();
+        mapPage.ensureIsDisplayedStationEditPopUp();
+
+        mapPage.setInputEditStationName("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        mapPage.getButtonEditRenameStation().click();
+
+        mapPage.getButtonApply().click();
+
+        mapPage.ensureIsDisplayedButtonEdit();
+        mapPage.ensureIsDeletedStations(beforeCount, 0);
+
+        assertThat(mapPage.numberOfStations()).isEqualTo(beforeCount);
+    }
+
+    /**
+     * Test saving station with short name
+     */
+    @Test
+    public void testSaveStationWithShortName() {
+
+        mapPage.ensureIsDisplayed();
+
+        mapPage.ensureIsDisplayedButtonEdit();
+
+        int beforeCount = mapPage.numberOfStations();
+
+        mapPage.getButtonEdit().click();
+        mapPage.ensureIsDisplayedEditor();
+
+        new Actions(browser).click(mapPage.getStationsOnEditMap().get(0)).build().perform();
+        mapPage.ensureIsDisplayedStationEditPopUp();
+
+        mapPage.setInputEditStationName("S");
+        mapPage.getButtonEditRenameStation().click();
+
+        mapPage.getButtonApply().click();
+
+        mapPage.ensureIsDisplayedButtonEdit();
+        mapPage.ensureIsDeletedStations(beforeCount, 0);
+
+        assertThat(mapPage.numberOfStations()).isEqualTo(beforeCount);
+    }
+
+    /**
+     * Test saving station with long name
+     */
+    @Test
+    public void testSaveStationWithLongName() {
+
+        mapPage.ensureIsDisplayed();
+
+        mapPage.ensureIsDisplayedButtonEdit();
+
+        int beforeCount = mapPage.numberOfStations();
+
+        mapPage.getButtonEdit().click();
+        mapPage.ensureIsDisplayedEditor();
+
+        new Actions(browser).click(mapPage.getStationsOnEditMap().get(0)).build().perform();
+        mapPage.ensureIsDisplayedStationEditPopUp();
+
+        mapPage.setInputEditStationName("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        mapPage.getButtonEditRenameStation().click();
+
+        mapPage.getButtonApply().click();
+
+        mapPage.ensureIsDisplayedButtonEdit();
+        mapPage.ensureIsDeletedStations(beforeCount, 0);
+
+        assertThat(mapPage.numberOfStations()).isEqualTo(beforeCount);
+    }
+
+    /**
+     * Test valid station deletion
+     */
+    @Test
+    public void testRemoveStation() {
+
+        mapPage.ensureIsDisplayed();
+
+        mapPage.ensureIsDisplayedButtonEdit();
+
+        int beforeCount = mapPage.numberOfStations();
+
+        mapPage.getButtonEdit().click();
+        mapPage.ensureIsDisplayedEditor();
+
+        new Actions(browser).click(mapPage.getStationsOnEditMap().get(0)).build().perform();
+        mapPage.ensureIsDisplayedStationEditPopUp();
+
+        mapPage.getButtonEditDeleteStation().click();
+
+        mapPage.getButtonApply().click();
+
+        mapPage.ensureIsDeletedStations(beforeCount, 1);
+
+        assertThat(mapPage.numberOfStations()).isEqualTo(beforeCount - 1);
     }
 
     @After

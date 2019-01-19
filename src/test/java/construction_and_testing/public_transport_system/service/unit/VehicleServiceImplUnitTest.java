@@ -50,7 +50,7 @@ public class VehicleServiceImplUnitTest {
                 Vehicle vehicle = (Vehicle) arguments[0];
                 if (DEL_ID.equals(vehicle.getId())) {
                     DB_VEHICLES.forEach(vehicle1 -> {
-                        if (vehicle1.getId().equals(vehicle.getId())){
+                        if (vehicle1.getId().equals(vehicle.getId())) {
                             vehicle1.setActive(false);
                             DEL_VEHICLE = vehicle1;
                         }

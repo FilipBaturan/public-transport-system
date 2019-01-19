@@ -4,7 +4,6 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -25,10 +24,6 @@ public class VehiclePageTest {
 
     private WebDriver browser;
 
-    private WelcomePage welcomePage;
-
-    private NavigationBarPage navigationBarPage;
-
     private VehiclePage vehiclePage;
 
     @Before
@@ -41,31 +36,19 @@ public class VehiclePageTest {
         //navigate
         browser.navigate().to("http://localhost:4200");
 
-        welcomePage = PageFactory.initElements(browser, WelcomePage.class);
-        navigationBarPage = PageFactory.initElements(browser, NavigationBarPage.class);
+        WelcomePage welcomePage = PageFactory.initElements(browser, WelcomePage.class);
+        NavigationBarPage navigationBarPage = PageFactory.initElements(browser, NavigationBarPage.class);
         vehiclePage = PageFactory.initElements(browser, VehiclePage.class);
 
         welcomePage.ensureIsDisplayed();
         welcomePage.login("null", "null");
 
-        try {
-            Thread.sleep(3000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
-        navigationBarPage.ensureIsDisplayed();
+        navigationBarPage.ensureIsDisplayedLogout();
         navigationBarPage.getMapDropDown().click();
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        navigationBarPage.ensureIsDisplayedMapDropItems();
         navigationBarPage.getVehicleLink().click();
 
-
         assertThat("http://localhost:4200/vehicles").isEqualTo(browser.getCurrentUrl());
-
     }
 
     /**
@@ -75,7 +58,6 @@ public class VehiclePageTest {
     public void testAddVehicle() {
 
         vehiclePage.ensureIsDisplayed();
-
 
         int beforeCount = vehiclePage.numberOfVehicles();
 
@@ -89,17 +71,15 @@ public class VehiclePageTest {
         vehiclePage.setInputName("NS-B-023-R3");
         vehiclePage.getOptionBus().click();
 
-        String selectedTransportLineXPath = "/html/body/ngb-modal-window/div/div/div[2]/form/div[2]/div[2]/select/option[2]";
-        String selectedTransportLineName = browser.findElement(By.xpath(selectedTransportLineXPath)).getText();
-
-        browser.findElement(By.xpath(selectedTransportLineXPath)).click();
+        WebElement selectedTransportLine = vehiclePage.selectTransportLine(2);
+        String selectedTransportLineName = selectedTransportLine.getText();
+        selectedTransportLine.click();
         vehiclePage.getButtonSave().click();
 
         vehiclePage.ensureIsAdded(beforeCount);
 
-        // new vehicle card is placed at add card position
-        List<WebElement> allCardNames = browser.findElements(By.cssSelector("h4.card-title.text-center"));
-        List<WebElement> allCardCurrentLines = browser.findElements(By.cssSelector("div.card-body p.text-center"));
+        List<WebElement> allCardNames = vehiclePage.getVehicleNames();
+        List<WebElement> allCardCurrentLines = vehiclePage.getVehicleCurrentLines();
         WebElement newVehicleName = allCardNames.get(allCardNames.size() - 2);
         WebElement newVehicleCurrentLine = allCardCurrentLines.get(allCardCurrentLines.size() - 1);
 
@@ -107,7 +87,6 @@ public class VehiclePageTest {
         assertThat(newVehicleName.getText()).isEqualTo("NS-B-023-R3");
         assertThat(newVehicleCurrentLine.getText()).contains(selectedTransportLineName);
     }
-
 
 
     /**
@@ -118,33 +97,30 @@ public class VehiclePageTest {
 
         vehiclePage.ensureIsDisplayed();
 
-        vehiclePage.getButtonEditVehicle().click();
+        vehiclePage.getEditButton().click();
 
         vehiclePage.ensureIsDisplayedButtonSave();
         assertThat(vehiclePage.getInputName().isDisplayed()).isTrue();
         assertThat(vehiclePage.getInputType().isDisplayed()).isTrue();
         assertThat(vehiclePage.getInputCurrentLine().isDisplayed()).isTrue();
 
-        String beforeName = vehiclePage.getInputName().getText();
-
         vehiclePage.setInputName("NS-T-824-P7");
-        vehiclePage.getOptionTram().click();
+        vehiclePage.getOptionBus().click();
 
-        String selectedTransportLineXPath = "/html/body/ngb-modal-window/div/div/div[2]/form/div/select[2]/option[2]";
-        String selectedTransportLineName = browser.findElement(By.xpath(selectedTransportLineXPath)).getText();
-
-        browser.findElement(By.xpath(selectedTransportLineXPath)).click();
+        WebElement selectedTransportLine = vehiclePage.selectTransportLine(2);
+        String selectedTransportLineName = selectedTransportLine.getText();
+        selectedTransportLine.click();
         vehiclePage.getButtonSave().click();
 
-        vehiclePage.ensureIsEdited(beforeName);
+        vehiclePage.ensureIsEdited("NS-T-824-P7");
 
-        List<WebElement> allCardNames = browser.findElements(By.cssSelector("h4.card-title.text-center"));
-        List<WebElement> allCardCurrentLines = browser.findElements(By.cssSelector("div.card-body p.text-center"));
-        WebElement newVehicleName = allCardNames.get(1);
-        WebElement newVehicleCurrentLine = allCardCurrentLines.get(1);
+        List<WebElement> allCardNames = vehiclePage.getVehicleNames();
+        List<WebElement> allCardCurrentLines = vehiclePage.getVehicleCurrentLines();
+        WebElement editedVehicleName = allCardNames.get(0);
+        WebElement editedVehicleCurrentLine = allCardCurrentLines.get(0);
 
-        assertThat(newVehicleName.getText()).isEqualTo("NS-T-824-P7");
-        assertThat(newVehicleCurrentLine.getText()).contains(selectedTransportLineName);
+        assertThat(editedVehicleName.getText()).isEqualTo("NS-T-824-P7");
+        assertThat(editedVehicleCurrentLine.getText()).contains(selectedTransportLineName);
     }
 
     /**
@@ -156,13 +132,15 @@ public class VehiclePageTest {
         vehiclePage.ensureIsDisplayed();
 
         int beforeCount = vehiclePage.numberOfVehicles();
+        String beforeName = vehiclePage.getVehicleNames().get(vehiclePage.getDeleteButtons().size() - 1).getText();
 
-        vehiclePage.getButtonDeleteVehicle().click();
+        vehiclePage.getDeleteButtons().get(vehiclePage.getDeleteButtons().size() - 1).click();
 
         vehiclePage.ensureIsRemoved(beforeCount);
 
         assertThat(vehiclePage.numberOfVehicles()).isEqualTo(beforeCount - 1);
-        assertThat(vehiclePage.getDeleteNameVehicle().getText()).isNotEqualTo("NS-T-824-P7");
+        assertThat(vehiclePage.getVehicleNames().get(vehiclePage.getVehicleNames().size() - 1).getText())
+                .isNotEqualTo(beforeName);
     }
 
     /**
@@ -185,17 +163,15 @@ public class VehiclePageTest {
         vehiclePage.setInputName("aaa");
         vehiclePage.getOptionBus().click();
 
-        String selectedTransportLineXPath = "/html/body/ngb-modal-window/div/div/div[2]/form/div/select[2]/option[3]";
-        String selectedTransportLineName = browser.findElement(By.xpath(selectedTransportLineXPath)).getText();
-
-        browser.findElement(By.xpath(selectedTransportLineXPath)).click();
+        WebElement selectedTransportLine = vehiclePage.selectTransportLine(2);
+        String selectedTransportLineName = selectedTransportLine.getText();
+        selectedTransportLine.click();
         vehiclePage.getButtonSave().click();
 
         vehiclePage.ensureIsAdded(beforeCount);
 
-        // new vehicle card is placed at add card position
-        List<WebElement> allCardNames = browser.findElements(By.cssSelector("h4.card-title.text-center"));
-        List<WebElement> allCardCurrentLines = browser.findElements(By.cssSelector("div.card-body p.text-center"));
+        List<WebElement> allCardNames = vehiclePage.getVehicleNames();
+        List<WebElement> allCardCurrentLines = vehiclePage.getVehicleCurrentLines();
         WebElement newVehicleName = allCardNames.get(allCardNames.size() - 2);
         WebElement newVehicleCurrentLine = allCardCurrentLines.get(allCardCurrentLines.size() - 1);
 
@@ -224,17 +200,16 @@ public class VehiclePageTest {
         vehiclePage.setInputName("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         vehiclePage.getOptionBus().click();
 
-        String selectedTransportLineXPath = "/html/body/ngb-modal-window/div/div/div[2]/form/div/select[2]/option[3]";
-        String selectedTransportLineName = browser.findElement(By.xpath(selectedTransportLineXPath)).getText();
-
-        browser.findElement(By.xpath(selectedTransportLineXPath)).click();
+        WebElement selectedTransportLine = vehiclePage.selectTransportLine(3);
+        String selectedTransportLineName = selectedTransportLine.getText();
+        selectedTransportLine.click();
         vehiclePage.getButtonSave().click();
 
         vehiclePage.ensureIsAdded(beforeCount);
 
         // new vehicle card is placed at add card position
-        List<WebElement> allCardNames = browser.findElements(By.cssSelector("h4.card-title.text-center"));
-        List<WebElement> allCardCurrentLines = browser.findElements(By.cssSelector("div.card-body p.text-center"));
+        List<WebElement> allCardNames = vehiclePage.getVehicleNames();
+        List<WebElement> allCardCurrentLines = vehiclePage.getVehicleCurrentLines();
         WebElement newVehicleName = allCardNames.get(allCardNames.size() - 2);
         WebElement newVehicleCurrentLine = allCardCurrentLines.get(allCardCurrentLines.size() - 1);
 
@@ -265,8 +240,8 @@ public class VehiclePageTest {
         vehiclePage.ensureIsDisplayedFirstError();
         vehiclePage.ensureIsDisplayedSecondError();
 
-        assertThat(vehiclePage.getSpanFirstError().getText()).isEqualTo("Vehicle name is required!");
-        assertThat(vehiclePage.getSpanSecondError().getText()).isEqualTo("Vehicle type is required!");
+        assertThat(vehiclePage.getSpanNameError().getText()).isEqualTo("Vehicle name is required!");
+        assertThat(vehiclePage.getSpanVehicleTypeError().getText()).isEqualTo("Vehicle type is required!");
         vehiclePage.getSpanExitModalForm().click();
         assertThat(vehiclePage.numberOfVehicles()).isEqualTo(beforeCount);
     }
@@ -294,7 +269,7 @@ public class VehiclePageTest {
         vehiclePage.getButtonSave().click();
         vehiclePage.ensureIsDisplayedFirstError();
 
-        assertThat(vehiclePage.getSpanFirstError().getText()).isEqualTo("Vehicle name is required!");
+        assertThat(vehiclePage.getSpanNameError().getText()).isEqualTo("Vehicle name is required!");
         vehiclePage.getSpanExitModalForm().click();
         assertThat(vehiclePage.numberOfVehicles()).isEqualTo(beforeCount);
     }
@@ -322,7 +297,7 @@ public class VehiclePageTest {
         vehiclePage.getButtonSave().click();
         vehiclePage.ensureIsDisplayedFirstError();
 
-        assertThat(vehiclePage.getSpanFirstError().getText())
+        assertThat(vehiclePage.getSpanNameError().getText())
                 .isEqualTo("Vehicle name must be at least 3 characters long!");
         vehiclePage.getSpanExitModalForm().click();
         assertThat(vehiclePage.numberOfVehicles()).isEqualTo(beforeCount);
@@ -351,7 +326,7 @@ public class VehiclePageTest {
         vehiclePage.getButtonSave().click();
         vehiclePage.ensureIsDisplayedFirstError();
 
-        assertThat(vehiclePage.getSpanFirstError().getText())
+        assertThat(vehiclePage.getSpanNameError().getText())
                 .isEqualTo("Vehicle name must be maximum 30 characters long!");
         vehiclePage.getSpanExitModalForm().click();
         assertThat(vehiclePage.numberOfVehicles()).isEqualTo(beforeCount);
@@ -377,9 +352,9 @@ public class VehiclePageTest {
         vehiclePage.getInputName().sendKeys("NS-B-023-R3");
 
         vehiclePage.getButtonSave().click();
-        vehiclePage.ensureIsDisplayedFirstError();
+        vehiclePage.ensureIsDisplayedSecondError();
 
-        assertThat(vehiclePage.getSpanFirstError().getText()).isEqualTo("Vehicle type is required!");
+        assertThat(vehiclePage.getSpanVehicleTypeError().getText()).isEqualTo("Vehicle type is required!");
         vehiclePage.getSpanExitModalForm().click();
         assertThat(vehiclePage.numberOfVehicles()).isEqualTo(beforeCount);
     }

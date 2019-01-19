@@ -2,6 +2,7 @@ package construction_and_testing.public_transport_system.service.integration;
 
 import construction_and_testing.public_transport_system.domain.TransportLine;
 import construction_and_testing.public_transport_system.domain.Zone;
+import construction_and_testing.public_transport_system.repository.ZoneRepository;
 import construction_and_testing.public_transport_system.service.definition.ZoneService;
 import construction_and_testing.public_transport_system.util.GeneralException;
 import org.junit.Test;
@@ -26,6 +27,8 @@ public class ZoneServiceImplIntegrationTest {
     @Autowired
     private ZoneService zoneService;
 
+    @Autowired
+    private ZoneRepository zoneRepository;
 
     /**
      * Test get all zone from database
@@ -83,7 +86,6 @@ public class ZoneServiceImplIntegrationTest {
         assertThat(dbZone.getName()).isEqualTo(zone.getName());
         assertThat(dbZone.isActive()).isEqualTo(zone.isActive());
         assertThat(dbZone.getLines()).isEqualTo(zone.getLines());
-
     }
 
     /**
@@ -105,6 +107,18 @@ public class ZoneServiceImplIntegrationTest {
         assertThat(dbZone.isActive()).isEqualTo(zone.isActive());
         assertThat(dbZone.getLines()).isEqualTo(zone.getLines());
 
+    }
+
+    /**
+     * Test with transport lines
+     */
+    @Test(expected = GeneralException.class)
+    @Transactional
+    public void saveWithLinesNoDefaultZone() {
+        zoneRepository.deleteById(1L);
+        Zone zone = new Zone(DB_ID, NEW_NAME, new HashSet<>(), true);
+        zone.getLines().forEach((TransportLine t) -> t.setZone(zone));
+        zoneService.save(zone);
     }
 
     /**
@@ -254,5 +268,15 @@ public class ZoneServiceImplIntegrationTest {
     @Transactional
     public void removeDefaultZone() {
         zoneService.remove(DEFAULT_ZONE_ID);
+    }
+
+    /**
+     * Test zone deletion when default does not exist
+     */
+    @Test(expected = GeneralException.class)
+    @Transactional
+    public void removeZoneNoDefault() {
+        zoneRepository.deleteById(1L);
+        zoneService.remove(DEL_ID);
     }
 }

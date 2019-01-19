@@ -25,7 +25,9 @@ public class WelcomePage {
     @FindBy(xpath = "//*[@id=\"sidebar\"]/ul[2]/li/a")
     private WebElement logoutButton;
 
-    public WelcomePage(WebDriver driver) { this.driver = driver; }
+    public WelcomePage(WebDriver driver) {
+        this.driver = driver;
+    }
 
     public WebElement getLoginButton() {
         return logInButton;
@@ -39,14 +41,16 @@ public class WelcomePage {
         return inputPassword;
     }
 
-    public WebElement getLogoutButton() { return logoutButton; }
+    public WebElement getLogoutButton() {
+        return logoutButton;
+    }
 
     public void ensureLogoutDisplayed() {
         (new WebDriverWait(driver, 10))
                 .until(ExpectedConditions.visibilityOf(logoutButton));
     }
 
-    public void login(String username, String password){
+    public void login(String username, String password) {
         setInputUsername(username);
         setInputPassword(password);
         getButtonSignIn().click();

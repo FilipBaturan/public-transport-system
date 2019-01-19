@@ -2,7 +2,7 @@ package construction_and_testing.public_transport_system.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import construction_and_testing.public_transport_system.converter.TransportLineConverter;
-import construction_and_testing.public_transport_system.domain.DTO.TransportLineColletionDTO;
+import construction_and_testing.public_transport_system.domain.DTO.TransportLineCollectionDTO;
 import construction_and_testing.public_transport_system.domain.DTO.TransportLineDTO;
 import construction_and_testing.public_transport_system.domain.TransportLine;
 import construction_and_testing.public_transport_system.service.definition.TransportLineService;
@@ -88,7 +88,7 @@ public class TransportLineController extends ValidationController {
         ObjectMapper mapper = new ObjectMapper();
         return new ResponseEntity<>(TransportLineConverter.fromEntityList(transportLineService
                 .replaceAll(TransportLineConverter.toEntityList(
-                        mapper.readValue(transportLines, TransportLineColletionDTO.class).getTransportLines(),
+                        mapper.readValue(transportLines, TransportLineCollectionDTO.class).getTransportLines(),
                         TransportLine::new)), TransportLineDTO::new), HttpStatus.OK);
     }
 

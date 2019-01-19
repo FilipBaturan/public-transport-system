@@ -64,7 +64,9 @@ public class RegUsersPage {
         return denyButton;
     }
 
-    public WebElement getTitle() { return title; }
+    public WebElement getTitle() {
+        return title;
+    }
 
     public void ensureTitleIsDisplayed() {
         (new WebDriverWait(driver, 10))

@@ -37,6 +37,7 @@ public class LoggedUserDTO {
         this.active = entity.isActive();
         this.telephone = entity.getTelephone();
     }
+
     public Long getId() {
         return id;
     }

@@ -21,7 +21,6 @@ public class ReportPageTest {
     private ReportPage reportPage;
 
 
-
     @BeforeMethod
     public void setupSelenium() {
         //instantiate browser
@@ -44,7 +43,7 @@ public class ReportPageTest {
     }
 
     @Test
-    public void gettingReport(){
+    public void gettingReport() {
 
         assertEquals("http://localhost:4200/reports", browser.getCurrentUrl());
 

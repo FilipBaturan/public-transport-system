@@ -81,11 +81,11 @@ public class SchedulePage {
                 .until(ExpectedConditions.elementToBeClickable(scheduleTable));
     }
 
-    public int getNumOfRows(){
+    public int getNumOfRows() {
         return driver.findElements(By.cssSelector("mat-row")).size();
     }
 
-    public int getNumOfColumns(){
+    public int getNumOfColumns() {
         return driver.findElements(By.cssSelector("mat-header-cell")).size();
     }
 

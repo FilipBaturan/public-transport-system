@@ -102,22 +102,17 @@ public class TransportLineServiceImpl implements TransportLineService {
         List<Schedule> associatedSchedules = new ArrayList<>();
         List<Schedule> schedules = scheduleRepository.findAll(); // all schedules in database
         List<TransportLine> dbTransportLines = transportLineRepository.findAll(); // all transport lines in database
-
-        this.validateSchedule(transportLines, schedules, associatedSchedules);
-        this.filterAndRemoveUnassociatedSchedules(schedules, associatedSchedules);
-        this.associateDefaultZoneToNewTransportLines(transportLines);
-        this.filterAssociatedTransportLines(dbTransportLines, transportLines);
-        if (!dbTransportLines.isEmpty()) {
-            this.removeVehiclesFromTransportLines(dbTransportLines);
-            this.removeTicketsFromTransportLines(dbTransportLines);
-        }
-
-
         try {
+            this.validateSchedule(transportLines, schedules, associatedSchedules);
+            this.filterAndRemoveUnassociatedSchedules(schedules, associatedSchedules);
+            this.associateDefaultZoneToNewTransportLines(transportLines);
+            this.filterAssociatedTransportLines(dbTransportLines, transportLines);
+            if (!dbTransportLines.isEmpty()) {
+                this.removeVehiclesFromTransportLines(dbTransportLines);
+                this.removeTicketsFromTransportLines(dbTransportLines);
+            }
             transportLineRepository.deleteAll(dbTransportLines);
             return transportLineRepository.saveAll(transportLines);
-        } catch (DataIntegrityViolationException e) {
-            throw new GeneralException("Transport line with given name already exist!", HttpStatus.BAD_REQUEST);
         } catch (RuntimeException e) { // PersistentObjectException handled
             throw new GeneralException("Transport lines have invalid schedule or position associated!",
                     HttpStatus.BAD_REQUEST);
@@ -228,8 +223,7 @@ public class TransportLineServiceImpl implements TransportLineService {
      */
     private void associateDefaultZoneToNewTransportLines(Iterable<TransportLine> transportLines) {
         // associate new transport lines with default zone
-        Zone defaultZone = zoneRepository.findById(1L).orElseThrow(
-                () -> new GeneralException("Default zone does not exist!", HttpStatus.INTERNAL_SERVER_ERROR));
+        @SuppressWarnings("OptionalGetWithoutIsPresent") Zone defaultZone = zoneRepository.findById(1L).get();
         transportLines.forEach(transportLine -> {
             if (transportLine.getZone() == null || transportLine.getZone().getId() == null) {
                 transportLine.setZone(defaultZone);
@@ -327,6 +321,17 @@ public class TransportLineServiceImpl implements TransportLineService {
      * @param transportLines that need to be validated
      */
     private void validate(Iterable<TransportLine> transportLines) {
+        this.validateUnique(transportLines);
         transportLines.forEach(this::validate);
+    }
+
+    private void validateUnique(Iterable<TransportLine> transportLines) {
+        List<String> names = new ArrayList<>();
+        transportLines.forEach(transportLine -> {
+            if (names.contains(transportLine.getName())) {
+                throw new GeneralException("Transport line with given name already exist!", HttpStatus.BAD_REQUEST);
+            }
+            names.add(transportLine.getName());
+        });
     }
 }

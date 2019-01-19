@@ -46,8 +46,7 @@ public class UnconfirmedUsersPageTest {
     }
 
     @Test
-    public void checkUsersDocuments()
-    {
+    public void checkUsersDocuments() {
         unconfirmedUsersPage.ensureTableIsDisplayed();
         assertEquals("http://localhost:4200/unconfirmedUsers", browser.getCurrentUrl());
         unconfirmedUsersPage.getCheckLink().click();
@@ -69,7 +68,7 @@ public class UnconfirmedUsersPageTest {
         unconfirmedUsersPage.ensureTableIsDisplayed();
         assertEquals("http://localhost:4200/unconfirmedUsers", browser.getCurrentUrl());
 
-        int sizeBeforeAdding =  unconfirmedUsersPage.getTableSize();
+        int sizeBeforeAdding = unconfirmedUsersPage.getTableSize();
         unconfirmedUsersPage.getAcceptButton().click();
 
         unconfirmedUsersPage.ensureIsChanged(sizeBeforeAdding, -1);
@@ -83,7 +82,7 @@ public class UnconfirmedUsersPageTest {
         assertEquals("http://localhost:4200/unconfirmedUsers", browser.getCurrentUrl());
         unconfirmedUsersPage.ensureTableIsDisplayed();
 
-        int sizeBeforeAdding =  unconfirmedUsersPage.getTableSize();
+        int sizeBeforeAdding = unconfirmedUsersPage.getTableSize();
         unconfirmedUsersPage.getDenyButton().click();
 
         unconfirmedUsersPage.ensureIsChanged(sizeBeforeAdding, -1);

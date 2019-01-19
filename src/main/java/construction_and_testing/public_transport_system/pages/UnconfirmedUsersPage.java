@@ -7,8 +7,6 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.List;
-
 public class UnconfirmedUsersPage {
 
     private WebDriver driver;
@@ -25,8 +23,7 @@ public class UnconfirmedUsersPage {
     @FindBy(xpath = "//*[@id=\"uncUsersTable\"]/tbody/tr[1]/td[7]")
     private WebElement denyButton;
 
-    public UnconfirmedUsersPage(WebDriver driver)
-    {
+    public UnconfirmedUsersPage(WebDriver driver) {
         this.driver = driver;
     }
 
@@ -34,12 +31,10 @@ public class UnconfirmedUsersPage {
         return table;
     }
 
-    public int getTableSize(){
+    public int getTableSize() {
         try {
             return getTable().findElements(By.tagName("tr")).size();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             // header
             return 1;
         }
@@ -57,10 +52,16 @@ public class UnconfirmedUsersPage {
                         By.cssSelector("tr"), numberOfTickets + change));
     }
 
-    public WebElement getCheckLink(){ return checkLink; }
+    public WebElement getCheckLink() {
+        return checkLink;
+    }
 
-    public WebElement getAcceptButton() { return acceptButton; }
+    public WebElement getAcceptButton() {
+        return acceptButton;
+    }
 
-    public WebElement getDenyButton() { return denyButton; }
+    public WebElement getDenyButton() {
+        return denyButton;
+    }
 
 }

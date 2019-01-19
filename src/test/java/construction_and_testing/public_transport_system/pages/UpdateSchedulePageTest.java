@@ -9,7 +9,6 @@ import org.testng.annotations.Test;
 
 import static construction_and_testing.public_transport_system.pages.util.SeleniumProperties.CHROME_DRIVER_PATH;
 import static org.testng.AssertJUnit.assertEquals;
-import static org.testng.AssertJUnit.assertNull;
 
 public class UpdateSchedulePageTest {
 
@@ -83,11 +82,11 @@ public class UpdateSchedulePageTest {
 
         //schedulePage.ensureIsDisplayedCell1();
 
-        int numRows = schedulePage.getNumOfRows();  
+        int numRows = schedulePage.getNumOfRows();
         int numColumns = schedulePage.getNumOfColumns();
 
-        assertEquals(7,numRows);
-        assertEquals(3,numColumns);
+        assertEquals(7, numRows);
+        assertEquals(3, numColumns);
 
         assertEquals("R1-WORKDAY", schedulePage.getHeader1().getText());
 

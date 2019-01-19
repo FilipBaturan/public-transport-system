@@ -1,7 +1,6 @@
 package construction_and_testing.public_transport_system.service.unit;
 
 import construction_and_testing.public_transport_system.domain.Schedule;
-import construction_and_testing.public_transport_system.domain.TransportLine;
 import construction_and_testing.public_transport_system.repository.ScheduleRepository;
 import construction_and_testing.public_transport_system.repository.TransportLineRepository;
 import construction_and_testing.public_transport_system.service.implementation.ScheduleServiceImpl;
@@ -21,7 +20,6 @@ import java.util.List;
 import java.util.Optional;
 
 import static construction_and_testing.public_transport_system.constants.ScheduleConstants.*;
-import static construction_and_testing.public_transport_system.constants.TransportLineConstants.DEL_ID;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;

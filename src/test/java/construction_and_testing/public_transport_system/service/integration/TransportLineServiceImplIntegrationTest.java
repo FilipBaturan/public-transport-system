@@ -9,12 +9,14 @@ import construction_and_testing.public_transport_system.domain.enums.VehicleType
 import construction_and_testing.public_transport_system.repository.ScheduleRepository;
 import construction_and_testing.public_transport_system.repository.TicketRepository;
 import construction_and_testing.public_transport_system.repository.VehicleRepository;
+import construction_and_testing.public_transport_system.repository.ZoneRepository;
 import construction_and_testing.public_transport_system.service.definition.TransportLineService;
 import construction_and_testing.public_transport_system.util.GeneralException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -43,6 +45,10 @@ public class TransportLineServiceImplIntegrationTest {
 
     @Autowired
     private TicketRepository ticketRepository;
+
+    @Autowired
+    private ZoneRepository zoneRepository;
+
 
     /**
      * Test get all stations from database
@@ -122,7 +128,7 @@ public class TransportLineServiceImplIntegrationTest {
     public void saveTransportLineWithUpdatedType() {
         TransportLine transportLine =
                 new TransportLine(DB_ID, DB_NAME, VehicleType.METRO,
-                        DB_POSITION, new HashSet<>() , DB_ZONE, true);
+                        DB_POSITION, new HashSet<>(), DB_ZONE, true);
         transportLine.getPositions().setTransportLine(transportLine);
 
         Schedule schedule1 = new Schedule(100L, transportLine, DayOfWeek.WORKDAY, new ArrayList<String>() {{
@@ -332,6 +338,16 @@ public class TransportLineServiceImplIntegrationTest {
     }
 
     /**
+     * Test replacement when default zone does not exist
+     */
+    @Test(expected = DataIntegrityViolationException.class)
+    @Transactional
+    public void replaceAllNoDefaultZone() {
+        zoneRepository.deleteById(1L);
+        transportLineService.replaceAll(NEW_TRANSPORT_LINES);
+    }
+
+    /**
      * Test with schedule associated to wrong transport line
      */
     @Test(expected = GeneralException.class)
@@ -370,6 +386,14 @@ public class TransportLineServiceImplIntegrationTest {
         transportLines.forEach(transportLine -> assertThat(transportLine.getSchedule().size()).isEqualTo(0));
         vehicleRepository.findAll().forEach(vehicle -> assertThat(vehicle.getCurrentLine()).isNull());
         assertThat(ticketRepository.findAll().size()).isEqualTo(0);
+    }
+
+    /**
+     * Test replacement transport lines with duplicate name
+     */
+    @Test(expected = GeneralException.class)
+    public void replaceAllWithNotUniqueName() {
+        transportLineService.replaceAll(NEW_TRANSPORT_LINES_NOT_UNIQUE_NAME);
     }
 
     /**

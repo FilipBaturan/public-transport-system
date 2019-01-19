@@ -58,12 +58,12 @@ public class ImageServiceTest {
         int beforeCount = Objects.requireNonNull(new File(this.destinationFolder).listFiles()).length;
 
         ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
-        ImageIO.write(new BufferedImage(320, 240, BufferedImage.TYPE_BYTE_GRAY), "png", byteArray );
+        ImageIO.write(new BufferedImage(320, 240, BufferedImage.TYPE_BYTE_GRAY), "png", byteArray);
         byteArray.flush();
         byte[] imageInByte = byteArray.toByteArray();
         byteArray.close();
 
-        String image =  imageService.uploadImage(new MockMultipartFile("image", "image.png",
+        String image = imageService.uploadImage(new MockMultipartFile("image", "image.png",
                 "multipart-form-data", imageInByte));
         assertThat(image).isEqualTo("img_1_1.png");
         assertThat(Objects.requireNonNull(new File(this.destinationFolder).listFiles()).length)
@@ -79,12 +79,12 @@ public class ImageServiceTest {
         int beforeCount = Objects.requireNonNull(new File(this.destinationFolder).listFiles()).length;
 
         ByteArrayOutputStream byteArray = new ByteArrayOutputStream();
-        ImageIO.write(new BufferedImage(320, 240, BufferedImage.TYPE_BYTE_GRAY), "png", byteArray );
+        ImageIO.write(new BufferedImage(320, 240, BufferedImage.TYPE_BYTE_GRAY), "png", byteArray);
         byteArray.flush();
         byte[] imageInByte = byteArray.toByteArray();
         byteArray.close();
 
-        String image =  imageService.uploadImage(new MockMultipartFile("image", "image.png",
+        String image = imageService.uploadImage(new MockMultipartFile("image", "image.png",
                 "multipart-form-data", imageInByte));
         assertThat(image).isEqualTo("img_2_2.png");
         assertThat(Objects.requireNonNull(new File(this.destinationFolder).listFiles()).length)
@@ -106,7 +106,7 @@ public class ImageServiceTest {
     @Test(expected = GeneralException.class)
     public void testUploadImageWithInvalidImageFormat() {
         imageService.uploadImage(new MockMultipartFile("image", "image.cl",
-                "multipart-form-data",  new byte[1]));
+                "multipart-form-data", new byte[1]));
     }
 
     /**
@@ -148,7 +148,7 @@ public class ImageServiceTest {
     }
 
     /**
-     * Test get image with null name
+     * Test get image with empty name
      */
     @Test(expected = GeneralException.class)
     public void testGetImageWithEmptyName() {

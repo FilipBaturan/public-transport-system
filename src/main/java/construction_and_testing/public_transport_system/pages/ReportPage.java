@@ -27,13 +27,21 @@ public class ReportPage {
         this.driver = driver;
     }
 
-    public WebElement getNumOfTicketsSold() { return numOfTicketsSold; }
+    public WebElement getNumOfTicketsSold() {
+        return numOfTicketsSold;
+    }
 
-    public WebElement getShowPriceButton() { return showPriceButton; }
+    public WebElement getShowPriceButton() {
+        return showPriceButton;
+    }
 
-    public WebElement getWeeklyChart() { return weeklyChart; }
+    public WebElement getWeeklyChart() {
+        return weeklyChart;
+    }
 
-    public WebElement getMontlyChart() { return montlyChart; }
+    public WebElement getMontlyChart() {
+        return montlyChart;
+    }
 
 
     public void ensureIsDisplayed() {

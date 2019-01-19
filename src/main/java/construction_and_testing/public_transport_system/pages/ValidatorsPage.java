@@ -8,8 +8,6 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
-import java.util.List;
-
 public class ValidatorsPage {
 
     private WebDriver driver;
@@ -65,9 +63,13 @@ public class ValidatorsPage {
         this.driver = driver;
     }
 
-    public WebElement getChangeButton() { return changeButton; }
+    public WebElement getChangeButton() {
+        return changeButton;
+    }
 
-    public WebElement getBlockButton() { return blockButton; }
+    public WebElement getBlockButton() {
+        return blockButton;
+    }
 
     public WebElement getAddButton() {
         return addButton;
@@ -91,13 +93,12 @@ public class ValidatorsPage {
         return formAddButton;
     }
 
-    public WebElement getTable()
-    {
+    public WebElement getTable() {
         return table;
     }
 
 
-    public int getTableSize(){
+    public int getTableSize() {
 
         return getTable().findElements(By.tagName("tr")).size();
 

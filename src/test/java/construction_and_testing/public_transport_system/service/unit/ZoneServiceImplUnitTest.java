@@ -50,7 +50,7 @@ public class ZoneServiceImplUnitTest {
                     throw new DataIntegrityViolationException("");
                 } else if (zone.getName().equals(DEL_NAME)) {
                     DB_ZONES.forEach(zone1 -> {
-                        if (zone.getName().equals(zone1.getName())){
+                        if (zone.getName().equals(zone1.getName())) {
                             zone1.setActive(false);
                             DEL_ZONE = zone1;
                         }
@@ -71,7 +71,8 @@ public class ZoneServiceImplUnitTest {
         });
 
         Mockito.when(zoneRepository.findById(DB_ID)).thenReturn(Optional.of(DB_ZONE)).thenReturn(Optional.of(DEL_ZONE));
-        Mockito.when(zoneRepository.findById(DEFAULT_ZONE_ID)).thenReturn(Optional.of(new Zone(DEFAULT_ZONE_ID)));
+        Mockito.when(zoneRepository.findById(DEFAULT_ZONE_ID)).thenReturn(Optional.of(
+                new Zone(DEFAULT_ZONE_ID, "Novi Sad", new HashSet<>(), true)));
         Mockito.when(zoneRepository.findById(DEL_ID_INVALID)).thenThrow(GeneralException.class);
     }
 
@@ -188,13 +189,13 @@ public class ZoneServiceImplUnitTest {
      */
     @Test
     public void saveWithMinLengthName() {
-        Zone zone = new Zone(DB_ID, NEW_NAME_MIN_LENGTH, DB_TR_SAT, true);
+        Zone zone = new Zone(null, NEW_NAME_MIN_LENGTH, DB_TR_SAT, true);
         zone.getLines().forEach(transportLine -> transportLine.setZone(zone));
         int countBefore = zoneService.getAll().size();
 
         Zone dbZone = zoneService.save(zone);
-        assertThat(zoneService.getAll().size()).isEqualTo(countBefore);
-        assertThat(dbZone.getId()).isEqualTo(DB_ID);
+        assertThat(zoneService.getAll().size()).isEqualTo(countBefore + 1);
+        assertThat(dbZone.getId()).isEqualTo(NEW_ID);
         assertThat(dbZone.getName()).isEqualTo(zone.getName());
         assertThat(dbZone.getLines()).isEqualTo(zone.getLines());
         assertThat(dbZone.isActive()).isEqualTo(zone.isActive());

@@ -4,8 +4,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import construction_and_testing.public_transport_system.converter.ScheduleConverter;
 import construction_and_testing.public_transport_system.domain.DTO.ScheduleDTO;
 import construction_and_testing.public_transport_system.domain.Schedule;
-import construction_and_testing.public_transport_system.domain.User;
-import construction_and_testing.public_transport_system.domain.enums.AuthorityType;
 import construction_and_testing.public_transport_system.domain.enums.DayOfWeek;
 import construction_and_testing.public_transport_system.service.definition.ScheduleService;
 import construction_and_testing.public_transport_system.service.definition.TransportLineService;
@@ -20,10 +18,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/schedule")
@@ -81,7 +77,7 @@ public class ScheduleController extends ValidationController {
     /**
      * GET /api/schedule/findByTransportLineId/{id}
      *
-     * @param id        of a transport lines for which a schedule is requested
+     * @param id of a transport lines for which a schedule is requested
      * @return schedule for a transport line with requested id
      */
     @GetMapping("/findByTransportLineId/{id}")

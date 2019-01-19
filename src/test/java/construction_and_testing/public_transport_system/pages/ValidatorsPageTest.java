@@ -1,21 +1,13 @@
 package construction_and_testing.public_transport_system.pages;
 
-import org.h2.store.Page;
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.PageFactory;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.WebDriverWait;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
-import javax.transaction.Transactional;
-
 import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.TimeUnit;
 
 import static construction_and_testing.public_transport_system.pages.util.SeleniumProperties.CHROME_DRIVER_PATH;
 import static org.assertj.core.api.Java6Assertions.assertThat;
@@ -28,7 +20,7 @@ public class ValidatorsPageTest {
 
     private WelcomePage welcomePage;
 
-    private  NavigationBarPage navigationBarPage;
+    private NavigationBarPage navigationBarPage;
 
     private ValidatorsPage validatorsPage;
 
@@ -46,7 +38,7 @@ public class ValidatorsPageTest {
         navigationBarPage = PageFactory.initElements(browser, NavigationBarPage.class);
         validatorsPage = PageFactory.initElements(browser, ValidatorsPage.class);
 
-        welcomePage.login("b","b");
+        welcomePage.login("b", "b");
         navigationBarPage.getUsersField().click();
         navigationBarPage.getValidatorsLink().click();
 
@@ -57,7 +49,7 @@ public class ValidatorsPageTest {
 
         assertEquals("http://localhost:4200/validators", browser.getCurrentUrl());
         validatorsPage.ensureTableIsDisplayed();
-        int sizeBeforeAdding =  validatorsPage.getTableSize();
+        int sizeBeforeAdding = validatorsPage.getTableSize();
         validatorsPage.ensureButtonIsDisplayed();
         validatorsPage.getAddButton().click();
         assertThat(validatorsPage.getForm().isDisplayed());
@@ -80,7 +72,7 @@ public class ValidatorsPageTest {
 
         assertEquals("http://localhost:4200/validators", browser.getCurrentUrl());
         validatorsPage.ensureTableIsDisplayed();
-        int sizeBeforeAdding =  validatorsPage.getTableSize();
+        int sizeBeforeAdding = validatorsPage.getTableSize();
         validatorsPage.ensureButtonIsDisplayed();
         validatorsPage.getAddButton().click();
         assertTrue(validatorsPage.getForm().isDisplayed());
@@ -95,11 +87,10 @@ public class ValidatorsPageTest {
     }
 
     @Test
-    public void blockValidator()
-    {
+    public void blockValidator() {
         assertEquals("http://localhost:4200/validators", browser.getCurrentUrl());
         validatorsPage.ensureTableIsDisplayed();
-        int sizeBeforeAdding =  validatorsPage.getTableSize();
+        int sizeBeforeAdding = validatorsPage.getTableSize();
         validatorsPage.getBlockButton().click();
         validatorsPage.ensureIsChanged(sizeBeforeAdding, -1);
 
@@ -112,7 +103,7 @@ public class ValidatorsPageTest {
     public void changeValidator() throws InterruptedException {
         assertEquals("http://localhost:4200/validators", browser.getCurrentUrl());
         validatorsPage.ensureTableIsDisplayed();
-        int sizeBeforeAdding =  validatorsPage.getTableSize();
+        int sizeBeforeAdding = validatorsPage.getTableSize();
         validatorsPage.getChangeButton().click();
 
         int mNum = ThreadLocalRandom.current().nextInt(0, 1000 + 1);

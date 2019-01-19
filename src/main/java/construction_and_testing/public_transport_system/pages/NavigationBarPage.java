@@ -59,6 +59,11 @@ public class NavigationBarPage {
                 .until(ExpectedConditions.elementToBeClickable(mapDropDown));
     }
 
+    public void ensureIsDisplayedMapDropItems() {
+        (new WebDriverWait(driver, 10))
+                .until(ExpectedConditions.elementToBeClickable(vehicleLink));
+    }
+
     public void ensureIsDisplayedLogout() {
         (new WebDriverWait(driver, 10))
                 .until(ExpectedConditions.elementToBeClickable(buttonLogout));
@@ -93,11 +98,11 @@ public class NavigationBarPage {
         return buttonLogout;
     }
 
-    public WebElement getValidatorsLink(){
+    public WebElement getValidatorsLink() {
         return validatorsLink;
     }
 
-    public WebElement getUsersField(){
+    public WebElement getUsersField() {
         return usersField;
     }
 
@@ -105,9 +110,13 @@ public class NavigationBarPage {
         return unconfirmedUsersLink;
     }
 
-    public WebElement getRegUsersLink() { return regUsersLink; }
+    public WebElement getRegUsersLink() {
+        return regUsersLink;
+    }
 
-    public WebElement getReportLink() { return reportLink; }
+    public WebElement getReportLink() {
+        return reportLink;
+    }
 
 
 }

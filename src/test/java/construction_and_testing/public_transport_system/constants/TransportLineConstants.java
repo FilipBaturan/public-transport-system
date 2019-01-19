@@ -45,6 +45,7 @@ public class TransportLineConstants {
     public static final ArrayList<TransportLine> NEW_TRANSPORT_LINES_NO_SCHEDULE = new ArrayList<>();
     public static final ArrayList<TransportLine> NEW_TRANSPORT_LINES_INVALID_SCHEDULE_ASSOCIATION = new ArrayList<>();
     public static final ArrayList<TransportLine> NEW_TRANSPORT_LINES_INVALID_SCHEDULE = new ArrayList<>();
+    public static final ArrayList<TransportLine> NEW_TRANSPORT_LINES_NOT_UNIQUE_NAME = new ArrayList<>();
 
     public static final int DEL_SCHEDULE_COUNT = 1;
 
@@ -249,6 +250,38 @@ public class TransportLineConstants {
 
         DB_VEHICLES.add(vehicle1);
         DB_VEHICLES.add(vehicle2);
+
+
+        TransportLine transportLine12 =
+                new TransportLine(null, "N7", VehicleType.BUS,
+                        new TransportLinePosition(null, "", null, true),
+                        null, new Zone(2L, "Liman", null, true), true);
+        transportLine12.getPositions().setTransportLine(transportLine12);
+
+        TransportLine transportLine13 =
+                new TransportLine(null, "N9", VehicleType.BUS,
+                        new TransportLinePosition(null, "", null, true),
+                        null, new Zone(2L, "Liman", null, true), true);
+        transportLine13.getPositions().setTransportLine(transportLine13);
+
+        NEW_TRANSPORT_LINES_NO_SCHEDULE.add(transportLine12);
+        NEW_TRANSPORT_LINES_NO_SCHEDULE.add(transportLine13);
+
+
+        TransportLine transportLine14 =
+                new TransportLine(null, "N7", VehicleType.BUS,
+                        new TransportLinePosition(null, "", null, true),
+                        new HashSet<>(), new Zone(2L, "Liman", null, true), true);
+        transportLine14.getPositions().setTransportLine(transportLine14);
+
+        TransportLine transportLine15 =
+                new TransportLine(null, "N7", VehicleType.BUS,
+                        new TransportLinePosition(null, "", null, true),
+                        new HashSet<>(), new Zone(2L, "Liman", null, true), true);
+        transportLine15.getPositions().setTransportLine(transportLine15);
+
+        NEW_TRANSPORT_LINES_NOT_UNIQUE_NAME.add(transportLine14);
+        NEW_TRANSPORT_LINES_NOT_UNIQUE_NAME.add(transportLine15);
     }
 
 

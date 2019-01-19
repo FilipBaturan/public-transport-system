@@ -1,8 +1,6 @@
 package construction_and_testing.public_transport_system.controller;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import construction_and_testing.public_transport_system.domain.DTO.ScheduleDTO;
-import construction_and_testing.public_transport_system.domain.DTO.UserDTO;
 import construction_and_testing.public_transport_system.domain.DTO.ZoneDTO;
 import construction_and_testing.public_transport_system.domain.Schedule;
 import construction_and_testing.public_transport_system.domain.enums.DayOfWeek;
@@ -12,7 +10,6 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
-import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
@@ -162,7 +159,7 @@ public class ScheduleControllerTest {
         assertThat(updatedSchedule.getDayOfWeek()).isEqualTo(scheduleDTO.getDayOfWeek());
         assertThat(updatedSchedule.getDepartures().size()).isEqualTo(scheduleDTO.getDepartures().size());
         int i = 0;
-        for (String departure: updatedSchedule.getDepartures()) {
+        for (String departure : updatedSchedule.getDepartures()) {
             assertThat(departure).isEqualTo(scheduleDTO.getDepartures().get(i));
             i++;
         }
@@ -213,9 +210,9 @@ public class ScheduleControllerTest {
         HttpHeaders headers = new HttpHeaders();
         //headers.add("X-Auth-Token", "eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJudWxsIiwiYXVkaWVuY2UiOiJ3ZWIiLCJjcmVhdGVkIjoxNTQ2OTU4NzE1Njc3LCJleHAiOjE1NDY5OTQ3MTUsImF1dGhvcml0aWVzIjoiT1BFUkFURVIifQ.yJo-JOt-5iQ8SIxw0hM57TDFl9ZlruH9tB0-EM_-0wB2FspXHuE1VCWDJW7_bRStn-P0J1Q-Lx62x2fDYWNJ_g");
         HttpEntity<ZoneDTO> httpEntity = new HttpEntity<>(headers);
-        System.out.println(this.URL+'/' + DB_VALID_ID);
+        System.out.println(this.URL + '/' + DB_VALID_ID);
         ResponseEntity<String> result = testRestTemplate
-                .exchange(this.URL+'/' + DB_VALID_ID, HttpMethod.DELETE,
+                .exchange(this.URL + '/' + DB_VALID_ID, HttpMethod.DELETE,
                         httpEntity, String.class);
 
         String body = result.getBody();

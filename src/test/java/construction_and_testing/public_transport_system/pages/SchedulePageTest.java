@@ -6,9 +6,9 @@ import org.openqa.selenium.support.PageFactory;
 import org.testng.annotations.AfterMethod;
 import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
-import static org.testng.AssertJUnit.assertEquals;
 
 import static construction_and_testing.public_transport_system.pages.util.SeleniumProperties.CHROME_DRIVER_PATH;
+import static org.testng.AssertJUnit.assertEquals;
 
 
 public class SchedulePageTest {
@@ -72,8 +72,8 @@ public class SchedulePageTest {
         int numRows = schedulePage.getNumOfRows();
         int numColumns = schedulePage.getNumOfColumns();
 
-        assertEquals(7,numRows);
-        assertEquals(3,numColumns);
+        assertEquals(7, numRows);
+        assertEquals(3, numColumns);
 
         assertEquals("R1-WORKDAY", schedulePage.getHeader1().getText());
 
