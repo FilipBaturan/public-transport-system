@@ -112,6 +112,7 @@ public class TransportLine implements Serializable {
         this.positions = transportLine.getPositions();
         this.schedule = transportLine.getSchedule();
         this.zone = transportLine.getZone();
+        this.active = transportLine.isActive();
     }
 
     public TransportLine(VehicleTransportLineDTO vehicle) {

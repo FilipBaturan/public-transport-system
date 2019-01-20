@@ -7,51 +7,41 @@ import org.openqa.selenium.support.FindBy;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.util.List;
+
 public class VehiclePage {
 
     private WebDriver driver;
 
-    @FindBy(xpath = "//*[@id=\"content\"]/div/div[7]/div/div")
+    @FindBy(css = "div.card-body:last-child")
     private WebElement buttonAdd;
 
-    @FindBy(xpath = "/html/body/ngb-modal-window/div/div/div[2]/form/div/input")
+    @FindBy(xpath = "/html/body/ngb-modal-window/div/div/div[2]/form/div[1]/div/input")
     private WebElement inputName;
 
-    @FindBy(xpath = "/html/body/ngb-modal-window/div/div/div[2]/form/div/select[1]")
+    @FindBy(xpath = "/html/body/ngb-modal-window/div/div/div[2]/form/div[2]/div[1]/select")
     private WebElement inputType;
 
-    @FindBy(xpath = "/html/body/ngb-modal-window/div/div/div[2]/form/div/select[2]")
+    @FindBy(xpath = "/html/body/ngb-modal-window/div/div/div[2]/form/div[2]/div[2]/select")
     private WebElement inputCurrentLine;
 
     @FindBy(xpath = "/html/body/ngb-modal-window/div/div/div[3]/button")
     private WebElement buttonSave;
 
-    @FindBy(xpath = "/html/body/ngb-modal-window/div/div/div[2]/form/div/select[1]/option[1]")
+    @FindBy(xpath = "/html/body/ngb-modal-window/div/div/div[2]/form/div[2]/div[1]/select/option[1]")
     private WebElement optionBus;
 
-    @FindBy(xpath = "/html/body/ngb-modal-window/div/div/div[2]/form/div/select[1]/option[2]")
+    @FindBy(xpath = "/html/body/ngb-modal-window/div/div/div[2]/form/div[2]/div[1]/select/option[2]")
     private WebElement optionMetro;
 
-    @FindBy(xpath = "/html/body/ngb-modal-window/div/div/div[2]/form/div/select[1]/option[3]")
+    @FindBy(xpath = "/html/body/ngb-modal-window/div/div/div[2]/form/div[2]/div[1]/select/option[3]")
     private WebElement optionTram;
 
-    @FindBy(xpath = "//*[@id=\"content\"]/div/div[2]/div/div[2]/button[1]")
-    private WebElement buttonEditVehicle;
+    @FindBy(xpath = "/html/body/ngb-modal-window/div/div/div[2]/form/div[1]/div/div/span")
+    private WebElement spanNameError;
 
-    @FindBy(xpath = "//*[@id=\"content\"]/div/div[2]/div/div[1]/h4")
-    private WebElement editVehicleName;
-
-    @FindBy(xpath = "//*[@id=\"content\"]/div/div[2]/div/div[2]/button[2]")
-    private WebElement buttonDeleteVehicle;
-
-    @FindBy(xpath = "//*[@id=\"content\"]/div/div[2]/div/div[1]/h4")
-    private WebElement deleteNameVehicle;
-
-    @FindBy(xpath = "/html/body/ngb-modal-window/div/div/div[2]/form/div/div[1]/span")
-    private WebElement spanFirstError;
-
-    @FindBy(xpath = "/html/body/ngb-modal-window/div/div/div[2]/form/div/div[2]/span")
-    private WebElement spanSecondError;
+    @FindBy(xpath = "/html/body/ngb-modal-window/div/div/div[2]/form/div[2]/div[1]/div/span")
+    private WebElement spanVehicleTypeError;
 
     @FindBy(xpath = "/html/body/ngb-modal-window/div/div/div[1]/button/span")
     private WebElement spanExitModalForm;
@@ -65,6 +55,27 @@ public class VehiclePage {
 
     public int numberOfVehicles() {
         return driver.findElements(By.cssSelector("h4.card-title.text-center")).size();
+    }
+
+    public WebElement selectTransportLine(int option) {
+        return driver.findElement(By
+                .xpath("/html/body/ngb-modal-window/div/div/div[2]/form/div[2]/div[2]/select/option[" + option + "]"));
+    }
+
+    public List<WebElement> getVehicleNames() {
+        return driver.findElements(By.cssSelector("h4.card-title.text-center"));
+    }
+
+    public List<WebElement> getVehicleCurrentLines() {
+        return driver.findElements(By.cssSelector("div.card-body p.text-center"));
+    }
+
+    public WebElement getEditButton() {
+        return driver.findElements(By.cssSelector("button.btn.btn-success.w-50")).get(0);
+    }
+
+    public List<WebElement> getDeleteButtons() {
+        return driver.findElements(By.cssSelector("button.btn.btn-danger.w-50"));
     }
 
     public void ensureIsDisplayed() {
@@ -83,10 +94,10 @@ public class VehiclePage {
                         By.cssSelector("h4.card-title.text-center"), previousNumberOfVehicles + 1));
     }
 
-    public void ensureIsEdited(String previousVehicleName) {
+    public void ensureIsEdited(String editedName) {
         (new WebDriverWait(driver, 10))
-                .until(ExpectedConditions
-                        .not(ExpectedConditions.textToBePresentInElementValue(editVehicleName, previousVehicleName)));
+                .until(ExpectedConditions.textToBe(By
+                        .xpath("//*[@id=\"content\"]/div/div[1]/div/div[1]/h4"), editedName));
     }
 
     public void ensureIsRemoved(int previousNumberOfVehicles) {
@@ -97,12 +108,12 @@ public class VehiclePage {
 
     public void ensureIsDisplayedFirstError() {
         (new WebDriverWait(driver, 10))
-                .until(ExpectedConditions.visibilityOf(spanFirstError));
+                .until(ExpectedConditions.visibilityOf(spanNameError));
     }
 
     public void ensureIsDisplayedSecondError() {
         (new WebDriverWait(driver, 10))
-                .until(ExpectedConditions.visibilityOf(spanSecondError));
+                .until(ExpectedConditions.visibilityOf(spanVehicleTypeError));
     }
 
     public WebElement getButtonAdd() {
@@ -142,24 +153,12 @@ public class VehiclePage {
         return optionTram;
     }
 
-    public WebElement getButtonEditVehicle() {
-        return buttonEditVehicle;
+    public WebElement getSpanNameError() {
+        return spanNameError;
     }
 
-    public WebElement getButtonDeleteVehicle() {
-        return buttonDeleteVehicle;
-    }
-
-    public WebElement getDeleteNameVehicle() {
-        return deleteNameVehicle;
-    }
-
-    public WebElement getSpanFirstError() {
-        return spanFirstError;
-    }
-
-    public WebElement getSpanSecondError() {
-        return spanSecondError;
+    public WebElement getSpanVehicleTypeError() {
+        return spanVehicleTypeError;
     }
 
     public WebElement getSpanExitModalForm() {

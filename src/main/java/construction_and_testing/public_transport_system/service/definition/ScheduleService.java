@@ -36,7 +36,6 @@ public interface ScheduleService {
     Schedule findByTransportLineIdAndDayOfWeek(Long id, Integer dayOfWeek);
 
     /**
-     *
      * @param id id of a transport line
      * @ list of schedules for the requested transport line
      */

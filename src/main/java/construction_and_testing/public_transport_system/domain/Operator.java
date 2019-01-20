@@ -1,5 +1,6 @@
 package construction_and_testing.public_transport_system.domain;
 
+import construction_and_testing.public_transport_system.domain.DTO.OperatorDTO;
 import construction_and_testing.public_transport_system.domain.enums.AuthorityType;
 import construction_and_testing.public_transport_system.domain.enums.UsersDocumentsStatus;
 
@@ -26,7 +27,13 @@ public class Operator extends User implements Serializable {
     }
 
     public Operator(User user) {
-        super(user.id, user.name, user.lastName, user.username, user.password, user.email, user.telephone, user.isActive());
+        super(user.id, user.firstName, user.lastName, user.username, user.password, user.email, user.telephone, user.isActive());
+        this.setAuthorityType(AuthorityType.OPERATER);
+    }
+
+    public Operator(OperatorDTO user) {
+        super(user.getId(), user.getFirstName(), user.getLastName(), user.getUsername(), user.getPassword(),
+                user.getEmail(), user.getTelephone(), user.isActive());
         this.setAuthorityType(AuthorityType.OPERATER);
     }
 

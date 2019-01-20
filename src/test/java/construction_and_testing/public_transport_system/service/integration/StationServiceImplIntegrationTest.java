@@ -8,7 +8,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
@@ -96,7 +95,7 @@ public class StationServiceImplIntegrationTest {
     }
 
     /**
-     * Test with to short name value
+     * Test with to short firstName value
      */
     @Test(expected = GeneralException.class)
     @Transactional
@@ -107,7 +106,7 @@ public class StationServiceImplIntegrationTest {
     }
 
     /**
-     * Test with too long name value
+     * Test with too long firstName value
      */
     @Test(expected = GeneralException.class)
     @Transactional
@@ -118,7 +117,7 @@ public class StationServiceImplIntegrationTest {
     }
 
     /**
-     * Test with min length name value
+     * Test with min length firstName value
      */
     @Test
     @Transactional
@@ -143,7 +142,7 @@ public class StationServiceImplIntegrationTest {
     }
 
     /**
-     * Test with max length name value
+     * Test with max length firstName value
      */
     @Test
     @Transactional
@@ -202,7 +201,7 @@ public class StationServiceImplIntegrationTest {
     }
 
     /**
-     * Test with too short name value
+     * Test with too short firstName value
      */
     @Test(expected = GeneralException.class)
     @Transactional
@@ -212,7 +211,7 @@ public class StationServiceImplIntegrationTest {
     }
 
     /**
-     * Test with too long name value
+     * Test with too long firstName value
      */
     @Test(expected = GeneralException.class)
     @Transactional
@@ -222,7 +221,7 @@ public class StationServiceImplIntegrationTest {
     }
 
     /**
-     * Test with min length name value
+     * Test with min length firstName value
      */
     @Test
     @Transactional
@@ -237,7 +236,7 @@ public class StationServiceImplIntegrationTest {
     }
 
     /**
-     * Test with max length name value
+     * Test with max length firstName value
      */
     @Test
     @Transactional

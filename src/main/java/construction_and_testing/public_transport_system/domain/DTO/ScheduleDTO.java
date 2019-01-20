@@ -6,7 +6,6 @@ import construction_and_testing.public_transport_system.domain.enums.DayOfWeek;
 
 import java.io.Serializable;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class ScheduleDTO implements Serializable {
 

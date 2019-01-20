@@ -222,7 +222,7 @@ public class VehicleControllerTest {
     }
 
     /**
-     * Test with to short name value
+     * Test with to short firstName value
      */
     @Test
     public void saveWithShortName() {
@@ -242,7 +242,7 @@ public class VehicleControllerTest {
     }
 
     /**
-     * Test with too long name value
+     * Test with too long firstName value
      */
     @Test
     public void saveWithLongName() {
@@ -262,7 +262,7 @@ public class VehicleControllerTest {
     }
 
     /**
-     * Test with min length name value
+     * Test with min length firstName value
      */
     @Test
     public void saveWithMinLengthName() {
@@ -286,7 +286,7 @@ public class VehicleControllerTest {
     }
 
     /**
-     * Test with max length name value
+     * Test with max length firstName value
      */
     @Test
     public void saveWithMaxLengthName() {

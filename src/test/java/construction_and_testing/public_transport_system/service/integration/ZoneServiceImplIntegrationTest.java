@@ -2,13 +2,13 @@ package construction_and_testing.public_transport_system.service.integration;
 
 import construction_and_testing.public_transport_system.domain.TransportLine;
 import construction_and_testing.public_transport_system.domain.Zone;
+import construction_and_testing.public_transport_system.repository.ZoneRepository;
 import construction_and_testing.public_transport_system.service.definition.ZoneService;
 import construction_and_testing.public_transport_system.util.GeneralException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -27,6 +27,8 @@ public class ZoneServiceImplIntegrationTest {
     @Autowired
     private ZoneService zoneService;
 
+    @Autowired
+    private ZoneRepository zoneRepository;
 
     /**
      * Test get all zone from database
@@ -84,7 +86,6 @@ public class ZoneServiceImplIntegrationTest {
         assertThat(dbZone.getName()).isEqualTo(zone.getName());
         assertThat(dbZone.isActive()).isEqualTo(zone.isActive());
         assertThat(dbZone.getLines()).isEqualTo(zone.getLines());
-
     }
 
     /**
@@ -106,6 +107,18 @@ public class ZoneServiceImplIntegrationTest {
         assertThat(dbZone.isActive()).isEqualTo(zone.isActive());
         assertThat(dbZone.getLines()).isEqualTo(zone.getLines());
 
+    }
+
+    /**
+     * Test with transport lines
+     */
+    @Test(expected = GeneralException.class)
+    @Transactional
+    public void saveWithLinesNoDefaultZone() {
+        zoneRepository.deleteById(1L);
+        Zone zone = new Zone(DB_ID, NEW_NAME, new HashSet<>(), true);
+        zone.getLines().forEach((TransportLine t) -> t.setZone(zone));
+        zoneService.save(zone);
     }
 
     /**
@@ -148,7 +161,7 @@ public class ZoneServiceImplIntegrationTest {
     }
 
     /**
-     * Test with not unique name
+     * Test with not unique firstName
      */
     @Test(expected = GeneralException.class)
     public void saveWithInvalidName() {
@@ -162,7 +175,7 @@ public class ZoneServiceImplIntegrationTest {
     }
 
     /**
-     * Test with to short name value
+     * Test with to short firstName value
      */
     @Test(expected = GeneralException.class)
     @Transactional
@@ -173,7 +186,7 @@ public class ZoneServiceImplIntegrationTest {
     }
 
     /**
-     * Test with too long name value
+     * Test with too long firstName value
      */
     @Test(expected = GeneralException.class)
     @Transactional
@@ -184,7 +197,7 @@ public class ZoneServiceImplIntegrationTest {
     }
 
     /**
-     * Test with min length name value
+     * Test with min length firstName value
      */
     @Test
     @Transactional
@@ -204,7 +217,7 @@ public class ZoneServiceImplIntegrationTest {
     }
 
     /**
-     * Test with max length name value
+     * Test with max length firstName value
      */
     @Test
     @Transactional
@@ -255,5 +268,15 @@ public class ZoneServiceImplIntegrationTest {
     @Transactional
     public void removeDefaultZone() {
         zoneService.remove(DEFAULT_ZONE_ID);
+    }
+
+    /**
+     * Test zone deletion when default does not exist
+     */
+    @Test(expected = GeneralException.class)
+    @Transactional
+    public void removeZoneNoDefault() {
+        zoneRepository.deleteById(1L);
+        zoneService.remove(DEL_ID);
     }
 }

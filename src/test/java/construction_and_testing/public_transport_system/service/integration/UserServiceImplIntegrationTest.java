@@ -35,7 +35,7 @@ public class UserServiceImplIntegrationTest {
         User user = userService.findById(DB_USER_ID);
         assertThat(user).isNotNull();
         assertEquals(user.getId(), DB_USER_ID);
-        assertEquals(user.getName(), DB_FIRST_NAME);
+        assertEquals(user.getFirstName(), DB_FIRST_NAME);
         assertEquals(user.getLastName(), DB_LAST_NAME);
         assertEquals(user.getUsername(), DB_USERNAME);
         assertEquals(user.getPassword(), DB_PASSWORD);
@@ -63,7 +63,7 @@ public class UserServiceImplIntegrationTest {
         userToSave.setEmail("newEmail@gmail.com");
         userService.save(userToSave);
         User savedUser = userService.findById(DB_USER_ID);
-        assertEquals(savedUser.getName(), DB_FIRST_NAME);
+        assertEquals(savedUser.getFirstName(), DB_FIRST_NAME);
         assertEquals(savedUser.getLastName(), DB_LAST_NAME);
         assertEquals(savedUser.getUsername(), DB_USERNAME);
         assertEquals(savedUser.getPassword(), DB_PASSWORD);
@@ -85,7 +85,7 @@ public class UserServiceImplIntegrationTest {
 
         User savedUser = userService.save(registeredUser);
         assertThat(savedUser).isNotNull();
-        assertEquals(savedUser.getName(), DB_NEW_FIRST_NAME);
+        assertEquals(savedUser.getFirstName(), DB_NEW_FIRST_NAME);
         assertEquals(savedUser.getLastName(), DB_NEW_LAST_NAME);
         assertEquals(savedUser.getUsername(), DB_NEW_USERNAME);
         assertEquals(savedUser.getPassword(), DB_NEW_PASSWORD);
@@ -99,7 +99,7 @@ public class UserServiceImplIntegrationTest {
     }
 
     /**
-     * User has invalid last name
+     * User has invalid last firstName
      */
     @Test(expected = GeneralException.class)
     public void saveInvalidUser() {

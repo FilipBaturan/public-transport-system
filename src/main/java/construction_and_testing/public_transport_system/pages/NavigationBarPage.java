@@ -31,6 +31,22 @@ public class NavigationBarPage {
     @FindBy(xpath = "//*[@id=\"sidebar\"]/ul[2]/li/a")
     private WebElement buttonLogout;
 
+    @FindBy(id = "validatorsLink")
+    private WebElement validatorsLink;
+
+    @FindBy(id = "unconfirmedUsersLink")
+    private WebElement unconfirmedUsersLink;
+
+    @FindBy(id = "regUsersLink")
+    private WebElement regUsersLink;
+
+    @FindBy(id = "reportLink")
+    private WebElement reportLink;
+
+    @FindBy(id = "usersField")
+    private WebElement usersField;
+
+
     public NavigationBarPage() {
     }
 
@@ -41,6 +57,11 @@ public class NavigationBarPage {
     public void ensureIsDisplayed() {
         (new WebDriverWait(driver, 10))
                 .until(ExpectedConditions.elementToBeClickable(mapDropDown));
+    }
+
+    public void ensureIsDisplayedMapDropItems() {
+        (new WebDriverWait(driver, 10))
+                .until(ExpectedConditions.elementToBeClickable(vehicleLink));
     }
 
     public void ensureIsDisplayedLogout() {
@@ -76,4 +97,26 @@ public class NavigationBarPage {
     public WebElement getButtonLogout() {
         return buttonLogout;
     }
+
+    public WebElement getValidatorsLink() {
+        return validatorsLink;
+    }
+
+    public WebElement getUsersField() {
+        return usersField;
+    }
+
+    public WebElement getUnconfirmedUsersLink() {
+        return unconfirmedUsersLink;
+    }
+
+    public WebElement getRegUsersLink() {
+        return regUsersLink;
+    }
+
+    public WebElement getReportLink() {
+        return reportLink;
+    }
+
+
 }

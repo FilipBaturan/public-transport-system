@@ -42,7 +42,7 @@ public class PricelistController {
         if (p != null) {
             return new ResponseEntity<>(p, HttpStatus.CREATED);
         } else {
-            throw new GeneralException("Pricelist with given name already exist!", HttpStatus.BAD_REQUEST);
+            throw new GeneralException("Pricelist with given firstName already exist!", HttpStatus.BAD_REQUEST);
         }
     }
 

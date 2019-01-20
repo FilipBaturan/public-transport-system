@@ -78,7 +78,6 @@ public interface UserService {
     List<Validator> getValidators();
 
     /**
-     *
      * @return list of all operators
      */
     List<Operator> getOperators();

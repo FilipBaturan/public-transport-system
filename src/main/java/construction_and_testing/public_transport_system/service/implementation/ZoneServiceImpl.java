@@ -54,17 +54,40 @@ public class ZoneServiceImpl implements ZoneService {
             this.validate(zone);
             if (zone.getLines() == null) {
                 zone.setLines(new HashSet<>());
+                return zoneRepository.save(zone);
             } else {
+                Zone previousZone = null;
+                if (zone.getId() != null) {
+                    Optional<Zone> optionalPreviousZone = zoneRepository.findById(zone.getId());
+                    if (optionalPreviousZone.isPresent()) {
+                        previousZone = optionalPreviousZone.get();
+                    }
+                }
                 Set<TransportLine> temp = new HashSet<>(transportLineRepository.findAllById(zone.getLines().stream()
                         .map((TransportLine::getId)).collect(Collectors.toList())));
                 if (temp.size() != zone.getLines().size()) {
                     throw new GeneralException("Invalid transport line data associated!", HttpStatus.BAD_REQUEST);
                 }
-                zone.setLines(temp);
+
+                if (previousZone != null) {
+                    previousZone.getLines().removeIf(temp::contains);
+                    if (!previousZone.getLines().isEmpty()) {
+                        Zone defaultZone = zoneRepository.findById(1L).orElseThrow(() ->
+                                new GeneralException("Default zone does not exist!", HttpStatus.INTERNAL_SERVER_ERROR));
+                        defaultZone.getLines().addAll(previousZone.getLines());
+                        defaultZone.getLines().forEach(transportLine -> transportLine.setZone(defaultZone));
+                        zoneRepository.save(defaultZone);
+                    }
+                    previousZone.setName(zone.getName());
+                    previousZone.setLines(temp);
+                    return zoneRepository.save(previousZone);
+                } else {
+                    zone.setLines(temp);
+                    return zoneRepository.save(zone);
+                }
             }
-            return zoneRepository.save(zone);
         } catch (DataIntegrityViolationException e) {
-            throw new GeneralException("Zone with given name already exist!", HttpStatus.BAD_REQUEST);
+            throw new GeneralException("Zone with given firstName already exist!", HttpStatus.BAD_REQUEST);
         }
     }
 

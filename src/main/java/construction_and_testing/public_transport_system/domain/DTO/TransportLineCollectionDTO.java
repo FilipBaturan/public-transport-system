@@ -2,14 +2,14 @@ package construction_and_testing.public_transport_system.domain.DTO;
 
 import java.util.List;
 
-public class TransportLineColletionDTO {
+public class TransportLineCollectionDTO {
 
     private List<TransportLineDTO> transportLines;
 
-    public TransportLineColletionDTO() {
+    public TransportLineCollectionDTO() {
     }
 
-    public TransportLineColletionDTO(List<TransportLineDTO> transportLines) {
+    public TransportLineCollectionDTO(List<TransportLineDTO> transportLines) {
         this.transportLines = transportLines;
     }
 

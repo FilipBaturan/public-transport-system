@@ -25,7 +25,7 @@ public class User implements Serializable {
     protected Long id;
 
     @Column(nullable = false)
-    protected String name;
+    protected String firstName;
 
     @Column(nullable = false)
     protected String lastName;
@@ -57,10 +57,10 @@ public class User implements Serializable {
         this.active = true;
     }
 
-    public User(Long id, String name, String lastName, String username, String password, String email,
+    public User(Long id, String firstName, String lastName, String username, String password, String email,
                 String telephone, boolean active) {
         this.id = id;
-        this.name = name;
+        this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.password = password;
@@ -69,10 +69,10 @@ public class User implements Serializable {
         this.active = active;
     }
 
-    public User(Long id, String name, String lastName, String username, String password, String email, String telephone,
+    public User(Long id, String firstName, String lastName, String username, String password, String email, String telephone,
                 UsersDocumentsStatus confirmation) {
         this.id = id;
-        this.name = name;
+        this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.password = password;
@@ -81,11 +81,11 @@ public class User implements Serializable {
         this.confirmation = confirmation;
     }
 
-    public User(Long id, String name, String lastName, String username, String password, String email, String telephone,
+    public User(Long id, String firstName, String lastName, String username, String password, String email, String telephone,
                 UsersDocumentsStatus confirmation, AuthorityType authorityType) {
 
         this.id = id;
-        this.name = name;
+        this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.password = password;
@@ -97,7 +97,7 @@ public class User implements Serializable {
 
     public User(UserDTO uDTO) {
         this.id = uDTO.getId();
-        this.name = uDTO.getName();
+        this.firstName = uDTO.getFirstName();
         this.lastName = uDTO.getLast();
         this.email = uDTO.getEmail();
         this.username = uDTO.getUsername();
@@ -117,12 +117,12 @@ public class User implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getLastName() {

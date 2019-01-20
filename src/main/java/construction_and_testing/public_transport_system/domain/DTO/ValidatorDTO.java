@@ -5,7 +5,7 @@ import construction_and_testing.public_transport_system.domain.Validator;
 public class ValidatorDTO {
 
     private Long id;
-    private String name;
+    private String firstName;
     private String lastName;
     private String username;
     private String password;
@@ -17,9 +17,9 @@ public class ValidatorDTO {
 
     }
 
-    public ValidatorDTO(Long id, String name, String lastName, String email, String password, String username) {
+    public ValidatorDTO(Long id, String firstName, String lastName, String email, String password, String username) {
         this.id = id;
-        this.name = name;
+        this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.username = username;
@@ -27,9 +27,9 @@ public class ValidatorDTO {
         this.active = true;
     }
 
-    public ValidatorDTO(String name, String lastName, String email, String password, String username, String telephone,
+    public ValidatorDTO(String firstName, String lastName, String email, String password, String username, String telephone,
                         boolean active) {
-        this.name = name;
+        this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
         this.username = username;
@@ -40,14 +40,13 @@ public class ValidatorDTO {
 
     public ValidatorDTO(Validator u) {
         this.id = u.getId();
-        this.name = u.getName();
+        this.firstName = u.getFirstName();
         this.lastName = u.getLastName();
         this.email = u.getEmail();
         this.username = u.getUsername();
         this.password = u.getPassword();
         this.telephone = u.getTelephone();
         this.active = u.isActive();
-
     }
 
     public Long getId() {
@@ -58,12 +57,12 @@ public class ValidatorDTO {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getLastName() {

@@ -11,6 +11,9 @@ public class WelcomePage {
 
     private WebDriver driver;
 
+    @FindBy(xpath = "//*[@id=\"content\"]/div/div[1]/div/div[3]/app-auth/form")
+    private WebElement formLogin;
+
     @FindBy(xpath = "//*[@id=\"content\"]/div/div[1]/div/div[3]/app-auth/form/input[1]")
     private WebElement inputUsername;
 
@@ -18,10 +21,13 @@ public class WelcomePage {
     private WebElement inputPassword;
 
     @FindBy(xpath = "//*[@id=\"signinButton\"]")
-    private WebElement buttonSignIn;
+    private WebElement logInButton;
 
     @FindBy(xpath = "//*[@id=\"content\"]/div/div[2]/div/div[2]/button")
     private WebElement buttonSignUp;
+
+    @FindBy(xpath = "//*[@id=\"sidebar\"]/ul[2]/li/a")
+    private WebElement logoutButton;
 
     public WelcomePage() {
     }
@@ -30,38 +36,53 @@ public class WelcomePage {
         this.driver = driver;
     }
 
-    public void ensureIsDisplayed() {
-        (new WebDriverWait(driver, 10))
-                .until(ExpectedConditions.presenceOfElementLocated(
-                        By.xpath("//*[@id=\"content\"]/div/div[1]/div/div[3]/app-auth/form/input[1]")));
+    public WebElement getLoginButton() {
+        return logInButton;
     }
 
-    public void login(String username, String password){
-        setInputUsername(username);
-        setInputPassword(password);
-        getButtonSignIn().click();
-    }
-
-    public WebElement getInputUsername() {
+    private WebElement getInputUsername() {
         return inputUsername;
-    }
-
-    public void setInputUsername(String value) {
-        inputUsername.clear();
-        inputUsername.sendKeys(value);
     }
 
     public WebElement getInputPassword() {
         return inputPassword;
     }
 
+    public WebElement getLogoutButton() {
+        return logoutButton;
+    }
+
+    public void ensureLogoutDisplayed() {
+        (new WebDriverWait(driver, 10))
+                .until(ExpectedConditions.visibilityOf(logoutButton));
+
+    }
+
+    public void login(String username, String password) {
+        setInputUsername(username);
+        setInputPassword(password);
+        getButtonSignIn().click();
+    }
+
+
+    public void setInputUsername(String value) {
+        inputUsername.clear();
+        inputUsername.sendKeys(value);
+    }
+
+
     public void setInputPassword(String value) {
         inputPassword.clear();
         inputPassword.sendKeys(value);
     }
 
+
     public WebElement getButtonSignIn() {
-        return buttonSignIn;
+        return logInButton;
+    }
+
+    public void ensureIsDisplayed() {
+        (new WebDriverWait(driver, 10)).until(ExpectedConditions.visibilityOf(formLogin));
     }
 
     public WebElement getButtonSignUp() {

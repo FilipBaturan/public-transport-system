@@ -71,11 +71,11 @@ public class UpdateSchedulePage {
                 .until(ExpectedConditions.textToBe(By.xpath("//*[@id=\"mat-input-0\"]"), "07:55"));
     }
 
-    public int getNumOfRows(){
+    public int getNumOfRows() {
         return driver.findElements(By.cssSelector("mat-row")).size();
     }
 
-    public int getNumOfColumns(){
+    public int getNumOfColumns() {
         return driver.findElements(By.cssSelector("mat-header-cell")).size();
     }
 

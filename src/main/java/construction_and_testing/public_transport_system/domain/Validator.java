@@ -22,12 +22,12 @@ public class Validator extends User implements Serializable {
     }
 
     public Validator(User user) {
-        super(user.id, user.name, user.lastName, user.username, user.password, user.email, user.telephone, user.isActive());
+        super(user.id, user.firstName, user.lastName, user.username, user.password, user.email, user.telephone, user.isActive());
         this.setAuthorityType(AuthorityType.VALIDATOR);
     }
 
     public Validator(ValidatorDTO user) {
-        super(user.getId(), user.getName(), user.getLastName(), user.getUsername(), user.getPassword(),
+        super(user.getId(), user.getFirstName(), user.getLastName(), user.getUsername(), user.getPassword(),
                 user.getEmail(), user.getTelephone(), user.isActive());
         this.setAuthorityType(AuthorityType.VALIDATOR);
     }

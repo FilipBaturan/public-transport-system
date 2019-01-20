@@ -43,7 +43,7 @@ public class UserControllerTest {
         UserDTO[] body = result.getBody();
         assertThat(body).isNotNull();
         assertEquals(body[0].getId(), DB_ID);
-        assertEquals(body[0].getName(), DB_FIRST_NAME);
+        assertEquals(body[0].getFirstName(), DB_FIRST_NAME);
         assertEquals(body[0].getLast(), DB_LAST_NAME);
         assertEquals(body[0].isActive(), true);
         assertEquals(body[0].getEmail(), DB_EMAIL);
@@ -239,7 +239,7 @@ public class UserControllerTest {
         assertThat(body).isNotNull();
         Long valId = 2L;
         assertEquals(body[0].getId(), valId);
-        assertEquals(body[0].getName(), DB_VAL_FIRST_NAME);
+        assertEquals(body[0].getFirstName(), DB_VAL_FIRST_NAME);
         assertEquals(body[0].getLastName(), DB_VAL_LAST_NAME);
         assertEquals(body[0].isActive(), true);
         assertEquals(body[0].getEmail(), DB_VAL_EMAIL);
@@ -262,7 +262,7 @@ public class UserControllerTest {
         assertEquals(result.getStatusCode(), HttpStatus.OK);
         User savedValidator = userService.findByUsername(newValidator.getUsername());
         assertEquals(savedValidator.getEmail(), "newEmail");
-        assertEquals(savedValidator.getName(), "newFirstName");
+        assertEquals(savedValidator.getFirstName(), "newFirstName");
         assertEquals(savedValidator.getLastName(), "newLastName");
 
         int sizeAfter = userService.getValidators().size();
@@ -321,7 +321,7 @@ public class UserControllerTest {
         assertThat(body).isNotNull();
         Long valId = 1L;
         assertEquals(body[0].getId(), valId);
-        assertEquals(body[0].getName(), DB_FIRST_NAME);
+        assertEquals(body[0].getFirstName(), DB_FIRST_NAME);
         assertEquals(body[0].getLast(), DB_LAST_NAME);
         assertEquals(body[0].isActive(), true);
         assertEquals(body[0].getEmail(), DB_EMAIL);

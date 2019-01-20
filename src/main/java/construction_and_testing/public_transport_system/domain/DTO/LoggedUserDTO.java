@@ -29,7 +29,7 @@ public class LoggedUserDTO {
 
     public LoggedUserDTO(User entity) {
         this.id = entity.getId();
-        this.name = entity.getName();
+        this.name = entity.getFirstName();
         this.lastName = entity.getLastName();
         this.username = entity.getUsername();
         this.password = entity.getPassword();
@@ -37,6 +37,7 @@ public class LoggedUserDTO {
         this.active = entity.isActive();
         this.telephone = entity.getTelephone();
     }
+
     public Long getId() {
         return id;
     }

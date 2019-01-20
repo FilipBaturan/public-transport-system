@@ -50,7 +50,7 @@ public class TicketController {
         if (t != null) {
             return new ResponseEntity<>(t, HttpStatus.CREATED);
         } else {
-            throw new GeneralException("Ticket with given name already exist!", HttpStatus.BAD_REQUEST);
+            throw new GeneralException("Ticket with given firstName already exist!", HttpStatus.BAD_REQUEST);
         }
     }
 

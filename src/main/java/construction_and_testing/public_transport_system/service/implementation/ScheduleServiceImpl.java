@@ -5,15 +5,12 @@ import construction_and_testing.public_transport_system.repository.ScheduleRepos
 import construction_and_testing.public_transport_system.repository.TransportLineRepository;
 import construction_and_testing.public_transport_system.service.definition.ScheduleService;
 import construction_and_testing.public_transport_system.util.GeneralException;
-
-
 import construction_and_testing.public_transport_system.util.TimeStringComparator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -31,7 +28,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     public List<Schedule> getAll() {
 
         List<Schedule> schedules = scheduleRepository.findAll();
-        for (Schedule schedule: schedules) {
+        for (Schedule schedule : schedules) {
             schedule.getDepartures().sort(new TimeStringComparator());
         }
         return schedules;
@@ -70,7 +67,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             Schedule schedule = this.scheduleRepository.findAllScheduleByTransportLineIdAndDayOfWeek(id, dayOfWeek);
             schedule.getDepartures().sort(new TimeStringComparator());
             return schedule;
-        }catch(Exception e){
+        } catch (Exception e) {
             throw new GeneralException("Requested schedule doesn't exist!", HttpStatus.BAD_REQUEST);
         }
     }
@@ -79,12 +76,12 @@ public class ScheduleServiceImpl implements ScheduleService {
     public List<Schedule> findByTransportLineId(Long id) {
         try {
             List<Schedule> schedules = this.scheduleRepository.findAllSchedulesByTransportLineId(id);
-            for (Schedule schedule: schedules) {
+            for (Schedule schedule : schedules) {
                 schedule.getDepartures().sort(new TimeStringComparator());
             }
             return schedules;
-        }catch(Exception e){
+        } catch (Exception e) {
             throw new GeneralException("Transport line doesn't exist!", HttpStatus.BAD_REQUEST);
-    }
+        }
     }
 }

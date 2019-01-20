@@ -1,19 +1,20 @@
-package construction_and_testing.public_transport_system.util;
+package construction_and_testing.public_transport_system.service.websocket;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import construction_and_testing.public_transport_system.domain.Vehicle;
 import construction_and_testing.public_transport_system.service.definition.VehicleService;
+import construction_and_testing.public_transport_system.util.TrackedVehicle;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.scheduling.annotation.Scheduled;
-import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
-@Component
-public class ScheduledUpdatesOnTopic {
+@Service
+public class TrackingVehicleService {
 
     @Autowired
     private SimpMessagingTemplate template;
@@ -25,7 +26,7 @@ public class ScheduledUpdatesOnTopic {
 
     private Random random;
 
-    public ScheduledUpdatesOnTopic() {
+    public TrackingVehicleService() {
         this.currentVehiclesPositionIndexes = new HashMap<>();
         this.random = new Random();
     }
@@ -45,7 +46,7 @@ public class ScheduledUpdatesOnTopic {
         int numberOfNotUpdatedVehicles;
         try {
             numberOfNotUpdatedVehicles = vehicles.size() - (this.random.nextInt(vehicles.size()) + 1);
-        } catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             numberOfNotUpdatedVehicles = 0;
         }
         for (int i = 0; i < numberOfNotUpdatedVehicles; i++) {
@@ -66,7 +67,7 @@ public class ScheduledUpdatesOnTopic {
      * @param vehicle that needs to get position
      * @return collection of available vehicle position
      */
-    private List<List<Double>> getVehiclePositions (Vehicle vehicle) {
+    private List<List<Double>> getVehiclePositions(Vehicle vehicle) {
         String content = vehicle.getCurrentLine().getPositions().getContent();
         if (content.contains("(")) {
             content = content.split("\\(")[0].trim();
@@ -89,7 +90,7 @@ public class ScheduledUpdatesOnTopic {
         try {
             this.currentVehiclesPositionIndexes.put(vehicle.getId(), ++index % positions.size());
             return new TrackedVehicle(vehicle, positions.get(index));
-        } catch (IndexOutOfBoundsException e){
+        } catch (IndexOutOfBoundsException e) {
             this.currentVehiclesPositionIndexes.put(vehicle.getId(), 0);
             return new TrackedVehicle(vehicle, positions.get(0));
         }

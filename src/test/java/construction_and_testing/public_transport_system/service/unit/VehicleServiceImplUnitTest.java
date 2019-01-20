@@ -50,7 +50,7 @@ public class VehicleServiceImplUnitTest {
                 Vehicle vehicle = (Vehicle) arguments[0];
                 if (DEL_ID.equals(vehicle.getId())) {
                     DB_VEHICLES.forEach(vehicle1 -> {
-                        if (vehicle1.getId().equals(vehicle.getId())){
+                        if (vehicle1.getId().equals(vehicle.getId())) {
                             vehicle1.setActive(false);
                             DEL_VEHICLE = vehicle1;
                         }
@@ -135,7 +135,7 @@ public class VehicleServiceImplUnitTest {
     }
 
     /**
-     * Test with to short name value
+     * Test with to short firstName value
      */
     @Test(expected = GeneralException.class)
     public void saveWithShortName() {
@@ -144,7 +144,7 @@ public class VehicleServiceImplUnitTest {
     }
 
     /**
-     * Test with too long name value
+     * Test with too long firstName value
      */
     @Test(expected = GeneralException.class)
     public void saveWithLongName() {
@@ -153,7 +153,7 @@ public class VehicleServiceImplUnitTest {
     }
 
     /**
-     * Test with min length name value
+     * Test with min length firstName value
      */
     @Test
     public void saveWithMinLengthName() {
@@ -174,7 +174,7 @@ public class VehicleServiceImplUnitTest {
     }
 
     /**
-     * Test with max length name value
+     * Test with max length firstName value
      */
     @Test
     public void saveWithMaxLengthName() {

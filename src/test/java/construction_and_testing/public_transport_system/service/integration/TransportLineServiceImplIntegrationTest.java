@@ -9,12 +9,14 @@ import construction_and_testing.public_transport_system.domain.enums.VehicleType
 import construction_and_testing.public_transport_system.repository.ScheduleRepository;
 import construction_and_testing.public_transport_system.repository.TicketRepository;
 import construction_and_testing.public_transport_system.repository.VehicleRepository;
+import construction_and_testing.public_transport_system.repository.ZoneRepository;
 import construction_and_testing.public_transport_system.service.definition.TransportLineService;
 import construction_and_testing.public_transport_system.util.GeneralException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
 
@@ -43,6 +45,10 @@ public class TransportLineServiceImplIntegrationTest {
 
     @Autowired
     private TicketRepository ticketRepository;
+
+    @Autowired
+    private ZoneRepository zoneRepository;
+
 
     /**
      * Test get all stations from database
@@ -122,7 +128,7 @@ public class TransportLineServiceImplIntegrationTest {
     public void saveTransportLineWithUpdatedType() {
         TransportLine transportLine =
                 new TransportLine(DB_ID, DB_NAME, VehicleType.METRO,
-                        DB_POSITION, new HashSet<>() , DB_ZONE, true);
+                        DB_POSITION, new HashSet<>(), DB_ZONE, true);
         transportLine.getPositions().setTransportLine(transportLine);
 
         Schedule schedule1 = new Schedule(100L, transportLine, DayOfWeek.WORKDAY, new ArrayList<String>() {{
@@ -197,7 +203,7 @@ public class TransportLineServiceImplIntegrationTest {
     }
 
     /**
-     * Test transport line with not unique name
+     * Test transport line with not unique firstName
      */
     @Test(expected = GeneralException.class)
     public void saveWithInvalidName() {
@@ -208,7 +214,7 @@ public class TransportLineServiceImplIntegrationTest {
     }
 
     /**
-     * Test with to short name value
+     * Test with to short firstName value
      */
     @Test(expected = GeneralException.class)
     @Transactional
@@ -222,7 +228,7 @@ public class TransportLineServiceImplIntegrationTest {
     }
 
     /**
-     * Test with too long name value
+     * Test with too long firstName value
      */
     @Test(expected = GeneralException.class)
     @Transactional
@@ -236,7 +242,7 @@ public class TransportLineServiceImplIntegrationTest {
     }
 
     /**
-     * Test with min length name value
+     * Test with min length firstName value
      */
     @Test
     @Transactional
@@ -261,7 +267,7 @@ public class TransportLineServiceImplIntegrationTest {
     }
 
     /**
-     * Test with max length name value
+     * Test with max length firstName value
      */
     @Test
     @Transactional
@@ -332,6 +338,16 @@ public class TransportLineServiceImplIntegrationTest {
     }
 
     /**
+     * Test replacement when default zone does not exist
+     */
+    @Test(expected = DataIntegrityViolationException.class)
+    @Transactional
+    public void replaceAllNoDefaultZone() {
+        zoneRepository.deleteById(1L);
+        transportLineService.replaceAll(NEW_TRANSPORT_LINES);
+    }
+
+    /**
      * Test with schedule associated to wrong transport line
      */
     @Test(expected = GeneralException.class)
@@ -373,6 +389,14 @@ public class TransportLineServiceImplIntegrationTest {
     }
 
     /**
+     * Test replacement transport lines with duplicate firstName
+     */
+    @Test(expected = GeneralException.class)
+    public void replaceAllWithNotUniqueName() {
+        transportLineService.replaceAll(NEW_TRANSPORT_LINES_NOT_UNIQUE_NAME);
+    }
+
+    /**
      * Test replacement with schedule that does not exist in database
      */
     @Test(expected = GeneralException.class)
@@ -382,7 +406,7 @@ public class TransportLineServiceImplIntegrationTest {
     }
 
     /**
-     * Test with too short name value
+     * Test with too short firstName value
      */
     @Test(expected = GeneralException.class)
     @Transactional
@@ -392,7 +416,7 @@ public class TransportLineServiceImplIntegrationTest {
     }
 
     /**
-     * Test with too long name value
+     * Test with too long firstName value
      */
     @Test(expected = GeneralException.class)
     @Transactional
@@ -402,7 +426,7 @@ public class TransportLineServiceImplIntegrationTest {
     }
 
     /**
-     * Test with min length name value
+     * Test with min length firstName value
      */
     @Test
     @Transactional
@@ -421,7 +445,7 @@ public class TransportLineServiceImplIntegrationTest {
     }
 
     /**
-     * Test with max length name value
+     * Test with max length firstName value
      */
     @Test
     @Transactional

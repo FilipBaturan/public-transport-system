@@ -29,8 +29,7 @@ public class ZoneConverter extends AbstractConverter {
     }
 
     public static ZoneDTO fromEntity(Zone entity) {
-        ZoneDTO dto = new ZoneDTO(entity);
-        return dto;
+        return new ZoneDTO(entity);
     }
 
 

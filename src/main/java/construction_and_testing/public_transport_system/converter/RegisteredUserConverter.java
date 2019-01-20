@@ -13,7 +13,7 @@ public class RegisteredUserConverter extends AbstractConverter {
 
     public static RegisteringUserDTO toRegisteringUserDTO(RegisteredUser registeredUser) {
         RegisteringUserDTO dto = new RegisteringUserDTO();
-        dto.setName(registeredUser.getName());
+        dto.setName(registeredUser.getFirstName());
         dto.setLastName(registeredUser.getLastName());
         dto.setUsername(registeredUser.getUsername());
         dto.setPassword(registeredUser.getPassword());
@@ -26,7 +26,7 @@ public class RegisteredUserConverter extends AbstractConverter {
         RegisteredUser entity = new RegisteredUser();
         Collection<AuthorityType> authorityTypeCollection = new ArrayList<>();
         //((ArrayList<AuthorityType>) authorityTypeCollection).add(AuthorityType.REGISTERED_USER);
-        entity.setName(registeringUserDTO.getName());
+        entity.setFirstName(registeringUserDTO.getName());
         entity.setLastName(registeringUserDTO.getLastName());
         entity.setUsername(registeringUserDTO.getUsername());
         entity.setPassword(registeringUserDTO.getPassword());
@@ -42,7 +42,7 @@ public class RegisteredUserConverter extends AbstractConverter {
     public static RegisteredUserDTO toRegisteredUserDTO(RegisteredUser registeredUser) {
         RegisteredUserDTO dto = new RegisteredUserDTO();
         dto.setId(registeredUser.getId());
-        dto.setName(registeredUser.getName());
+        dto.setName(registeredUser.getFirstName());
         dto.setLastName(registeredUser.getLastName());
         dto.setUsername(registeredUser.getUsername());
         dto.setPassword(registeredUser.getPassword());
@@ -57,7 +57,7 @@ public class RegisteredUserConverter extends AbstractConverter {
         Collection<AuthorityType> authorityTypeCollection = new ArrayList<>();
         //((ArrayList<AuthorityType>) authorityTypeCollection).add(AuthorityType.REGISTERED_USER);
         entity.setId(registeredUserDTO.getId());
-        entity.setName(registeredUserDTO.getName());
+        entity.setFirstName(registeredUserDTO.getName());
         entity.setLastName(registeredUserDTO.getLastName());
         entity.setUsername(registeredUserDTO.getUsername());
         entity.setPassword(registeredUserDTO.getPassword());

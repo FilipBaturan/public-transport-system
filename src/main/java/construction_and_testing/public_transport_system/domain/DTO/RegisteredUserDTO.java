@@ -11,7 +11,7 @@ public class RegisteredUserDTO {
     private String telephone;
     private boolean active;
 
-    public RegisteredUserDTO(){
+    public RegisteredUserDTO() {
 
     }
 
