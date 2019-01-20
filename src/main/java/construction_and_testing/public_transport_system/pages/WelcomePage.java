@@ -11,14 +11,17 @@ public class WelcomePage {
 
     private WebDriver driver;
 
-    @FindBy(xpath = "//*[@id=\"content\"]/div/app-auth/form/input[1]")
+    @FindBy(xpath = "//*[@id=\"content\"]/div/div[1]/div/div[3]/app-auth/form/input[1]")
     private WebElement inputUsername;
 
-    @FindBy(xpath = "//*[@id=\"content\"]/div/app-auth/form/input[2]")
+    @FindBy(xpath = "//*[@id=\"content\"]/div/div[1]/div/div[3]/app-auth/form/input[2]")
     private WebElement inputPassword;
 
     @FindBy(xpath = "//*[@id=\"signinButton\"]")
     private WebElement buttonSignIn;
+
+    @FindBy(xpath = "//*[@id=\"content\"]/div/div[2]/div/div[2]/button")
+    private WebElement buttonSignUp;
 
     public WelcomePage() {
     }
@@ -30,7 +33,7 @@ public class WelcomePage {
     public void ensureIsDisplayed() {
         (new WebDriverWait(driver, 10))
                 .until(ExpectedConditions.presenceOfElementLocated(
-                        By.xpath("//*[@id=\"content\"]/div/app-auth/form/input[1]")));
+                        By.xpath("//*[@id=\"content\"]/div/div[1]/div/div[3]/app-auth/form/input[1]")));
     }
 
     public void login(String username, String password){
@@ -59,5 +62,13 @@ public class WelcomePage {
 
     public WebElement getButtonSignIn() {
         return buttonSignIn;
+    }
+
+    public WebElement getButtonSignUp() {
+        return buttonSignUp;
+    }
+
+    public void setButtonSignUp(WebElement buttonSignUp) {
+        this.buttonSignUp = buttonSignUp;
     }
 }

@@ -46,10 +46,23 @@ public class PricelistController {
         }
     }
 
+    /**
+     * Finding active price list.
+     * @return pricelist with all items, if active is existing
+     *         BAD_REQUEST if there's no active price list.
+     */
     @GetMapping("findActive")
     public ResponseEntity<PricelistDTO> findActive() {
         Pricelist p = pricelistService.findValid();
-        return new ResponseEntity<>(PriceListConverter.fromEntity(p), HttpStatus.OK);
+        if(p != null){
+            logger.info("Successfully found price list");
+            return new ResponseEntity<>(PriceListConverter.fromEntity(p), HttpStatus.OK);
+        }
+        else{
+            logger.warn("There is no active price list.");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     /**
