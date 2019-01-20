@@ -8,7 +8,7 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 
-	<name>public_transport_system</name>
+	<firstName>public_transport_system</firstName>
 	<description>Project for construction and testing</description>
 
 	<parent>

@@ -39,7 +39,7 @@ public class ItemController {
         if (i != null) {
             return new ResponseEntity<>(i, HttpStatus.CREATED);
         } else {
-            throw new GeneralException("Item with given name already exist!", HttpStatus.BAD_REQUEST);
+            throw new GeneralException("Item with given firstName already exist!", HttpStatus.BAD_REQUEST);
         }
     }
 

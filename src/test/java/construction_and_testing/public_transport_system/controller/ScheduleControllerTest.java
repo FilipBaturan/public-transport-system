@@ -73,7 +73,7 @@ public class ScheduleControllerTest {
         assertThat(body).isNotNull();
 
         assertThat(body.getId()).isEqualTo(DB_VALID_ID);
-        //assertThat(schedule.getTransportLine().getName()).isEqualTo(DB_TL_NAME);
+        //assertThat(schedule.getTransportLine().getFirstName()).isEqualTo(DB_TL_NAME);
         assertThat(body.getDayOfWeek()).isEqualTo(DB_VALID_DAY_OF_WEEK);
         //assertThat(schedule.getDepartures()).isEqualTo(DB_VALID_DEPARTURES);
         //assertThat(body.getDepartures().size()).isEqualTo(DB_VALID_DEPARTURES_SIZE);
@@ -111,7 +111,7 @@ public class ScheduleControllerTest {
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.ACCEPTED);
         assertThat(body).isNotNull();
-        //assertThat(schedule.getTransportLine().getName()).isEqualTo(DB_TL_NAME);
+        //assertThat(schedule.getTransportLine().getFirstName()).isEqualTo(DB_TL_NAME);
         assertThat(body.getDayOfWeek()).isEqualTo(scheduleDTO.getDayOfWeek());
         //assertThat(schedule.getDepartures()).isEqualTo(DB_VALID_DEPARTURES);
         assertThat(body.getDepartures().size()).isEqualTo(scheduleDTO.getDepartures().size());

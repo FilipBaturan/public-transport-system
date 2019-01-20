@@ -213,11 +213,11 @@ public class ZoneControllerTest {
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(body).isNotNull();
-        assertThat(body).isEqualTo("Zone with given name already exist!");
+        assertThat(body).isEqualTo("Zone with given firstName already exist!");
     }
 
     /**
-     * Test with not unique name
+     * Test with not unique firstName
      */
     @Test
     public void saveWithInvalidName() {
@@ -245,11 +245,11 @@ public class ZoneControllerTest {
         assertThat(result2.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(body2).isNotNull();
 
-        assertThat(body2).isEqualTo("Zone with given name already exist!");
+        assertThat(body2).isEqualTo("Zone with given firstName already exist!");
     }
 
     /**
-     * Test with to short name value
+     * Test with to short firstName value
      */
     @Test
     public void saveWithShortName() {
@@ -268,7 +268,7 @@ public class ZoneControllerTest {
     }
 
     /**
-     * Test with too long name value
+     * Test with too long firstName value
      */
     @Test
     public void saveWithLongName() {
@@ -287,7 +287,7 @@ public class ZoneControllerTest {
     }
 
     /**
-     * Test with min length name value
+     * Test with min length firstName value
      */
     @Test
     public void saveWithMinLengthName() {
@@ -309,7 +309,7 @@ public class ZoneControllerTest {
     }
 
     /**
-     * Test with max length name value
+     * Test with max length firstName value
      */
     @Test
     public void saveWithMaxLengthName() {

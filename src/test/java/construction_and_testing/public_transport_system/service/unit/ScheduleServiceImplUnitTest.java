@@ -69,7 +69,7 @@ public class ScheduleServiceImplUnitTest {
         assertThat(schedule).isNotNull();
 
         assertThat(schedule.getId()).isEqualTo(DB_VALID_ID);
-        //assertThat(schedule.getTransportLine().getName()).isEqualTo(DB_TL_NAME);
+        //assertThat(schedule.getTransportLine().getFirstName()).isEqualTo(DB_TL_NAME);
         assertThat(schedule.getDayOfWeek()).isEqualTo(DB_VALID_DAY_OF_WEEK);
         //assertThat(schedule.getDepartures()).isEqualTo(DB_VALID_DEPARTURES);
         assertThat(schedule.getDepartures().size()).isEqualTo(DB_VALID_DEPARTURES_SIZE);
@@ -93,7 +93,7 @@ public class ScheduleServiceImplUnitTest {
         assertThat(schedule).isNotNull();
 
         assertThat(schedule.getId()).isEqualTo(DB_VALID_ID);
-        //assertThat(schedule.getTransportLine().getName()).isEqualTo(DB_TL_NAME);
+        //assertThat(schedule.getTransportLine().getFirstName()).isEqualTo(DB_TL_NAME);
         assertThat(schedule.getDayOfWeek()).isEqualTo(DB_VALID_DAY_OF_WEEK);
         assertThat(schedule.getDepartures().size()).isEqualTo(DB_VALID_DEPARTURES_SIZE);
         assertThat(schedule.isActive()).isEqualTo(DB_VALID_ACTIVE);
@@ -111,7 +111,7 @@ public class ScheduleServiceImplUnitTest {
         assertThat(newSchedule).isNotNull();
 
         //assertThat(scheduleService.getAll().size()).isEqualTo(countBefore + 1);
-        //assertThat(newSchedule.getTransportLine().getName()).isEqualTo(DB_TL_NAME);
+        //assertThat(newSchedule.getTransportLine().getFirstName()).isEqualTo(DB_TL_NAME);
         assertThat(newSchedule.getDayOfWeek()).isEqualTo(DB_NEW_SCHEDULE.getDayOfWeek());
         assertThat(newSchedule.getDepartures()).isEqualTo(DB_NEW_SCHEDULE.getDepartures());
         assertThat(newSchedule.getDepartures().size()).isEqualTo(DB_NEW_SCHEDULE.getDepartures().size());
@@ -134,7 +134,7 @@ public class ScheduleServiceImplUnitTest {
         System.out.println(updatedSchedule.getId());
 
         assertThat(scheduleService.getAll().size()).isEqualTo(countBefore);
-        //assertThat(updatedSchedule.getTransportLine().getName()).isEqualTo(DB_TL_NAME);
+        //assertThat(updatedSchedule.getTransportLine().getFirstName()).isEqualTo(DB_TL_NAME);
         assertThat(updatedSchedule.getDayOfWeek()).isEqualTo(DB_UPDATE_DAYOFWEEK);
         assertThat(updatedSchedule.getDepartures()).isEqualTo(DB_UPDATE_SCHEDULE.getDepartures());
         assertThat(updatedSchedule.getDepartures().size()).isEqualTo(DB_UPDATE_SCHEDULE.getDepartures().size());
@@ -156,7 +156,7 @@ public class ScheduleServiceImplUnitTest {
         assertThat(newSchedule).isNotNull();
 
         //assertThat(scheduleService.getAll().size()).isEqualTo(countBefore + 1);
-        //assertThat(newSchedule.getTransportLine().getName()).isEqualTo(DB_TL_NAME);
+        //assertThat(newSchedule.getTransportLine().getFirstName()).isEqualTo(DB_TL_NAME);
         assertThat(newSchedule.getDayOfWeek()).isEqualTo(schedule.getDayOfWeek());
         assertThat(newSchedule.getDepartures()).isEqualTo(schedule.getDepartures());
         assertThat(newSchedule.isActive()).isEqualTo(schedule.isActive());

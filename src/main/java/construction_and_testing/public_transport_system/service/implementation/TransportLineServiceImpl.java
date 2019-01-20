@@ -66,7 +66,7 @@ public class TransportLineServiceImpl implements TransportLineService {
             transportLineRepository.save(transportLine);
             return transportLinePositionRepository.save(transportLine.getPositions()).getTransportLine();
         } catch (DataIntegrityViolationException e) {
-            throw new GeneralException("Transport line with given name already exist!", HttpStatus.BAD_REQUEST);
+            throw new GeneralException("Transport line with given firstName already exist!", HttpStatus.BAD_REQUEST);
         } catch (RuntimeException e) {
             throw new GeneralException("Transport lines have invalid schedule or position associated!",
                     HttpStatus.BAD_REQUEST);
@@ -329,7 +329,7 @@ public class TransportLineServiceImpl implements TransportLineService {
         List<String> names = new ArrayList<>();
         transportLines.forEach(transportLine -> {
             if (names.contains(transportLine.getName())) {
-                throw new GeneralException("Transport line with given name already exist!", HttpStatus.BAD_REQUEST);
+                throw new GeneralException("Transport line with given firstName already exist!", HttpStatus.BAD_REQUEST);
             }
             names.add(transportLine.getName());
         });

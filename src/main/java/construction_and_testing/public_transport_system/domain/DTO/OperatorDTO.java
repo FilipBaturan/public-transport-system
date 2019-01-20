@@ -1,9 +1,8 @@
 package construction_and_testing.public_transport_system.domain.DTO;
 
-import construction_and_testing.public_transport_system.domain.Validator;
+import construction_and_testing.public_transport_system.domain.Operator;
 
-public class ValidatorDTO {
-
+public class OperatorDTO {
     private Long id;
     private String firstName;
     private String lastName;
@@ -13,40 +12,40 @@ public class ValidatorDTO {
     private String telephone;
     private boolean active;
 
-    public ValidatorDTO() {
-
+    public OperatorDTO() {
     }
 
-    public ValidatorDTO(Long id, String firstName, String lastName, String email, String password, String username) {
+    public OperatorDTO(Long id, String firstName, String lastName, String username, String password, String email, String telephone, boolean active) {
         this.id = id;
         this.firstName = firstName;
         this.lastName = lastName;
-        this.email = email;
         this.username = username;
         this.password = password;
-        this.active = true;
+        this.email = email;
+        this.telephone = telephone;
+        this.active = active;
     }
 
-    public ValidatorDTO(String firstName, String lastName, String email, String password, String username, String telephone,
-                        boolean active) {
+
+    public OperatorDTO(String firstName, String lastName, String username, String password, String email, String telephone, boolean active) {
         this.firstName = firstName;
         this.lastName = lastName;
-        this.email = email;
         this.username = username;
         this.password = password;
+        this.email = email;
         this.telephone = telephone;
-        this.active = true;
+        this.active = active;
     }
 
-    public ValidatorDTO(Validator u) {
-        this.id = u.getId();
-        this.firstName = u.getFirstName();
-        this.lastName = u.getLastName();
-        this.email = u.getEmail();
-        this.username = u.getUsername();
-        this.password = u.getPassword();
-        this.telephone = u.getTelephone();
-        this.active = u.isActive();
+    public OperatorDTO(Operator operator) {
+        this.id = operator.getId();
+        this.firstName = operator.getFirstName();
+        this.lastName = operator.getLastName();
+        this.email = operator.getEmail();
+        this.username = operator.getUsername();
+        this.password = operator.getPassword();
+        this.telephone = operator.getTelephone();
+        this.active = operator.isActive();
     }
 
     public Long getId() {

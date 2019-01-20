@@ -143,7 +143,7 @@ public class MapPageTest {
     }
 
     /**
-     * Test saving transport line with min length name
+     * Test saving transport line with min length firstName
      */
     @Test
     public void testSaveTransportLineWithMinLengthName() {
@@ -166,7 +166,7 @@ public class MapPageTest {
     }
 
     /**
-     * Test saving transport line with not unique name
+     * Test saving transport line with not unique firstName
      */
     @Test
     public void testSaveTransportLineNotUniqueName() {
@@ -190,7 +190,7 @@ public class MapPageTest {
     }
 
     /**
-     * Test saving transport line with long name
+     * Test saving transport line with long firstName
      */
     @Test
     public void testSaveTransportLineWithLongName() {
@@ -211,7 +211,7 @@ public class MapPageTest {
         mapPage.ensureIsDisplayedFirstError();
 
         assertThat(mapPage.getSpanFirstError().getText())
-                .isEqualTo("Transport line name must be maximum 30 characters long!");
+                .isEqualTo("Transport line firstName must be maximum 30 characters long!");
         assertThat(mapPage.numberOfTransportLines()).isEqualTo(beforeCount);
     }
 
@@ -276,7 +276,7 @@ public class MapPageTest {
     }
 
     /**
-     * Test saving station with min length name
+     * Test saving station with min length firstName
      */
     @Test
     public void testSaveStationWithMinLengthName() {
@@ -305,7 +305,7 @@ public class MapPageTest {
     }
 
     /**
-     * Test saving station with max length name
+     * Test saving station with max length firstName
      */
     @Test
     public void testSaveStationWithMaxLengthName() {
@@ -334,7 +334,7 @@ public class MapPageTest {
     }
 
     /**
-     * Test saving station with short name
+     * Test saving station with short firstName
      */
     @Test
     public void testSaveStationWithShortName() {
@@ -363,7 +363,7 @@ public class MapPageTest {
     }
 
     /**
-     * Test saving station with long name
+     * Test saving station with long firstName
      */
     @Test
     public void testSaveStationWithLongName() {

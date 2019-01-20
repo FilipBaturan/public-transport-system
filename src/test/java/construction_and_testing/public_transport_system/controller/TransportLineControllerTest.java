@@ -199,7 +199,7 @@ public class TransportLineControllerTest {
     }
 
     /**
-     * Test transport line with not unique name
+     * Test transport line with not unique firstName
      */
     @Test
     public void saveWithInvalidName() {
@@ -220,7 +220,7 @@ public class TransportLineControllerTest {
     }
 
     /**
-     * Test with to short name value
+     * Test with to short firstName value
      */
     @Test
     public void saveWithShortName() {
@@ -241,7 +241,7 @@ public class TransportLineControllerTest {
     }
 
     /**
-     * Test with too long name value
+     * Test with too long firstName value
      */
     @Test
     public void saveWithLongName() {
@@ -262,7 +262,7 @@ public class TransportLineControllerTest {
     }
 
     /**
-     * Test with min length name value
+     * Test with min length firstName value
      */
     @Test
     public void saveWithMinLengthName() {
@@ -290,7 +290,7 @@ public class TransportLineControllerTest {
     }
 
     /**
-     * Test with max length name value
+     * Test with max length firstName value
      */
     @Test
     public void saveWithMaxLengthName() {
@@ -518,7 +518,7 @@ public class TransportLineControllerTest {
     }
 
     /**
-     * Test with too short name value
+     * Test with too short firstName value
      */
     @Test
     public void replaceAllWithShortName() {
@@ -540,7 +540,7 @@ public class TransportLineControllerTest {
     }
 
     /**
-     * Test with too long name value
+     * Test with too long firstName value
      */
     @Test
     public void replaceAllWithLongName() {
@@ -562,7 +562,7 @@ public class TransportLineControllerTest {
     }
 
     /**
-     * Test with min length name value
+     * Test with min length firstName value
      */
     @Test
     public void replaceAllWithMinLengthName() {
@@ -586,7 +586,7 @@ public class TransportLineControllerTest {
     }
 
     /**
-     * Test with max length name value
+     * Test with max length firstName value
      */
     @Test
     public void replaceAllWithMaxLengthName() {

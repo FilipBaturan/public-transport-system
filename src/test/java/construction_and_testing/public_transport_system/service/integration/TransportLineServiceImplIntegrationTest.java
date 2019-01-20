@@ -203,7 +203,7 @@ public class TransportLineServiceImplIntegrationTest {
     }
 
     /**
-     * Test transport line with not unique name
+     * Test transport line with not unique firstName
      */
     @Test(expected = GeneralException.class)
     public void saveWithInvalidName() {
@@ -214,7 +214,7 @@ public class TransportLineServiceImplIntegrationTest {
     }
 
     /**
-     * Test with to short name value
+     * Test with to short firstName value
      */
     @Test(expected = GeneralException.class)
     @Transactional
@@ -228,7 +228,7 @@ public class TransportLineServiceImplIntegrationTest {
     }
 
     /**
-     * Test with too long name value
+     * Test with too long firstName value
      */
     @Test(expected = GeneralException.class)
     @Transactional
@@ -242,7 +242,7 @@ public class TransportLineServiceImplIntegrationTest {
     }
 
     /**
-     * Test with min length name value
+     * Test with min length firstName value
      */
     @Test
     @Transactional
@@ -267,7 +267,7 @@ public class TransportLineServiceImplIntegrationTest {
     }
 
     /**
-     * Test with max length name value
+     * Test with max length firstName value
      */
     @Test
     @Transactional
@@ -389,7 +389,7 @@ public class TransportLineServiceImplIntegrationTest {
     }
 
     /**
-     * Test replacement transport lines with duplicate name
+     * Test replacement transport lines with duplicate firstName
      */
     @Test(expected = GeneralException.class)
     public void replaceAllWithNotUniqueName() {
@@ -406,7 +406,7 @@ public class TransportLineServiceImplIntegrationTest {
     }
 
     /**
-     * Test with too short name value
+     * Test with too short firstName value
      */
     @Test(expected = GeneralException.class)
     @Transactional
@@ -416,7 +416,7 @@ public class TransportLineServiceImplIntegrationTest {
     }
 
     /**
-     * Test with too long name value
+     * Test with too long firstName value
      */
     @Test(expected = GeneralException.class)
     @Transactional
@@ -426,7 +426,7 @@ public class TransportLineServiceImplIntegrationTest {
     }
 
     /**
-     * Test with min length name value
+     * Test with min length firstName value
      */
     @Test
     @Transactional
@@ -445,7 +445,7 @@ public class TransportLineServiceImplIntegrationTest {
     }
 
     /**
-     * Test with max length name value
+     * Test with max length firstName value
      */
     @Test
     @Transactional
