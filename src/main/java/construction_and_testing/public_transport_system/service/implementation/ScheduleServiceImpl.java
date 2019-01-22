@@ -72,7 +72,7 @@ public class ScheduleServiceImpl implements ScheduleService {
             schedule.getDepartures().sort(new TimeStringComparator());
             return schedule;
         } catch (Exception e) {
-            throw new GeneralException("Requested schedule doesn't exist!", HttpStatus.BAD_REQUEST);
+            throw new GeneralException("Requested schedule doesn't exist!", HttpStatus.NOT_FOUND);
         }
     }
 

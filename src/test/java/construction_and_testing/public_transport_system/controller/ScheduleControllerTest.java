@@ -14,12 +14,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.SpyBean;
 import org.springframework.boot.test.web.client.TestRestTemplate;
+import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.http.*;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.util.UriComponentsBuilder;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 import static construction_and_testing.public_transport_system.constants.ScheduleConstants.*;
 import static org.assertj.core.api.Assertions.assertThat;
@@ -31,6 +32,9 @@ import static org.mockito.ArgumentMatchers.any;
 public class ScheduleControllerTest {
 
     private final String URL = "/api/schedule";
+
+    @LocalServerPort
+    private int port;
 
     @Autowired
     private TestRestTemplate testRestTemplate;
@@ -96,8 +100,6 @@ public class ScheduleControllerTest {
         ResponseEntity<ScheduleDTO[]> result = testRestTemplate
                 .exchange(this.URL + "/findByTransportLineId/" + DB_TRANSPORT_LINE.getId(), HttpMethod.GET, entity, ScheduleDTO[].class);
 
-        //"api/schedule/findByTransportLineId/1"
-
         ScheduleDTO[] body = result.getBody();
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.FOUND);
         assertThat(body).isNotNull();
@@ -107,15 +109,79 @@ public class ScheduleControllerTest {
             Schedule temp = DB_SCHEDULES.get(idx);
 
             assertThat(scheduleDTO.getId()).isEqualTo(temp.getId());
-            //assertThat(schedule.getTransportLine().getFirstName()).isEqualTo(DB_TL_NAME);
             assertThat(scheduleDTO.getDayOfWeek()).isEqualTo(temp.getDayOfWeek());
-            //assertThat(schedule.getDepartures()).isEqualTo(DB_VALID_DEPARTURES);
-            //assertThat(body.getDepartures().size()).isEqualTo(DB_VALID_DEPARTURES_SIZE);
             assertThat(scheduleDTO.isActive()).isEqualTo(temp.isActive());
             idx+=1;
         }
-
     }
+
+
+    /**
+     * Test with valid id
+     */
+    @Test
+    public void findByTransportLineIdInvalid() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
+
+        ResponseEntity<ScheduleDTO[]> result = testRestTemplate
+                .exchange(this.URL + "/findByTransportLineId/" + 21341234L, HttpMethod.GET, entity, ScheduleDTO[].class);
+
+        ScheduleDTO[] body = result.getBody();
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.FOUND);
+        assertThat(body).isNotNull();
+        assertThat(body.length).isEqualTo(0);
+    }
+
+    /**
+     * Test with valid id
+     */
+    @Test
+    public void findByTransportLineIdAndDayOfWeekValid() {
+
+        Map<String, String> params = new HashMap<>();
+        params.put("dayOfWeek", DayOfWeek.WORKDAY.toString());
+
+        //HttpEntity<String> entity = new HttpEntity<>("parameters", params);
+
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl("http://localhost:" + this.port  + this.URL + "/findByTransportLineIdAndDayOfWeek/" + 1L)
+                .queryParam("dayOfWeek", DayOfWeek.WORKDAY.toString());
+
+        //this.URL + "/findByTransportLineIdAndDayOfWeek/" + 1L  + "?dayOfWeek={dayOfWeek}"
+        ResponseEntity<String> result = testRestTemplate
+                .getForEntity(builder.build().encode().toUri(), String.class);
+
+        System.out.println(result.getBody().toString());
+
+        /*ScheduleDTO body = result.getBody();
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.FOUND);
+        assertThat(body).isNotNull();
+
+        assertThat(body.getTransportLine().getName()).isEqualTo("R1");*/
+    }
+
+
+    /**
+     * Test with valid id
+     */
+    @Test
+    public void findByTransportLineIdAndDayOfWeekInvalid() {
+        HttpHeaders headers = new HttpHeaders();
+        headers.setContentType(MediaType.APPLICATION_JSON);
+
+        HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
+
+        ResponseEntity<ScheduleDTO> result = testRestTemplate
+                .exchange(this.URL + "/findByTransportLineIdAndDayOfWeek/" + 21341234L + "?dayOfWeek=" + DayOfWeek.WORKDAY.toString(),
+                        HttpMethod.GET, entity, ScheduleDTO.class);
+
+        ScheduleDTO body = result.getBody();
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
+        //assertThat(body).isNull();
+    }
+
 
     /**
      * Test with invalid id
@@ -127,10 +193,11 @@ public class ScheduleControllerTest {
 
         String body = result.getBody();
 
-        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
         assertThat(body).isNotNull();
         assertThat(body).isEqualTo("Requested schedule does not exist!");
     }
+
 
     /**
      * Test valid schedule saving
@@ -140,23 +207,24 @@ public class ScheduleControllerTest {
         ScheduleDTO scheduleDTO = new ScheduleDTO(
                 new Schedule(null, DB_TRANSPORT_LINE_3, DayOfWeek.WORKDAY, DB_NEW_DEPARTURES, true));
         System.out.println(scheduleDTO.toString());
-        ResponseEntity<String> result = testRestTemplate.exchange(this.URL, HttpMethod.POST,
-                new HttpEntity<ScheduleDTO>(scheduleDTO), String.class);
+        ResponseEntity<ScheduleDTO> result = testRestTemplate.exchange(this.URL, HttpMethod.POST,
+                new HttpEntity<ScheduleDTO>(scheduleDTO), ScheduleDTO.class);
 
-        String body = result.getBody();
+        ScheduleDTO body = result.getBody();
         System.out.println(body);
         System.out.println(result.toString());
-        /*assertThat(result.getStatusCode()).isEqualTo(HttpStatus.ACCEPTED);
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.ACCEPTED);
         assertThat(body).isNotNull();
         //assertThat(schedule.getTransportLine().getFirstName()).isEqualTo(DB_TL_NAME);
         assertThat(body.getDayOfWeek()).isEqualTo(scheduleDTO.getDayOfWeek());
         //assertThat(schedule.getDepartures()).isEqualTo(DB_VALID_DEPARTURES);
         assertThat(body.getDepartures().size()).isEqualTo(scheduleDTO.getDepartures().size());
-        assertThat(body.isActive()).isEqualTo(true);*/
+        assertThat(body.isActive()).isEqualTo(true);
     }
 
+
     /**
-     * Test valid schedule saving
+     * Test invalid schedule saving
      */
     @Test
     public void saveInvalid() throws Exception {
@@ -172,21 +240,21 @@ public class ScheduleControllerTest {
 
     /**
      * Test transport line position has long id instead of null
-
+    */
     @Test
     public void saveWithInvalidFormat() throws Exception {
         ScheduleDTO scheduleDTO = new ScheduleDTO(
-                new Schedule(null, DB_INVALID_TRANSPORT_LINE, DB_VALID_DAY_OF_WEEK, DB_NEW_DEPARTURES, true));
+                new Schedule(100L, DB_TRANSPORT_LINE_1, DB_VALID_DAY_OF_WEEK, DB_NEW_DEPARTURES, true));
         String jsonSchedule = TestUtil.json(scheduleDTO);
 
         ResponseEntity<String> result = testRestTemplate.postForEntity(this.URL, jsonSchedule, String.class);
 
         String body = result.getBody();
 
-        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
-        assertThat(body).isNotNull();
-        assertThat(body).isEqualTo("Requested transport line does not exist!");
-    }*/
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+        assertThat(body).isNull();
+        //assertThat(body).isEqualTo("Requested transport line does not exist!");
+    }
 
     /**
      * Test valid schedule updating
@@ -295,7 +363,7 @@ public class ScheduleControllerTest {
     /**
      * Test with null values
      */
-    /*@Test
+    @Test
     public void saveWithNullValues() throws Exception {
         ScheduleDTO scheduleDTO = new ScheduleDTO(
                 new Schedule(null, null, null, null, true));
@@ -305,10 +373,9 @@ public class ScheduleControllerTest {
 
         String body = result.getBody();
 
-        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.INTERNAL_SERVER_ERROR);
-        assertThat(body).isNotNull();
-        assertThat(body).isEqualTo("Transport lines have invalid schedule or position associated!");
-    }*/
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.UNSUPPORTED_MEDIA_TYPE);
+        assertThat(body).isNull();
+    }
 }
 
 
