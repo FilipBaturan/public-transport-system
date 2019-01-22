@@ -119,6 +119,15 @@ public class TransportLineServiceImplIntegrationTest {
     }
 
     /**
+     * Test null saving
+     */
+    @Test(expected = GeneralException.class)
+    @Transactional
+    public void saveNull() {
+        transportLineService.save(null);
+    }
+
+    /**
      * Test valid transport line saving with updated
      * Vehicles associated with transport line should be updated
      * with null current line
@@ -386,6 +395,15 @@ public class TransportLineServiceImplIntegrationTest {
         transportLines.forEach(transportLine -> assertThat(transportLine.getSchedule().size()).isEqualTo(0));
         vehicleRepository.findAll().forEach(vehicle -> assertThat(vehicle.getCurrentLine()).isNull());
         assertThat(ticketRepository.findAll().size()).isEqualTo(0);
+    }
+
+    /**
+     * Test null replacing
+     */
+    @Test(expected = GeneralException.class)
+    @Transactional
+    public void replaceAllNull() {
+        transportLineService.replaceAll(null);
     }
 
     /**

@@ -89,7 +89,7 @@ public class ZoneServiceImplIntegrationTest {
     }
 
     /**
-     * Test with transport lines
+     * Test save with transport lines
      */
     @Test
     @Transactional
@@ -110,7 +110,16 @@ public class ZoneServiceImplIntegrationTest {
     }
 
     /**
-     * Test with transport lines
+     * Test null saving
+     */
+    @Test(expected = GeneralException.class)
+    @Transactional
+    public void saveNull() {
+        zoneService.save(null);
+    }
+
+    /**
+     * Test save with transport lines
      */
     @Test(expected = GeneralException.class)
     @Transactional

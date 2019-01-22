@@ -96,6 +96,14 @@ public class StationServiceImplUnitTest {
     }
 
     /**
+     * Test null saving
+     */
+    @Test(expected = GeneralException.class)
+    public void saveNull() {
+        stationService.save(null);
+    }
+
+    /**
      * Test with null values
      */
     @Test(expected = GeneralException.class)
@@ -250,6 +258,14 @@ public class StationServiceImplUnitTest {
 
         Mockito.verify(stationRepository, Mockito.times(1)).deleteAll();
         Mockito.verify(stationRepository, Mockito.times(1)).saveAll(any());
+    }
+
+    /**
+     * Test null replacement
+     */
+    @Test(expected = GeneralException.class)
+    public void replaceAllNull() {
+        stationService.replaceAll(null);
     }
 
     /**
