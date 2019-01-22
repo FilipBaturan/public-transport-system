@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import construction_and_testing.public_transport_system.converter.ScheduleConverter;
 import construction_and_testing.public_transport_system.domain.DTO.ScheduleDTO;
 import construction_and_testing.public_transport_system.domain.Schedule;
+import construction_and_testing.public_transport_system.domain.TransportLine;
 import construction_and_testing.public_transport_system.domain.enums.DayOfWeek;
 import construction_and_testing.public_transport_system.service.definition.ScheduleService;
 import construction_and_testing.public_transport_system.service.definition.TransportLineService;
@@ -33,6 +34,7 @@ public class ScheduleController extends ValidationController {
     @Autowired
     private TransportLineService transportLineService;
 
+
     /**
      * GET /api/schedule
      *
@@ -45,6 +47,7 @@ public class ScheduleController extends ValidationController {
         return new ResponseEntity<>(ScheduleConverter.fromEntityList(scheduleService.getAll(), ScheduleDTO::new),
                 HttpStatus.OK);
     }
+
 
     /**
      * GET /api/schedule/{id}
@@ -68,11 +71,12 @@ public class ScheduleController extends ValidationController {
      * @return schedule for a transport line with requested id
      */
     @GetMapping("/findByTrLineIdAndDayOfWeek/{id}")
-    public ResponseEntity<ScheduleDTO> findByTransportLineIdAndDayOfWeek(@PathVariable Long id, @RequestParam String dayOfWeek) {
+    public ResponseEntity<ScheduleDTO> findByTransportLineIdAndDayOfWeek(@PathVariable("id") Long id, @RequestParam String dayOfWeek) {
         logger.info("Requesting schedule for transprot line with  {} at time {}.", id, Calendar.getInstance().getTime());
         Schedule schedule = scheduleService.findByTransportLineIdAndDayOfWeek(id, DayOfWeek.valueOf(dayOfWeek).ordinal());
-        return new ResponseEntity<>(new ScheduleDTO(schedule), HttpStatus.OK);
+        return new ResponseEntity<>(new ScheduleDTO(schedule), HttpStatus.FOUND);
     }
+
 
     /**
      * GET /api/schedule/findByTransportLineId/{id}
@@ -81,53 +85,83 @@ public class ScheduleController extends ValidationController {
      * @return schedule for a transport line with requested id
      */
     @GetMapping("/findByTransportLineId/{id}")
-    public ResponseEntity<List<ScheduleDTO>> findByTransportLineId(@PathVariable Long id) {
+    public ResponseEntity<List<ScheduleDTO>> findByTransportLineId(@PathVariable("id") String id) {
         logger.info("Requesting schedule for transprot line with  {} at time {}.", id, Calendar.getInstance().getTime());
-        return new ResponseEntity<>(ScheduleConverter.fromEntityList(scheduleService.findByTransportLineId(id), ScheduleDTO::new), HttpStatus.OK);
+        return new ResponseEntity<>(ScheduleConverter.fromEntityList(scheduleService.findByTransportLineId(Long.parseLong(id)), ScheduleDTO::new), HttpStatus.FOUND);
     }
+
 
     /**
      * POST /api/schedule
      *
-     * @param schedule that needs to be saved
+     * @param scheduleDTO that is to be saved
      * @return saved schedule
      */
-    @PostMapping()
-    public ResponseEntity<ScheduleDTO> create(@RequestBody String schedule) throws IOException, ValidationException {
+    @PostMapping
+    public ResponseEntity<ScheduleDTO> create(@RequestBody ScheduleDTO scheduleDTO) throws IOException, ValidationException {
         logger.info("Saving schedule at time {}.", Calendar.getInstance().getTime());
-        validateJSON(schedule, "schedule.json");
-        ObjectMapper mapper = new ObjectMapper();
-        Schedule temp = new Schedule(mapper.readValue(schedule, ScheduleDTO.class));
-        temp.setTransportLine(transportLineService.findById(temp.getTransportLine().getId()));
-        return new ResponseEntity<>(new ScheduleDTO(scheduleService.save(temp))
+        //validateJSON(schedule, "schedule.json");
+        try {
+            TransportLine transportLine = transportLineService.findById(scheduleDTO.getTransportLine().getId());
+            if (transportLine==null){
+                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            }
+
+            Schedule schedule = scheduleService.findScheduleIfExists(new Schedule(scheduleDTO));
+            if (schedule==null) {
+                /*if (scheduleDTO.getId() == null)
+                    return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+                else
+                    schedule = new Schedule(scheduleDTO);*/
+                schedule = new Schedule(scheduleDTO);
+            }
+
+            schedule.setTransportLine(transportLine);
+            schedule.setDepartures(scheduleDTO.getDepartures());
+            schedule.setActive(true);
+
+            return new ResponseEntity<>(new ScheduleDTO(scheduleService.save(schedule))
                 , HttpStatus.ACCEPTED);
+        } catch (GeneralException ge){
+             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+         }
     }
 
+
+    /**
+     * PUT /api/schedule/updateSchedule
+     *
+     * @param scheduleDTOS schedules that are to be updated
+     * @return true if schedules are updated successfully, else false
+     */
     @PutMapping("/updateSchedule")
-    ResponseEntity<Boolean> updateSchedule(@RequestBody ScheduleDTO scheduleDTO) {
-        Schedule schedule = null;
+    ResponseEntity<Boolean> updateSchedule(@RequestBody List<ScheduleDTO> scheduleDTOS) {
+        for (ScheduleDTO scheduleDTO: scheduleDTOS) {
+            Schedule schedule = null;
+            try {
+                schedule = this.scheduleService.findById(scheduleDTO.getId());
+            } catch (GeneralException ge) {
+                return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+            }
 
-        try {
-            schedule = this.scheduleService.findById(scheduleDTO.getId());
-        } catch (GeneralException ge) {
-            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+            schedule.setDepartures(scheduleDTO.getDepartures());
+            schedule.setActive(scheduleDTO.isActive());
+
+            try {
+                this.scheduleService.save(schedule);
+
+            } catch (GeneralException e) {
+                return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
+            }
         }
-
-        ModelMapper mapper = new ModelMapper();
-        mapper.map(scheduleDTO, schedule);
-
-        try {
-            this.scheduleService.save(schedule);
-            return new ResponseEntity<>(true, HttpStatus.OK);
-        } catch (GeneralException e) {
-            return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
-        }
+        return new ResponseEntity<>(true, HttpStatus.OK);
     }
+
 
     /**
      * DELETE /api/schedule/{id}
      *
-     * @param schedule that needs to be deleted
+     * @param id of a schedule that is to be deleted
      * @return message about action results
      */
     @DeleteMapping("{id}")
