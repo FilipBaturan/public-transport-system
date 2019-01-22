@@ -73,6 +73,9 @@ public class StationServiceImpl implements StationService {
      * @param station that needs to be validated
      */
     private void validate(Station station) {
+        if (station == null) {
+            throw new GeneralException("Invalid station", HttpStatus.BAD_REQUEST);
+        }
         Set<ConstraintViolation<Station>> violations = Validation.buildDefaultValidatorFactory()
                 .getValidator().validate(station);
         if (!violations.isEmpty()) {
@@ -92,6 +95,9 @@ public class StationServiceImpl implements StationService {
      * @param stations that need to be validated
      */
     private void validate(Iterable<Station> stations) {
+        if (stations == null) {
+            throw new GeneralException("Invalid station", HttpStatus.BAD_REQUEST);
+        }
         stations.forEach(this::validate);
     }
 
