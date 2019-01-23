@@ -59,7 +59,7 @@ public class ScheduleController extends ValidationController {
     public ResponseEntity<ScheduleDTO> findById(@PathVariable("id") String id) {
         try{
             logger.info("Requesting schedule with id {} at time {}.", id, Calendar.getInstance().getTime());
-            return new ResponseEntity<>(new ScheduleDTO(scheduleService.findById(Long.parseLong(id))), HttpStatus.FOUND);
+            return new ResponseEntity<>(new ScheduleDTO(scheduleService.findById(Long.parseLong(id))), HttpStatus.OK);
         } catch(Exception e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -74,11 +74,12 @@ public class ScheduleController extends ValidationController {
      * @return schedule for a transport line with requested id
      */
     @GetMapping("/findByTrLineIdAndDayOfWeek/{id}")
-    public ResponseEntity<ScheduleDTO> findByTransportLineIdAndDayOfWeek(@PathVariable("id") Long id, @RequestParam("dayOfWeek") String dayOfWeek) {
+    public ResponseEntity<ScheduleDTO> findByTransportLineIdAndDayOfWeek(@PathVariable String id, @RequestParam String dayOfWeek) {
         logger.info("Requesting schedule for transprot line with  {} at time {}.", id, Calendar.getInstance().getTime());
         try{
-            Schedule schedule = scheduleService.findByTransportLineIdAndDayOfWeek(id, DayOfWeek.valueOf(dayOfWeek).ordinal());
-            return new ResponseEntity<>(new ScheduleDTO(schedule), HttpStatus.FOUND);
+            Schedule schedule = scheduleService.findByTransportLineIdAndDayOfWeek(Long.parseLong(id), DayOfWeek.valueOf(dayOfWeek).ordinal());
+            System.out.println(schedule.toString());
+            return new ResponseEntity<>(new ScheduleDTO(schedule), HttpStatus.OK);
         } catch(Exception e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -95,7 +96,7 @@ public class ScheduleController extends ValidationController {
     public ResponseEntity<List<ScheduleDTO>> findByTransportLineId(@PathVariable("id") String id) {
         try{
             logger.info("Requesting schedule for transprot line with  {} at time {}.", id, Calendar.getInstance().getTime());
-            return new ResponseEntity<>(ScheduleConverter.fromEntityList(scheduleService.findByTransportLineId(Long.parseLong(id)), ScheduleDTO::new), HttpStatus.FOUND);
+            return new ResponseEntity<>(ScheduleConverter.fromEntityList(scheduleService.findByTransportLineId(Long.parseLong(id)), ScheduleDTO::new), HttpStatus.OK);
         } catch(Exception e){
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

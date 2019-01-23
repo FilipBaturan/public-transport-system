@@ -76,7 +76,7 @@ public class ScheduleControllerTest {
 
         ScheduleDTO body = result.getBody();
 
-        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.FOUND);
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(body).isNotNull();
 
         assertThat(body.getId()).isEqualTo(DB_VALID_ID);
@@ -101,7 +101,7 @@ public class ScheduleControllerTest {
                 .exchange(this.URL + "/findByTransportLineId/" + DB_TRANSPORT_LINE.getId(), HttpMethod.GET, entity, ScheduleDTO[].class);
 
         ScheduleDTO[] body = result.getBody();
-        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.FOUND);
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(body).isNotNull();
 
         int idx = 0;
@@ -130,7 +130,7 @@ public class ScheduleControllerTest {
                 .exchange(this.URL + "/findByTransportLineId/" + 21341234L, HttpMethod.GET, entity, ScheduleDTO[].class);
 
         ScheduleDTO[] body = result.getBody();
-        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.FOUND);
+        assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(body).isNotNull();
         assertThat(body.length).isEqualTo(0);
     }
