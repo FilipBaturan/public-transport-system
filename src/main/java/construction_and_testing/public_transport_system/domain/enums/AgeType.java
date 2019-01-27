@@ -4,5 +4,6 @@ public enum AgeType {
 
     STUDENT,
     PENSIONER,
-    REGULAR
+    REGULAR,
+    ALL
 }

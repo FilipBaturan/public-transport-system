@@ -86,6 +86,15 @@ public class StationServiceImplIntegrationTest {
     }
 
     /**
+     * Test null saving
+     */
+    @Test(expected = GeneralException.class)
+    @Transactional
+    public void saveNull() {
+        stationService.save(null);
+    }
+
+    /**
      * Test with null values
      */
     @Test(expected = GeneralException.class)
@@ -198,6 +207,15 @@ public class StationServiceImplIntegrationTest {
                     .stream().map(Station::getName).collect(Collectors.toList()));
         });
         assertThat(stations).doesNotContainSequence(stationsBefore);
+    }
+
+    /**
+     * Test null replacement
+     */
+    @Test(expected = GeneralException.class)
+    @Transactional
+    public void replaceAllNull() {
+        stationService.replaceAll(null);
     }
 
     /**

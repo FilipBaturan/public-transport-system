@@ -44,7 +44,7 @@ public class RegisteredUserServiceImpl implements RegisteredUserService {
     public boolean modify(RegisteredUser user) {
         if (registeredUserRepository.findById(user.getId()).isPresent()) {
             RegisteredUser toChange = registeredUserRepository.findById(user.getId()).get();
-            toChange.setName(user.getName());
+            toChange.setFirstName(user.getFirstName());
             toChange.setLastName(user.getLastName());
             toChange.setEmail(user.getEmail());
             toChange.setUsername(user.getUsername());

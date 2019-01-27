@@ -2,7 +2,6 @@ package construction_and_testing.public_transport_system.domain;
 
 import construction_and_testing.public_transport_system.domain.DTO.ScheduleDTO;
 import construction_and_testing.public_transport_system.domain.enums.DayOfWeek;
-import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -14,7 +13,7 @@ import java.util.Objects;
  * Add later
  */
 @Entity
-@Where(clause = "active =1")
+//@Where(clause = "active =1")
 public class Schedule implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -59,7 +58,7 @@ public class Schedule implements Serializable {
 
     public Schedule(ScheduleDTO schedule) {
         this.id = schedule.getId();
-        this.transportLine = new TransportLine(schedule.getTransportLine().getId());
+        this.transportLine = new TransportLine(schedule.getTransportLine());
         this.departures = schedule.getDepartures();
         this.active = schedule.isActive();
         this.dayOfWeek = schedule.getDayOfWeek();
@@ -117,6 +116,14 @@ public class Schedule implements Serializable {
         this.active = active;
     }
 
+    public DayOfWeek getDayOfWeek() {
+        return dayOfWeek;
+    }
+
+    public void setDayOfWeek(DayOfWeek dayOfWeek) {
+        this.dayOfWeek = dayOfWeek;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -130,11 +137,14 @@ public class Schedule implements Serializable {
         return Objects.hash(id);
     }
 
-    public DayOfWeek getDayOfWeek() {
-        return dayOfWeek;
-    }
-
-    public void setDayOfWeek(DayOfWeek dayOfWeek) {
-        this.dayOfWeek = dayOfWeek;
+    @Override
+    public String toString() {
+        return "Schedule{" +
+                "id=" + id +
+                ", transportLine=" + transportLine +
+                ", dayOfWeek=" + dayOfWeek +
+                ", departures=" + departures.toString() +
+                ", active=" + active +
+                '}';
     }
 }

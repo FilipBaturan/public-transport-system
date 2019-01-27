@@ -2,11 +2,8 @@ package construction_and_testing.public_transport_system.controller;
 
 import construction_and_testing.public_transport_system.converter.RegisteredUserConverter;
 import construction_and_testing.public_transport_system.converter.UserConverter;
+import construction_and_testing.public_transport_system.domain.*;
 import construction_and_testing.public_transport_system.domain.DTO.*;
-import construction_and_testing.public_transport_system.domain.Operator;
-import construction_and_testing.public_transport_system.domain.RegisteredUser;
-import construction_and_testing.public_transport_system.domain.User;
-import construction_and_testing.public_transport_system.domain.Validator;
 import construction_and_testing.public_transport_system.domain.enums.AuthorityType;
 import construction_and_testing.public_transport_system.domain.enums.UsersDocumentsStatus;
 import construction_and_testing.public_transport_system.security.TokenUtils;
@@ -64,6 +61,7 @@ public class UserController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
+
     /**
      * GET /api/user
      * <p>
@@ -76,6 +74,10 @@ public class UserController {
         //add integration later
     }
 
+        /**
+     * @param username of a validator that is being searched
+     * @return validator with the given username
+     */
     @GetMapping("/getByUsername/{username}")
     public ResponseEntity<ValidatorDTO> getByUsername(@PathVariable String username) {
         try {
@@ -86,13 +88,39 @@ public class UserController {
         }
     }
 
+//    /**
+//     * @param username of a user that is being searched
+//     * @return type of user if successful
+//     */
+//    @GetMapping("/getRegByUsername/{username}")
+//    public Object getByUsername(@PathVariable("username") String username) {
+//        try {
+//            User user = userService.findByUsername(username);
+//
+//            System.out.println(user.toString());
+//
+//            if (user == null)
+//                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//
+//            if (user.getAuthorityType() == AuthorityType.OPERATER)
+//                return new ResponseEntity<>(UserConverter.fromEntity((Operator) user), HttpStatus.FOUND);
+//            else if (user.getAuthorityType() == AuthorityType.VALIDATOR)
+//                return new ResponseEntity<>(UserConverter.fromEntity((Validator) user), HttpStatus.FOUND);
+//            else if (user.getAuthorityType() == AuthorityType.ADMIN)
+//                return new ResponseEntity<>(UserConverter.fromEntity(user), HttpStatus.FOUND);
+//            else
+//                return new ResponseEntity<>(UserConverter.fromEntity(user), HttpStatus.FOUND);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
+//    }
+
     @GetMapping("/getRegByUsername/{username}")
     public ResponseEntity<UserDTO> getRegByUsername(@PathVariable String username) {
         try {
             ResponseEntity re = new ResponseEntity<>(UserConverter.fromEntity(userService.findByUsername(username)), HttpStatus.OK);
             return re;
-        }catch (Exception e)
-        {
+        } catch (Exception e) {
             return new ResponseEntity<>(new UserDTO(), HttpStatus.NOT_FOUND);
         }
     }
@@ -126,6 +154,7 @@ public class UserController {
                 HttpStatus.BAD_REQUEST);*/
     }
 
+
     /**
      * GET /api/user/currentUser
      * <p>
@@ -137,6 +166,7 @@ public class UserController {
     public ResponseEntity findCurrentUser() {
         return new ResponseEntity<>(UserConverter.fromLoggedEntity(userService.findCurrentUser()), HttpStatus.OK);
     }
+
 
     /**
      * POST /api/user
@@ -159,6 +189,7 @@ public class UserController {
         return new ResponseEntity<>(false, HttpStatus.CONFLICT);
     }
 
+
     /**
      * PUT /api/user/modifyRegistered
      * <p>
@@ -169,7 +200,7 @@ public class UserController {
      */
     @PutMapping("/modifyRegistered/{id}")
     //@PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<RegisteredUser> update(@PathVariable Long id, @RequestBody RegisteringUserDTO user) {
+    public ResponseEntity<RegisteredUser> update(@PathVariable("id") Long id, @RequestBody RegisteringUserDTO user) {
         RegisteredUser changed = RegisteredUserConverter.fromRegisteringUserDTO(user);
         changed.setId(id);
         if (!changed.getPassword().startsWith("$")) {
@@ -232,7 +263,6 @@ public class UserController {
 
     @PutMapping("/denyUser")
     public ResponseEntity<Boolean> denyUser(@RequestBody UserDTO user) {
-
 
         try {
             User u = this.userService.findById(user.getId());
@@ -317,11 +347,11 @@ public class UserController {
     }
 
     @GetMapping("/getOperators")
-    public ResponseEntity<List<UserDTO>> getOperators() {
+    public ResponseEntity<List<OperatorDTO>> getOperators() {
         List<Operator> listOfOperators = userService.getOperators();
-        List<UserDTO> listOfDTOOperators = new ArrayList<>();
-        for (Operator user : listOfOperators) {
-            listOfDTOOperators.add(UserConverter.fromEntity(user));
+        List<OperatorDTO> listOfDTOOperators = new ArrayList<>();
+        for (Operator operator : listOfOperators) {
+            listOfDTOOperators.add(UserConverter.fromEntity(operator));
         }
 
         return new ResponseEntity<>(listOfDTOOperators, HttpStatus.OK);
@@ -329,7 +359,7 @@ public class UserController {
     }
 
     @PutMapping("/updateOperator")
-    public ResponseEntity<Boolean> updateOperator(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<Boolean> updateOperator(@RequestBody OperatorDTO userDTO) {
 
         User operator = null;
 
@@ -341,12 +371,17 @@ public class UserController {
 
 
         if (operator.getAuthorityType() != AuthorityType.OPERATER)
-            return new ResponseEntity<>(false, HttpStatus.I_AM_A_TEAPOT);
+            return new ResponseEntity<>(false, HttpStatus.NOT_ACCEPTABLE);
 
         ModelMapper mapper = new ModelMapper();
         mapper.map(userDTO, operator);
+
+        System.out.println(userDTO.toString());
+        System.out.println(operator.toString());
+
         try {
             this.userService.save(operator);
+
             return new ResponseEntity<>(true, HttpStatus.OK);
         } catch (GeneralException e) {
             return new ResponseEntity<>(false, HttpStatus.NOT_ACCEPTABLE);
@@ -355,10 +390,14 @@ public class UserController {
     }
 
     @PostMapping("/addOperator")
-    ResponseEntity<Boolean> addOperator(@RequestBody UserDTO userDTO) {
+    ResponseEntity<Boolean> addOperator(@RequestBody OperatorDTO userDTO) {
         if (userDTO.getId() != null)
             return new ResponseEntity<>(false, HttpStatus.CONFLICT);
         else {
+            if (this.userService.findByUsername(userDTO.getUsername()) != null)
+                return new ResponseEntity<>(false, HttpStatus.CONFLICT);
+
+            userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
             Operator newOperator = new Operator(UserConverter.toEntity(userDTO));
             try {
                 this.userService.save(newOperator);

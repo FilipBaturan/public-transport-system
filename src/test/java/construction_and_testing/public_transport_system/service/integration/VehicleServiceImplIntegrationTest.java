@@ -82,6 +82,15 @@ public class VehicleServiceImplIntegrationTest {
     }
 
     /**
+     * Test null saving
+     */
+    @Test(expected = GeneralException.class)
+    @Transactional
+    public void saveNull() {
+        vehicleService.save(null);
+    }
+
+    /**
      * Test with invalid vehicle type and transport line type
      */
     @Test(expected = GeneralException.class)

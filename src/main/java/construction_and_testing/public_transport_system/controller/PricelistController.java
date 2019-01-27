@@ -6,6 +6,7 @@ import construction_and_testing.public_transport_system.domain.DTO.PricelistDTO;
 import construction_and_testing.public_transport_system.domain.Pricelist;
 import construction_and_testing.public_transport_system.service.definition.PricelistService;
 import construction_and_testing.public_transport_system.util.GeneralException;
+import construction_and_testing.public_transport_system.util.PricelistTimeIntervalException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -36,20 +37,48 @@ public class PricelistController {
      * @return added pricelist
      */
     @PostMapping
-    public ResponseEntity<Pricelist> create(@RequestBody Pricelist pricelist) {
-        logger.info("Adding pricelist at time {}.", Calendar.getInstance().getTime());
-        Pricelist p = this.pricelistService.savePricelist(pricelist);
-        if (p != null) {
-            return new ResponseEntity<>(p, HttpStatus.CREATED);
-        } else {
-            throw new GeneralException("Pricelist with given name already exist!", HttpStatus.BAD_REQUEST);
+    public ResponseEntity<Object> create(@RequestBody Pricelist pricelist) {
+        try {
+            Pricelist p = this.pricelistService.savePricelist(pricelist);
+            if (p != null) {
+                logger.info("Adding pricelist at time {}.", Calendar.getInstance().getTime());
+                return new ResponseEntity<>(HttpStatus.CREATED);
+            } else {
+                throw new GeneralException("Pricelist with given firstName already exist!", HttpStatus.BAD_REQUEST);
+            }
+        } catch (PricelistTimeIntervalException e) {
+            return new ResponseEntity<>(e.getHttpStatus());
         }
     }
 
+    /**
+     * Finding active price list.
+     *
+     * @return pricelist with all items, if active is existing
+     * BAD_REQUEST if there's no active price list.
+     */
     @GetMapping("findActive")
     public ResponseEntity<PricelistDTO> findActive() {
         Pricelist p = pricelistService.findValid();
-        return new ResponseEntity<>(PriceListConverter.fromEntity(p), HttpStatus.OK);
+        if (p != null) {
+            logger.info("Successfully found price list");
+            return new ResponseEntity<>(PriceListConverter.fromEntity(p), HttpStatus.OK);
+        } else {
+            logger.warn("There is no active price list.");
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("modify")
+    public ResponseEntity<Object> modify(@RequestBody Pricelist pricelist) {
+        Pricelist p = this.pricelistService.modify(pricelist);
+        if (p != null) {
+            logger.info("Modifying pricelist at time {}.", Calendar.getInstance().getTime());
+            return new ResponseEntity<>(HttpStatus.CREATED);
+        } else {
+            throw new GeneralException("Pricelist with given firstName already exist!", HttpStatus.BAD_REQUEST);
+        }
+
     }
 
     /**

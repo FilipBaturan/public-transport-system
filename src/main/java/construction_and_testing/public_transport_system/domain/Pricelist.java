@@ -6,6 +6,7 @@ import org.hibernate.annotations.Where;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
 
@@ -37,6 +38,14 @@ public class Pricelist implements Serializable {
     private boolean active;
 
     public Pricelist() {
+        this.active = true;
+    }
+
+    public Pricelist(Long id, LocalDateTime startDate, LocalDateTime endDate) {
+        this.id = id;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.items = new HashSet<>();
         this.active = true;
     }
 
@@ -74,6 +83,9 @@ public class Pricelist implements Serializable {
 
     public void setItems(Set<PricelistItem> items) {
         this.items = items;
+        for (PricelistItem p : items) {
+            p.setPricelist(this);
+        }
     }
 
     @Override

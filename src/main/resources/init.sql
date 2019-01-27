@@ -61,10 +61,10 @@ INSERT INTO `public_transport`.`schedule` (`id`, `active`, `transport_line_id`, 
 INSERT INTO `public_transport`.`schedule` (`id`, `active`, `transport_line_id`, `day_of_week`) VALUES (106, TRUE, 2, 2);
 
 
-INSERT INTO `public_transport`.`user` (`type`, `id`, `active`, `authority`, `confirmation`, `email`, `last_name`, `name`, `password`, `telephone`, `username`, `balance`, `document`) VALUES ('REGISTERED_USER', '1', TRUE, '0', '2', 'asdasd.asd@gmail.com', 'LastName', 'FirstName', 'pass', '0120120012', 'username1', '100', 'asds');
-INSERT INTO `public_transport`.`user` (`type`, `id`, `active`, `authority`, `email`, `last_name`, `name`, `password`, `username`, `balance`, `document`) VALUES ('VALIDATOR', '2', TRUE, '2', 'asdasd.asd@gmail.com', '', 'nekoIme', '123123', 'username2', '100', 'asds');
-INSERT INTO `public_transport`.`user` (`type`, `id`, `active`, `authority`, `email`, `last_name`, `name`, `password`, `username`) VALUES ('VALIDATOR', '4', TRUE, '2', 'newEmail', '', 'newName', 'newPass', 'newUserName');
-INSERT INTO `public_transport`.`user` (`type`, `id`, `active`, `authority`, `email`, `last_name`, `name`, `password`, `username`) VALUES ('OPERATOR', '5', TRUE, '3', 'null@gmail.com', 'David', 'Davidovic', '$2a$04$CpdJcjORftUKRbJpynFIa.qUY2c/DoqNmta2dL.o6Wkw1I3ZLh79C', 'null');
+INSERT INTO `public_transport`.`user` (`type`, `id`, `active`, `authority`, `confirmation`, `email`, `last_name`, `first_name`, `password`, `telephone`, `username`, `balance`, `document`) VALUES ('REGISTERED_USER', '1', TRUE, '0', '2', 'asdasd.asd@gmail.com', 'LastName', 'FirstName', 'pass', '0120120012', 'username1', '100', 'asds');
+INSERT INTO `public_transport`.`user` (`type`, `id`, `active`, `authority`, `email`, `last_name`, `first_name`, `password`, `username`, `balance`, `document`) VALUES ('VALIDATOR', '2', TRUE, '2', 'asdasd.asd@gmail.com', '', 'nekoIme', '123123', 'username2', '100', 'asds');
+INSERT INTO `public_transport`.`user` (`type`, `id`, `active`, `authority`, `email`, `last_name`, `first_name`, `password`, `username`) VALUES ('VALIDATOR', '4', TRUE, '2', 'newEmail', '', 'newName', 'newPass', 'newUserName');
+INSERT INTO `public_transport`.`user` (`type`, `id`, `active`, `authority`, `email`, `last_name`, `first_name`, `password`, `username`) VALUES ('OPERATOR', '5', TRUE, '3', 'null@gmail.com', 'David', 'Davidovic', '$2a$04$CpdJcjORftUKRbJpynFIa.qUY2c/DoqNmta2dL.o6Wkw1I3ZLh79C', 'null');
 
 INSERT INTO `public_transport`.`schedule_departures` (`schedule_id`, `departure`) VALUES (100, '08:00');
 INSERT INTO `public_transport`.`schedule_departures` (`schedule_id`, `departure`) VALUES (100, '08:15');

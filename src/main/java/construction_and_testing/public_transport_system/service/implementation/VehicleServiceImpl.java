@@ -78,6 +78,9 @@ public class VehicleServiceImpl implements VehicleService {
      * @param vehicle that needs to be validated
      */
     private void validate(Vehicle vehicle) {
+        if (vehicle == null) {
+            throw new GeneralException("Invalid vehicle", HttpStatus.BAD_REQUEST);
+        }
         Set<ConstraintViolation<Vehicle>> violations = Validation.buildDefaultValidatorFactory()
                 .getValidator().validate(vehicle);
         if (!violations.isEmpty()) {

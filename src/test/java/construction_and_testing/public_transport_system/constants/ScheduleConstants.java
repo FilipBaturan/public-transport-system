@@ -74,11 +74,21 @@ public class ScheduleConstants {
 
     public static final ArrayList<String> DB_VALID_TL_DEPARTURES_SAT = new ArrayList<String>() {
         {
-            add("15:10");
-            add("15:25");
-            add("15:40");
-            add("15:55");
-            add("16:05");
+            add("18:00");
+            add("18:15");
+            add("18:30");
+            add("18:45");
+            add("19:00");
+        }
+    };
+
+    public static final ArrayList<String> DB_VALID_TL_DEPARTURES_SUN = new ArrayList<String>() {
+        {
+            add("22:00");
+            add("22:15");
+            add("22:30");
+            add("22:45");
+            add("23:00");
         }
     };
 
@@ -103,12 +113,28 @@ public class ScheduleConstants {
                     null, true),
             new HashSet<>(), new Zone(2L, "Liman", null, true), true);
 
+    public static final TransportLine DB_TRANSPORT_LINE_2 = new TransportLine(3L, "R3", VehicleType.BUS,
+            new TransportLinePosition(1L, "45.25674,23.45442 46.75338,24.27895(red|R3)",
+                    null, true),
+            new HashSet<>(), new Zone(2L, "Liman", null, true), true);
+
+    public static final TransportLine DB_TRANSPORT_LINE_3 = new TransportLine(4L, "R4", VehicleType.BUS,
+            new TransportLinePosition(1L, "45.25674,23.45442 46.75338,24.27895(red|R3)",
+                    null, true),
+            new HashSet<>(), new Zone(2L, "Liman", null, true), true);
+
     public static final Schedule DB_SCHEDULE = new Schedule(100L, DB_TRANSPORT_LINE, DayOfWeek.WORKDAY, DB_VALID_TL_DEPARTURES, true);
-    public static final Schedule DB_SCHEDULE_1 = new Schedule(104L, DB_TRANSPORT_LINE_1, DayOfWeek.SATURDAY, DB_VALID_TL_DEPARTURES_SAT, true);
+    public static final Schedule DB_SCHEDULE_1 = new Schedule(103L, DB_TRANSPORT_LINE, DayOfWeek.SATURDAY, DB_VALID_TL_DEPARTURES_SAT, true);
+    public static final Schedule DB_SCHEDULE_2 = new Schedule(105L, DB_TRANSPORT_LINE, DayOfWeek.SUNDAY, DB_VALID_TL_DEPARTURES_SUN, true);
+
+
+    public static final Schedule DB_INVALID_SCHEDULE = new Schedule(3L, DB_TRANSPORT_LINE_2, DayOfWeek.SATURDAY, DB_NEW_DEPARTURES, true);
+
 
     public static final List<Schedule> DB_SCHEDULES = new ArrayList<Schedule>() {{
         add(DB_SCHEDULE);
         add(DB_SCHEDULE_1);
+        add(DB_SCHEDULE_2);
     }};
 
 }

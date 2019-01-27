@@ -87,12 +87,23 @@ public class ScheduleDTO implements Serializable {
 
     @Override
     public String toString() {
-        return "ScheduleDTO{" +
-                "id=" + id +
-                ", departures=" + departures +
-                ", transportLine=" + transportLine +
-                ", dayOfWeek=" + dayOfWeek +
-                ", active=" + active +
-                '}';
+        try {
+            return "ScheduleDTO{" +
+                    "id=" + id +
+                    ", departures=" + departures.toString() +
+                    ", transportLine=" + transportLine +
+                    ", dayOfWeek=" + dayOfWeek +
+                    ", active=" + active +
+                    '}';
+
+        } catch (Exception e) {
+            return "ScheduleDTO{" +
+                    ", departures=" + departures +
+                    ", transportLine=" + transportLine +
+                    ", dayOfWeek=" + dayOfWeek +
+                    ", active=" + active +
+                    '}';
+        }
+
     }
 }

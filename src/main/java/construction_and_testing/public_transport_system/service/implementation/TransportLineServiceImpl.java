@@ -302,6 +302,9 @@ public class TransportLineServiceImpl implements TransportLineService {
      * @param transportLine that needs to be validated
      */
     private void validate(TransportLine transportLine) {
+        if (transportLine == null) {
+            throw new GeneralException("Invalid transport line", HttpStatus.BAD_REQUEST);
+        }
         Set<ConstraintViolation<TransportLine>> violations = Validation.buildDefaultValidatorFactory()
                 .getValidator().validate(transportLine);
         if (!violations.isEmpty()) {
@@ -321,6 +324,9 @@ public class TransportLineServiceImpl implements TransportLineService {
      * @param transportLines that need to be validated
      */
     private void validate(Iterable<TransportLine> transportLines) {
+        if (transportLines == null) {
+            throw new GeneralException("Invalid transport line", HttpStatus.BAD_REQUEST);
+        }
         this.validateUnique(transportLines);
         transportLines.forEach(this::validate);
     }

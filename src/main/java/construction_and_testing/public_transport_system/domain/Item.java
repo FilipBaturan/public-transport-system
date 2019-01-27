@@ -34,7 +34,6 @@ public class Item implements Serializable {
     @Column(nullable = false)
     private double cost;
 
-    //sta staviti za cascade ????
     @OneToOne(fetch = FetchType.EAGER)
     private Zone zone;
 
@@ -44,20 +43,20 @@ public class Item implements Serializable {
     @Column(nullable = false, name = "vehicleType")
     private VehicleType vehicleType;
 
-    @OneToMany(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "item")
-    private Set<PricelistItem> pricelists;
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL, mappedBy = "item")
+    private PricelistItem pricelist;
 
     public Item() {
         this.active = true;
     }
 
-    public Item(long id, TicketType type, AgeType age, double cost, Zone zone, Set<PricelistItem> pricelists) {
+    public Item(long id, TicketType type, AgeType age, double cost, Zone zone, PricelistItem pricelist) {
         this.id = id;
         this.type = type;
         this.age = age;
         this.cost = cost;
         this.zone = zone;
-        this.pricelists = pricelists;
+        this.pricelist = pricelist;
     }
 
     public Item(long id, TicketType type, AgeType age, double cost, Zone zone, Set<PricelistItem> pricelists, VehicleType vt) {
@@ -66,7 +65,7 @@ public class Item implements Serializable {
         this.age = age;
         this.cost = cost;
         this.zone = zone;
-        this.pricelists = pricelists;
+        this.pricelist = pricelist;
         this.vehicleType = vt;
     }
 
@@ -135,12 +134,13 @@ public class Item implements Serializable {
         this.active = active;
     }
 
-    public Set<PricelistItem> getPricelists() {
-        return pricelists;
+    public PricelistItem getPricelist() {
+        return pricelist;
     }
 
-    public void setPricelists(Set<PricelistItem> pricelists) {
-        this.pricelists = pricelists;
+    public void setPricelist(PricelistItem pricelist) {
+        this.pricelist = pricelist;
+        //pricelist.setItem(this);
     }
 
     public VehicleType getVehicleType() {

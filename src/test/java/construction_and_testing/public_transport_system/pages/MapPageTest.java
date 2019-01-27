@@ -161,8 +161,35 @@ public class MapPageTest {
         mapPage.getSelectOptionMetro().click();
         mapPage.getButtonSave().click();
 
+        mapPage.ensureIsEditedTransportLine("a");
+
         assertThat(mapPage.numberOfTransportLines()).isEqualTo(beforeCount);
         assertThat(mapPage.getTransportLines().get(0).getText()).contains("a");
+    }
+
+    /**
+     * Test saving transport line with max length name
+     */
+    @Test
+    public void testSaveTransportLineWithMaxLengthName() {
+
+        mapPage.ensureIsDisplayed();
+
+        mapPage.ensureIsDisplayedButtonEdit();
+
+        int beforeCount = mapPage.numberOfTransportLines();
+
+        mapPage.getEditButtonTransportLine().click();
+        mapPage.ensureIsDisplayedButtonSave();
+
+        mapPage.setInputEditTransportLineName("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        mapPage.getSelectOptionMetro().click();
+        mapPage.getButtonSave().click();
+
+        mapPage.ensureIsEditedTransportLine("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+
+        assertThat(mapPage.numberOfTransportLines()).isEqualTo(beforeCount);
+        assertThat(mapPage.getTransportLines().get(0).getText()).contains("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     }
 
     /**

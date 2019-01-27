@@ -39,7 +39,7 @@ public class NewsController {
     //@PreAuthorize("isAuthenticated()")
     public ResponseEntity<List<NewsDTO>> getAll() {
         logger.info("Fetching all news...");
-        List<NewsDTO> allNews = NewsConverter.fromEntityList(newsService.getAll(), e -> NewsConverter.fromEntity(e));
+        List<NewsDTO> allNews = NewsConverter.fromEntityList(newsService.getAll(), NewsConverter::fromEntity);
         return new ResponseEntity<>(allNews, HttpStatus.OK);
     }
 
@@ -98,14 +98,14 @@ public class NewsController {
      */
     @PutMapping("/{id}")
     //@PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<News> update(@PathVariable Long id, @RequestBody News news) {
+    public ResponseEntity<News> update(@PathVariable Long id, @RequestBody NewsDTO news) {
         news.setId(id);
-        boolean succeeded = newsService.modify(news);
+        boolean succeeded = newsService.modify(NewsConverter.toEntity(news));
         if (succeeded) {
-            logger.info("News successfully modified.");
-            return new ResponseEntity<>(news, HttpStatus.OK);
+            logger.info("News successfully modified at {}.", Calendar.getInstance().getTime());
+            return new ResponseEntity<>(NewsConverter.toEntity(news), HttpStatus.OK);
         } else {
-            logger.warn("Cannot modify news, probably news with given id doesn't exists!");
+            logger.warn("Cannot modify news, probably news with given id doesn't exists at {}.", Calendar.getInstance().getTime());
             return new ResponseEntity<>(HttpStatus.CONFLICT);
         }
     }
@@ -115,15 +115,15 @@ public class NewsController {
      * <p>
      * Deleting existing news
      *
-     * @param news for removing
+     * @param id of news to remove
      * @return feedback message
      */
-    @DeleteMapping("/{id}")
+    @DeleteMapping(value = "/{id}")
     //@PreAuthorize("hasAuthority('ADMIN')")
-    public ResponseEntity<String> delete(@RequestBody News news) {
-        logger.info("Deleting news with id {} at time {}.", news.getId(), Calendar.getInstance().getTime());
+    public ResponseEntity<String> delete(@PathVariable Long id) {
+        logger.info("Deleting news with id {} at time {}.", id, Calendar.getInstance().getTime());
         try {
-            newsService.remove(news.getId());
+            newsService.remove(id);
             return new ResponseEntity<>("News successfully deleted!", HttpStatus.OK);
         } catch (EntityNotFoundException e) {
             throw new GeneralException("Requested news does not exist!", HttpStatus.NOT_FOUND);

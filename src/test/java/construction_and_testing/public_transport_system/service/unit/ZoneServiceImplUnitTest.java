@@ -118,6 +118,14 @@ public class ZoneServiceImplUnitTest {
     }
 
     /**
+     * Test null saving
+     */
+    @Test(expected = GeneralException.class)
+    public void saveNull() {
+        zoneService.save(null);
+    }
+
+    /**
      * Test with null transport lines data associated
      */
     @Test

@@ -46,6 +46,21 @@ public class RegisteredUser extends User implements Serializable {
         //this.image = image;
     }
 
+    public RegisteredUser(Long id, String name, String lastName, String username, String password, String email,
+
+                          String telephone, UsersDocumentsStatus confirmation, Set<Reservation> reservations,
+                          double balance, String document, boolean active) {
+
+
+        super(id, name, lastName, username, password, email, telephone, confirmation);
+        this.reservations = reservations;
+        this.balance = balance;
+        this.document = document;
+        this.setActive(active);
+        this.image = "";
+        //this.image = image;
+    }
+
     public static long getSerialVersionUID() {
         return serialVersionUID;
     }

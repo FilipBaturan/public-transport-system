@@ -116,7 +116,7 @@ public class ImageService {
 
     /**
      * @param imageFile that need be processed
-     * @return full path of generated name
+     * @return full path of generated firstName
      */
     private UploadResponse generateName(String imageFile) {
 

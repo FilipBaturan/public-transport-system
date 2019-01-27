@@ -1,8 +1,11 @@
 package construction_and_testing.public_transport_system.controller;
 
 
+import construction_and_testing.public_transport_system.domain.DTO.OperatorDTO;
 import construction_and_testing.public_transport_system.domain.DTO.UserDTO;
 import construction_and_testing.public_transport_system.domain.DTO.ValidatorDTO;
+import construction_and_testing.public_transport_system.domain.Operator;
+import construction_and_testing.public_transport_system.domain.RegisteredUser;
 import construction_and_testing.public_transport_system.domain.User;
 import construction_and_testing.public_transport_system.domain.Validator;
 import construction_and_testing.public_transport_system.domain.enums.UsersDocumentsStatus;
@@ -44,7 +47,7 @@ public class UserControllerTest {
         UserDTO[] body = result.getBody();
         assertThat(body).isNotNull();
         assertEquals(body[0].getId(), DB_ID);
-        assertEquals(body[0].getName(), DB_FIRST_NAME);
+        assertEquals(body[0].getFirstName(), DB_FIRST_NAME);
         assertEquals(body[0].getLastName(), DB_LAST_NAME);
         assertEquals(body[0].isActive(), true);
         assertEquals(body[0].getEmail(), DB_EMAIL);
@@ -240,7 +243,7 @@ public class UserControllerTest {
         assertThat(body).isNotNull();
         Long valId = 2L;
         assertEquals(body[0].getId(), valId);
-        assertEquals(body[0].getName(), DB_VAL_FIRST_NAME);
+        assertEquals(body[0].getFirstName(), DB_VAL_FIRST_NAME);
         assertEquals(body[0].getLastName(), DB_VAL_LAST_NAME);
         assertEquals(body[0].isActive(), true);
         assertEquals(body[0].getEmail(), DB_VAL_EMAIL);
@@ -263,7 +266,7 @@ public class UserControllerTest {
         assertEquals(result.getStatusCode(), HttpStatus.OK);
         User savedValidator = userService.findByUsername(newValidator.getUsername());
         assertEquals(savedValidator.getEmail(), "newEmail");
-        assertEquals(savedValidator.getName(), "newFirstName");
+        assertEquals(savedValidator.getFirstName(), "newFirstName");
         assertEquals(savedValidator.getLastName(), "newLastName");
 
         int sizeAfter = userService.getValidators().size();
@@ -334,6 +337,212 @@ public class UserControllerTest {
     }
 
     @Test
+    public void updateOperator() {
+        OperatorDTO operatorDTO = new OperatorDTO(4L, "Ime", "Prezime", "korime", "123123", "mail@mail.com", "123", true);
+        operatorDTO.setEmail("email@mail.com");
+
+        ResponseEntity<Boolean> result = testRestTemplate
+                .exchange(this.URL + "/updateOperator", HttpMethod.PUT,
+                        new HttpEntity<OperatorDTO>(operatorDTO), Boolean.class);
+
+        Boolean body = result.getBody();
+        System.out.println(body.toString());
+        assertNotNull(body);
+        assertTrue(body);
+        assertEquals(result.getStatusCode(), HttpStatus.OK);
+        User approvedUser = userService.findById(4L);
+        assertEquals(approvedUser.getEmail(), "email@mail.com");
+
+    }
+
+    @Test
+    public void updateOperatorInvalid() {
+        Long randomId = 124523L;
+        OperatorDTO operatorDTO = new OperatorDTO(randomId, "Ime", "Prezime", "korime", "123123", "mail@mail.com", "123", true);
+        operatorDTO.setEmail("mail@mail.com");
+
+        ResponseEntity<Boolean> result = testRestTemplate
+                .exchange(this.URL + "/updateOperator", HttpMethod.PUT,
+                        new HttpEntity<OperatorDTO>(operatorDTO), Boolean.class);
+
+        Boolean body = result.getBody();
+
+        assertNotNull(body);
+        assertFalse(body);
+        assertEquals(result.getStatusCode(), HttpStatus.NOT_FOUND);
+
+    }
+
+    @Test
+    public void updateOperatorRegUserId() {
+        // Id of a registerd user
+        UserDTO userDTO = new UserDTO(1L, "name", "lastName", "email", "username", "pass");
+
+        ResponseEntity<Boolean> result = testRestTemplate
+                .exchange(this.URL + "/updateOperator/", HttpMethod.PUT,
+                        new HttpEntity<UserDTO>(userDTO), Boolean.class);
+
+        Boolean body = result.getBody();
+
+        assertNotNull(body);
+        assertFalse(body);
+        assertEquals(result.getStatusCode(), HttpStatus.NOT_ACCEPTABLE);
+
+    }
+
+    @Test
+    public void updateOperatorNullParameter() {
+        // parameter password missing
+        OperatorDTO operatorDTO = new OperatorDTO(3L, "Ime", "Prezime", "korime", null, "mail@mail.com", "123", true);
+
+        ResponseEntity<Boolean> result = testRestTemplate
+                .exchange(this.URL + "/updateOperator/", HttpMethod.PUT,
+                        new HttpEntity<OperatorDTO>(operatorDTO), Boolean.class);
+
+        Boolean body = result.getBody();
+
+        assertNotNull(body);
+        assertFalse(body);
+        assertEquals(result.getStatusCode(), HttpStatus.NOT_ACCEPTABLE);
+    }
+
+    @Test
+    public void getOperators() {
+        ResponseEntity<OperatorDTO[]> result = testRestTemplate
+                .getForEntity(this.URL + "/getOperators", OperatorDTO[].class);
+
+        OperatorDTO[] body = result.getBody();
+        assertThat(body).isNotNull();
+        Operator operator = (Operator) this.userService.findById(3L);
+        assertEquals(body[0].getId(), operator.getId());
+        assertEquals(body[0].getFirstName(), operator.getFirstName());
+        assertEquals(body[0].getLastName(), operator.getLastName());
+        assertTrue(body[0].isActive());
+        assertEquals(body[0].getEmail(), operator.getEmail());
+        assertEquals(body[0].getPassword(), operator.getPassword());
+        assertEquals(result.getStatusCode(), HttpStatus.OK);
+    }
+
+    @Test
+    public void addOperator() {
+        OperatorDTO operatorDTO = new OperatorDTO(null, "Opera", "Tor", "operator", "321", "operator@mail.com", "353234", true);
+
+        int size = userService.getOperators().size();
+
+        ResponseEntity<Boolean> result = testRestTemplate
+                .postForEntity(this.URL + "/addOperator", operatorDTO, Boolean.class);
+
+        Boolean response = result.getBody();
+        assertTrue(response);
+        assertEquals(result.getStatusCode(), HttpStatus.OK);
+        User savedValidator = userService.findByUsername(operatorDTO.getUsername());
+        assertEquals(savedValidator.getEmail(), "operator@mail.com");
+        assertEquals(savedValidator.getFirstName(), "Opera");
+        assertEquals(savedValidator.getLastName(), "Tor");
+
+        int sizeAfter = userService.getOperators().size();
+        assertEquals(size + 1, sizeAfter);
+    }
+
+    @Test
+    public void addInvalid() {
+        OperatorDTO operatorDTO = new OperatorDTO(null, null, "Tor", "operator", "321", "operator@mail.com", "353234", true);
+
+        int size = userService.getOperators().size();
+
+        ResponseEntity<Boolean> result = testRestTemplate
+                .postForEntity(this.URL + "/addOperator", operatorDTO, Boolean.class);
+
+        Boolean response = result.getBody();
+        assertFalse(response);
+        assertEquals(result.getStatusCode(), HttpStatus.NOT_ACCEPTABLE);
+
+        int sizeAfter = userService.getOperators().size();
+        assertEquals(size, sizeAfter);
+    }
+
+    @Test
+    public void addOperatorExistingUsername() {
+        OperatorDTO operatorDTO = new OperatorDTO(null, "Opera", "Tor", "username", "321", "operator@mail.com", "353234", true);
+
+        int size = userService.getOperators().size();
+
+        ResponseEntity<Boolean> result = testRestTemplate
+                .postForEntity(this.URL + "/addOperator", operatorDTO, Boolean.class);
+
+        Boolean response = result.getBody();
+        assertFalse(response);
+        assertEquals(result.getStatusCode(), HttpStatus.CONFLICT);
+
+        int sizeAfter = userService.getOperators().size();
+        assertEquals(size, sizeAfter);
+    }
+
+
+    /**
+     * Parameter pass is missing
+     */
+    @Test
+    public void addOperatorNullParameter() {
+        OperatorDTO operatorDTO = new OperatorDTO(5L, "Opera", "Tor", "operator", "321", "operator@mail.com", "353234", true);
+
+        int size = userService.getOperators().size();
+
+        ResponseEntity<Boolean> result = testRestTemplate
+                .postForEntity(this.URL + "/addOperator", operatorDTO, Boolean.class);
+
+        Boolean response = result.getBody();
+        assertFalse(response);
+        assertEquals(result.getStatusCode(), HttpStatus.CONFLICT);
+
+        int sizeAfter = userService.getOperators().size();
+        assertEquals(size, sizeAfter);
+    }
+
+
+    @Test
+    public void getByUsername() {
+        String username = "operkor";
+
+        ResponseEntity<Object> result = testRestTemplate
+                .getForEntity(this.URL + "/getByUsername/" + username, Object.class);
+
+        Object body = result.getBody();
+        assertNotNull(body);
+        assertEquals(result.getStatusCode(), HttpStatus.FOUND);
+        //assertThat(body.getUsername()).isEqualTo(username);
+        //assertThat(body.getAuthorityType()).isEqualTo(AuthorityType.OPERATER);
+    }
+
+    @Test
+    public void getByUsernameRegUser() {
+        String username = "username";
+
+        ResponseEntity<Object> result = testRestTemplate
+                .getForEntity(this.URL + "/getByUsername/" + username, Object.class);
+
+        Object body = result.getBody();
+
+        assertNotNull(body);
+        assertEquals(result.getStatusCode(), HttpStatus.FOUND);
+        //assertThat(body.getUsername()).isEqualTo(username);
+        //assertThat(body.getAuthorityType()).isEqualTo(AuthorityType.REGISTERED_USER);
+    }
+
+    @Test
+    public void getByUsernameNotExisting() {
+        String username = "wrong_username";
+
+        ResponseEntity<Object> result = testRestTemplate
+                .getForEntity(this.URL + "/getByUsername/" + username, Object.class);
+
+        RegisteredUser body = (RegisteredUser) result.getBody();
+
+        assertNull(body);
+        assertEquals(result.getStatusCode(), HttpStatus.NOT_FOUND);
+    }
+
+    @Test
     public void getRegUsersValid() {
         ResponseEntity<UserDTO[]> result = testRestTemplate
                 .getForEntity(this.URL + "/registeredUsers/", UserDTO[].class);
@@ -342,7 +551,7 @@ public class UserControllerTest {
         assertThat(body).isNotNull();
         Long valId = 1L;
         assertEquals(body[0].getId(), valId);
-        assertEquals(body[0].getName(), DB_FIRST_NAME);
+        assertEquals(body[0].getFirstName(), DB_FIRST_NAME);
         assertEquals(body[0].getLastName(), DB_LAST_NAME);
         assertEquals(body[0].isActive(), true);
         assertEquals(body[0].getEmail(), DB_EMAIL);
@@ -359,7 +568,7 @@ public class UserControllerTest {
         assertThat(body).isNotNull();
         Long valId = 2L;
         assertEquals(body.getId(), valId);
-        assertEquals(body.getName(), DB_VAL_FIRST_NAME);
+        assertEquals(body.getFirstName(), DB_VAL_FIRST_NAME);
         assertEquals(body.getLastName(), DB_VAL_LAST_NAME);
         assertEquals(body.isActive(), true);
         assertEquals(body.getEmail(), DB_VAL_EMAIL);
@@ -374,7 +583,7 @@ public class UserControllerTest {
 
         ValidatorDTO body = result.getBody();
         assertEquals(body.getId(), null);
-        assertEquals(body.getName(), null);
+        assertEquals(body.getFirstName(), null);
         assertEquals(body.getLastName(), null);
         assertEquals(body.isActive(), false);
         assertEquals(body.getEmail(), null);
@@ -391,7 +600,7 @@ public class UserControllerTest {
         assertThat(body).isNotNull();
         Long valId = 1L;
         assertEquals(body.getId(), valId);
-        assertEquals(body.getName(), DB_FIRST_NAME);
+        assertEquals(body.getFirstName(), DB_FIRST_NAME);
         assertEquals(body.getLastName(), DB_LAST_NAME);
         assertEquals(body.isActive(), true);
         assertEquals(body.getEmail(), DB_EMAIL);
@@ -406,7 +615,7 @@ public class UserControllerTest {
 
         UserDTO body = result.getBody();
         assertEquals(body.getId(), null);
-        assertEquals(body.getName(), "");
+        assertEquals(body.getFirstName(), "");
         assertEquals(body.getLastName(), "");
         assertEquals(body.isActive(), false);
         assertEquals(body.getEmail(), "");

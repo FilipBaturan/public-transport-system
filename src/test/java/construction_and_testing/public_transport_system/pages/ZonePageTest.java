@@ -109,7 +109,7 @@ public class ZonePageTest {
 
         assertThat(zonePage.numberOfZones()).isEqualTo(beforeCount);
         assertThat(editedZoneName.getText()).isEqualTo("Veternik");
-        assertThat(editedZoneTransportLine.getText()).isEqualTo("Number of routes: 2");
+        assertThat(editedZoneTransportLine.getText()).isEqualTo("Number of routes: 3");
     }
 
     /**
@@ -133,7 +133,7 @@ public class ZonePageTest {
         assertThat(zonePage.numberOfZones()).isEqualTo(beforeCount - 1);
         assertThat(zoneName).isNotEqualTo(nameBefore);
         assertThat(zonesTransportLines).isEqualTo("Number of routes: 0");
-        assertThat(defaultZoneTransportLines).isEqualTo("Number of routes: 3");
+        assertThat(defaultZoneTransportLines).isEqualTo("Number of routes: 4");
     }
 
     /**

@@ -341,6 +341,14 @@ public class TransportLineServiceImplUnitTest {
     }
 
     /**
+     * Test null saving
+     */
+    @Test(expected = GeneralException.class)
+    public void saveNull() {
+        transportLineService.save(null);
+    }
+
+    /**
      * Test with null values
      */
     @Test(expected = GeneralException.class)
@@ -513,6 +521,14 @@ public class TransportLineServiceImplUnitTest {
         assertThat(ticketRepository.findAll().size()).isEqualTo(DB_TICKET_COUNT);
 
 
+    }
+
+    /**
+     * Test null replacing
+     */
+    @Test(expected = GeneralException.class)
+    public void replaceAllNull() {
+        transportLineService.replaceAll(null);
     }
 
     /**

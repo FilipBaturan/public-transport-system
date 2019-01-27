@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
+import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
@@ -46,6 +47,7 @@ public class NewsServiceImpl implements NewsService {
     @Override
     public boolean modify(News news) {
         if (newsRepository.findById(news.getId()).isPresent()) {
+            news.setDate(LocalDateTime.now());
             newsRepository.saveAndFlush(news);
             return true;
         }

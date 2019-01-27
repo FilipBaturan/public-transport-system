@@ -22,8 +22,14 @@ public class WelcomePage {
     @FindBy(xpath = "//*[@id=\"signinButton\"]")
     private WebElement logInButton;
 
+    @FindBy(xpath = "//*[@id=\"content\"]/div/div[2]/div/div[2]/button")
+    private WebElement buttonSignUp;
+
     @FindBy(xpath = "//*[@id=\"sidebar\"]/ul[2]/li/a")
     private WebElement logoutButton;
+
+    public WelcomePage() {
+    }
 
     public WelcomePage(WebDriver driver) {
         this.driver = driver;
@@ -48,6 +54,7 @@ public class WelcomePage {
     public void ensureLogoutDisplayed() {
         (new WebDriverWait(driver, 10))
                 .until(ExpectedConditions.visibilityOf(logoutButton));
+
     }
 
     public void login(String username, String password) {
@@ -75,5 +82,13 @@ public class WelcomePage {
 
     public void ensureIsDisplayed() {
         (new WebDriverWait(driver, 10)).until(ExpectedConditions.visibilityOf(formLogin));
+    }
+
+    public WebElement getButtonSignUp() {
+        return buttonSignUp;
+    }
+
+    public void setButtonSignUp(WebElement buttonSignUp) {
+        this.buttonSignUp = buttonSignUp;
     }
 }

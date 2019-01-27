@@ -115,6 +115,9 @@ public class ZoneServiceImpl implements ZoneService {
      * @param zone that needs to be validated
      */
     private void validate(Zone zone) {
+        if (zone == null) {
+            throw new GeneralException("Invalid zone", HttpStatus.BAD_REQUEST);
+        }
         Set<ConstraintViolation<Zone>> violations = Validation.buildDefaultValidatorFactory()
                 .getValidator().validate(zone);
         if (!violations.isEmpty()) {

@@ -160,7 +160,7 @@ public class StationControllerTest {
     }
 
     /**
-     * Test with to short name value
+     * Test with to short firstName value
      */
     @Test
     public void saveWithShortName() {
@@ -180,7 +180,7 @@ public class StationControllerTest {
     }
 
     /**
-     * Test with too long name value
+     * Test with too long firstName value
      */
     @Test
     public void saveWithLongName() {
@@ -200,7 +200,7 @@ public class StationControllerTest {
     }
 
     /**
-     * Test with min length name value
+     * Test with min length firstName value
      */
     @Test
     public void saveWithMinLengthName() {
@@ -224,7 +224,7 @@ public class StationControllerTest {
     }
 
     /**
-     * Test with max length name value
+     * Test with max length firstName value
      */
     @Test
     public void saveWithMaxLengthName() {
@@ -351,7 +351,7 @@ public class StationControllerTest {
     }
 
     /**
-     * Test with too short name value
+     * Test with too short firstName value
      */
     @Test
     public void replaceAllWithShortName() {
@@ -372,7 +372,7 @@ public class StationControllerTest {
     }
 
     /**
-     * Test with too long name value
+     * Test with too long firstName value
      */
     @Test
     public void replaceAllWithLongName() {
@@ -393,7 +393,7 @@ public class StationControllerTest {
     }
 
     /**
-     * Test with min length name value
+     * Test with min length firstName value
      */
     @Test
     public void replaceAllWithMinLengthName() {
@@ -415,7 +415,7 @@ public class StationControllerTest {
     }
 
     /**
-     * Test with max length name value
+     * Test with max length firstName value
      */
     @Test
     public void replaceAllWithMaxLengthName() {
