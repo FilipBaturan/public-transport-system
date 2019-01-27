@@ -1,9 +1,14 @@
 package construction_and_testing.public_transport_system.controller;
 
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import construction_and_testing.public_transport_system.domain.DTO.OperatorDTO;
 import construction_and_testing.public_transport_system.domain.DTO.UserDTO;
 import construction_and_testing.public_transport_system.domain.DTO.ValidatorDTO;
+import construction_and_testing.public_transport_system.domain.Operator;
+import construction_and_testing.public_transport_system.domain.RegisteredUser;
 import construction_and_testing.public_transport_system.domain.User;
+import construction_and_testing.public_transport_system.domain.enums.AuthorityType;
 import construction_and_testing.public_transport_system.domain.enums.UsersDocumentsStatus;
 import construction_and_testing.public_transport_system.service.definition.UserService;
 import org.junit.Test;
@@ -310,6 +315,212 @@ public class UserControllerTest {
         // size should remain the same
         int sizeAfter = userService.getValidators().size();
         assertEquals(size, sizeAfter);
+    }
+
+    @Test
+    public void updateOperator() {
+        OperatorDTO operatorDTO = new OperatorDTO(4L, "Ime", "Prezime", "korime", "123123", "mail@mail.com", "123", true);
+        operatorDTO.setEmail("email@mail.com");
+
+        ResponseEntity<Boolean> result = testRestTemplate
+                .exchange(this.URL + "/updateOperator", HttpMethod.PUT,
+                        new HttpEntity<OperatorDTO>(operatorDTO), Boolean.class);
+
+        Boolean body = result.getBody();
+        System.out.println(body.toString());
+        assertNotNull(body);
+        assertTrue(body);
+        assertEquals(result.getStatusCode(), HttpStatus.OK);
+        User approvedUser = userService.findById(4L);
+        assertEquals(approvedUser.getEmail(), "email@mail.com");
+
+    }
+
+    @Test
+    public void updateOperatorInvalid() {
+        Long randomId = 124523L;
+        OperatorDTO operatorDTO = new OperatorDTO(randomId, "Ime", "Prezime", "korime", "123123", "mail@mail.com", "123", true);
+        operatorDTO.setEmail("mail@mail.com");
+
+        ResponseEntity<Boolean> result = testRestTemplate
+                .exchange(this.URL + "/updateOperator", HttpMethod.PUT,
+                        new HttpEntity<OperatorDTO>(operatorDTO), Boolean.class);
+
+        Boolean body = result.getBody();
+
+        assertNotNull(body);
+        assertFalse(body);
+        assertEquals(result.getStatusCode(), HttpStatus.NOT_FOUND);
+
+    }
+
+    @Test
+    public void updateOperatorRegUserId() {
+        // Id of a registerd user
+        UserDTO userDTO = new UserDTO(1L, "name", "lastName", "email", "username", "pass");
+
+        ResponseEntity<Boolean> result = testRestTemplate
+                .exchange(this.URL + "/updateOperator/", HttpMethod.PUT,
+                        new HttpEntity<UserDTO>(userDTO), Boolean.class);
+
+        Boolean body = result.getBody();
+
+        assertNotNull(body);
+        assertFalse(body);
+        assertEquals(result.getStatusCode(), HttpStatus.NOT_ACCEPTABLE);
+
+    }
+
+    @Test
+    public void updateOperatorNullParameter() {
+        // parameter password missing
+        OperatorDTO operatorDTO = new OperatorDTO(3L, "Ime", "Prezime", "korime", null, "mail@mail.com", "123", true);
+
+        ResponseEntity<Boolean> result = testRestTemplate
+                .exchange(this.URL + "/updateOperator/", HttpMethod.PUT,
+                        new HttpEntity<OperatorDTO>(operatorDTO), Boolean.class);
+
+        Boolean body = result.getBody();
+
+        assertNotNull(body);
+        assertFalse(body);
+        assertEquals(result.getStatusCode(), HttpStatus.NOT_ACCEPTABLE);
+    }
+
+    @Test
+    public void getOperators() {
+        ResponseEntity<OperatorDTO[]> result = testRestTemplate
+                .getForEntity(this.URL + "/getOperators", OperatorDTO[].class);
+
+        OperatorDTO[] body = result.getBody();
+        assertThat(body).isNotNull();
+        Operator operator = (Operator) this.userService.findById(3L);
+        assertEquals(body[0].getId(), operator.getId());
+        assertEquals(body[0].getFirstName(), operator.getFirstName());
+        assertEquals(body[0].getLastName(), operator.getLastName());
+        assertTrue(body[0].isActive());
+        assertEquals(body[0].getEmail(), operator.getEmail());
+        assertEquals(body[0].getPassword(), operator.getPassword());
+        assertEquals(result.getStatusCode(), HttpStatus.OK);
+    }
+
+    @Test
+    public void addOperator() {
+        OperatorDTO operatorDTO = new OperatorDTO(null, "Opera", "Tor", "operator", "321", "operator@mail.com", "353234", true);
+
+        int size = userService.getOperators().size();
+
+        ResponseEntity<Boolean> result = testRestTemplate
+                .postForEntity(this.URL + "/addOperator", operatorDTO, Boolean.class);
+
+        Boolean response = result.getBody();
+        assertTrue(response);
+        assertEquals(result.getStatusCode(), HttpStatus.OK);
+        User savedValidator = userService.findByUsername(operatorDTO.getUsername());
+        assertEquals(savedValidator.getEmail(), "operator@mail.com");
+        assertEquals(savedValidator.getFirstName(), "Opera");
+        assertEquals(savedValidator.getLastName(), "Tor");
+
+        int sizeAfter = userService.getOperators().size();
+        assertEquals(size+1, sizeAfter);
+    }
+
+    @Test
+    public void addInvalid() {
+        OperatorDTO operatorDTO = new OperatorDTO(null, null, "Tor", "operator", "321", "operator@mail.com", "353234", true);
+
+        int size = userService.getOperators().size();
+
+        ResponseEntity<Boolean> result = testRestTemplate
+                .postForEntity(this.URL + "/addOperator", operatorDTO, Boolean.class);
+
+        Boolean response = result.getBody();
+        assertFalse(response);
+        assertEquals(result.getStatusCode(), HttpStatus.NOT_ACCEPTABLE);
+
+        int sizeAfter = userService.getOperators().size();
+        assertEquals(size, sizeAfter);
+    }
+
+    @Test
+    public void addOperatorExistingUsername() {
+        OperatorDTO operatorDTO = new OperatorDTO(null, "Opera", "Tor", "username", "321", "operator@mail.com", "353234", true);
+
+        int size = userService.getOperators().size();
+
+        ResponseEntity<Boolean> result = testRestTemplate
+                .postForEntity(this.URL + "/addOperator", operatorDTO, Boolean.class);
+
+        Boolean response = result.getBody();
+        assertFalse(response);
+        assertEquals(result.getStatusCode(), HttpStatus.CONFLICT);
+
+        int sizeAfter = userService.getOperators().size();
+        assertEquals(size, sizeAfter);
+    }
+
+
+    /**
+     * Parameter pass is missing
+     */
+    @Test
+    public void addOperatorNullParameter() {
+        OperatorDTO operatorDTO = new OperatorDTO(5L, "Opera", "Tor", "operator", "321", "operator@mail.com", "353234", true);
+
+        int size = userService.getOperators().size();
+
+        ResponseEntity<Boolean> result = testRestTemplate
+                .postForEntity(this.URL + "/addOperator", operatorDTO, Boolean.class);
+
+        Boolean response = result.getBody();
+        assertFalse(response);
+        assertEquals(result.getStatusCode(), HttpStatus.CONFLICT);
+
+        int sizeAfter = userService.getOperators().size();
+        assertEquals(size, sizeAfter);
+    }
+
+
+    @Test
+    public void getByUsername(){
+        String username = "operkor";
+
+        ResponseEntity<Object> result = testRestTemplate
+                .getForEntity(this.URL + "/getByUsername/" + username, Object.class);
+
+        Object body =  result.getBody();
+        assertNotNull(body);
+        assertEquals(result.getStatusCode(), HttpStatus.FOUND);
+        //assertThat(body.getUsername()).isEqualTo(username);
+        //assertThat(body.getAuthorityType()).isEqualTo(AuthorityType.OPERATER);
+    }
+
+    @Test
+    public void getByUsernameRegUser(){
+        String username = "username";
+
+        ResponseEntity<Object> result = testRestTemplate
+                .getForEntity(this.URL + "/getByUsername/" + username, Object.class);
+
+        Object body = result.getBody();
+
+        assertNotNull(body);
+        assertEquals(result.getStatusCode(), HttpStatus.FOUND);
+        //assertThat(body.getUsername()).isEqualTo(username);
+        //assertThat(body.getAuthorityType()).isEqualTo(AuthorityType.REGISTERED_USER);
+    }
+
+    @Test
+    public void getByUsernameNotExisting(){
+        String username = "wrong_username";
+
+        ResponseEntity<Object> result = testRestTemplate
+                .getForEntity(this.URL + "/getByUsername/" + username, Object.class);
+
+        RegisteredUser body = (RegisteredUser) result.getBody();
+
+        assertNull(body);
+        assertEquals(result.getStatusCode(), HttpStatus.NOT_FOUND);
     }
 
     @Test

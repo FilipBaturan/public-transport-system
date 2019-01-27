@@ -40,4 +40,11 @@ public interface ScheduleService {
      * @ list of schedules for the requested transport line
      */
     List<Schedule> findByTransportLineId(Long id);
+
+    /**
+     *
+     * @param schedule that is being checked
+     * @return schedule if it exists else null
+     */
+    Schedule findScheduleIfExists(Schedule schedule);
 }

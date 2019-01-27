@@ -33,14 +33,13 @@ public class ScheduleServiceImplIntegrationTest {
      */
     @Test
     public void testGetAllSchedules() {
-
         List<Schedule> schedules = scheduleService.getAll();
         assertThat(schedules).hasSize(DB_COUNT);
 
     }
 
     /**
-     * Test finding a schedule with a valid id.
+     * Test finding an existing schedule.
      */
     @Test
     public void testFindById() {
@@ -48,11 +47,117 @@ public class ScheduleServiceImplIntegrationTest {
         assertThat(schedule).isNotNull();
 
         assertThat(schedule.getId()).isEqualTo(DB_VALID_ID);
-        //assertThat(schedule.getTransportLine().getFirstName()).isEqualTo(DB_TL_NAME);
+        assertThat(schedule.getTransportLine().getName()).isEqualTo(DB_SCHEDULE.getTransportLine().getName());
         assertThat(schedule.getDayOfWeek()).isEqualTo(DB_VALID_DAY_OF_WEEK);
         //assertThat(schedule.getDepartures()).isEqualTo(DB_VALID_DEPARTURES);
         assertThat(schedule.getDepartures().size()).isEqualTo(DB_VALID_DEPARTURES_SIZE);
         assertThat(schedule.isActive()).isEqualTo(DB_VALID_ACTIVE);
+
+        int idx = 0;
+        for (String departure: schedule.getDepartures()) {
+            assertThat(departure).isEqualTo(DB_SCHEDULE.getDepartures().get(idx));
+            idx+=1;
+        }
+    }
+
+
+    /**
+     * Test finding a not existing schedule.
+     */
+    @Test
+    public void testFindScheduleIfExists() {
+        Schedule schedule = scheduleService.findScheduleIfExists(DB_SCHEDULE);
+        assertThat(schedule).isNotNull();
+
+        assertThat(schedule.getId()).isEqualTo(DB_VALID_ID);
+        assertThat(schedule.getTransportLine().getName()).isEqualTo(DB_TRANSPORT_LINE.getName());
+        assertThat(schedule.getDayOfWeek()).isEqualTo(DB_VALID_DAY_OF_WEEK);
+        assertThat(schedule.getDepartures().size()).isEqualTo(DB_VALID_DEPARTURES_SIZE);
+        assertThat(schedule.isActive()).isEqualTo(DB_VALID_ACTIVE);
+
+        int idx = 0;
+        for (String departure: schedule.getDepartures()) {
+            assertThat(departure).isEqualTo(DB_SCHEDULE.getDepartures().get(idx));
+            idx+=1;
+        }
+    }
+
+
+    /**
+     * Test finding a schedule with a valid id.
+     */
+    @Test
+    public void testFindScheduleIfExistsInvalid() {
+        Schedule schedule = scheduleService.findScheduleIfExists(DB_INVALID_SCHEDULE);
+        assertThat(schedule).isNull();
+    }
+
+
+    /**
+     * Test finding a schedule by transport line id.
+     */
+    @Test
+    public void findByTransportLineIdAndDayOfWeek() {
+        Schedule schedule = scheduleService.findByTransportLineIdAndDayOfWeek(DB_TL_ID, DB_VALID_DAY_OF_WEEK.ordinal());
+        assertThat(schedule).isNotNull();
+
+        assertThat(schedule.getId()).isEqualTo(DB_VALID_ID);
+        assertThat(schedule.getTransportLine().getName()).isEqualTo(DB_TRANSPORT_LINE.getName());
+        assertThat(schedule.getDayOfWeek()).isEqualTo(DB_VALID_DAY_OF_WEEK);
+        assertThat(schedule.getDepartures().size()).isEqualTo(DB_VALID_DEPARTURES_SIZE);
+        assertThat(schedule.isActive()).isEqualTo(DB_VALID_ACTIVE);
+
+        int idx = 0;
+        for (String departure: schedule.getDepartures()) {
+            assertThat(departure).isEqualTo(DB_SCHEDULE.getDepartures().get(idx));
+            idx+=1;
+        }
+    }
+
+    /**
+     * Test not finding a schedule by transport line id.
+     */
+    @Test(expected = GeneralException.class)
+    public void findByTransportLineIdAndDayOfWeekInvalid() {
+        Schedule schedule = scheduleService.findByTransportLineIdAndDayOfWeek(DB_INVALID_TRANSPORT_LINE.getId(), DB_VALID_DAY_OF_WEEK.ordinal());
+        assertThat(schedule).isNull();
+    }
+
+    /**
+     * Test finding a schedule by transport line id.
+     */
+    @Test
+    public void findByTransportLineId() {
+        List<Schedule> schedules = scheduleService.findByTransportLineId(DB_TL_ID);
+
+        assertThat(schedules).isNotNull();
+        assertThat(schedules.size()).isEqualTo(3);
+
+        int idx = 0;
+        for (Schedule schedule: schedules) {
+            Schedule temp = DB_SCHEDULES.get(idx);
+            assertThat(schedule.getId()).isEqualTo(temp.getId());
+            assertThat(schedule.getTransportLine().getName()).isEqualTo(temp.getTransportLine().getName());
+            assertThat(schedule.getDayOfWeek()).isEqualTo(temp.getDayOfWeek());
+            assertThat(schedule.getDepartures().size()).isEqualTo(temp.getDepartures().size());
+            assertThat(schedule.isActive()).isEqualTo(temp.isActive());
+
+            int idx1 = 0;
+            for (String departure: schedule.getDepartures()) {
+                assertThat(departure).isEqualTo(temp.getDepartures().get(idx1));
+                idx1+=1;
+            }
+            idx+=1;
+        }
+    }
+
+    /**
+     * Test not finding a schedule by transport line id.
+     */
+    @Test
+    public void findByTransportLineIdInvalid() {
+        List<Schedule> schedules = scheduleService.findByTransportLineId(DB_INVALID_TRANSPORT_LINE.getId());
+        assertThat(schedules.size()).isEqualTo(0);
     }
 
     /**
@@ -93,7 +198,7 @@ public class ScheduleServiceImplIntegrationTest {
         assertThat(newSchedule).isNotNull();
 
         assertThat(scheduleService.getAll().size()).isEqualTo(countBefore + 1);
-        //assertThat(newSchedule.getTransportLine().getFirstName()).isEqualTo(DB_TL_NAME);
+        assertThat(schedule.getTransportLine().getName()).isEqualTo(DB_NEW_SCHEDULE.getTransportLine().getName());
         assertThat(newSchedule.getDayOfWeek()).isEqualTo(schedule.getDayOfWeek());
         assertThat(newSchedule.getDepartures()).isEqualTo(schedule.getDepartures());
         assertThat(newSchedule.getDepartures().size()).isEqualTo(schedule.getDepartures().size());
