@@ -115,6 +115,30 @@ public class UserController {
 //        }
 //    }
 
+//    @GetMapping("/getRegByUsername/{username}")
+//    public ResponseEntity<UserDTO> getRegByUsername(@PathVariable String username) {
+//        try {
+//            ResponseEntity re = new ResponseEntity<>(UserConverter.fromEntity(userService.findByUsername(username)), HttpStatus.OK);
+//            return re;
+//            User user = userService.findByUsername(username);
+//
+//            if (user == null)
+//                return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+//
+//            if (user.getAuthorityType() == AuthorityType.OPERATER)
+//                return new ResponseEntity<>(UserConverter.fromEntity((Operator) user), HttpStatus.OK);
+//            else if (user.getAuthorityType() == AuthorityType.VALIDATOR)
+//                return new ResponseEntity<>(UserConverter.fromEntity((Validator) user), HttpStatus.OK);
+//            else if (user.getAuthorityType() == AuthorityType.ADMIN)
+//                return new ResponseEntity<>(UserConverter.fromEntity((Admin) user), HttpStatus.OK);
+//            else
+//                return new ResponseEntity<>(UserConverter.fromEntity(user), HttpStatus.OK);
+//
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(new UserDTO(), HttpStatus.NOT_FOUND);
+//        }
+//    }
+
     @GetMapping("/getRegByUsername/{username}")
     public ResponseEntity<UserDTO> getRegByUsername(@PathVariable String username) {
         try {

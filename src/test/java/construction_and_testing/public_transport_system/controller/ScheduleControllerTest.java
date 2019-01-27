@@ -101,15 +101,17 @@ public class ScheduleControllerTest {
         HttpEntity<String> entity = new HttpEntity<>("parameters", headers);
 
         ResponseEntity<ScheduleDTO[]> result = testRestTemplate
-                .exchange(this.URL + "/findByTransportLineId/" + DB_TRANSPORT_LINE.getId(), HttpMethod.GET, entity, ScheduleDTO[].class);
+                .exchange(this.URL + "/findByTransportLineId/" + DB_TRANSPORT_LINE_2.getId(), HttpMethod.GET, entity, ScheduleDTO[].class);
 
         ScheduleDTO[] body = result.getBody();
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.OK);
         assertThat(body).isNotNull();
 
         int idx = 0;
-        for (ScheduleDTO scheduleDTO : body) {
-            Schedule temp = DB_SCHEDULES.get(idx);
+
+        for (ScheduleDTO scheduleDTO: body) {
+            Schedule temp = DB_SCHEDULES_1.get(idx);
+
 
             assertThat(scheduleDTO.getId()).isEqualTo(temp.getId());
             assertThat(scheduleDTO.getDayOfWeek()).isEqualTo(temp.getDayOfWeek());
@@ -197,8 +199,8 @@ public class ScheduleControllerTest {
         String body = result.getBody();
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.NOT_FOUND);
-        assertThat(body).isNotNull();
-        assertThat(body).isEqualTo("Requested schedule does not exist!");
+        assertThat(body).isNull();
+        //assertThat(body).isEqualTo("Requested schedule does not exist!");
     }
 
 

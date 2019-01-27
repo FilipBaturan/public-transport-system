@@ -77,7 +77,6 @@ public class ScheduleController extends ValidationController {
         logger.info("Requesting schedule for transprot line with  {} at time {}.", id, Calendar.getInstance().getTime());
         try {
             Schedule schedule = scheduleService.findByTransportLineIdAndDayOfWeek(Long.parseLong(id), DayOfWeek.valueOf(dayOfWeek).ordinal());
-            System.out.println(schedule.toString());
             return new ResponseEntity<>(new ScheduleDTO(schedule), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

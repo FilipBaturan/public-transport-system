@@ -49,7 +49,6 @@ public class UserDetailsImpl implements UserDetails {
         this.authorities = new ArrayList<>();
     }
 
-    //Date lastPasswordReset,
     public UserDetailsImpl(Long id, String username, String password, String email, String phoneNumber,
                            Collection<? extends GrantedAuthority> authorities) {
         this.id = id;
@@ -57,7 +56,6 @@ public class UserDetailsImpl implements UserDetails {
         this.password = password;
         this.email = email;
         this.telephone = phoneNumber;
-        //this.lastPasswordReset = lastPasswordReset;
         this.authorities = authorities;
     }
 
@@ -100,14 +98,6 @@ public class UserDetailsImpl implements UserDetails {
     public void setTelephone(String telephone) {
         this.telephone = telephone;
     }
-
-    //public Date getLastPasswordReset() {
-    //return this.lastPasswordReset;
-    //}
-
-    //public void setLastPasswordReset(Date lastPasswordReset) {
-    //    this.lastPasswordReset = lastPasswordReset;
-    //}
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {

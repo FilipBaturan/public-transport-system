@@ -33,6 +33,7 @@ INSERT INTO `schedule` (`id`, `active`, `transport_line_id`, `day_of_week`) VALU
 INSERT INTO `schedule` (`id`, `active`, `transport_line_id`, `day_of_week`) VALUES ('102', TRUE, 3, 0);
 INSERT INTO `schedule` (`id`, `active`, `transport_line_id`, `day_of_week`) VALUES ('103', TRUE, 1, 1);
 INSERT INTO `schedule` (`id`, `active`, `transport_line_id`, `day_of_week`) VALUES ('104', TRUE, 2, 1);
+INSERT INTO `schedule` (`id`, `active`, `transport_line_id`, `day_of_week`) VALUES ('107', TRUE, 3, 1);
 INSERT INTO `schedule` (`id`, `active`, `transport_line_id`, `day_of_week`) VALUES ('105', TRUE, 1, 2);
 INSERT INTO `schedule` (`id`, `active`, `transport_line_id`, `day_of_week`) VALUES ('106', TRUE, 2, 2);
 

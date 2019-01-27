@@ -23,25 +23,26 @@ public class SchedulePage {
     @FindBy(xpath = "/html/body/app-root/app-schedule/div/div/angular2-multiselect[2]/div/div[1]/div")
     private WebElement transportLineComboCheckBox;
 
-    @FindBy(xpath = "/html/body/app-root/app-schedule/div/div/angular2-multiselect[2]/div/div[2]/div[3]/div[3]/ul/li[1]")
+    @FindBy(xpath = "//*[@id=\"content\"]/angular2-multiselect[2]/div/div[2]/div[3]/div[3]/ul/li[2]")
     private WebElement checkTransportLine;
 
-    @FindBy(xpath = "/html/body/app-root/app-schedule/div/div/angular2-multiselect[2]/div/div[2]/div[3]/div[3]/ul/li[2]")
+    @FindBy(xpath = "//*[@id=\"content\"]/angular2-multiselect[2]/div/div[2]/div[3]/div[3]/ul/li[3]")
     private WebElement checkTransportLine1;
 
-    @FindBy(xpath = "/html/body/app-root/app-schedule/div/div/angular2-multiselect[2]/div/div[2]/div[3]/div[3]/ul/li[3]")
+    @FindBy(xpath = "//*[@id=\"content\"]/angular2-multiselect[2]/div/div[2]/div[3]/div[3]/ul/li[5]")
     private WebElement checkTransportLine2;
 
-    @FindBy(xpath = "/html/body/app-root/app-schedule/div/div/table")
+    @FindBy(css = "#content > table")
     private WebElement scheduleTable;
 
-    @FindBy(xpath = "/html/body/app-root/app-schedule/div/div/table/thead/mat-header-row/mat-header-cell[1]/div/button")
+    @FindBy(xpath = "//*[@id=\"content\"]/table/thead/mat-header-row/mat-header-cell[1]")
     private WebElement header1;
 
-    @FindBy(xpath = "html/body/app-root/app-schedule/div/div/table/tbody/mat-row[1]/mat-cell[1]")
+    ////*[@id="content"]/table/tbody/mat-row[1]/mat-cell[1]
+    @FindBy(css = "#content > table > tbody > mat-row:nth-child(1) > mat-cell")
     private WebElement cell1;
 
-    @FindBy(xpath = "html/body/app-root/app-schedule/div/div/table/tbody/mat-row[1]/mat-cell[2]")
+    @FindBy(css = "#content > table > tbody > mat-row:nth-child(2) > mat-cell")
     private WebElement cell2;
 
     public SchedulePage() {
@@ -78,8 +79,45 @@ public class SchedulePage {
 
     public void ensureIsDisplayedScheduleTable() {
         (new WebDriverWait(driver, 10))
-                .until(ExpectedConditions.elementToBeClickable(scheduleTable));
+                .until(ExpectedConditions.visibilityOf(scheduleTable));
     }
+
+    public void ensureIsDisplayedAllHeaderCells() {
+        (new WebDriverWait(driver, 10))
+                .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("mat-header-cell")));
+    }
+
+    public void ensureIsDisplayedAllRows() {
+        (new WebDriverWait(driver, 10))
+                .until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector("mat-row")));
+    }
+
+    public void ensureHasCorrectSizeHeaderCells() {
+        (new WebDriverWait(driver, 10))
+                .until(ExpectedConditions.numberOfElementsToBe(By.cssSelector("mat-header-cell"),3));
+    }
+
+    public void ensureHasCorrectSizeRows() {
+        (new WebDriverWait(driver, 10))
+                .until(ExpectedConditions.numberOfElementsToBe(By.cssSelector("mat-row"),6));
+    }
+
+    public void ensureIsDisplayedCheckBox1() {
+        (new WebDriverWait(driver, 20))
+                .until(ExpectedConditions.elementToBeClickable(checkTransportLine));
+    }
+
+    public void ensureIsDisplayedCheckBox2() {
+        (new WebDriverWait(driver, 10))
+                .until(ExpectedConditions.elementToBeClickable(checkTransportLine1));
+    }
+
+    public void ensureIsDisplayedCheckBox3() {
+        (new WebDriverWait(driver, 10))
+                .until(ExpectedConditions.elementToBeClickable(checkTransportLine2));
+    }
+
+
 
     public int getNumOfRows() {
         return driver.findElements(By.cssSelector("mat-row")).size();

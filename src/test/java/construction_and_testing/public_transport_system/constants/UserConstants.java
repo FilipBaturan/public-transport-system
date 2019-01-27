@@ -42,6 +42,8 @@ public class UserConstants {
     public static final String DB_NEW_EMAIL = "newEmail@gmail.com";
     public static final String DB_NEW_TELEPHONE = "00213124";
 
+    public static final String DB_INVALID_USER_NAME = "invalidUsername";
+
 
     public static final User DB_USER = new User(DB_USER_ID, DB_FIRST_NAME, DB_LAST_NAME, DB_USERNAME, DB_PASSWORD,
             DB_EMAIL, DB_TELEPHONE, true);

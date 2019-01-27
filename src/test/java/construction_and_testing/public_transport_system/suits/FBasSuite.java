@@ -4,6 +4,8 @@ package construction_and_testing.public_transport_system.suits;
 import construction_and_testing.public_transport_system.controller.ScheduleControllerTest;
 import construction_and_testing.public_transport_system.controller.UserControllerTest;
 import construction_and_testing.public_transport_system.service.integration.ScheduleServiceImplIntegrationTest;
+import construction_and_testing.public_transport_system.service.integration.UserDetailsServiceImplTest;
+
 import construction_and_testing.public_transport_system.service.unit.ScheduleServiceImplUnitTest;
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
@@ -17,6 +19,7 @@ import org.springframework.test.annotation.DirtiesContext;
         ScheduleServiceImplIntegrationTest.class,
         ScheduleServiceImplUnitTest.class,
         ScheduleControllerTest.class,
+        UserDetailsServiceImplTest.class,
         UserControllerTest.class
 
 })
