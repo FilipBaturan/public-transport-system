@@ -140,7 +140,7 @@ public class ImageServiceTest {
     }
 
     /**
-     * Test get image with null firstName
+     * Test get image with null name
      */
     @Test(expected = GeneralException.class)
     public void testGetImageWithNullName() {
@@ -148,7 +148,7 @@ public class ImageServiceTest {
     }
 
     /**
-     * Test get image with empty firstName
+     * Test get image with empty name
      */
     @Test(expected = GeneralException.class)
     public void testGetImageWithEmptyName() {

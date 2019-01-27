@@ -1,14 +1,12 @@
 package construction_and_testing.public_transport_system.controller;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import construction_and_testing.public_transport_system.domain.DTO.OperatorDTO;
 import construction_and_testing.public_transport_system.domain.DTO.UserDTO;
 import construction_and_testing.public_transport_system.domain.DTO.ValidatorDTO;
 import construction_and_testing.public_transport_system.domain.Operator;
 import construction_and_testing.public_transport_system.domain.RegisteredUser;
 import construction_and_testing.public_transport_system.domain.User;
-import construction_and_testing.public_transport_system.domain.enums.AuthorityType;
 import construction_and_testing.public_transport_system.domain.enums.UsersDocumentsStatus;
 import construction_and_testing.public_transport_system.service.definition.UserService;
 import org.junit.Test;
@@ -422,7 +420,7 @@ public class UserControllerTest {
         assertEquals(savedValidator.getLastName(), "Tor");
 
         int sizeAfter = userService.getOperators().size();
-        assertEquals(size+1, sizeAfter);
+        assertEquals(size + 1, sizeAfter);
     }
 
     @Test
@@ -482,13 +480,13 @@ public class UserControllerTest {
 
 
     @Test
-    public void getByUsername(){
+    public void getByUsername() {
         String username = "operkor";
 
         ResponseEntity<Object> result = testRestTemplate
                 .getForEntity(this.URL + "/getByUsername/" + username, Object.class);
 
-        Object body =  result.getBody();
+        Object body = result.getBody();
         assertNotNull(body);
         assertEquals(result.getStatusCode(), HttpStatus.OK);
         //assertThat(body.getUsername()).isEqualTo(username);
@@ -496,7 +494,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void getByUsernameRegUser(){
+    public void getByUsernameRegUser() {
         String username = "username";
 
         ResponseEntity<Object> result = testRestTemplate
@@ -511,7 +509,9 @@ public class UserControllerTest {
     }
 
     @Test
-    public void getByUsernameNotExisting(){
+    public void getByUsernameNotExisting() {
+        String username = "wrong_username";
+
         ResponseEntity<Object> result = testRestTemplate
                 .getForEntity(this.URL + "/getByUsername/" + DB_INVALID_USER_NAME, Object.class);
 

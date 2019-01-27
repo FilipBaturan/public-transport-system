@@ -75,7 +75,6 @@ public class UserController {
     }
 
     /**
-     *
      * @param username of a user that is being searched
      * @return type of user if successful
      */
@@ -95,7 +94,7 @@ public class UserController {
                 return new ResponseEntity<>(UserConverter.fromEntity((Admin) user), HttpStatus.OK);
             else
                 return new ResponseEntity<>(UserConverter.fromEntity(user), HttpStatus.OK);
-        } catch (Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }
     }
@@ -343,7 +342,6 @@ public class UserController {
         } catch (GeneralException ge) {
             return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
         }
-
 
 
         if (operator.getAuthorityType() != AuthorityType.OPERATER)

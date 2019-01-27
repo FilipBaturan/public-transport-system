@@ -11,7 +11,6 @@ import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Optional;
@@ -30,7 +29,7 @@ public class ScheduleServiceImpl implements ScheduleService {
     public List<Schedule> getAll() {
         List<Schedule> schedules = scheduleRepository.findAll();
         Iterator<Schedule> it = schedules.iterator();
-        while (it.hasNext()){
+        while (it.hasNext()) {
             Schedule schedule = it.next();
             schedule.getDepartures().sort(new TimeStringComparator());
             if (!schedule.isActive()) it.remove();
@@ -92,8 +91,8 @@ public class ScheduleServiceImpl implements ScheduleService {
     @Override
     public Schedule findScheduleIfExists(Schedule schedule) {
         List<Schedule> schedules = scheduleRepository.findAll();
-        for (Schedule s: schedules) {
-            if (s.getTransportLine().getName().equals(schedule.getTransportLine().getName()) && s.getDayOfWeek().name().equals(schedule.getDayOfWeek().name())){
+        for (Schedule s : schedules) {
+            if (s.getTransportLine().getName().equals(schedule.getTransportLine().getName()) && s.getDayOfWeek().name().equals(schedule.getDayOfWeek().name())) {
                 return s;
             }
         }

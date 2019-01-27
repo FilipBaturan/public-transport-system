@@ -144,7 +144,7 @@ public class VehiclePageTest {
     }
 
     /**
-     * Test valid vehicle saving with minimum firstName length
+     * Test valid vehicle saving with minimum name length
      */
     @Test
     public void testSaveVehicleWithMinimumNameLength() {
@@ -181,7 +181,7 @@ public class VehiclePageTest {
     }
 
     /**
-     * Test valid vehicle saving with maximum firstName length
+     * Test valid vehicle saving with maximum name length
      */
     @Test
     public void testSaveVehicleWithMaximumNameLength() {
@@ -219,7 +219,7 @@ public class VehiclePageTest {
     }
 
     /**
-     * Test invalid vehicle saving with null firstName and type
+     * Test invalid vehicle saving with null name and type
      */
     @Test
     public void testSaveVehicleWithNullNameAndType() {
@@ -240,14 +240,14 @@ public class VehiclePageTest {
         vehiclePage.ensureIsDisplayedFirstError();
         vehiclePage.ensureIsDisplayedSecondError();
 
-        assertThat(vehiclePage.getSpanNameError().getText()).isEqualTo("Vehicle firstName is required!");
+        assertThat(vehiclePage.getSpanNameError().getText()).isEqualTo("Vehicle name is required!");
         assertThat(vehiclePage.getSpanVehicleTypeError().getText()).isEqualTo("Vehicle type is required!");
         vehiclePage.getSpanExitModalForm().click();
         assertThat(vehiclePage.numberOfVehicles()).isEqualTo(beforeCount);
     }
 
     /**
-     * Test invalid vehicle saving with null firstName
+     * Test invalid vehicle saving with null name
      */
     @Test
     public void testSaveVehicleWithNullName() {
@@ -269,13 +269,13 @@ public class VehiclePageTest {
         vehiclePage.getButtonSave().click();
         vehiclePage.ensureIsDisplayedFirstError();
 
-        assertThat(vehiclePage.getSpanNameError().getText()).isEqualTo("Vehicle firstName is required!");
+        assertThat(vehiclePage.getSpanNameError().getText()).isEqualTo("Vehicle name is required!");
         vehiclePage.getSpanExitModalForm().click();
         assertThat(vehiclePage.numberOfVehicles()).isEqualTo(beforeCount);
     }
 
     /**
-     * Test invalid vehicle saving with short firstName
+     * Test invalid vehicle saving with short name
      */
     @Test
     public void testSaveVehicleWithShortName() {
@@ -298,13 +298,13 @@ public class VehiclePageTest {
         vehiclePage.ensureIsDisplayedFirstError();
 
         assertThat(vehiclePage.getSpanNameError().getText())
-                .isEqualTo("Vehicle firstName must be at least 3 characters long!");
+                .isEqualTo("Vehicle name must be at least 3 characters long!");
         vehiclePage.getSpanExitModalForm().click();
         assertThat(vehiclePage.numberOfVehicles()).isEqualTo(beforeCount);
     }
 
     /**
-     * Test invalid vehicle saving with long firstName
+     * Test invalid vehicle saving with long name
      */
     @Test
     public void testSaveVehicleWithLongName() {
@@ -327,7 +327,7 @@ public class VehiclePageTest {
         vehiclePage.ensureIsDisplayedFirstError();
 
         assertThat(vehiclePage.getSpanNameError().getText())
-                .isEqualTo("Vehicle firstName must be maximum 30 characters long!");
+                .isEqualTo("Vehicle name must be maximum 30 characters long!");
         vehiclePage.getSpanExitModalForm().click();
         assertThat(vehiclePage.numberOfVehicles()).isEqualTo(beforeCount);
     }

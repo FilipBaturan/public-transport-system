@@ -154,7 +154,7 @@ public class ZoneServiceImplUnitTest {
     }
 
     /**
-     * Test with not unique firstName
+     * Test with not unique name
      */
     @Test(expected = GeneralException.class)
     public void saveWithInvalidName() {
@@ -173,7 +173,7 @@ public class ZoneServiceImplUnitTest {
     }
 
     /**
-     * Test with to short firstName value
+     * Test with to short name value
      */
     @Test(expected = GeneralException.class)
     public void saveWithShortName() {
@@ -183,7 +183,7 @@ public class ZoneServiceImplUnitTest {
     }
 
     /**
-     * Test with too long firstName value
+     * Test with too long name value
      */
     @Test(expected = GeneralException.class)
     public void saveWithLongName() {
@@ -193,7 +193,7 @@ public class ZoneServiceImplUnitTest {
     }
 
     /**
-     * Test with min length firstName value
+     * Test with min length name value
      */
     @Test
     public void saveWithMinLengthName() {
@@ -213,7 +213,7 @@ public class ZoneServiceImplUnitTest {
     }
 
     /**
-     * Test with max length firstName value
+     * Test with max length name value
      */
     @Test
     public void saveWithMaxLengthName() {

@@ -1,7 +1,5 @@
 package construction_and_testing.public_transport_system.pages;
 
-import construction_and_testing.public_transport_system.pages.SignUpPage;
-import construction_and_testing.public_transport_system.pages.WelcomePage;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.support.PageFactory;
@@ -22,7 +20,7 @@ public class SignUpPageTest {
 
 
     @BeforeMethod
-    public void startSelenium(){
+    public void startSelenium() {
         System.setProperty("webdriver.chrome.driver", CHROME_DRIVER_PATH);
         browser = new ChromeDriver();
         browser.manage().window().maximize();
@@ -38,7 +36,7 @@ public class SignUpPageTest {
     }
 
     @Test
-    public void successfulRegistration(){
+    public void successfulRegistration() {
         signUpPage.ensureIsDisplayed();
         signUpPage.setNameInput("Name1");
         signUpPage.setLastNameInput("LastName1");
@@ -52,7 +50,7 @@ public class SignUpPageTest {
     }
 
     @AfterMethod
-    public void closeSelenium(){
+    public void closeSelenium() {
         browser.close();
     }
 }

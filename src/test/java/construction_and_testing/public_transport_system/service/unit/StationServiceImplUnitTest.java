@@ -124,7 +124,7 @@ public class StationServiceImplUnitTest {
     }
 
     /**
-     * Test with to short firstName value
+     * Test with to short name value
      */
     @Test(expected = GeneralException.class)
     public void saveWithShortName() {
@@ -145,7 +145,7 @@ public class StationServiceImplUnitTest {
     }
 
     /**
-     * Test with too long firstName value
+     * Test with too long name value
      */
     @Test(expected = GeneralException.class)
     public void saveWithLongName() {
@@ -166,7 +166,7 @@ public class StationServiceImplUnitTest {
     }
 
     /**
-     * Test with min length firstName value
+     * Test with min length name value
      */
     @Test
     public void saveWithMinLengthName() {
@@ -192,7 +192,7 @@ public class StationServiceImplUnitTest {
     }
 
     /**
-     * Test with max length firstName value
+     * Test with max length name value
      */
     @Test
     public void saveWithMaxLengthName() {
@@ -269,7 +269,7 @@ public class StationServiceImplUnitTest {
     }
 
     /**
-     * Test with too short firstName value
+     * Test with too short name value
      */
     @Test(expected = GeneralException.class)
     public void replaceAllWithShortName() {
@@ -286,7 +286,7 @@ public class StationServiceImplUnitTest {
     }
 
     /**
-     * Test with too long firstName value
+     * Test with too long name value
      */
     @Test(expected = GeneralException.class)
     public void replaceAllWithLongName() {
@@ -303,7 +303,7 @@ public class StationServiceImplUnitTest {
     }
 
     /**
-     * Test with min length firstName value
+     * Test with min length name value
      */
     @Test
     public void replaceAllWithMinLengthName() {
@@ -320,7 +320,7 @@ public class StationServiceImplUnitTest {
     }
 
     /**
-     * Test with max length firstName value
+     * Test with max length name value
      */
     @Test
     public void replaceAllWithMaxLengthName() {

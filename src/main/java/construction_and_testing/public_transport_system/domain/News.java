@@ -47,6 +47,16 @@ public class News implements Serializable, Comparable<News> {
         this.content = content;
         this.date = date;
         this.operator = operator;
+        this.active = true;
+    }
+
+    public News(Long id, String title, String content, LocalDateTime date, Operator operator, boolean active) {
+        this.id = id;
+        this.title = title;
+        this.content = content;
+        this.date = date;
+        this.operator = operator;
+        this.active = active;
     }
 
     public static long getSerialVersionUID() {

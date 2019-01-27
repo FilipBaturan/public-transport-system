@@ -130,7 +130,6 @@ public class ScheduleConstants {
     public static final Schedule DB_SCHEDULE_4 = new Schedule(107L, DB_TRANSPORT_LINE_2, DayOfWeek.SATURDAY, DB_VALID_TL_DEPARTURES_SUN, true);
 
 
-
     public static final Schedule DB_INVALID_SCHEDULE = new Schedule(3L, DB_TRANSPORT_LINE_3, DayOfWeek.SATURDAY, DB_NEW_DEPARTURES, true);
 
 
