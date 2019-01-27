@@ -58,49 +58,54 @@ public class UpdateSchedulePageTest {
     @Test
     public void testUpdateSchedule() {
         schedulePage.ensureIsDisplayedTransportLineComboCheckBox();
-        schedulePage.ensureIsDisplayedScheduleTable();
-
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         schedulePage.getTransportLineComboCheckBox().click();
+        schedulePage.ensureIsDisplayedCheckBox1();
         schedulePage.getCheckTransportLine().click();
+
         /*schedulePage.getTransportLineComboCheckBox().click();
         schedulePage.getCheckTransportLine1().click();
         schedulePage.getTransportLineComboCheckBox().click();
         schedulePage.getCheckTransportLine2().click();
         schedulePage.getTransportLineComboCheckBox().click();
         schedulePage.getCheckTransportLine().click();*/
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
 
         //schedulePage.ensureIsDisplayedCell1();
+
+        schedulePage.ensureIsDisplayedScheduleTable();
 
         int numRows = schedulePage.getNumOfRows();
         int numColumns = schedulePage.getNumOfColumns();
 
-        assertEquals(7, numRows);
+        schedulePage.ensureIsDisplayedAllHeaderCells();
+        schedulePage.ensureIsDisplayedAllRows();
+
+        schedulePage.ensureHasCorrectSizeHeaderCells(3);
+
+
+        schedulePage.ensureHasCorrectSizeRows(5);
+
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
         assertEquals(3, numColumns);
+        assertEquals(5, numRows);
 
-        assertEquals("R1-WORKDAY", schedulePage.getHeader1().getText());
+        try {
+            Thread.sleep(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
 
-        assertEquals("07:55", schedulePage.getCell1().getAttribute("ng-reflect-model"));
-        assertEquals("18:00", schedulePage.getCell2().getAttribute("ng-reflect-model"));
+        //assertEquals("R1-WORKDAY", schedulePage.getHeader1().getText());
+
+        assertEquals("08:00", schedulePage.getCell1().getAttribute("ng-reflect-model"));
+        assertEquals("", schedulePage.getCell2().getAttribute("ng-reflect-model"));
         assertEquals("22:00", schedulePage.getCell3().getAttribute("ng-reflect-model"));
 
         schedulePage.getCell1().clear();
         schedulePage.getCell1().sendKeys("07:50");
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
     }
 
     @AfterMethod

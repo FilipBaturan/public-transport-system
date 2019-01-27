@@ -23,19 +23,8 @@ public class UserDetailsFactory {
      * @return UserDetailsImpl
      */
     public static UserDetailsImpl create(User user) {
-        Collection<? extends GrantedAuthority> authorities;
         List<GrantedAuthority> auth = new ArrayList<GrantedAuthority>();
         auth.add(user.getAuthorityType());
-        try {
-            //auth.add(new SimpleGrantedAuthority(user.getAuthorityType().toString()));
-            //authorities = auth; //.map(a -> new SimpleGrantedAuthority(a.toString())).collect(Collectors.toList());
-            //authorities = user.getAuthorityType().stream().map(a -> new SimpleGrantedAuthority(a.toString())).collect(Collectors.toList());
-            authorities = null;
-        } catch (Exception e) {
-            authorities = null;
-        }
-
-        //AuthorityType auth = AuthorityType.REGISTERED_USER;
 
         return new UserDetailsImpl(
                 user.getId(),
@@ -43,7 +32,6 @@ public class UserDetailsFactory {
                 user.getPassword(),
                 user.getEmail(),
                 user.getTelephone(),
-                //user.getLastPasswordReset(),
                 auth
         );
     }

@@ -13,10 +13,10 @@ public class NavigationBarPage {
     @FindBy(xpath = "//*[@id=\"sidebar\"]/ul[1]/li[2]/a")
     private WebElement mapDropDown;
 
-    @FindBy(xpath = "//*[@id=\"sidebar\"]/ul[1]/li[5]/a")
+    @FindBy(css = "#sidebar > ul.list-unstyled.components > li:nth-child(7) > a")
     private WebElement updateScheduleLink;
 
-    @FindBy(xpath = "//*[@id=\"sidebar\"]/ul[1]/li[4]/a")
+    @FindBy(css = "#sidebar > ul.list-unstyled.components > li:nth-child(6) > a")
     private WebElement scheduleLink;
 
     @FindBy(xpath = "//*[@id=\"homeSubmenu\"]/li[3]/a")
@@ -30,6 +30,9 @@ public class NavigationBarPage {
 
     @FindBy(xpath = "//*[@id=\"sidebar\"]/ul[2]/li/a")
     private WebElement buttonLogout;
+
+    @FindBy(id = "operatorsLink")
+    private WebElement operatorsLink;
 
     @FindBy(id = "validatorsLink")
     private WebElement validatorsLink;
@@ -62,6 +65,11 @@ public class NavigationBarPage {
     public void ensureIsDisplayedMapDropItems() {
         (new WebDriverWait(driver, 10))
                 .until(ExpectedConditions.elementToBeClickable(vehicleLink));
+    }
+
+    public void ensureIsDisplayedScheduleLink() {
+        (new WebDriverWait(driver, 10))
+                .until(ExpectedConditions.elementToBeClickable(scheduleLink));
     }
 
     public void ensureIsDisplayedLogout() {
@@ -98,6 +106,10 @@ public class NavigationBarPage {
         return buttonLogout;
     }
 
+    public WebElement getOperatorsLink() {
+        return operatorsLink;
+    }
+
     public WebElement getValidatorsLink() {
         return validatorsLink;
     }
@@ -117,6 +129,4 @@ public class NavigationBarPage {
     public WebElement getReportLink() {
         return reportLink;
     }
-
-
 }

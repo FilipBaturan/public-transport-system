@@ -490,7 +490,7 @@ public class UserControllerTest {
 
         Object body =  result.getBody();
         assertNotNull(body);
-        assertEquals(result.getStatusCode(), HttpStatus.FOUND);
+        assertEquals(result.getStatusCode(), HttpStatus.OK);
         //assertThat(body.getUsername()).isEqualTo(username);
         //assertThat(body.getAuthorityType()).isEqualTo(AuthorityType.OPERATER);
     }
@@ -505,22 +505,20 @@ public class UserControllerTest {
         Object body = result.getBody();
 
         assertNotNull(body);
-        assertEquals(result.getStatusCode(), HttpStatus.FOUND);
+        assertEquals(result.getStatusCode(), HttpStatus.OK);
         //assertThat(body.getUsername()).isEqualTo(username);
         //assertThat(body.getAuthorityType()).isEqualTo(AuthorityType.REGISTERED_USER);
     }
 
     @Test
     public void getByUsernameNotExisting(){
-        String username = "wrong_username";
-
         ResponseEntity<Object> result = testRestTemplate
-                .getForEntity(this.URL + "/getByUsername/" + username, Object.class);
+                .getForEntity(this.URL + "/getByUsername/" + DB_INVALID_USER_NAME, Object.class);
 
         RegisteredUser body = (RegisteredUser) result.getBody();
 
         assertNull(body);
-        assertEquals(result.getStatusCode(), HttpStatus.NOT_FOUND);
+        assertEquals(result.getStatusCode(), HttpStatus.NOT_ACCEPTABLE);
     }
 
     @Test

@@ -84,19 +84,17 @@ public class UserController {
         try {
             User user = userService.findByUsername(username);
 
-            System.out.println(user.toString());
-
             if (user == null)
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+                return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 
             if (user.getAuthorityType() == AuthorityType.OPERATER)
-                return new ResponseEntity<>(UserConverter.fromEntity((Operator) user), HttpStatus.FOUND);
+                return new ResponseEntity<>(UserConverter.fromEntity((Operator) user), HttpStatus.OK);
             else if (user.getAuthorityType() == AuthorityType.VALIDATOR)
-                return new ResponseEntity<>(UserConverter.fromEntity((Validator) user), HttpStatus.FOUND);
+                return new ResponseEntity<>(UserConverter.fromEntity((Validator) user), HttpStatus.OK);
             else if (user.getAuthorityType() == AuthorityType.ADMIN)
-                return new ResponseEntity<>(UserConverter.fromEntity((Admin) user), HttpStatus.FOUND);
+                return new ResponseEntity<>(UserConverter.fromEntity((Admin) user), HttpStatus.OK);
             else
-                return new ResponseEntity<>(UserConverter.fromEntity(user), HttpStatus.FOUND);
+                return new ResponseEntity<>(UserConverter.fromEntity(user), HttpStatus.OK);
         } catch (Exception e){
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
         }

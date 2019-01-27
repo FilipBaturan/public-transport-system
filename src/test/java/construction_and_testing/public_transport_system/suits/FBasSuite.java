@@ -7,6 +7,7 @@ import construction_and_testing.public_transport_system.controller.UserControlle
 import construction_and_testing.public_transport_system.service.implementation.ScheduleServiceImpl;
 import construction_and_testing.public_transport_system.service.integration.ScheduleServiceImplIntegrationTest;
 import construction_and_testing.public_transport_system.service.integration.TicketServiceImplIntegrationTest;
+import construction_and_testing.public_transport_system.service.integration.UserDetailsServiceImplTest;
 import construction_and_testing.public_transport_system.service.integration.UserServiceImplIntegrationTest;
 import construction_and_testing.public_transport_system.service.unit.ScheduleServiceImplUnitTest;
 import construction_and_testing.public_transport_system.service.unit.TicketServiceImplUnitTest;
@@ -23,6 +24,7 @@ import org.springframework.test.annotation.DirtiesContext;
         ScheduleServiceImplIntegrationTest.class,
         ScheduleServiceImplUnitTest.class,
         ScheduleControllerTest.class,
+        UserDetailsServiceImplTest.class,
         UserControllerTest.class
 
 })
