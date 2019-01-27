@@ -11,6 +11,9 @@ public class ReportPage {
 
     private WebDriver driver;
 
+    @FindBy(xpath = "//*[@id=\"content\"]/div/div/h1")
+    private WebElement title;
+
     @FindBy(xpath = "/html/body/app-root/app-report/div/div/p/b")
     private WebElement numOfTicketsSold;
 
@@ -22,6 +25,11 @@ public class ReportPage {
 
     @FindBy(xpath = "/html/body/app-root/app-report/div/div/div[4]")
     private WebElement montlyChart;
+
+    @FindBy(xpath = "//*[@id=\"datePickerDiv\"]/div[1]/input")
+    private WebElement inputStartDate;
+
+    
 
     public ReportPage(WebDriver driver) {
         this.driver = driver;
@@ -43,10 +51,21 @@ public class ReportPage {
         return montlyChart;
     }
 
+    public WebElement getInputStartDate() { return inputStartDate; }
 
     public void ensureIsDisplayed() {
         (new WebDriverWait(driver, 10))
-                .until(ExpectedConditions.presenceOfElementLocated(
-                        By.xpath("/html/body/app-root/app-report/div/div/h1")));
+                .until(ExpectedConditions.visibilityOf(title));
+    }
+
+    public void ensureChartIsDisplayed() {
+        (new WebDriverWait(driver, 10))
+                .until(ExpectedConditions.visibilityOf(montlyChart));
+    }
+
+    public void setInputStartDate(String value)
+    {
+        inputStartDate.click();
+        inputStartDate.sendKeys(value);
     }
 }

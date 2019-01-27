@@ -143,7 +143,7 @@ public class MapPageTest {
     }
 
     /**
-     * Test saving transport line with min length firstName
+     * Test saving transport line with min length name
      */
     @Test
     public void testSaveTransportLineWithMinLengthName() {
@@ -161,12 +161,39 @@ public class MapPageTest {
         mapPage.getSelectOptionMetro().click();
         mapPage.getButtonSave().click();
 
+        mapPage.ensureIsEditedTransportLine("a");
+
         assertThat(mapPage.numberOfTransportLines()).isEqualTo(beforeCount);
         assertThat(mapPage.getTransportLines().get(0).getText()).contains("a");
     }
 
     /**
-     * Test saving transport line with not unique firstName
+     * Test saving transport line with max length name
+     */
+    @Test
+    public void testSaveTransportLineWithMaxLengthName() {
+
+        mapPage.ensureIsDisplayed();
+
+        mapPage.ensureIsDisplayedButtonEdit();
+
+        int beforeCount = mapPage.numberOfTransportLines();
+
+        mapPage.getEditButtonTransportLine().click();
+        mapPage.ensureIsDisplayedButtonSave();
+
+        mapPage.setInputEditTransportLineName("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+        mapPage.getSelectOptionMetro().click();
+        mapPage.getButtonSave().click();
+
+        mapPage.ensureIsEditedTransportLine("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+
+        assertThat(mapPage.numberOfTransportLines()).isEqualTo(beforeCount);
+        assertThat(mapPage.getTransportLines().get(0).getText()).contains("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+    }
+
+    /**
+     * Test saving transport line with not unique name
      */
     @Test
     public void testSaveTransportLineNotUniqueName() {
@@ -190,7 +217,7 @@ public class MapPageTest {
     }
 
     /**
-     * Test saving transport line with long firstName
+     * Test saving transport line with long name
      */
     @Test
     public void testSaveTransportLineWithLongName() {
@@ -211,7 +238,7 @@ public class MapPageTest {
         mapPage.ensureIsDisplayedFirstError();
 
         assertThat(mapPage.getSpanFirstError().getText())
-                .isEqualTo("Transport line firstName must be maximum 30 characters long!");
+                .isEqualTo("Transport line name must be maximum 30 characters long!");
         assertThat(mapPage.numberOfTransportLines()).isEqualTo(beforeCount);
     }
 
@@ -276,7 +303,7 @@ public class MapPageTest {
     }
 
     /**
-     * Test saving station with min length firstName
+     * Test saving station with min length name
      */
     @Test
     public void testSaveStationWithMinLengthName() {
@@ -305,7 +332,7 @@ public class MapPageTest {
     }
 
     /**
-     * Test saving station with max length firstName
+     * Test saving station with max length name
      */
     @Test
     public void testSaveStationWithMaxLengthName() {
@@ -334,7 +361,7 @@ public class MapPageTest {
     }
 
     /**
-     * Test saving station with short firstName
+     * Test saving station with short name
      */
     @Test
     public void testSaveStationWithShortName() {
@@ -363,7 +390,7 @@ public class MapPageTest {
     }
 
     /**
-     * Test saving station with long firstName
+     * Test saving station with long name
      */
     @Test
     public void testSaveStationWithLongName() {

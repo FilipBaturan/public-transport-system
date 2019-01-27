@@ -1,14 +1,13 @@
 package construction_and_testing.public_transport_system.controller;
 
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import construction_and_testing.public_transport_system.domain.DTO.OperatorDTO;
 import construction_and_testing.public_transport_system.domain.DTO.UserDTO;
 import construction_and_testing.public_transport_system.domain.DTO.ValidatorDTO;
 import construction_and_testing.public_transport_system.domain.Operator;
 import construction_and_testing.public_transport_system.domain.RegisteredUser;
 import construction_and_testing.public_transport_system.domain.User;
-import construction_and_testing.public_transport_system.domain.enums.AuthorityType;
+import construction_and_testing.public_transport_system.domain.Validator;
 import construction_and_testing.public_transport_system.domain.enums.UsersDocumentsStatus;
 import construction_and_testing.public_transport_system.service.definition.UserService;
 import org.junit.Test;
@@ -49,7 +48,7 @@ public class UserControllerTest {
         assertThat(body).isNotNull();
         assertEquals(body[0].getId(), DB_ID);
         assertEquals(body[0].getFirstName(), DB_FIRST_NAME);
-        assertEquals(body[0].getLast(), DB_LAST_NAME);
+        assertEquals(body[0].getLastName(), DB_LAST_NAME);
         assertEquals(body[0].isActive(), true);
         assertEquals(body[0].getEmail(), DB_EMAIL);
         assertEquals(body[0].getPassword(), DB_PASSWORD);
@@ -288,6 +287,26 @@ public class UserControllerTest {
 
         Boolean response = result.getBody();
         assertFalse(response);
+        assertEquals(result.getStatusCode(), HttpStatus.NOT_ACCEPTABLE);
+
+        // size should remain the same
+        int sizeAfter = userService.getValidators().size();
+        assertEquals(size, sizeAfter);
+    }
+
+    @Test
+    public void addInvalidatorNotExisting() {
+        Long randomId = 12343L;
+        ValidatorDTO newValidator = new ValidatorDTO(null, "newFirstName", "newLastName",
+                "newEmail", "newUser", "valUsername");
+
+        int size = userService.getValidators().size();
+
+        ResponseEntity<Boolean> result = testRestTemplate
+                .postForEntity(this.URL + "/addValidator/", newValidator, Boolean.class);
+
+        Boolean response = result.getBody();
+        assertFalse(response);
         assertEquals(result.getStatusCode(), HttpStatus.CONFLICT);
 
         // size should remain the same
@@ -422,7 +441,7 @@ public class UserControllerTest {
         assertEquals(savedValidator.getLastName(), "Tor");
 
         int sizeAfter = userService.getOperators().size();
-        assertEquals(size+1, sizeAfter);
+        assertEquals(size + 1, sizeAfter);
     }
 
     @Test
@@ -482,21 +501,21 @@ public class UserControllerTest {
 
 
     @Test
-    public void getByUsername(){
+    public void getByUsername() {
         String username = "operkor";
 
         ResponseEntity<Object> result = testRestTemplate
                 .getForEntity(this.URL + "/getByUsername/" + username, Object.class);
 
-        Object body =  result.getBody();
+        Object body = result.getBody();
         assertNotNull(body);
-        assertEquals(result.getStatusCode(), HttpStatus.FOUND);
+        assertEquals(result.getStatusCode(), HttpStatus.OK);
         //assertThat(body.getUsername()).isEqualTo(username);
         //assertThat(body.getAuthorityType()).isEqualTo(AuthorityType.OPERATER);
     }
 
     @Test
-    public void getByUsernameRegUser(){
+    public void getByUsernameRegUser() {
         String username = "username";
 
         ResponseEntity<Object> result = testRestTemplate
@@ -505,22 +524,22 @@ public class UserControllerTest {
         Object body = result.getBody();
 
         assertNotNull(body);
-        assertEquals(result.getStatusCode(), HttpStatus.FOUND);
+        assertEquals(result.getStatusCode(), HttpStatus.OK);
         //assertThat(body.getUsername()).isEqualTo(username);
         //assertThat(body.getAuthorityType()).isEqualTo(AuthorityType.REGISTERED_USER);
     }
 
     @Test
-    public void getByUsernameNotExisting(){
+    public void getByUsernameNotExisting() {
         String username = "wrong_username";
 
         ResponseEntity<Object> result = testRestTemplate
-                .getForEntity(this.URL + "/getByUsername/" + username, Object.class);
+                .getForEntity(this.URL + "/getByUsername/" + DB_INVALID_USER_NAME, Object.class);
 
         RegisteredUser body = (RegisteredUser) result.getBody();
 
         assertNull(body);
-        assertEquals(result.getStatusCode(), HttpStatus.NOT_FOUND);
+        assertEquals(result.getStatusCode(), HttpStatus.NOT_ACCEPTABLE);
     }
 
     @Test
@@ -533,11 +552,75 @@ public class UserControllerTest {
         Long valId = 1L;
         assertEquals(body[0].getId(), valId);
         assertEquals(body[0].getFirstName(), DB_FIRST_NAME);
-        assertEquals(body[0].getLast(), DB_LAST_NAME);
+        assertEquals(body[0].getLastName(), DB_LAST_NAME);
         assertEquals(body[0].isActive(), true);
         assertEquals(body[0].getEmail(), DB_EMAIL);
         assertEquals(body[0].getPassword(), DB_PASSWORD);
         assertEquals(result.getStatusCode(), HttpStatus.OK);
+    }
+
+    @Test
+    public void getByUsernameValid() {
+        ResponseEntity<ValidatorDTO> result = testRestTemplate
+                .getForEntity(this.URL + "/getByUsername/" + DB_VAL_USERNAME, ValidatorDTO.class);
+
+        ValidatorDTO body = result.getBody();
+        assertThat(body).isNotNull();
+        Long valId = 2L;
+        assertEquals(body.getId(), valId);
+        assertEquals(body.getFirstName(), DB_VAL_FIRST_NAME);
+        assertEquals(body.getLastName(), DB_VAL_LAST_NAME);
+        assertEquals(body.isActive(), true);
+        assertEquals(body.getEmail(), DB_VAL_EMAIL);
+        assertEquals(body.getPassword(), DB_VAL_PASSWORD);
+        assertEquals(result.getStatusCode(), HttpStatus.OK);
+    }
+
+    @Test
+    public void getByUsernameInvalid() {
+        ResponseEntity<ValidatorDTO> result = testRestTemplate
+                .getForEntity(this.URL + "/getByUsername/" + "randomUsername883", ValidatorDTO.class);
+
+        ValidatorDTO body = result.getBody();
+        assertEquals(body.getId(), null);
+        assertEquals(body.getFirstName(), null);
+        assertEquals(body.getLastName(), null);
+        assertEquals(body.isActive(), false);
+        assertEquals(body.getEmail(), null);
+        assertEquals(body.getPassword(), null);
+        assertEquals(result.getStatusCode(), HttpStatus.NOT_FOUND);
+    }
+
+    @Test
+    public void getRegByUsernameValid() {
+        ResponseEntity<UserDTO> result = testRestTemplate
+                .getForEntity(this.URL + "/getRegByUsername/" + DB_USERNAME, UserDTO.class);
+
+        UserDTO body = result.getBody();
+        assertThat(body).isNotNull();
+        Long valId = 1L;
+        assertEquals(body.getId(), valId);
+        assertEquals(body.getFirstName(), DB_FIRST_NAME);
+        assertEquals(body.getLastName(), DB_LAST_NAME);
+        assertEquals(body.isActive(), true);
+        assertEquals(body.getEmail(), DB_EMAIL);
+        assertEquals(body.getPassword(), DB_PASSWORD);
+        assertEquals(result.getStatusCode(), HttpStatus.OK);
+    }
+
+    @Test
+    public void getRegByUsernameInvalid() {
+        ResponseEntity<UserDTO> result = testRestTemplate
+                .getForEntity(this.URL + "/getRegByUsername/" + "randomUsername883", UserDTO.class);
+
+        UserDTO body = result.getBody();
+        assertEquals(body.getId(), null);
+        assertEquals(body.getFirstName(), "");
+        assertEquals(body.getLastName(), "");
+        assertEquals(body.isActive(), false);
+        assertEquals(body.getEmail(), "");
+        assertEquals(body.getPassword(), "");
+        assertEquals(result.getStatusCode(), HttpStatus.NOT_FOUND);
     }
 
 }

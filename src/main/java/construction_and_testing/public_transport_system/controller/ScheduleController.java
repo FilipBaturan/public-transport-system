@@ -10,7 +10,6 @@ import construction_and_testing.public_transport_system.service.definition.Sched
 import construction_and_testing.public_transport_system.service.definition.TransportLineService;
 import construction_and_testing.public_transport_system.util.GeneralException;
 import org.everit.json.schema.ValidationException;
-import org.modelmapper.ModelMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -57,10 +56,10 @@ public class ScheduleController extends ValidationController {
      */
     @GetMapping("/{id}")
     public ResponseEntity<ScheduleDTO> findById(@PathVariable("id") String id) {
-        try{
+        try {
             logger.info("Requesting schedule with id {} at time {}.", id, Calendar.getInstance().getTime());
             return new ResponseEntity<>(new ScheduleDTO(scheduleService.findById(Long.parseLong(id))), HttpStatus.OK);
-        } catch(Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -76,11 +75,10 @@ public class ScheduleController extends ValidationController {
     @GetMapping("/findByTrLineIdAndDayOfWeek/{id}")
     public ResponseEntity<ScheduleDTO> findByTransportLineIdAndDayOfWeek(@PathVariable String id, @RequestParam String dayOfWeek) {
         logger.info("Requesting schedule for transprot line with  {} at time {}.", id, Calendar.getInstance().getTime());
-        try{
+        try {
             Schedule schedule = scheduleService.findByTransportLineIdAndDayOfWeek(Long.parseLong(id), DayOfWeek.valueOf(dayOfWeek).ordinal());
-            System.out.println(schedule.toString());
             return new ResponseEntity<>(new ScheduleDTO(schedule), HttpStatus.OK);
-        } catch(Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -94,10 +92,10 @@ public class ScheduleController extends ValidationController {
      */
     @GetMapping("/findByTransportLineId/{id}")
     public ResponseEntity<List<ScheduleDTO>> findByTransportLineId(@PathVariable("id") String id) {
-        try{
+        try {
             logger.info("Requesting schedule for transprot line with  {} at time {}.", id, Calendar.getInstance().getTime());
             return new ResponseEntity<>(ScheduleConverter.fromEntityList(scheduleService.findByTransportLineId(Long.parseLong(id)), ScheduleDTO::new), HttpStatus.OK);
-        } catch(Exception e){
+        } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -115,12 +113,12 @@ public class ScheduleController extends ValidationController {
         //validateJSON(schedule, "schedule.json");
         try {
             TransportLine transportLine = transportLineService.findById(scheduleDTO.getTransportLine().getId());
-            if (transportLine==null){
+            if (transportLine == null) {
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
 
             Schedule schedule = scheduleService.findScheduleIfExists(new Schedule(scheduleDTO));
-            if (schedule==null) {
+            if (schedule == null) {
                 /*if (scheduleDTO.getId() == null)
                     return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
                 else
@@ -133,10 +131,10 @@ public class ScheduleController extends ValidationController {
             schedule.setActive(true);
 
             return new ResponseEntity<>(new ScheduleDTO(scheduleService.save(schedule))
-                , HttpStatus.ACCEPTED);
-        } catch (GeneralException ge){
-             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
-         }
+                    , HttpStatus.ACCEPTED);
+        } catch (GeneralException ge) {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
     }
 
 
@@ -148,7 +146,7 @@ public class ScheduleController extends ValidationController {
      */
     @PutMapping("/updateSchedule")
     ResponseEntity<Boolean> updateSchedule(@RequestBody List<ScheduleDTO> scheduleDTOS) {
-        for (ScheduleDTO scheduleDTO: scheduleDTOS) {
+        for (ScheduleDTO scheduleDTO : scheduleDTOS) {
             Schedule schedule = null;
             try {
                 schedule = this.scheduleService.findById(scheduleDTO.getId());

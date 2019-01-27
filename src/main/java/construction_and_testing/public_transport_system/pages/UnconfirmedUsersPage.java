@@ -23,6 +23,13 @@ public class UnconfirmedUsersPage {
     @FindBy(xpath = "//*[@id=\"uncUsersTable\"]/tbody/tr[1]/td[7]")
     private WebElement denyButton;
 
+    @FindBy(xpath = "//*[@id=\"content\"]/h3")
+    private WebElement noUsersTitle;
+
+
+    @FindBy(xpath = "//*[@id=\"content\"]/h1")
+    private WebElement title;
+
     public UnconfirmedUsersPage(WebDriver driver) {
         this.driver = driver;
     }
@@ -39,14 +46,29 @@ public class UnconfirmedUsersPage {
             return 1;
         }
     }
+    public void ensureTitleIsDisplayed() {
+        (new WebDriverWait(driver, 10))
+                .until(ExpectedConditions.visibilityOf(title));
+    }
+
 
     public void ensureTableIsDisplayed() {
         (new WebDriverWait(driver, 10))
                 .until(ExpectedConditions.visibilityOf(table));
     }
 
+    public void ensureTableIsNotDisplayed() {
+        (new WebDriverWait(driver, 10))
+                .until(ExpectedConditions.visibilityOf(noUsersTitle));
+    }
+
+    public void ensureTicketsAreDisplayed() {
+        (new WebDriverWait(driver, 10))
+                .until(ExpectedConditions.urlToBe("http://localhost:4200/userProfile"));
+    }
+
     public void ensureIsChanged(int numberOfTickets, int change) {
-        //wait for add button to be present
+
         (new WebDriverWait(driver, 10))
                 .until(ExpectedConditions.numberOfElementsToBe(
                         By.cssSelector("tr"), numberOfTickets + change));

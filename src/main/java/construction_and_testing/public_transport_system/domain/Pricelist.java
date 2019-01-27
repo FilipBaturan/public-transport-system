@@ -83,7 +83,7 @@ public class Pricelist implements Serializable {
 
     public void setItems(Set<PricelistItem> items) {
         this.items = items;
-        for(PricelistItem p : items){
+        for (PricelistItem p : items) {
             p.setPricelist(this);
         }
     }

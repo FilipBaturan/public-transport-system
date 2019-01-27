@@ -36,7 +36,7 @@ public class RegUsersPageTest {
         regUsersPage = PageFactory.initElements(browser, RegUsersPage.class);
 
         welcomePage.ensureIsDisplayed();
-        welcomePage.login("b", "b");
+        welcomePage.login("admin", "admin");
 
         navigationBarPage.getUsersField().click();
         navigationBarPage.getRegUsersLink().click();
@@ -46,32 +46,43 @@ public class RegUsersPageTest {
     @Test
     public void checkUsersTickets() {
         assertEquals("http://localhost:4200/registeredUsers", browser.getCurrentUrl());
+        String[] tokens = regUsersPage.getTicketsLink().getAttribute("href").split("/");
+        String userId = tokens[tokens.length - 1];
         regUsersPage.getTicketsLink().click();
 
         regUsersPage.ensureTitleIsDisplayed();
 
-        assertEquals("http://localhost:4200/userTickets/1", browser.getCurrentUrl());
+        assertEquals("http://localhost:4200/userTickets/" + userId, browser.getCurrentUrl());
     }
 
     @Test
     public void denyTicket() {
         assertEquals("http://localhost:4200/registeredUsers", browser.getCurrentUrl());
+        String[] tokens = regUsersPage.getTicketsLink().getAttribute("href").split("/");
+        String userId = tokens[tokens.length - 1];
         regUsersPage.getTicketsLink().click();
 
         regUsersPage.ensureTitleIsDisplayed();
 
-        assertEquals("http://localhost:4200/userTickets/1", browser.getCurrentUrl());
-
-        regUsersPage.ensureUsersTicketsTableIsDisplayed();
+        assertEquals("http://localhost:4200/userTickets/" + userId, browser.getCurrentUrl());
 
         int sizeBeforeAdding = regUsersPage.getUsersTicketsTableSize();
 
-        regUsersPage.getDenyButton().click();
+        if (sizeBeforeAdding != 1)
+        {
+            regUsersPage.getDenyButton().click();
+            if (sizeBeforeAdding != 2)
+            {
+                regUsersPage.ensureIsChanged(sizeBeforeAdding, -1);
+                int sizeAfter = regUsersPage.getUsersTicketsTableSize();
+                assertEquals(sizeBeforeAdding, sizeAfter + 1);
+            }
+            else
+                regUsersPage.ensureRegUsersTableIsNotDisplayed();
+        }
 
-        regUsersPage.ensureUsersTicketsTableIsDisplayed();
-
-        int sizeAfter = regUsersPage.getUsersTicketsTableSize();
-        assertEquals(sizeBeforeAdding, sizeAfter + 1);
+        else
+            regUsersPage.ensureRegUsersTableIsNotDisplayed();
     }
 
     @AfterMethod

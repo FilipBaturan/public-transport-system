@@ -2,7 +2,6 @@ package construction_and_testing.public_transport_system.constants;
 
 import construction_and_testing.public_transport_system.domain.News;
 import construction_and_testing.public_transport_system.domain.Operator;
-import org.apache.tomcat.jni.Local;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -36,14 +35,14 @@ public class NewsConstants {
     public static final News DB_CHANGED_INVALID_NEWS = new News(DB_INVALID_ID, "Title1", "Content1",DB_TIME_1, new Operator(3L));
     public static final News DB_DELETED_NEWS = new News(1L,"Title1", "Content1",DB_TIME_1, new Operator(3L), false);
 
-    public static boolean isSorted(List<News> news){
+
+    public static boolean isSorted(List<News> news) {
         LocalDateTime date = news.get(0).getDate();
         news.remove(0);
-        for(News n : news){
-            if(n.getDate().isBefore(date)){
+        for (News n : news) {
+            if (n.getDate().isBefore(date)) {
                 date = n.getDate();
-            }
-            else {
+            } else {
                 return false;
             }
         }

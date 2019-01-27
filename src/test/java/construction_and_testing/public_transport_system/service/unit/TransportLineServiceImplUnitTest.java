@@ -83,7 +83,7 @@ public class TransportLineServiceImplUnitTest {
                 } else if (transportLine.getId() == null && transportLine.getPositions().getId() != null) {
                     throw new GeneralException("Invalid transport line position associated!", HttpStatus.BAD_REQUEST);
                 } else if (transportLine.getName().equals(DB_NOT_UNIQUE_NAME)) {
-                    throw new GeneralException("Transport line with with given firstName already exist!",
+                    throw new GeneralException("Transport line with with given name already exist!",
                             HttpStatus.BAD_REQUEST);
                 } else {
                     transportLine.setId(NEW_ID);
@@ -371,7 +371,7 @@ public class TransportLineServiceImplUnitTest {
     }
 
     /**
-     * Test transport line with not unique firstName
+     * Test transport line with not unique name
      */
     @Test(expected = GeneralException.class)
     public void saveWithNotUniqueName() {
@@ -385,7 +385,7 @@ public class TransportLineServiceImplUnitTest {
 
 
     /**
-     * Test with to short firstName value
+     * Test with to short name value
      */
     @Test(expected = GeneralException.class)
     public void saveWithShortName() {
@@ -398,7 +398,7 @@ public class TransportLineServiceImplUnitTest {
     }
 
     /**
-     * Test with too long firstName value
+     * Test with too long name value
      */
     @Test(expected = GeneralException.class)
     public void saveWithLongName() {
@@ -411,7 +411,7 @@ public class TransportLineServiceImplUnitTest {
     }
 
     /**
-     * Test with min length firstName value
+     * Test with min length name value
      */
     @Test
     public void saveWithMinLengthName() {
@@ -440,7 +440,7 @@ public class TransportLineServiceImplUnitTest {
     }
 
     /**
-     * Test with max length firstName value
+     * Test with max length name value
      */
     @Test
     public void saveWithMaxLengthName() {
@@ -598,7 +598,7 @@ public class TransportLineServiceImplUnitTest {
     }
 
     /**
-     * Test with too short firstName value
+     * Test with too short name value
      */
     @Test(expected = GeneralException.class)
     public void replaceAllWithShortName() {
@@ -607,7 +607,7 @@ public class TransportLineServiceImplUnitTest {
     }
 
     /**
-     * Test with too long firstName value
+     * Test with too long name value
      */
     @Test(expected = GeneralException.class)
     public void replaceAllWithLongName() {
@@ -616,7 +616,7 @@ public class TransportLineServiceImplUnitTest {
     }
 
     /**
-     * Test with min length firstName value
+     * Test with min length name value
      */
     @Test
     public void replaceAllWithMinLengthName() {
@@ -642,7 +642,7 @@ public class TransportLineServiceImplUnitTest {
     }
 
     /**
-     * Test with max length firstName value
+     * Test with max length name value
      */
     @Test
     public void replaceAllWithMaxLengthName() {

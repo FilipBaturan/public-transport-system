@@ -13,7 +13,7 @@ public interface PricelistItemRepository extends JpaRepository<PricelistItem, Lo
     @Query(value = "insert into pricelist_item (id, active, item_id, pricelist_id) values (:id, :active, :item, :pricelist)",
             nativeQuery = true)
     void insertPricelistItem(@Param("id") Long id, @Param("active") boolean active, @Param("item") Long item,
-                    @Param("pricelist") Long pricelist);
+                             @Param("pricelist") Long pricelist);
 
 
 }

@@ -18,11 +18,15 @@ import javax.persistence.EntityNotFoundException;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.Assert.*;
 
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
 import static construction_and_testing.public_transport_system.constants.PricelistConstants.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
@@ -36,7 +40,7 @@ public class PricelistServiceImplUnitTest {
     private PricelistService pricelistService;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         List<Pricelist> pricelists = new ArrayList<>();
         DB_VALID_PRICELIST.setStartDate(DB_START_DATE_VALID);
         DB_VALID_PRICELIST.setEndDate(DB_END_DATE_VALID);
@@ -60,7 +64,7 @@ public class PricelistServiceImplUnitTest {
      * Test for getting active pricelist
      */
     @Test
-    public void findValidTest(){
+    public void findValidTest() {
         Pricelist valid = pricelistService.findValid();
         assertThat(valid).isNotNull();
         assertEquals(valid.getId(), DB_ID);

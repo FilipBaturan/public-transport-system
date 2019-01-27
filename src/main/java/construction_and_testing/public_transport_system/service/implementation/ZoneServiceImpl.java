@@ -87,7 +87,7 @@ public class ZoneServiceImpl implements ZoneService {
                 }
             }
         } catch (DataIntegrityViolationException e) {
-            throw new GeneralException("Zone with given firstName already exist!", HttpStatus.BAD_REQUEST);
+            throw new GeneralException("Zone with given name already exist!", HttpStatus.BAD_REQUEST);
         }
     }
 

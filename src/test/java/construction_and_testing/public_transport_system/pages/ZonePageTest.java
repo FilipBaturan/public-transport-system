@@ -109,7 +109,7 @@ public class ZonePageTest {
 
         assertThat(zonePage.numberOfZones()).isEqualTo(beforeCount);
         assertThat(editedZoneName.getText()).isEqualTo("Veternik");
-        assertThat(editedZoneTransportLine.getText()).isEqualTo("Number of routes: 2");
+        assertThat(editedZoneTransportLine.getText()).isEqualTo("Number of routes: 3");
     }
 
     /**
@@ -133,11 +133,11 @@ public class ZonePageTest {
         assertThat(zonePage.numberOfZones()).isEqualTo(beforeCount - 1);
         assertThat(zoneName).isNotEqualTo(nameBefore);
         assertThat(zonesTransportLines).isEqualTo("Number of routes: 0");
-        assertThat(defaultZoneTransportLines).isEqualTo("Number of routes: 3");
+        assertThat(defaultZoneTransportLines).isEqualTo("Number of routes: 4");
     }
 
     /**
-     * Test saving with min length firstName
+     * Test saving with min length name
      */
     @Test
     public void testSaveWithMinLengthName() {
@@ -167,7 +167,7 @@ public class ZonePageTest {
     }
 
     /**
-     * Test saving with max length firstName
+     * Test saving with max length name
      */
     @Test
     public void testSaveWithMaxLengthName() {
@@ -197,7 +197,7 @@ public class ZonePageTest {
     }
 
     /**
-     * Test saving with not unique firstName
+     * Test saving with not unique name
      */
     @Test
     public void testSaveWithNotUniqueName() {
@@ -218,7 +218,7 @@ public class ZonePageTest {
     }
 
     /**
-     * Test saving with short firstName
+     * Test saving with short name
      */
     @Test
     public void testSaveWithShortName() {
@@ -237,12 +237,12 @@ public class ZonePageTest {
 
         zonePage.ensureIsDisplayedFirstError();
 
-        assertThat(zonePage.getSpanNameError().getText()).isEqualTo("Zone firstName is required!");
+        assertThat(zonePage.getSpanNameError().getText()).isEqualTo("Zone name is required!");
         assertThat(zonePage.numberOfZones()).isEqualTo(beforeCount);
     }
 
     /**
-     * Test saving with short firstName
+     * Test saving with short name
      */
     @Test
     public void testSaveWithLongName() {
@@ -261,7 +261,7 @@ public class ZonePageTest {
 
         zonePage.ensureIsDisplayedFirstError();
 
-        assertThat(zonePage.getSpanNameError().getText()).isEqualTo("Zone firstName must be maximum 30 characters long!");
+        assertThat(zonePage.getSpanNameError().getText()).isEqualTo("Zone name must be maximum 30 characters long!");
         assertThat(zonePage.numberOfZones()).isEqualTo(beforeCount);
     }
 

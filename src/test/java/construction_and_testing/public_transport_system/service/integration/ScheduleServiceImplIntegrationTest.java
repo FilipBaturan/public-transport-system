@@ -54,9 +54,9 @@ public class ScheduleServiceImplIntegrationTest {
         assertThat(schedule.isActive()).isEqualTo(DB_VALID_ACTIVE);
 
         int idx = 0;
-        for (String departure: schedule.getDepartures()) {
+        for (String departure : schedule.getDepartures()) {
             assertThat(departure).isEqualTo(DB_SCHEDULE.getDepartures().get(idx));
-            idx+=1;
+            idx += 1;
         }
     }
 
@@ -76,9 +76,9 @@ public class ScheduleServiceImplIntegrationTest {
         assertThat(schedule.isActive()).isEqualTo(DB_VALID_ACTIVE);
 
         int idx = 0;
-        for (String departure: schedule.getDepartures()) {
+        for (String departure : schedule.getDepartures()) {
             assertThat(departure).isEqualTo(DB_SCHEDULE.getDepartures().get(idx));
-            idx+=1;
+            idx += 1;
         }
     }
 
@@ -108,9 +108,9 @@ public class ScheduleServiceImplIntegrationTest {
         assertThat(schedule.isActive()).isEqualTo(DB_VALID_ACTIVE);
 
         int idx = 0;
-        for (String departure: schedule.getDepartures()) {
+        for (String departure : schedule.getDepartures()) {
             assertThat(departure).isEqualTo(DB_SCHEDULE.getDepartures().get(idx));
-            idx+=1;
+            idx += 1;
         }
     }
 
@@ -134,7 +134,7 @@ public class ScheduleServiceImplIntegrationTest {
         assertThat(schedules.size()).isEqualTo(3);
 
         int idx = 0;
-        for (Schedule schedule: schedules) {
+        for (Schedule schedule : schedules) {
             Schedule temp = DB_SCHEDULES.get(idx);
             assertThat(schedule.getId()).isEqualTo(temp.getId());
             assertThat(schedule.getTransportLine().getName()).isEqualTo(temp.getTransportLine().getName());
@@ -143,11 +143,11 @@ public class ScheduleServiceImplIntegrationTest {
             assertThat(schedule.isActive()).isEqualTo(temp.isActive());
 
             int idx1 = 0;
-            for (String departure: schedule.getDepartures()) {
+            for (String departure : schedule.getDepartures()) {
                 assertThat(departure).isEqualTo(temp.getDepartures().get(idx1));
-                idx1+=1;
+                idx1 += 1;
             }
-            idx+=1;
+            idx += 1;
         }
     }
 

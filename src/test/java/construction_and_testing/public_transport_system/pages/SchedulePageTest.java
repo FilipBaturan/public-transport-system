@@ -34,16 +34,11 @@ public class SchedulePageTest {
         navBarPage = PageFactory.initElements(browser, NavigationBarPage.class);
         schedulePage = PageFactory.initElements(browser, SchedulePage.class);
 
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-
         welcomePage.ensureIsDisplayed();
         welcomePage.login("null", "null");
 
         navBarPage.ensureIsDisplayed();
+        //navBarPage.ensureIsDisplayedScheduleLink();
         navBarPage.getScheduleLink().click();
         assertEquals("http://localhost:4200/schedule", browser.getCurrentUrl());
 
@@ -53,32 +48,37 @@ public class SchedulePageTest {
     public void testDisplaySchedule() {
         schedulePage.ensureIsDisplayedDayOfWeekComboCheckBox();
         schedulePage.ensureIsDisplayedTransportLineComboCheckBox();
-        schedulePage.ensureIsDisplayedScheduleTable();
 
         schedulePage.getDayOfWeekComboCheckBox().click();
         schedulePage.getCheckDayOfWeek().click();
 
         schedulePage.getTransportLineComboCheckBox().click();
+        schedulePage.ensureIsDisplayedCheckBox1();
+        schedulePage.ensureIsDisplayedCheckBox2();
+        schedulePage.ensureIsDisplayedCheckBox3();
         schedulePage.getCheckTransportLine().click();
         schedulePage.getCheckTransportLine1().click();
         schedulePage.getCheckTransportLine2().click();
         schedulePage.getTransportLineComboCheckBox().click();
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
+        schedulePage.ensureIsDisplayedScheduleTable();
 
         int numRows = schedulePage.getNumOfRows();
         int numColumns = schedulePage.getNumOfColumns();
 
-        assertEquals(7, numRows);
+        schedulePage.ensureIsDisplayedAllHeaderCells();
+        schedulePage.ensureIsDisplayedAllRows();
+        schedulePage.ensureHasCorrectSizeHeaderCells();
+        schedulePage.ensureHasCorrectSizeRows();
+
+
         assertEquals(3, numColumns);
+        assertEquals(6, numRows);
 
         assertEquals("R1-WORKDAY", schedulePage.getHeader1().getText());
 
-        assertEquals("07:55", schedulePage.getCell1().getText());
-        assertEquals("10:00", schedulePage.getCell2().getText());
+        assertEquals("08:00", schedulePage.getCell1().getText());
+        assertEquals("08:15", schedulePage.getCell2().getText());
     }
 
     @AfterMethod

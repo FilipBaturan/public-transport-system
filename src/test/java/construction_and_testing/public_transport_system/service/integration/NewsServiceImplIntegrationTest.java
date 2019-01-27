@@ -15,12 +15,8 @@ import javax.persistence.EntityNotFoundException;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
 import static construction_and_testing.public_transport_system.constants.NewsConstants.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -30,7 +26,7 @@ public class NewsServiceImplIntegrationTest {
     private NewsService newsService;
 
     @Test
-    public void getAll(){
+    public void getAll() {
         List<News> all = newsService.getAll();
         assertThat(all).isNotNull();
         assertThat(all).hasSize(DB_COUNT);
@@ -51,7 +47,7 @@ public class NewsServiceImplIntegrationTest {
      * Test when invalid ID is given
      */
     @Test
-    public void getByInvalidId(){
+    public void getByInvalidId() {
         News news = newsService.getById(DB_INVALID_ID);
         assertThat(news).isNull();
     }
@@ -70,7 +66,7 @@ public class NewsServiceImplIntegrationTest {
     @Test
     public void addNew() {
         News news = new News(null, "Title4", "Content4",
-                LocalDateTime.of(2019,1,20,10,10), null);
+                LocalDateTime.of(2019, 1, 20, 10, 10), null);
         Operator o = new Operator();
         o.setId(3L);
         news.setOperator(o);
@@ -84,7 +80,7 @@ public class NewsServiceImplIntegrationTest {
     @Test
     public void addNewWithNullTitle() {
         News news = new News(null, null, "Content4",
-                LocalDateTime.of(2019,1,20,10,10), null);
+                LocalDateTime.of(2019, 1, 20, 10, 10), null);
         Operator o = new Operator();
         o.setId(3L);
         news.setOperator(o);
@@ -98,7 +94,7 @@ public class NewsServiceImplIntegrationTest {
     @Test
     public void addNewWithContentNull() {
         News news = new News(null, "Title4", null,
-                LocalDateTime.of(2019,1,20,10,10), null);
+                LocalDateTime.of(2019, 1, 20, 10, 10), null);
         Operator o = new Operator();
         o.setId(3L);
         news.setOperator(o);
@@ -110,7 +106,7 @@ public class NewsServiceImplIntegrationTest {
      * Valid test for modifying news
      */
     @Test
-    public void modify(){
+    public void modify() {
         boolean modified = newsService.modify(DB_CHANGED_NEWS);
         assertThat(modified).isTrue();
         News news = newsService.getById(DB_ID_2);
@@ -122,7 +118,7 @@ public class NewsServiceImplIntegrationTest {
      * Test when given news contains invalid ID
      */
     @Test
-    public void modifyWithInvalidId(){
+    public void modifyWithInvalidId() {
         boolean saved = newsService.modify(DB_CHANGED_INVALID_NEWS);
         assertThat(saved).isFalse();
     }
@@ -131,15 +127,15 @@ public class NewsServiceImplIntegrationTest {
      * Valid test of deleting news with given ID
      */
     @Test
-    public void delete(){
+    public void delete() {
         newsService.remove(DB_ID);
         News news = newsService.getById(DB_ID);
         assertThat(news).isNull();
     }
 
     @Test(expected = EntityNotFoundException.class)
-    public void deleteInvalid(){
-        newsService.remove(DB_INVALID_ID );
+    public void deleteInvalid() {
+        newsService.remove(DB_INVALID_ID);
     }
 
 }

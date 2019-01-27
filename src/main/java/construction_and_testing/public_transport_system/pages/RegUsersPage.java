@@ -17,7 +17,7 @@ public class RegUsersPage {
     @FindBy(id = "usersTickets")
     private WebElement usersTicketsTable;
 
-    @FindBy(xpath = "//*[@id=\"regUsersTable\"]/tbody/tr[1]/td[5]")
+    @FindBy(xpath = "//*[@id=\"regUsersTable\"]/tbody/tr[1]/td[5]/a")
     private WebElement ticketsLink;
 
     @FindBy(xpath = "//*[@id=\"usersTickets\"]/tbody/tr[1]/td[3]")
@@ -25,6 +25,9 @@ public class RegUsersPage {
 
     @FindBy(xpath = "//*[@id=\"content\"]/h1")
     private WebElement title;
+
+    @FindBy(xpath = "//*[@id=\"content\"]/h3")
+    private WebElement noTicketsTitle;
 
     public RegUsersPage(WebDriver driver) {
         this.driver = driver;
@@ -51,9 +54,21 @@ public class RegUsersPage {
                 .until(ExpectedConditions.visibilityOf(regUsersTable));
     }
 
+    public void ensureRegUsersTableIsNotDisplayed() {
+        (new WebDriverWait(driver, 10))
+                .until(ExpectedConditions.visibilityOf(noTicketsTitle));
+    }
+
     public void ensureUsersTicketsTableIsDisplayed() {
         (new WebDriverWait(driver, 10))
                 .until(ExpectedConditions.visibilityOf(usersTicketsTable));
+    }
+
+    public void ensureIsChanged(int numberOfTickets, int change) {
+
+        (new WebDriverWait(driver, 10))
+                .until(ExpectedConditions.numberOfElementsToBe(
+                        By.cssSelector("tr"), numberOfTickets + change));
     }
 
     public WebElement getTicketsLink() {

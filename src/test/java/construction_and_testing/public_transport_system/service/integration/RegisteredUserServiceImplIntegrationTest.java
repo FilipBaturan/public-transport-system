@@ -21,6 +21,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
 public class RegisteredUserServiceImplIntegrationTest {
@@ -29,7 +31,7 @@ public class RegisteredUserServiceImplIntegrationTest {
     private RegisteredUserService registeredUserService;
 
     @Test
-    public void getAll(){
+    public void getAll() {
         List<RegisteredUser> all = registeredUserService.getAll();
         assertThat(all).hasSize(3);
     }

@@ -13,7 +13,7 @@ import java.util.List;
 
 public class ScheduleConstants {
 
-    public static final int DB_COUNT = 7;
+    public static final int DB_COUNT = 8;
 
     public static final Long DB_VALID_ID = 100L;
     public static final Long DB_TL_ID = 1L;
@@ -126,16 +126,22 @@ public class ScheduleConstants {
     public static final Schedule DB_SCHEDULE = new Schedule(100L, DB_TRANSPORT_LINE, DayOfWeek.WORKDAY, DB_VALID_TL_DEPARTURES, true);
     public static final Schedule DB_SCHEDULE_1 = new Schedule(103L, DB_TRANSPORT_LINE, DayOfWeek.SATURDAY, DB_VALID_TL_DEPARTURES_SAT, true);
     public static final Schedule DB_SCHEDULE_2 = new Schedule(105L, DB_TRANSPORT_LINE, DayOfWeek.SUNDAY, DB_VALID_TL_DEPARTURES_SUN, true);
+    public static final Schedule DB_SCHEDULE_3 = new Schedule(102L, DB_TRANSPORT_LINE_2, DayOfWeek.WORKDAY, DB_VALID_TL_DEPARTURES_SAT, true);
+    public static final Schedule DB_SCHEDULE_4 = new Schedule(107L, DB_TRANSPORT_LINE_2, DayOfWeek.SATURDAY, DB_VALID_TL_DEPARTURES_SUN, true);
 
 
-
-    public static final Schedule DB_INVALID_SCHEDULE = new Schedule(3L, DB_TRANSPORT_LINE_2, DayOfWeek.SATURDAY, DB_NEW_DEPARTURES, true);
+    public static final Schedule DB_INVALID_SCHEDULE = new Schedule(3L, DB_TRANSPORT_LINE_3, DayOfWeek.SATURDAY, DB_NEW_DEPARTURES, true);
 
 
     public static final List<Schedule> DB_SCHEDULES = new ArrayList<Schedule>() {{
         add(DB_SCHEDULE);
         add(DB_SCHEDULE_1);
         add(DB_SCHEDULE_2);
+    }};
+
+    public static final List<Schedule> DB_SCHEDULES_1 = new ArrayList<Schedule>() {{
+        add(DB_SCHEDULE_3);
+        add(DB_SCHEDULE_4);
     }};
 
 }

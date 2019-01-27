@@ -144,7 +144,7 @@ public class VehicleServiceImplUnitTest {
     }
 
     /**
-     * Test with to short firstName value
+     * Test with to short name value
      */
     @Test(expected = GeneralException.class)
     public void saveWithShortName() {
@@ -153,7 +153,7 @@ public class VehicleServiceImplUnitTest {
     }
 
     /**
-     * Test with too long firstName value
+     * Test with too long name value
      */
     @Test(expected = GeneralException.class)
     public void saveWithLongName() {
@@ -162,7 +162,7 @@ public class VehicleServiceImplUnitTest {
     }
 
     /**
-     * Test with min length firstName value
+     * Test with min length name value
      */
     @Test
     public void saveWithMinLengthName() {
@@ -183,7 +183,7 @@ public class VehicleServiceImplUnitTest {
     }
 
     /**
-     * Test with max length firstName value
+     * Test with max length name value
      */
     @Test
     public void saveWithMaxLengthName() {

@@ -74,34 +74,80 @@ public class UserController {
         //add integration later
     }
 
-    /**
-     *
-     * @param username of a user that is being searched
-     * @return type of user if successful
+        /**
+     * @param username of a validator that is being searched
+     * @return validator with the given username
      */
     @GetMapping("/getByUsername/{username}")
-    public Object getByUsername(@PathVariable("username") String username) {
+    public ResponseEntity<ValidatorDTO> getByUsername(@PathVariable String username) {
         try {
-            User user = userService.findByUsername(username);
-
-            System.out.println(user.toString());
-
-            if (user == null)
-                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-
-            if (user.getAuthorityType() == AuthorityType.OPERATER)
-                return new ResponseEntity<>(UserConverter.fromEntity((Operator) user), HttpStatus.FOUND);
-            else if (user.getAuthorityType() == AuthorityType.VALIDATOR)
-                return new ResponseEntity<>(UserConverter.fromEntity((Validator) user), HttpStatus.FOUND);
-            else if (user.getAuthorityType() == AuthorityType.ADMIN)
-                return new ResponseEntity<>(UserConverter.fromEntity((Admin) user), HttpStatus.FOUND);
-            else
-                return new ResponseEntity<>(UserConverter.fromEntity(user), HttpStatus.FOUND);
-        } catch (Exception e){
-            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(UserConverter.fromEntity((Validator) userService.findByUsername(username)), HttpStatus.OK);
+        }catch (Exception e)
+        {
+            return new ResponseEntity<>(new ValidatorDTO(), HttpStatus.NOT_FOUND);
         }
     }
 
+//    /**
+//     * @param username of a user that is being searched
+//     * @return type of user if successful
+//     */
+//    @GetMapping("/getRegByUsername/{username}")
+//    public Object getByUsername(@PathVariable("username") String username) {
+//        try {
+//            User user = userService.findByUsername(username);
+//
+//            System.out.println(user.toString());
+//
+//            if (user == null)
+//                return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+//
+//            if (user.getAuthorityType() == AuthorityType.OPERATER)
+//                return new ResponseEntity<>(UserConverter.fromEntity((Operator) user), HttpStatus.FOUND);
+//            else if (user.getAuthorityType() == AuthorityType.VALIDATOR)
+//                return new ResponseEntity<>(UserConverter.fromEntity((Validator) user), HttpStatus.FOUND);
+//            else if (user.getAuthorityType() == AuthorityType.ADMIN)
+//                return new ResponseEntity<>(UserConverter.fromEntity(user), HttpStatus.FOUND);
+//            else
+//                return new ResponseEntity<>(UserConverter.fromEntity(user), HttpStatus.FOUND);
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+//        }
+//    }
+
+//    @GetMapping("/getRegByUsername/{username}")
+//    public ResponseEntity<UserDTO> getRegByUsername(@PathVariable String username) {
+//        try {
+//            ResponseEntity re = new ResponseEntity<>(UserConverter.fromEntity(userService.findByUsername(username)), HttpStatus.OK);
+//            return re;
+//            User user = userService.findByUsername(username);
+//
+//            if (user == null)
+//                return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+//
+//            if (user.getAuthorityType() == AuthorityType.OPERATER)
+//                return new ResponseEntity<>(UserConverter.fromEntity((Operator) user), HttpStatus.OK);
+//            else if (user.getAuthorityType() == AuthorityType.VALIDATOR)
+//                return new ResponseEntity<>(UserConverter.fromEntity((Validator) user), HttpStatus.OK);
+//            else if (user.getAuthorityType() == AuthorityType.ADMIN)
+//                return new ResponseEntity<>(UserConverter.fromEntity((Admin) user), HttpStatus.OK);
+//            else
+//                return new ResponseEntity<>(UserConverter.fromEntity(user), HttpStatus.OK);
+//
+//        } catch (Exception e) {
+//            return new ResponseEntity<>(new UserDTO(), HttpStatus.NOT_FOUND);
+//        }
+//    }
+
+    @GetMapping("/getRegByUsername/{username}")
+    public ResponseEntity<UserDTO> getRegByUsername(@PathVariable String username) {
+        try {
+            ResponseEntity re = new ResponseEntity<>(UserConverter.fromEntity(userService.findByUsername(username)), HttpStatus.OK);
+            return re;
+        } catch (Exception e) {
+            return new ResponseEntity<>(new UserDTO(), HttpStatus.NOT_FOUND);
+        }
+    }
 
     /**
      * POST /api/user/auth
@@ -305,9 +351,10 @@ public class UserController {
             return new ResponseEntity<>(false, HttpStatus.NOT_ACCEPTABLE);
         else {
 
+            if (this.userService.findByUsername(userDTO.getUsername()) != null)
+                return new ResponseEntity<>(false, HttpStatus.CONFLICT);
+
             try {
-                if (this.userService.findByUsername(userDTO.getUsername()) != null)
-                    return new ResponseEntity<>(false, HttpStatus.CONFLICT);
 
                 userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
                 Validator newValidator = new Validator(UserConverter.toEntity(userDTO));
@@ -345,7 +392,6 @@ public class UserController {
         } catch (GeneralException ge) {
             return new ResponseEntity<>(false, HttpStatus.NOT_FOUND);
         }
-
 
 
         if (operator.getAuthorityType() != AuthorityType.OPERATER)

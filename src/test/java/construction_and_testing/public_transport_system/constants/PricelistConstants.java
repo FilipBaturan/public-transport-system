@@ -20,11 +20,11 @@ public class PricelistConstants {
     public static final LocalDateTime DB_END_DATE_VALID_INTEGR = LocalDateTime.of(2019, 12, 31, 0,0);
 
 
-    public static final LocalDateTime DB_START_DATE_VALID = LocalDateTime.of(2019, 1,1,0,0);
-    public static final LocalDateTime DB_END_DATE_VALID = LocalDateTime.of(2019, 3, 30, 0,0);
+    public static final LocalDateTime DB_START_DATE_VALID = LocalDateTime.of(2019, 1, 1, 0, 0);
+    public static final LocalDateTime DB_END_DATE_VALID = LocalDateTime.of(2019, 3, 30, 0, 0);
 
-    public static final LocalDateTime DB_START_DATE_EXPIRED = LocalDateTime.of(2018, 5,1,0,0);
-    public static final LocalDateTime DB_END_DATE_EXPIRED = LocalDateTime.of(2018, 10, 30, 0,0);
+    public static final LocalDateTime DB_START_DATE_EXPIRED = LocalDateTime.of(2018, 5, 1, 0, 0);
+    public static final LocalDateTime DB_END_DATE_EXPIRED = LocalDateTime.of(2018, 10, 30, 0, 0);
 
     public static final LocalDateTime DB_NEW_START_DATE_VALID = LocalDateTime.of(2019, 5,1,0,0);
     public static final LocalDateTime DB_NEW_END_DATE_VALID = LocalDateTime.of(2019, 10, 30, 0,0);

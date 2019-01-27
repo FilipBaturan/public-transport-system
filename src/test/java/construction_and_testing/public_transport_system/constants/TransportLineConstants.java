@@ -11,7 +11,7 @@ import java.util.List;
 
 public class TransportLineConstants {
 
-    public static final int DB_COUNT = 3;
+    public static final int DB_COUNT = 4;
     public static final Long DB_ID = 1L;
     public static final String DB_NAME = "R1";
     public static final VehicleType DB_TYPE = VehicleType.BUS;
