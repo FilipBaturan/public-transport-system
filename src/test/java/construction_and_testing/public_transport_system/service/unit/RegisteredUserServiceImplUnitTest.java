@@ -1,6 +1,5 @@
 package construction_and_testing.public_transport_system.service.unit;
 
-import construction_and_testing.public_transport_system.constants.RegisteredUserConstants;
 import construction_and_testing.public_transport_system.domain.RegisteredUser;
 import construction_and_testing.public_transport_system.repository.RegisteredUserRepository;
 import construction_and_testing.public_transport_system.service.implementation.RegisteredUserServiceImpl;
@@ -42,6 +41,9 @@ public class RegisteredUserServiceImplUnitTest {
 
     }
 
+    /**
+     * Valid test for getting registered user by existing ID
+     */
     @Test
     public void getByIdTest(){
         RegisteredUser registeredUser = registeredUserService.getById(DB_VALID_ID);
@@ -55,6 +57,9 @@ public class RegisteredUserServiceImplUnitTest {
         verify(registeredUserRepository, times(2)).findById(DB_VALID_ID);
     }
 
+    /**
+     * Test when invalid ID is given
+     */
     @Test
     public void getByInvalidIdTest(){
         RegisteredUser regUser = registeredUserService.getById(DB_INVALID_ID);
@@ -62,6 +67,9 @@ public class RegisteredUserServiceImplUnitTest {
         verify(registeredUserRepository, times(1)).findById(DB_INVALID_ID);
     }
 
+    /**
+     * Test when given ID is null
+     */
     @Test
     public void getByNullIdTest(){
         RegisteredUser regUser = registeredUserService.getById(null);
@@ -69,6 +77,9 @@ public class RegisteredUserServiceImplUnitTest {
         verify(registeredUserRepository, times(1)).findById(null);
     }
 
+    /**
+     * Valid test for modifying registered user
+     */
     @Test
     public void modifyRegisteredUserTest(){
         boolean saved = registeredUserService.modify(DB_MODIFIED_USER_1);
@@ -77,6 +88,9 @@ public class RegisteredUserServiceImplUnitTest {
         verify(registeredUserRepository, times(1)).saveAndFlush(DB_MODIFIED_USER_1);
     }
 
+    /**
+     * Test when registered user contains invalid ID
+     */
     @Test
     public void modifyInvalidUser(){
         boolean saved = registeredUserService.modify(DB_MODIFIED_USER_INVALID_ID);
@@ -84,6 +98,9 @@ public class RegisteredUserServiceImplUnitTest {
         verify(registeredUserRepository, times(1)).findById(DB_INVALID_ID);
     }
 
+    /**
+     * Valid test for deleting registered user
+     */
     @Test
     public void deleteUserTest(){
         registeredUserService.remove(DB_VALID_ID);
@@ -91,6 +108,9 @@ public class RegisteredUserServiceImplUnitTest {
         verify(registeredUserRepository, times(1)).save(DB_DEL_USER_1);
     }
 
+    /**
+     * Test for trying to delete registered user with invalid ID
+     */
     @Test(expected = EntityNotFoundException.class)
     public void deleteInvalidUser(){
         registeredUserService.remove(DB_INVALID_ID);

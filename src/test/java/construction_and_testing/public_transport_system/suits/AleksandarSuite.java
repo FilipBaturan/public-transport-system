@@ -1,7 +1,9 @@
 package construction_and_testing.public_transport_system.suits;
 
+import construction_and_testing.public_transport_system.service.integration.NewsServiceImplIntegrationTest;
 import construction_and_testing.public_transport_system.service.integration.PricelistServiceImplIntegrationTest;
 import construction_and_testing.public_transport_system.service.integration.RegisteredUserServiceImplIntegrationTest;
+import construction_and_testing.public_transport_system.service.unit.NewsServiceImplUnitTest;
 import construction_and_testing.public_transport_system.service.unit.PricelistServiceImplUnitTest;
 import construction_and_testing.public_transport_system.service.unit.RegisteredUserServiceImplUnitTest;
 import org.junit.runner.RunWith;
@@ -14,7 +16,9 @@ import org.springframework.boot.test.context.SpringBootTest;
         RegisteredUserServiceImplUnitTest.class,
         RegisteredUserServiceImplIntegrationTest.class,
         PricelistServiceImplUnitTest.class,
-        PricelistServiceImplIntegrationTest.class
+        PricelistServiceImplIntegrationTest.class,
+        NewsServiceImplUnitTest.class,
+        NewsServiceImplIntegrationTest.class
 })
 public class AleksandarSuite {
 }

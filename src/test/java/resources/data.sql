@@ -90,9 +90,11 @@ INSERT INTO `reservation` (`id`, `active`, `owner_id`) VALUES ('1', true, '1');
 INSERT INTO `ticket` (`id`, `active`, `expiry_date`, `purchase_date`, `token`, `line_id`, `price_list_item_id`, `reservation_id`) VALUES ('1', true, '2018-04-24 07:39:16', '2016-12-20 00:00:00', 'qweqwe', '1', '1', '1');
 INSERT INTO `ticket` (`id`, `active`, `expiry_date`, `purchase_date`, `token`, `line_id`, `price_list_item_id`, `reservation_id`) VALUES ('2', true, '2018-04-24 07:39:16', '2016-12-20 00:00:00', 'zxczxczxc', '1', '1', '1');
 
-
-
-
+INSERT INTO `news`(`id`, `active`, `content`, `date`, `title`, `operator_id`) VALUES ('1', true, 'Content1', '2019-1-15 13:45:00', 'Title1', '3');
+INSERT INTO `news`(`id`, `active`, `content`, `date`, `title`, `operator_id`) VALUES ('2', true, 'Content2', '2019-1-14 03:27:00', 'Title2', '3');
+INSERT INTO `news`(`id`, `active`, `content`, `date`, `title`, `operator_id`) VALUES ('3', true, 'Content3', '2019-1-16 23:35:00', 'Title3', '3');
+INSERT INTO `news`(`id`, `active`, `content`, `date`, `title`, `operator_id`) VALUES ('4', true, 'Content4', '2019-1-16 23:35:00', 'Title4', '3');
+INSERT INTO `news`(`id`, `active`, `content`, `date`, `title`, `operator_id`) VALUES ('5', true, 'Content5', '2019-1-16 23:35:00', 'Title5', '3');
 
 
 ALTER sequence `hibernate_sequence` restart WITH 500

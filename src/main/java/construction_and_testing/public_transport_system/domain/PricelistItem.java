@@ -4,6 +4,8 @@ import org.hibernate.annotations.Where;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Where(clause = "active =1")
@@ -18,7 +20,7 @@ public class PricelistItem implements Serializable {
     @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Item item;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private Pricelist pricelist;
 
     @Column(nullable = false, name = "active")
@@ -52,6 +54,7 @@ public class PricelistItem implements Serializable {
 
     public void setItem(Item item) {
         this.item = item;
+        item.setPricelist(this);
     }
 
     public Pricelist getPricelist() {

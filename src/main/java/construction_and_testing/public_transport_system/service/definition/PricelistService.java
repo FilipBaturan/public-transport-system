@@ -15,4 +15,6 @@ public interface PricelistService {
     Pricelist findPricelistById(long id);
 
     Pricelist findValid();
+
+    Pricelist modify(Pricelist p);
 }
