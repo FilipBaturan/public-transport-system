@@ -52,12 +52,12 @@ public class ValidatorsPage {
     @FindBy(css = "h1.title yt-formatted-string")
     private WebElement naslov;
 
-    @FindBy(xpath = "//*[@id=\"info\"]")
-    private WebElement asd;
+    @FindBy(xpath = "//*[@id=\"content\"]/h3")
+    private WebElement noValTitle;
 
-    public WebElement getAsd() {
-        return asd;
-    }
+    @FindBy(xpath = "//*[@id=\"content\"]/h1")
+    private WebElement title;
+
 
     public ValidatorsPage(WebDriver driver) {
         this.driver = driver;
@@ -99,19 +99,37 @@ public class ValidatorsPage {
 
 
     public int getTableSize() {
+        try {
+            return getTable().findElements(By.tagName("tr")).size();
+        }
+        catch (Exception e) {
+            return 1;
+        }
+    }
 
-        return getTable().findElements(By.tagName("tr")).size();
-
+    public void  ensureTitleIsDisplayed() {
+        (new WebDriverWait(driver, 10))
+                .until(ExpectedConditions.visibilityOf(title));
     }
 
     public void ensureButtonIsDisplayed() {
         (new WebDriverWait(driver, 10))
                 .until(ExpectedConditions.visibilityOf(addButton));
     }
+    public void ensureFormButtonIsDisplayed() {
+        (new WebDriverWait(driver, 10))
+                .until(ExpectedConditions.visibilityOf(formAddButton));
+    }
+
 
     public void ensureTableIsDisplayed() {
         (new WebDriverWait(driver, 10))
                 .until(ExpectedConditions.visibilityOf(table));
+    }
+
+    public void ensureTableIsNotDisplayed() {
+        (new WebDriverWait(driver, 10))
+                .until(ExpectedConditions.visibilityOf(noValTitle));
     }
 
     public void ensureIsChanged(int previousNoOfValidators, int change) {

@@ -61,6 +61,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public List<Operator> getOperators() {
+        return userRepository.getOperators();
+    }
+
+    @Override
     public List<User> getUnvalidatedUsers() {
         return this.userRepository.getUnvalidatedUsers();
     }
@@ -88,11 +93,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public List<Validator> getValidators() {
         return userRepository.getValidators();
-    }
-
-    @Override
-    public List<Operator> getOperators() {
-        return userRepository.getOperators();
     }
 
     @Override

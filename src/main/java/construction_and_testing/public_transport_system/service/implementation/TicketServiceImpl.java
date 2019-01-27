@@ -81,12 +81,10 @@ public class TicketServiceImpl implements TicketService {
 
     @Override
     public Ticket findTicketById(long id) {
-        try {
-            return ticketRepository.findById(id).orElseThrow(() ->
-                    new GeneralException("Requested ticket does not exist!", HttpStatus.BAD_REQUEST));
-        } catch (InvalidDataAccessApiUsageException e) { // null id
-            throw new GeneralException("Invalid id!", HttpStatus.BAD_REQUEST);
-        }
+
+        return ticketRepository.findById(id).orElseThrow(() ->
+                new GeneralException("Requested ticket does not exist!", HttpStatus.BAD_REQUEST));
+
     }
 
     @Override

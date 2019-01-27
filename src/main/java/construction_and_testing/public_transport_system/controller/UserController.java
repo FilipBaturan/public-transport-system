@@ -77,8 +77,24 @@ public class UserController {
     }
 
     @GetMapping("/getByUsername/{username}")
-    public ValidatorDTO getByUsername(@PathVariable String username) {
-        return UserConverter.fromEntity((Validator) userService.findByUsername(username));
+    public ResponseEntity<ValidatorDTO> getByUsername(@PathVariable String username) {
+        try {
+            return new ResponseEntity<>(UserConverter.fromEntity((Validator) userService.findByUsername(username)), HttpStatus.OK);
+        }catch (Exception e)
+        {
+            return new ResponseEntity<>(new ValidatorDTO(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+    @GetMapping("/getRegByUsername/{username}")
+    public ResponseEntity<UserDTO> getRegByUsername(@PathVariable String username) {
+        try {
+            ResponseEntity re = new ResponseEntity<>(UserConverter.fromEntity(userService.findByUsername(username)), HttpStatus.OK);
+            return re;
+        }catch (Exception e)
+        {
+            return new ResponseEntity<>(new UserDTO(), HttpStatus.NOT_FOUND);
+        }
     }
 
     /**
@@ -281,9 +297,10 @@ public class UserController {
             return new ResponseEntity<>(false, HttpStatus.NOT_ACCEPTABLE);
         else {
 
+            if (this.userService.findByUsername(userDTO.getUsername()) != null)
+                return new ResponseEntity<>(false, HttpStatus.CONFLICT);
+
             try {
-                if (this.userService.findByUsername(userDTO.getUsername()) != null)
-                    return new ResponseEntity<>(false, HttpStatus.CONFLICT);
 
                 userDTO.setPassword(passwordEncoder.encode(userDTO.getPassword()));
                 Validator newValidator = new Validator(UserConverter.toEntity(userDTO));

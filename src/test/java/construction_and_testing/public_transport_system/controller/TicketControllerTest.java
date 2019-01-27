@@ -3,6 +3,7 @@ package construction_and_testing.public_transport_system.controller;
 import construction_and_testing.public_transport_system.domain.DTO.TicketReportDTO;
 import construction_and_testing.public_transport_system.domain.enums.VehicleType;
 import construction_and_testing.public_transport_system.service.definition.TicketService;
+import construction_and_testing.public_transport_system.util.GeneralException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,8 @@ import org.springframework.core.ParameterizedTypeReference;
 import org.springframework.http.*;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestClientException;
 
 import java.util.Map;
 
@@ -81,6 +84,18 @@ public class TicketControllerTest {
         assertThat(body).isNotNull();
         assertThat(body).isEmpty();
         assertEquals(result.getStatusCode(), HttpStatus.OK);
+
+    }
+
+    @Test(expected = RestClientException.class)
+    public void getTicketsForUserNaN() {
+        ResponseEntity<TicketReportDTO[]> result = testRestTemplate
+                .getForEntity(this.URL + "/getTicketsForUser/" + "sad", TicketReportDTO[].class);
+
+        TicketReportDTO[] body = result.getBody();
+        assertThat(body).isNotNull();
+        assertThat(body).isEmpty();
+
 
     }
 

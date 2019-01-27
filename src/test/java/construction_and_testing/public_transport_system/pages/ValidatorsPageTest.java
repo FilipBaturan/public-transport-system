@@ -38,7 +38,7 @@ public class ValidatorsPageTest {
         navigationBarPage = PageFactory.initElements(browser, NavigationBarPage.class);
         validatorsPage = PageFactory.initElements(browser, ValidatorsPage.class);
 
-        welcomePage.login("b", "b");
+        welcomePage.login("admin", "admin");
         navigationBarPage.getUsersField().click();
         navigationBarPage.getValidatorsLink().click();
 
@@ -48,7 +48,7 @@ public class ValidatorsPageTest {
     public void testAddingValidAtor() {
 
         assertEquals("http://localhost:4200/validators", browser.getCurrentUrl());
-        validatorsPage.ensureTableIsDisplayed();
+        validatorsPage.ensureTitleIsDisplayed();
         int sizeBeforeAdding = validatorsPage.getTableSize();
         validatorsPage.ensureButtonIsDisplayed();
         validatorsPage.getAddButton().click();
@@ -71,7 +71,7 @@ public class ValidatorsPageTest {
     public void testAddingInvalidator() {
 
         assertEquals("http://localhost:4200/validators", browser.getCurrentUrl());
-        validatorsPage.ensureTableIsDisplayed();
+        validatorsPage.ensureTitleIsDisplayed();
         int sizeBeforeAdding = validatorsPage.getTableSize();
         validatorsPage.ensureButtonIsDisplayed();
         validatorsPage.getAddButton().click();
@@ -89,20 +89,30 @@ public class ValidatorsPageTest {
     @Test
     public void blockValidator() {
         assertEquals("http://localhost:4200/validators", browser.getCurrentUrl());
-        validatorsPage.ensureTableIsDisplayed();
+        validatorsPage.ensureTitleIsDisplayed();
         int sizeBeforeAdding = validatorsPage.getTableSize();
-        validatorsPage.getBlockButton().click();
-        validatorsPage.ensureIsChanged(sizeBeforeAdding, -1);
 
-        int sizeAfter = validatorsPage.getTableSize();
-        assertEquals(sizeBeforeAdding, sizeAfter + 1);
+        if (sizeBeforeAdding != 1)
+        {
+            validatorsPage.getBlockButton().click();
 
+            if (sizeBeforeAdding != 2)
+            {
+                validatorsPage.ensureIsChanged(sizeBeforeAdding, -1);
+                int sizeAfter = validatorsPage.getTableSize();
+                assertEquals(sizeBeforeAdding, sizeAfter + 1);
+            }
+            else
+                validatorsPage.ensureTableIsNotDisplayed();
+        }
+        else
+            validatorsPage.ensureTableIsNotDisplayed();
     }
 
     @Test
     public void changeValidator() throws InterruptedException {
         assertEquals("http://localhost:4200/validators", browser.getCurrentUrl());
-        validatorsPage.ensureTableIsDisplayed();
+        validatorsPage.ensureTitleIsDisplayed();
         int sizeBeforeAdding = validatorsPage.getTableSize();
         validatorsPage.getChangeButton().click();
 
@@ -111,8 +121,7 @@ public class ValidatorsPageTest {
         validatorsPage.setFirstNameInput(newFirstName);
         validatorsPage.getFormAddButton().click();
 
-        //browser.manage().timeouts().implicitlyWait(10, TimeUnit.MINUTES);
-        Thread.sleep(2000);
+        validatorsPage.ensureFormButtonIsDisplayed();
 
         int sizeAfter = validatorsPage.getTableSize();
         assertEquals(sizeBeforeAdding, sizeAfter);

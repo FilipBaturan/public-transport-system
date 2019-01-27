@@ -97,11 +97,11 @@ public class UserDTO {
         this.name = firstName;
     }
 
-    public String getLast() {
+    public String getLastName() {
         return lastName;
     }
 
-    public void setLast(String lastName) {
+    public void setLastName(String lastName) {
         this.lastName = lastName;
     }
 }

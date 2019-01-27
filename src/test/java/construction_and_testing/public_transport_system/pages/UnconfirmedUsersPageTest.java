@@ -36,7 +36,7 @@ public class UnconfirmedUsersPageTest {
         unconfirmedUsersPage = PageFactory.initElements(browser, UnconfirmedUsersPage.class);
 
         welcomePage.ensureIsDisplayed();
-        welcomePage.login("b", "b");
+        welcomePage.login("admin", "admin");
 
         // navigate To Unchecked Users
         navigationBarPage.ensureIsDisplayed();
@@ -51,12 +51,7 @@ public class UnconfirmedUsersPageTest {
         assertEquals("http://localhost:4200/unconfirmedUsers", browser.getCurrentUrl());
         unconfirmedUsersPage.getCheckLink().click();
 
-
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        unconfirmedUsersPage.ensureTicketsAreDisplayed();
 
         assertEquals("http://localhost:4200/userProfile", browser.getCurrentUrl());
 
@@ -80,15 +75,24 @@ public class UnconfirmedUsersPageTest {
     @Test
     public void denyUser() throws InterruptedException {
         assertEquals("http://localhost:4200/unconfirmedUsers", browser.getCurrentUrl());
-        unconfirmedUsersPage.ensureTableIsDisplayed();
+        unconfirmedUsersPage.ensureTitleIsDisplayed();
 
         int sizeBeforeAdding = unconfirmedUsersPage.getTableSize();
-        unconfirmedUsersPage.getDenyButton().click();
+        if (sizeBeforeAdding != 1)
+        {
+            unconfirmedUsersPage.getDenyButton().click();
 
-        unconfirmedUsersPage.ensureIsChanged(sizeBeforeAdding, -1);
+            if (sizeBeforeAdding != 2)
+                unconfirmedUsersPage.ensureIsChanged(sizeBeforeAdding, -1);
+            else
+                unconfirmedUsersPage.ensureTableIsNotDisplayed();
 
-        int sizeAfter = unconfirmedUsersPage.getTableSize();
-        assertEquals(sizeBeforeAdding, sizeAfter + 1);
+
+            int sizeAfter = unconfirmedUsersPage.getTableSize();
+            assertEquals(sizeBeforeAdding, sizeAfter + 1);
+        }
+        else
+            unconfirmedUsersPage.ensureTableIsNotDisplayed();
     }
 
     @AfterMethod

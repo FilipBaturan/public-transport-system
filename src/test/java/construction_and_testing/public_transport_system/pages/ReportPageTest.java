@@ -8,6 +8,7 @@ import org.testng.annotations.BeforeMethod;
 import org.testng.annotations.Test;
 
 import static construction_and_testing.public_transport_system.pages.util.SeleniumProperties.CHROME_DRIVER_PATH;
+import static org.testng.Assert.assertFalse;
 import static org.testng.AssertJUnit.assertEquals;
 import static org.testng.AssertJUnit.assertTrue;
 
@@ -36,7 +37,7 @@ public class ReportPageTest {
         reportPage = PageFactory.initElements(browser, ReportPage.class);
 
         welcomePage.ensureIsDisplayed();
-        welcomePage.login("b", "b");
+        welcomePage.login("admin", "admin");
         navigationBarPage.getUsersField().click();
         navigationBarPage.getReportLink().click();
         reportPage.ensureIsDisplayed();
@@ -49,17 +50,25 @@ public class ReportPageTest {
 
         reportPage.getShowPriceButton().click();
 
-        //browser.manage().timeouts().implicitlyWait(10, TimeUnit.MINUTES);
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        reportPage.ensureChartIsDisplayed();
 
         assertTrue(reportPage.getWeeklyChart().isDisplayed());
         assertTrue(reportPage.getMontlyChart().isDisplayed());
         assertTrue(reportPage.getNumOfTicketsSold().isDisplayed());
-        assertTrue(reportPage.getNumOfTicketsSold().getText().endsWith("2"));
+    }
+
+
+    @Test
+    public void settingInvalidDates() {
+
+        assertEquals("http://localhost:4200/reports", browser.getCurrentUrl());
+        reportPage.setInputStartDate("8798706");
+
+        reportPage.getShowPriceButton().click();
+
+        assertFalse(reportPage.getWeeklyChart().isDisplayed());
+        assertFalse(reportPage.getMontlyChart().isDisplayed());
+        assertFalse(reportPage.getNumOfTicketsSold().isDisplayed());
     }
 
     @AfterMethod
