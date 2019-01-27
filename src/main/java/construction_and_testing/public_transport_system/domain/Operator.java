@@ -26,6 +26,10 @@ public class Operator extends User implements Serializable {
     public Operator() {
     }
 
+    public Operator(Long id){
+        this.id = id;
+    }
+
     public Operator(User user) {
         super(user.id, user.firstName, user.lastName, user.username, user.password, user.email, user.telephone, user.isActive());
         this.setAuthorityType(AuthorityType.OPERATER);

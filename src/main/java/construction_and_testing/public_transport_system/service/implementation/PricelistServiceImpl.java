@@ -37,7 +37,7 @@ public class PricelistServiceImpl implements PricelistService {
             if(pricelist != null){
                 List<Pricelist> afterPricelists = this.getAllAfterNow();
                 for(Pricelist price : afterPricelists){
-                    if(!price.getEndDate().isBefore(p.getStartDate()) || !price.getStartDate().isAfter(p.getEndDate())){
+                    if(!(price.getEndDate().isBefore(p.getStartDate()) || price.getStartDate().isAfter(p.getEndDate()))){
                         throw new PricelistTimeIntervalException("Cannot create price list with this perion of validity!", HttpStatus.CONFLICT);
                     }
                 }
@@ -87,8 +87,11 @@ public class PricelistServiceImpl implements PricelistService {
     }
 
     @Override
-    public Pricelist findPricelistById(long id) {
-        return this.pricelistRepository.findById(id).get();
+    public Pricelist findPricelistById(Long id) {
+        if(pricelistRepository.findById(id).isPresent()){
+            return pricelistRepository.findById(id).get();
+        }
+        return null;
     }
 
     @Override

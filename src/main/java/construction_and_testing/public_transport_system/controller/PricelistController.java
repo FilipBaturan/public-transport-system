@@ -52,6 +52,8 @@ public class PricelistController {
     }
 
     /**
+     * GET /api/pricelist/findActive
+     *<p>
      * Finding active price list.
      *
      * @return pricelist with all items, if active is existing
@@ -70,6 +72,13 @@ public class PricelistController {
         }
     }
 
+    /**
+     * PUT /api/pricelist/modify
+     * <p>
+     * Modifying price list items
+     * @param pricelist - price list with modified items
+     * @return saved pricelist
+     */
     @PutMapping("modify")
     public ResponseEntity<Object> modify(@RequestBody Pricelist pricelist){
         Pricelist p = this.pricelistService.modify(pricelist);

@@ -83,12 +83,16 @@ INSERT INTO `user` (`type`, `id`, `active`, `authority`, `confirmation`, `email`
 INSERT INTO `user` (`type`, `id`, `active`, `authority`, `email`, `last_name`, `first_name`, `password`, `username`) VALUES ('VALIDATOR', '2', true, '2', 'email@gmail.com', 'ValLastName', 'ValFirstName', 'valPassword', 'valUsername');
 INSERT INTO `user` (`type`, `id`, `active`, `authority`, `email`, `last_name`, `first_name`, `password`, `username`) VALUES ('OPERATOR', '3', true, '3', 'null@gmail.com', 'David', 'Davidovic', '$2a$04$CpdJcjORftUKRbJpynFIa.qUY2c/DoqNmta2dL.o6Wkw1I3ZLh79C', 'null');
 INSERT INTO `user` (`type`, `id`, `active`, `authority`, `email`, `last_name`, `first_name`, `password`, `username`) VALUES ('OPERATOR', '4', true, '3', 'mail@mail.com', 'Ime', 'Prezime', '$2a$04$mEe6vqwMvGidyoQ8K.w8E.dLMXs12a6j6GKHrQFW6POXFhk027CuC', 'operkor');
-
+INSERT INTO `user` (`type`, `id`, `active`, `authority`, `confirmation`, `email`, `last_name`, `first_name`, `password`, `telephone`, `username`, `balance`, `document`) VALUES ('REGISTERED_USER', '5', true, '0', '2', 'email@gmail.com', 'LastName', 'FirstName', 'password', '00213123', 'username5677', '100', 'asds');
 
 INSERT INTO `item` (`id`, `active`, `age`, `cost`, `type`, `zone_id`, `vehicle_type`) VALUES ('1', true, '0', '150', '1', '1', '0');
-INSERT INTO `pricelist` (`id`, `active`, `end_date`, `start_date`) VALUES ('1', true, '2020-01-22', '2010-01-22');
+INSERT INTO `pricelist` (`id`, `active`, `end_date`, `start_date`) VALUES ('1', true, '2019-01-01', '2010-01-22');
 INSERT INTO `pricelist_item` (`id`, `active`, `item_id`, `pricelist_id`) VALUES ('1', true, '1', '1');
 INSERT INTO `reservation` (`id`, `active`, `owner_id`) VALUES ('1', true, '1');
+
+INSERT INTO `pricelist` (`id`, `active`, `end_date`, `start_date`) VALUES ('2', true, '2019-12-31', '2019-01-22');
+INSERT INTO `pricelist` (`id`, `active`, `end_date`, `start_date`) VALUES ('3', true, '2020-12-31', '2020-06-01');
+
 
 INSERT INTO `ticket` (`id`, `active`, `expiry_date`, `purchase_date`, `token`, `line_id`, `price_list_item_id`, `reservation_id`) VALUES ('1', true, '2018-04-24 07:39:16', '2016-12-20 00:00:00', 'qweqwe', '1', '1', '1');
 INSERT INTO `ticket` (`id`, `active`, `expiry_date`, `purchase_date`, `token`, `line_id`, `price_list_item_id`, `reservation_id`) VALUES ('2', true, '2018-04-24 07:39:16', '2016-12-20 00:00:00', 'zxczxczxc', '1', '1', '1');

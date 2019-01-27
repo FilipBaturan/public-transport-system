@@ -43,6 +43,7 @@ public class NewsServiceImplUnitTest {
         all.add(DB_NEWS_3);
         when(newsRepository.findAll()).thenReturn(all);
         when(newsRepository.findById(DB_ID)).thenReturn(Optional.of(DB_NEWS_1));
+        when(newsRepository.findById(DB_ID_2)).thenReturn(Optional.of(DB_NEWS_2));
         when(newsRepository.findById(DB_INVALID_ID)).thenReturn(Optional.empty());
         when(newsRepository.findById(null)).thenReturn(Optional.empty());
         when(newsRepository.saveAndFlush(DB_NEW_NEWS)).thenReturn(DB_NEW_NEWS);
@@ -111,7 +112,7 @@ public class NewsServiceImplUnitTest {
     public void modifyExistingNews(){
         boolean modified = newsService.modify(DB_CHANGED_NEWS);
         assertTrue(modified);
-        verify(newsRepository, times(1)).findById(DB_ID);
+        verify(newsRepository, times(1)).findById(DB_ID_2);
         verify(newsRepository, times(1 )).saveAndFlush(DB_CHANGED_NEWS);
     }
 

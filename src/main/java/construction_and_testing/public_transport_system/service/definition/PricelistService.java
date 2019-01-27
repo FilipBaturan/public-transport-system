@@ -32,7 +32,7 @@ public interface PricelistService {
      * @param id of pricelist
      * @return - pricelist with given id
      */
-    Pricelist findPricelistById(long id);
+    Pricelist findPricelistById(Long id);
 
     /**
      * Getting active pricelist

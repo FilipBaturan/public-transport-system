@@ -8,6 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.dao.InvalidDataAccessApiUsageException;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.persistence.EntityNotFoundException;
@@ -40,11 +41,10 @@ public class NewsServiceImplIntegrationTest {
      */
     @Test
     public void getById(){
-        News news = newsService.getById(DB_ID);
-        assertThat(news.getId()).isEqualTo(DB_ID);
-        assertThat(news.getDate()).isEqualTo(DB_TIME_1);
-        assertThat(news.getTitle()).isEqualTo(DB_TITLE);
-        assertThat(news.getContent()).isEqualTo(DB_CONTENT);
+        News news = newsService.getById(DB_ID_2);
+        assertThat(news.getId()).isEqualTo(DB_ID_2);
+        assertThat(news.getTitle()).isEqualTo(DB_CHANGED_TITLE);
+        assertThat(news.getContent()).isEqualTo(DB_CHANGED_CONTENT);
     }
 
     /**
@@ -59,7 +59,7 @@ public class NewsServiceImplIntegrationTest {
     /**
      * Test when given ID is null
      */
-    @Test(expected = IllegalArgumentException.class)
+    @Test(expected = InvalidDataAccessApiUsageException.class)
     public void getByNullId(){
         newsService.getById(null);
     }
@@ -113,7 +113,7 @@ public class NewsServiceImplIntegrationTest {
     public void modify(){
         boolean modified = newsService.modify(DB_CHANGED_NEWS);
         assertThat(modified).isTrue();
-        News news = newsService.getById(DB_ID);
+        News news = newsService.getById(DB_ID_2);
         assertThat(news.getTitle()).isEqualTo(DB_CHANGED_TITLE);
         assertThat(news.getContent()).isEqualTo(DB_CHANGED_CONTENT);
     }

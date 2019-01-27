@@ -1,5 +1,6 @@
 package construction_and_testing.public_transport_system.domain;
 
+import construction_and_testing.public_transport_system.domain.enums.AuthorityType;
 import construction_and_testing.public_transport_system.domain.enums.UsersDocumentsStatus;
 
 import javax.persistence.*;
@@ -43,6 +44,7 @@ public class RegisteredUser extends User implements Serializable {
         this.document = document;
         this.setActive(true);
         this.image = "";
+        this.setAuthorityType(AuthorityType.REGISTERED_USER);
         //this.image = image;
     }
 

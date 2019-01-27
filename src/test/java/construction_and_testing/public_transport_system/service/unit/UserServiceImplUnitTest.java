@@ -164,7 +164,6 @@ public class UserServiceImplUnitTest {
         assertThat(validators.size()).isEqualTo(DB_VAL_COUNT);
     }
 
-
     @Test
     public void getRegisteredUsersTest() {
         List<RegisteredUser> regUsers = userService.getRegisteredUsers();
