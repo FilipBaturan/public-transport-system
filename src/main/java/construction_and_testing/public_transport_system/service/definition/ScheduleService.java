@@ -42,7 +42,6 @@ public interface ScheduleService {
     List<Schedule> findByTransportLineId(Long id);
 
     /**
-     *
      * @param schedule that is being checked
      * @return schedule if it exists else null
      */

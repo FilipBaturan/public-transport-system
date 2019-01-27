@@ -1,6 +1,5 @@
 package construction_and_testing.public_transport_system.domain.DTO;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import construction_and_testing.public_transport_system.domain.Schedule;
 import construction_and_testing.public_transport_system.domain.TransportLine;
 import construction_and_testing.public_transport_system.domain.enums.DayOfWeek;
@@ -88,7 +87,7 @@ public class ScheduleDTO implements Serializable {
 
     @Override
     public String toString() {
-        try{
+        try {
             return "ScheduleDTO{" +
                     "id=" + id +
                     ", departures=" + departures.toString() +
@@ -97,7 +96,7 @@ public class ScheduleDTO implements Serializable {
                     ", active=" + active +
                     '}';
 
-        }catch(Exception e){
+        } catch (Exception e) {
             return "ScheduleDTO{" +
                     ", departures=" + departures +
                     ", transportLine=" + transportLine +

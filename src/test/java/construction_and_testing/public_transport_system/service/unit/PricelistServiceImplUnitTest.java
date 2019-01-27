@@ -10,13 +10,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.context.junit4.SpringRunner;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import static construction_and_testing.public_transport_system.constants.PricelistConstants.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
@@ -30,7 +31,7 @@ public class PricelistServiceImplUnitTest {
     private PricelistService pricelistService;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         List<Pricelist> pricelists = new ArrayList<>();
         pricelists.add(DB_VALID_PRICELIST);
         pricelists.add(DB_EXPIRED_PRICELIST);
@@ -38,7 +39,7 @@ public class PricelistServiceImplUnitTest {
     }
 
     @Test
-    public void findValidTest(){
+    public void findValidTest() {
         Pricelist valid = pricelistService.findValid();
         assertThat(valid).isNotNull();
         assertEquals(valid.getId(), DB_ID);

@@ -17,13 +17,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.junit.Assert.assertEquals;
-
-import static org.junit.Assert.assertFalse;
-import static org.junit.Assert.assertTrue;
-import static org.mockito.Mockito.*;
 import static construction_and_testing.public_transport_system.constants.NewsConstants.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.*;
+import static org.mockito.Mockito.*;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -36,7 +33,7 @@ public class NewsServiceImplUnitTest {
     private NewsService newsService;
 
     @Before
-    public void setUp(){
+    public void setUp() {
         List<News> all = new ArrayList<>();
         all.add(DB_NEWS_1);
         all.add(DB_NEWS_2);
@@ -55,7 +52,7 @@ public class NewsServiceImplUnitTest {
      * Valid test of getting all news in sorted order
      */
     @Test
-    public void getAll(){
+    public void getAll() {
         List<News> allNews = newsService.getAll();
         boolean sorted = NewsConstants.isSorted(allNews);
         assertThat(allNews).isNotNull();
@@ -67,7 +64,7 @@ public class NewsServiceImplUnitTest {
      * Valid test for getting news by existing ID
      */
     @Test
-    public void getById(){
+    public void getById() {
         News news = newsService.getById(DB_ID);
         assertThat(news).isNotNull();
         assertEquals(news.getId(), DB_ID);
@@ -81,7 +78,7 @@ public class NewsServiceImplUnitTest {
      * Test when invalid ID is given
      */
     @Test
-    public void getByInvalidId(){
+    public void getByInvalidId() {
         News news = newsService.getById(DB_INVALID_ID);
         assertThat(news).isNull();
         verify(newsRepository, times(1)).findById(DB_INVALID_ID);
@@ -91,7 +88,7 @@ public class NewsServiceImplUnitTest {
      * Test when given ID is null
      */
     @Test
-    public void getByNullId(){
+    public void getByNullId() {
         News news = newsService.getById(null);
         assertThat(news).isNull();
         verify(newsRepository, times(1)).findById(null);
@@ -101,36 +98,36 @@ public class NewsServiceImplUnitTest {
      *
      */
     @Test
-    public void addNew(){
+    public void addNew() {
         boolean saved = newsService.addNew(DB_NEW_NEWS);
         assertTrue(saved);
         verify(newsRepository, times(1)).saveAndFlush(DB_NEW_NEWS);
     }
 
     @Test
-    public void modifyExistingNews(){
+    public void modifyExistingNews() {
         boolean modified = newsService.modify(DB_CHANGED_NEWS);
         assertTrue(modified);
         verify(newsRepository, times(1)).findById(DB_ID);
-        verify(newsRepository, times(1 )).saveAndFlush(DB_CHANGED_NEWS);
+        verify(newsRepository, times(1)).saveAndFlush(DB_CHANGED_NEWS);
     }
 
     @Test
-    public void modifyUnexistingNews(){
+    public void modifyUnexistingNews() {
         boolean modified = newsService.modify(DB_CHANGED_INVALID_NEWS);
         assertFalse(modified);
         verify(newsRepository, times(1)).findById(DB_INVALID_ID);
     }
 
     @Test
-    public void removeNews(){
+    public void removeNews() {
         newsService.remove(DB_ID);
         verify(newsRepository, times(1)).findById(DB_ID);
         verify(newsRepository, times(1)).save(DB_DELETED_NEWS);
     }
 
     @Test(expected = EntityNotFoundException.class)
-    public void removeInvalidNews(){
+    public void removeInvalidNews() {
         newsService.remove(DB_INVALID_ID);
         verify(newsRepository, times(1)).findById(DB_INVALID_ID);
     }

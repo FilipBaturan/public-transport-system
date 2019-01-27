@@ -16,12 +16,14 @@ public interface PricelistService {
 
     /**
      * Removing pricelist
+     *
      * @param id - pricelist id
      */
     void remove(Long id);
 
     /**
      * Getting all pricelist
+     *
      * @return list of all found pricelist
      */
     List<Pricelist> findAllPricelists();
@@ -36,6 +38,7 @@ public interface PricelistService {
 
     /**
      * Getting active pricelist
+     *
      * @return active pricelist
      */
     Pricelist findValid();

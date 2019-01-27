@@ -16,7 +16,7 @@ public class ZoneConstants {
     public static final Long DB_ID = 2L;
     public static final String DB_NAME = "Liman";
     public static final boolean DB_ACTIVE = true;
-    public static final int DB_TR_COUNT = 3;
+    public static final int DB_TR_COUNT = 4;
     public static final Long DB_ID_INVALID = 33L;
     public static final ArrayList<Long> DB_TR_ID = new ArrayList<Long>() {{
         add(21L);

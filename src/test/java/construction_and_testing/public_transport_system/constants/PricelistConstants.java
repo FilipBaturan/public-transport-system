@@ -9,11 +9,11 @@ public class PricelistConstants {
     public static final Long DB_ID = 1L;
     public static final Long DB_EXPIRED_ID = 2L;
 
-    public static final LocalDateTime DB_START_DATE_VALID = LocalDateTime.of(2019, 1,1,0,0);
-    public static final LocalDateTime DB_END_DATE_VALID = LocalDateTime.of(2019, 3, 30, 0,0);
+    public static final LocalDateTime DB_START_DATE_VALID = LocalDateTime.of(2019, 1, 1, 0, 0);
+    public static final LocalDateTime DB_END_DATE_VALID = LocalDateTime.of(2019, 3, 30, 0, 0);
 
-    public static final LocalDateTime DB_START_DATE_EXPIRED = LocalDateTime.of(2018, 5,1,0,0);
-    public static final LocalDateTime DB_END_DATE_EXPIRED = LocalDateTime.of(2018, 10, 30, 0,0);
+    public static final LocalDateTime DB_START_DATE_EXPIRED = LocalDateTime.of(2018, 5, 1, 0, 0);
+    public static final LocalDateTime DB_END_DATE_EXPIRED = LocalDateTime.of(2018, 10, 30, 0, 0);
 
 
     public static final Pricelist DB_VALID_PRICELIST = new Pricelist(1L, DB_START_DATE_VALID, DB_END_DATE_VALID);

@@ -1,6 +1,5 @@
 package construction_and_testing.public_transport_system.service.implementation;
 
-import construction_and_testing.public_transport_system.domain.Item;
 import construction_and_testing.public_transport_system.domain.Pricelist;
 import construction_and_testing.public_transport_system.domain.PricelistItem;
 import construction_and_testing.public_transport_system.repository.ItemRepository;
@@ -14,7 +13,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityNotFoundException;
-import javax.transaction.Transactional;
 import java.time.LocalDateTime;
 import java.util.*;
 
@@ -34,10 +32,10 @@ public class PricelistServiceImpl implements PricelistService {
     public Pricelist savePricelist(Pricelist p) {
         try {
             Pricelist pricelist = this.findValid();
-            if(pricelist != null){
+            if (pricelist != null) {
                 List<Pricelist> afterPricelists = this.getAllAfterNow();
-                for(Pricelist price : afterPricelists){
-                    if(!price.getEndDate().isBefore(p.getStartDate()) || !price.getStartDate().isAfter(p.getEndDate())){
+                for (Pricelist price : afterPricelists) {
+                    if (!price.getEndDate().isBefore(p.getStartDate()) || !price.getStartDate().isAfter(p.getEndDate())) {
                         throw new PricelistTimeIntervalException("Cannot create price list with this perion of validity!", HttpStatus.CONFLICT);
                     }
                 }
@@ -51,7 +49,7 @@ public class PricelistServiceImpl implements PricelistService {
 
     @Override
     public Pricelist modify(Pricelist p) {
-        try{
+        try {
             LocalDateTime newDate = LocalDateTime.now();
             LocalDateTime oldEndDate = p.getEndDate();
             Set<PricelistItem> newItems = p.getItems();
@@ -63,7 +61,7 @@ public class PricelistServiceImpl implements PricelistService {
             newPricelist.setEndDate(oldEndDate);
             newPricelist.setItems(newItems);
             return pricelistRepository.save(newPricelist);
-        }catch(DataIntegrityViolationException e){
+        } catch (DataIntegrityViolationException e) {
             return null;
         }
 
@@ -96,7 +94,7 @@ public class PricelistServiceImpl implements PricelistService {
         List<Pricelist> pricelists = pricelistRepository.findAll();
         LocalDateTime now = LocalDateTime.now();
         for (Pricelist p : pricelists) {
-            if (p.getStartDate().isBefore(now) && p.getEndDate().isAfter(now)){
+            if (p.getStartDate().isBefore(now) && p.getEndDate().isAfter(now)) {
                 return p;
             }
         }
@@ -104,12 +102,11 @@ public class PricelistServiceImpl implements PricelistService {
     }
 
 
-
-    private List<Pricelist> getAllAfterNow(){
+    private List<Pricelist> getAllAfterNow() {
         List<Pricelist> all = pricelistRepository.findAll();
         List<Pricelist> after = new ArrayList<>();
-        for(Pricelist p : all){
-            if(p.getEndDate().isAfter(LocalDateTime.now())){
+        for (Pricelist p : all) {
+            if (p.getEndDate().isAfter(LocalDateTime.now())) {
                 after.add(p);
             }
         }

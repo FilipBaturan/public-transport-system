@@ -35,5 +35,4 @@ public class PriceListConverter extends AbstractConverter {
     }
 
 
-
 }

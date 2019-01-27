@@ -2,7 +2,6 @@ package construction_and_testing.public_transport_system.constants;
 
 import construction_and_testing.public_transport_system.domain.News;
 import construction_and_testing.public_transport_system.domain.Operator;
-import org.apache.tomcat.jni.Local;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -27,22 +26,21 @@ public class NewsConstants {
     public static final LocalDateTime DB_TIME_NEW = LocalDateTime.of(2019, 1, 19, 20, 35);
     public static final LocalDateTime DB_CHANGED_TIME = LocalDateTime.of(2019, 1, 20, 20, 35);
 
-    public static final News DB_NEWS_1 = new News(1L,"Title1", "Content1",DB_TIME_1, new Operator());
-    public static final News DB_NEWS_2 = new News(2L,"Title2", "Content2",DB_TIME_2, new Operator());
-    public static final News DB_NEWS_3 = new News(3L,"Title3", "Content3",DB_TIME_3, new Operator());
-    public static final News DB_NEW_NEWS = new News(4L,"Title new", "Content new",DB_TIME_NEW, new Operator());
-    public static final News DB_CHANGED_NEWS = new News(82L,DB_CHANGED_TITLE, DB_CHANGED_CONTENT,DB_CHANGED_TIME, new Operator());
-    public static final News DB_CHANGED_INVALID_NEWS = new News(DB_INVALID_ID, "Title1", "Content1",DB_TIME_1, new Operator());
-    public static final News DB_DELETED_NEWS = new News(1L,"Title1", "Content1",DB_TIME_1, new Operator(), false);
+    public static final News DB_NEWS_1 = new News(1L, "Title1", "Content1", DB_TIME_1, new Operator());
+    public static final News DB_NEWS_2 = new News(2L, "Title2", "Content2", DB_TIME_2, new Operator());
+    public static final News DB_NEWS_3 = new News(3L, "Title3", "Content3", DB_TIME_3, new Operator());
+    public static final News DB_NEW_NEWS = new News(4L, "Title new", "Content new", DB_TIME_NEW, new Operator());
+    public static final News DB_CHANGED_NEWS = new News(82L, DB_CHANGED_TITLE, DB_CHANGED_CONTENT, DB_CHANGED_TIME, new Operator());
+    public static final News DB_CHANGED_INVALID_NEWS = new News(DB_INVALID_ID, "Title1", "Content1", DB_TIME_1, new Operator());
+    public static final News DB_DELETED_NEWS = new News(1L, "Title1", "Content1", DB_TIME_1, new Operator(), false);
 
-    public static boolean isSorted(List<News> news){
+    public static boolean isSorted(List<News> news) {
         LocalDateTime date = news.get(0).getDate();
         news.remove(0);
-        for(News n : news){
-            if(n.getDate().isBefore(date)){
+        for (News n : news) {
+            if (n.getDate().isBefore(date)) {
                 date = n.getDate();
-            }
-            else {
+            } else {
                 return false;
             }
         }

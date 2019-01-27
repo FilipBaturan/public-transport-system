@@ -8,9 +8,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest(webEnvironment = SpringBootTest.WebEnvironment.RANDOM_PORT)
@@ -20,53 +20,53 @@ public class RegisteredUserServiceImplIntegrationTest {
     private RegisteredUserService registeredUserService;
 
     @Test
-    public void getAll(){
+    public void getAll() {
         List<RegisteredUser> all = registeredUserService.getAll();
         assertThat(all).hasSize(1);
     }
 
     @Test
-    public void getById(){
+    public void getById() {
 
     }
 
     @Test
-    public void getByInvalidId(){
+    public void getByInvalidId() {
 
     }
 
     @Test
-    public void getByNullId(){
+    public void getByNullId() {
 
     }
 
     @Test
-    public void addNew(){
+    public void addNew() {
 
     }
 
     @Test
-    public void modify(){
+    public void modify() {
 
     }
 
     @Test
-    public void modifyWithInvalidId(){
+    public void modifyWithInvalidId() {
 
     }
 
     @Test
-    public void remove(){
+    public void remove() {
 
     }
 
     @Test
-    public void removeWithInvalidId(){
+    public void removeWithInvalidId() {
 
     }
 
     @Test
-    public void removeWithNullId(){
+    public void removeWithNullId() {
 
     }
 

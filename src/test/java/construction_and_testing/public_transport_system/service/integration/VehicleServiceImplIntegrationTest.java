@@ -140,7 +140,7 @@ public class VehicleServiceImplIntegrationTest {
     }
 
     /**
-     * Test with to short firstName value
+     * Test with to short name value
      */
     @Test(expected = GeneralException.class)
     @Transactional
@@ -150,7 +150,7 @@ public class VehicleServiceImplIntegrationTest {
     }
 
     /**
-     * Test with too long firstName value
+     * Test with too long name value
      */
     @Test(expected = GeneralException.class)
     @Transactional
@@ -160,7 +160,7 @@ public class VehicleServiceImplIntegrationTest {
     }
 
     /**
-     * Test with min length firstName value
+     * Test with min length name value
      */
     @Test
     @Transactional
@@ -179,7 +179,7 @@ public class VehicleServiceImplIntegrationTest {
     }
 
     /**
-     * Test with max length firstName value
+     * Test with max length name value
      */
     @Test
     @Transactional
