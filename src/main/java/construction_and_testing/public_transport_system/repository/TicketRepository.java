@@ -18,10 +18,10 @@ public interface TicketRepository extends JpaRepository<Ticket, Long> {
     Long getPrice(LocalDate date1, LocalDate date2, int i);
 
 
-    @Query(value = "SELECT * FROM Ticket t WHERE t.purchase_date BETWEEN ?1 AND ?2", nativeQuery = true)
+    @Query(value = "SELECT * FROM ticket t WHERE t.purchase_date BETWEEN ?1 AND ?2", nativeQuery = true)
     List<Ticket> getTicketsBetween(LocalDate date1, LocalDate date2);
 
-    @Query("SELECT t from Ticket t WHERE t.line.id IN :lines")
+    @Query(value = "SELECT t from ticket t WHERE t.line.id IN :lines", nativeQuery = true)
     List<Ticket> findByTransportLine(@Param("lines") List<Long> transportLineIds);
 
 }

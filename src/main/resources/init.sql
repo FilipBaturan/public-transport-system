@@ -61,9 +61,9 @@ INSERT INTO `public_transport`.`schedule` (`id`, `active`, `transport_line_id`, 
 INSERT INTO `public_transport`.`schedule` (`id`, `active`, `transport_line_id`, `day_of_week`) VALUES (106, TRUE, 2, 2);
 
 
-INSERT INTO `public_transport`.`user` (`type`, `id`, `active`, `authority`, `confirmation`, `email`, `last_name`, `first_name`, `password`, `telephone`, `username`, `balance`, `document`) VALUES ('REGISTERED_USER', '1', TRUE, '0', '2', 'asdasd.asd@gmail.com', 'LastName', 'FirstName', 'pass', '0120120012', 'username1', '100', 'asds');
-INSERT INTO `public_transport`.`user` (`type`, `id`, `active`, `authority`, `email`, `last_name`, `first_name`, `password`, `username`, `balance`, `document`) VALUES ('VALIDATOR', '2', TRUE, '2', 'asdasd.asd@gmail.com', '', 'nekoIme', '123123', 'username2', '100', 'asds');
-INSERT INTO `public_transport`.`user` (`type`, `id`, `active`, `authority`, `email`, `last_name`, `first_name`, `password`, `username`) VALUES ('VALIDATOR', '4', TRUE, '2', 'newEmail', '', 'newName', 'newPass', 'newUserName');
+INSERT INTO `public_transport`.`user` (`type`, `id`, `active`, `authority`, `confirmation`, `email`, `last_name`, `first_name`, `password`, `telephone`, `username`, `balance`, `document`) VALUES ('REGISTERED_USER', '1', TRUE, '0', '2', 'asdasd.asd@gmail.com', 'LastName', 'FirstName', '$2a$04$DHYhZ6Y0Zp8Xpd4DA1q9ke8KQB6HJA88AF1T1k03D43XrjEskqJmK', '0120120012', 'username1', '100', 'img_1_1.jpg');
+INSERT INTO `public_transport`.`user` (`type`, `id`, `active`, `authority`, `email`, `last_name`, `first_name`, `password`, `username`) VALUES ('ADMIN', '2', TRUE, '1', 'admin', 'admin', 'admin', '$2a$04$DHYhZ6Y0Zp8Xpd4DA1q9ke8KQB6HJA88AF1T1k03D43XrjEskqJmK', 'admin');
+INSERT INTO `public_transport`.`user` (`type`, `id`, `active`, `authority`, `email`, `last_name`, `first_name`, `password`, `username`) VALUES ('VALIDATOR', '4', TRUE, '2', 'newEmail', 'newLastName', 'newName', '$2a$04$DHYhZ6Y0Zp8Xpd4DA1q9ke8KQB6HJA88AF1T1k03D43XrjEskqJmK', 'valid');
 INSERT INTO `public_transport`.`user` (`type`, `id`, `active`, `authority`, `email`, `last_name`, `first_name`, `password`, `username`) VALUES ('OPERATOR', '5', TRUE, '3', 'null@gmail.com', 'David', 'Davidovic', '$2a$04$CpdJcjORftUKRbJpynFIa.qUY2c/DoqNmta2dL.o6Wkw1I3ZLh79C', 'null');
 
 INSERT INTO `public_transport`.`schedule_departures` (`schedule_id`, `departure`) VALUES (100, '08:00');
@@ -108,6 +108,9 @@ INSERT INTO `public_transport`.`schedule_departures` (`schedule_id`, `departure`
 INSERT INTO `public_transport`.`schedule_departures` (`schedule_id`, `departure`) VALUES (106, '23:30');
 INSERT INTO `public_transport`.`schedule_departures` (`schedule_id`, `departure`) VALUES (106, '23:45');
 INSERT INTO `public_transport`.`schedule_departures` (`schedule_id`, `departure`) VALUES (106, '00:00');
+
+INSERT INTO `public_transport`.`news`(`id`, `active`, `content`, `date`, `title`, `operator_id`) VALUES ('1', true, 'Content1', '2019-1-15 13:45:00', 'Title1', '5');
+INSERT INTO `public_transport`.`news`(`id`, `active`, `content`, `date`, `title`, `operator_id`) VALUES ('2', true, 'Content2', '2019-1-14 03:27:00', 'Title2', '5');
 
 SET SQL_SAFE_UPDATES = 0;
 UPDATE `public_transport`.`hibernate_sequence` SET `next_val` = '200' WHERE `next_val` = '1';
