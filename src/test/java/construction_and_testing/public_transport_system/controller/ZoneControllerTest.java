@@ -213,7 +213,7 @@ public class ZoneControllerTest {
 
         assertThat(result.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(body).isNotNull();
-        assertThat(body).isEqualTo("Zone with given firstName already exist!");
+        assertThat(body).isEqualTo("Zone with given name already exist!");
     }
 
     /**
@@ -245,7 +245,7 @@ public class ZoneControllerTest {
         assertThat(result2.getStatusCode()).isEqualTo(HttpStatus.BAD_REQUEST);
         assertThat(body2).isNotNull();
 
-        assertThat(body2).isEqualTo("Zone with given firstName already exist!");
+        assertThat(body2).isEqualTo("Zone with given name already exist!");
     }
 
     /**

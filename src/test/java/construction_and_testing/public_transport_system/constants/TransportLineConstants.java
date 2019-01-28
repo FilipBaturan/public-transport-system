@@ -47,7 +47,8 @@ public class TransportLineConstants {
     public static final ArrayList<TransportLine> NEW_TRANSPORT_LINES_INVALID_SCHEDULE = new ArrayList<>();
     public static final ArrayList<TransportLine> NEW_TRANSPORT_LINES_NOT_UNIQUE_NAME = new ArrayList<>();
 
-    public static final int DEL_SCHEDULE_COUNT = 1;
+    public static final int DEL_SCHEDULE_COUNT = 2;
+    public static final int DEL_SCHEDULE_COUNT_UN = 1;
 
     public static ArrayList<TransportLine> DB_TRANSPORT_LINES = new ArrayList<>();
 

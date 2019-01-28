@@ -516,7 +516,7 @@ public class TransportLineServiceImplUnitTest {
             assertThat(transportLine.getName()).isIn(NEW_TRANSPORT_LINES
                     .stream().map(TransportLine::getName).collect(Collectors.toList()));
         });
-        assertThat(scheduleRepository.findAll().size()).isEqualTo(DB_SCHEDULES_COUNT - DEL_SCHEDULE_COUNT);
+        assertThat(scheduleRepository.findAll().size()).isEqualTo(DB_SCHEDULES_COUNT - DEL_SCHEDULE_COUNT_UN);
         vehicleRepository.findAll().forEach(vehicle -> assertThat(vehicle.getCurrentLine()).isNotNull());
         assertThat(ticketRepository.findAll().size()).isEqualTo(DB_TICKET_COUNT);
 
@@ -636,7 +636,7 @@ public class TransportLineServiceImplUnitTest {
 
         assertThat(transportLines).isNotNull();
         assertThat(transportLines.size()).isEqualTo(NEW_TRANSPORT_LINES.size());
-        assertThat(scheduleRepository.findAll().size()).isEqualTo(DB_SCHEDULES_COUNT - DEL_SCHEDULE_COUNT);
+        assertThat(scheduleRepository.findAll().size()).isEqualTo(DB_SCHEDULES_COUNT - DEL_SCHEDULE_COUNT_UN);
         vehicleRepository.findAll().forEach(vehicle -> assertThat(vehicle.getCurrentLine()).isNotNull());
         assertThat(ticketRepository.findAll().size()).isEqualTo(DB_TICKET_COUNT);
     }
@@ -662,7 +662,7 @@ public class TransportLineServiceImplUnitTest {
 
         assertThat(transportLines).isNotNull();
         assertThat(transportLines.size()).isEqualTo(NEW_TRANSPORT_LINES.size());
-        assertThat(scheduleRepository.findAll().size()).isEqualTo(DB_SCHEDULES_COUNT - DEL_SCHEDULE_COUNT);
+        assertThat(scheduleRepository.findAll().size()).isEqualTo(DB_SCHEDULES_COUNT - DEL_SCHEDULE_COUNT_UN);
         vehicleRepository.findAll().forEach(vehicle -> assertThat(vehicle.getCurrentLine()).isNotNull());
         assertThat(ticketRepository.findAll().size()).isEqualTo(DB_TICKET_COUNT);
     }
