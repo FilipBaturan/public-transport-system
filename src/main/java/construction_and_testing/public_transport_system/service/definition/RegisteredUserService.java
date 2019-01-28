@@ -1,5 +1,6 @@
 package construction_and_testing.public_transport_system.service.definition;
 
+import construction_and_testing.public_transport_system.domain.DTO.ImageUploadDTO;
 import construction_and_testing.public_transport_system.domain.RegisteredUser;
 
 import java.util.List;
@@ -43,4 +44,17 @@ public interface RegisteredUserService {
      * @param id - id of user for deleting
      */
     void remove(Long id);
+
+    /**
+     * Setting new users validation document
+     * @param imageUploadDTO - id of user and document name
+     */
+    void updateValidationDocument(ImageUploadDTO imageUploadDTO);
+
+    /**
+     * Getting users validation document
+     * @param id of user
+     * @return image
+     */
+    ImageUploadDTO getValidationDocument(Long id);
 }

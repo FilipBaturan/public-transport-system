@@ -191,6 +191,28 @@ public class UserController {
         return new ResponseEntity<>(UserConverter.fromLoggedEntity(userService.findCurrentUser()), HttpStatus.OK);
     }
 
+    @PutMapping("/addImage")
+    public ResponseEntity addImageToUser(@RequestBody ImageUploadDTO imageUploadDTO){
+        try{
+            registeredUserService.updateValidationDocument(imageUploadDTO);
+            logger.info("Updating validation document to user with id {}", imageUploadDTO.getId());
+            return new ResponseEntity(HttpStatus.OK);
+        }catch(Exception e){
+            e.printStackTrace();
+            return new ResponseEntity(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/getImage/{id}")
+    public ResponseEntity<ImageUploadDTO> getDocument(@PathVariable Long id){
+        ImageUploadDTO image = registeredUserService.getValidationDocument(id);
+        if(image != null){
+            return new ResponseEntity<>(image, HttpStatus.OK);
+        }
+        else{
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        }
+    }
 
     /**
      * POST /api/user

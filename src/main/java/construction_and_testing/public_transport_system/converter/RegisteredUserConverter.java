@@ -42,7 +42,7 @@ public class RegisteredUserConverter extends AbstractConverter {
     public static RegisteredUserDTO toRegisteredUserDTO(RegisteredUser registeredUser) {
         RegisteredUserDTO dto = new RegisteredUserDTO();
         dto.setId(registeredUser.getId());
-        dto.setName(registeredUser.getFirstName());
+        dto.setFirstName(registeredUser.getFirstName());
         dto.setLastName(registeredUser.getLastName());
         dto.setUsername(registeredUser.getUsername());
         dto.setPassword(registeredUser.getPassword());
@@ -57,7 +57,7 @@ public class RegisteredUserConverter extends AbstractConverter {
         Collection<AuthorityType> authorityTypeCollection = new ArrayList<>();
         //((ArrayList<AuthorityType>) authorityTypeCollection).add(AuthorityType.REGISTERED_USER);
         entity.setId(registeredUserDTO.getId());
-        entity.setFirstName(registeredUserDTO.getName());
+        entity.setFirstName(registeredUserDTO.getFirstName());
         entity.setLastName(registeredUserDTO.getLastName());
         entity.setUsername(registeredUserDTO.getUsername());
         entity.setPassword(registeredUserDTO.getPassword());

@@ -3,7 +3,7 @@ package construction_and_testing.public_transport_system.domain.DTO;
 public class RegisteredUserDTO {
 
     private Long id;
-    private String name;
+    private String firstName;
     private String lastName;
     private String username;
     private String password;
@@ -15,9 +15,9 @@ public class RegisteredUserDTO {
 
     }
 
-    public RegisteredUserDTO(Long id, String name, String lastName, String username, String password, String email, String telephone, boolean active) {
+    public RegisteredUserDTO(Long id, String firstName, String lastName, String username, String password, String email, String telephone, boolean active) {
         this.id = id;
-        this.name = name;
+        this.firstName = firstName;
         this.lastName = lastName;
         this.username = username;
         this.password = password;
@@ -34,12 +34,12 @@ public class RegisteredUserDTO {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
+    public String getFirstName() {
+        return firstName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setFirstName(String firstName) {
+        this.firstName = firstName;
     }
 
     public String getLastName() {
