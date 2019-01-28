@@ -42,7 +42,6 @@ public class RegisteredUserServiceImplIntegrationTest {
         assertThat(registeredUser).isNotNull();
         assertEquals(registeredUser.getId(), DB_INTEGR_ID);
         assertEquals(registeredUser.getUsername(), DB_INTEGR_USERNAME);
-        assertEquals(registeredUser.getPassword(), DB_INTEGR_PASSWORD);
         assertEquals(registeredUser.getFirstName(), DB_INTEGR_NAME);
         assertEquals(registeredUser.getLastName(), DB_INTEGR_LASTNAME);
         assertTrue(registeredUser.isActive());

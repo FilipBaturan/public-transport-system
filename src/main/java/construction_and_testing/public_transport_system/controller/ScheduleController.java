@@ -72,11 +72,11 @@ public class ScheduleController extends ValidationController {
      * @param dayOfWeek day of week for which the schedule is requested
      * @return schedule for a transport line with requested id
      */
-    @GetMapping("/findByTrLineIdAndDayOfWeek/{id}")
-    public ResponseEntity<ScheduleDTO> findByTransportLineIdAndDayOfWeek(@PathVariable String id, @RequestParam String dayOfWeek) {
+    @GetMapping("/findByTrLineIdAndDayOfWeek/{id}/{dayOfWeek}")
+    public ResponseEntity<ScheduleDTO> findByTransportLineIdAndDayOfWeek(@PathVariable("id") String id, @PathVariable("dayOfWeek") String dayOfWeek) {
         logger.info("Requesting schedule for transprot line with  {} at time {}.", id, Calendar.getInstance().getTime());
         try {
-            Schedule schedule = scheduleService.findByTransportLineIdAndDayOfWeek(Long.parseLong(id), DayOfWeek.valueOf(dayOfWeek).ordinal());
+            Schedule schedule = scheduleService.findByTransportLineIdAndDayOfWeek(Long.parseLong(id), DayOfWeek.valueOf(dayOfWeek.toUpperCase()).ordinal());
             return new ResponseEntity<>(new ScheduleDTO(schedule), HttpStatus.OK);
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);

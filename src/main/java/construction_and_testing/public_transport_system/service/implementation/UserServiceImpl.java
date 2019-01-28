@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
+import javax.ws.rs.ForbiddenException;
 import java.util.List;
 
 @Service
@@ -51,13 +52,18 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User findCurrentUser() {
-        final UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
-        if (authentication == null) {
-            return null;
-        }
+        try {
+            UsernamePasswordAuthenticationToken authentication = (UsernamePasswordAuthenticationToken) SecurityContextHolder.getContext().getAuthentication();
+            if (authentication == null) {
+                throw new ForbiddenException();
+            }
 
-        final UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        return findByUsername(userDetails.getUsername());
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            return findByUsername(userDetails.getUsername());
+        }
+        catch(ForbiddenException e){
+            throw new ForbiddenException();
+        }
     }
 
     @Override

@@ -10,9 +10,9 @@ import java.util.HashSet;
 
 public class UserConstants {
 
-    public static final int DB_REG_USERS_COUNT = 1;
+    public static final int DB_REG_USERS_COUNT = 2;
     public static final int DB_VAL_COUNT = 1;
-    public static final int DB_UNCHECKED_COUNT = 1;
+    public static final int DB_UNCHECKED_COUNT = 2;
     public static final int DB_TOTAL_COUNT = 2;
 
     public static final Long DB_USER_ID = 1L;
@@ -42,6 +42,8 @@ public class UserConstants {
     public static final String DB_NEW_EMAIL = "newEmail@gmail.com";
     public static final String DB_NEW_TELEPHONE = "00213124";
 
+    public static final String DB_VALID_OP_USER_NAME = "null";
+    public static final String DB_INVALID_OP_USER_NAME = "invalid_username";
     public static final String DB_INVALID_USER_NAME = "invalidUsername";
 
 

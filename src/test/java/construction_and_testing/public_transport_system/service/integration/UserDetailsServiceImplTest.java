@@ -30,9 +30,9 @@ public class UserDetailsServiceImplTest {
      */
     @Test
     public void loadUserByUsernameShouldReturnUserDetailsWhenExists() {
-        final User user = userRepository.findById(DB_USER.getId()).orElse(null);
+        User user = userRepository.findById(DB_USER.getId()).orElse(null);
 
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
+        UserDetails userDetails = userDetailsService.loadUserByUsername(user.getUsername());
 
         assertThat(userDetails).isNotNull();
         assertThat(user.getUsername()).isEqualTo(userDetails.getUsername());
@@ -44,9 +44,7 @@ public class UserDetailsServiceImplTest {
      */
     @Test(expected = UsernameNotFoundException.class)
     public void loadUserByUsernameShouldThrowExceptionWhenUserDoesNotExist() {
-        //final User user = userRepository.findByUsername(DB_INVALID_USER_NAME);
-
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(DB_INVALID_USER_NAME);
+        UserDetails userDetails = userDetailsService.loadUserByUsername(DB_INVALID_USER_NAME);
 
         assertThat(userDetails).isNotNull();
         assertThat(DB_INVALID_USER_NAME).isEqualTo(userDetails.getUsername());
