@@ -34,11 +34,11 @@ public class UpdateSchedulePageTest {
         navBarPage = PageFactory.initElements(browser, NavigationBarPage.class);
         schedulePage = PageFactory.initElements(browser, UpdateSchedulePage.class);
 
-        try {
-            Thread.sleep(2000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Thread.sleep(2000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
 
         welcomePage.ensureIsDisplayed();
         welcomePage.login("null", "null");
@@ -49,7 +49,7 @@ public class UpdateSchedulePageTest {
 //            e.printStackTrace();
 //        }
 
-        navBarPage.ensureIsDisplayed();
+        navBarPage.ensureIsDisplayedUpdateScheduleLink();
         navBarPage.getUpdateScheduleLink().click();
         assertEquals("http://localhost:4200/updateSchedules", browser.getCurrentUrl());
 
@@ -61,13 +61,6 @@ public class UpdateSchedulePageTest {
         schedulePage.getTransportLineComboCheckBox().click();
         schedulePage.ensureIsDisplayedCheckBox1();
         schedulePage.getCheckTransportLine().click();
-
-        /*schedulePage.getTransportLineComboCheckBox().click();
-        schedulePage.getCheckTransportLine1().click();
-        schedulePage.getTransportLineComboCheckBox().click();
-        schedulePage.getCheckTransportLine2().click();
-        schedulePage.getTransportLineComboCheckBox().click();
-        schedulePage.getCheckTransportLine().click();*/
 
         //schedulePage.ensureIsDisplayedCell1();
 
@@ -124,6 +117,8 @@ public class UpdateSchedulePageTest {
         schedulePage.ensureIsSaveScheduleBtn();
         schedulePage.getSaveSchedule().click();
         assertEquals("08:00", schedulePage.getCell1().getAttribute("ng-reflect-model"));
+        schedulePage.ensureIsSaveScheduleBtn();
+        schedulePage.getSaveSchedule().click();
     }
 
     @AfterMethod

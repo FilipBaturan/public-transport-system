@@ -37,7 +37,7 @@ public class SchedulePageTest {
         welcomePage.ensureIsDisplayed();
         welcomePage.login("null", "null");
 
-        navBarPage.ensureIsDisplayed();
+        navBarPage.ensureIsDisplayedScheduleLink();
         //navBarPage.ensureIsDisplayedScheduleLink();
         navBarPage.getScheduleLink().click();
         assertEquals("http://localhost:4200/schedule", browser.getCurrentUrl());

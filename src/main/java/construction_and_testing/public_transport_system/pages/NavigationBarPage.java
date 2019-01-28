@@ -68,8 +68,13 @@ public class NavigationBarPage {
     }
 
     public void ensureIsDisplayedScheduleLink() {
-        (new WebDriverWait(driver, 10))
+        (new WebDriverWait(driver, 20))
                 .until(ExpectedConditions.elementToBeClickable(scheduleLink));
+    }
+
+    public void ensureIsDisplayedUpdateScheduleLink() {
+        (new WebDriverWait(driver, 20))
+                .until(ExpectedConditions.elementToBeClickable(updateScheduleLink));
     }
 
     public void ensureIsDisplayedLogout() {
