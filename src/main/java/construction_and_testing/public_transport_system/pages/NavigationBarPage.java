@@ -13,10 +13,10 @@ public class NavigationBarPage {
     @FindBy(xpath = "//*[@id=\"sidebar\"]/ul[1]/li[2]/a")
     private WebElement mapDropDown;
 
-    @FindBy(css = "#sidebar > ul.list-unstyled.components > li:nth-child(7) > a")
+    @FindBy(css = "#sidebar > ul.list-unstyled.components > li:nth-child(8) > a")
     private WebElement updateScheduleLink;
 
-    @FindBy(css = "#sidebar > ul.list-unstyled.components > li:nth-child(6) > a")
+    @FindBy(css = "#sidebar > ul.list-unstyled.components > li:nth-child(7) > a")
     private WebElement scheduleLink;
 
     @FindBy(xpath = "//*[@id=\"homeSubmenu\"]/li[3]/a")

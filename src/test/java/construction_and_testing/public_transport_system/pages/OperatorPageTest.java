@@ -45,7 +45,7 @@ public class OperatorPageTest{
         }
 
         @Test
-        public void testAddingValidAtor() {
+        public void testAddingOperator() {
 
             assertEquals("http://localhost:4200/operators", browser.getCurrentUrl());
             operatorsPage.ensureTableIsDisplayed();
@@ -68,7 +68,7 @@ public class OperatorPageTest{
         }
 
         @Test
-        public void testAddingInvalidator() {
+        public void testAddingOperatorInvalid() {
 
             assertEquals("http://localhost:4200/operators", browser.getCurrentUrl());
             operatorsPage.ensureTableIsDisplayed();
@@ -87,7 +87,7 @@ public class OperatorPageTest{
         }
 
         @Test
-        public void blockValidator() {
+        public void blockOperator() {
             assertEquals("http://localhost:4200/operators", browser.getCurrentUrl());
             operatorsPage.ensureTableIsDisplayed();
             int sizeBeforeAdding = operatorsPage.getTableSize();
@@ -100,7 +100,7 @@ public class OperatorPageTest{
         }
 
         @Test
-        public void changeValidator() throws InterruptedException {
+        public void changeOperator() throws InterruptedException {
             assertEquals("http://localhost:4200/operators", browser.getCurrentUrl());
             operatorsPage.ensureTableIsDisplayed();
             int sizeBeforeAdding = operatorsPage.getTableSize();
