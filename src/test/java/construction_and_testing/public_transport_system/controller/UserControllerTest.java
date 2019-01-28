@@ -1,15 +1,15 @@
 package construction_and_testing.public_transport_system.controller;
 
 
-import construction_and_testing.public_transport_system.domain.DTO.OperatorDTO;
-import construction_and_testing.public_transport_system.domain.DTO.UserDTO;
-import construction_and_testing.public_transport_system.domain.DTO.ValidatorDTO;
+import construction_and_testing.public_transport_system.domain.DTO.*;
 import construction_and_testing.public_transport_system.domain.Operator;
 import construction_and_testing.public_transport_system.domain.RegisteredUser;
 import construction_and_testing.public_transport_system.domain.User;
 import construction_and_testing.public_transport_system.domain.Validator;
+import construction_and_testing.public_transport_system.domain.enums.AuthorityType;
 import construction_and_testing.public_transport_system.domain.enums.UsersDocumentsStatus;
 import construction_and_testing.public_transport_system.service.definition.UserService;
+import construction_and_testing.public_transport_system.util.SecurityUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +21,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.test.annotation.DirtiesContext;
 import org.springframework.test.context.junit4.SpringRunner;
+
+import javax.ws.rs.ForbiddenException;
 
 import static construction_and_testing.public_transport_system.constants.TicketConstants.DB_ID;
 import static construction_and_testing.public_transport_system.constants.UserConstants.*;
@@ -51,7 +53,7 @@ public class UserControllerTest {
         assertEquals(body[0].getLastName(), DB_LAST_NAME);
         assertEquals(body[0].isActive(), true);
         assertEquals(body[0].getEmail(), DB_EMAIL);
-        assertEquals(body[0].getPassword(), DB_PASSWORD);
+        //assertEquals(body[0].getPassword(), DB_PASSWORD);
         assertEquals(result.getStatusCode(), HttpStatus.OK);
 
     }
@@ -501,46 +503,54 @@ public class UserControllerTest {
 
 
     @Test
-    public void getByUsername() {
-        String username = "operkor";
+    public void getOpByUsername() {
+        ResponseEntity<OperatorDTO> result = testRestTemplate
+                .getForEntity(this.URL + "/getOpByUsername/" + DB_VALID_OP_USER_NAME, OperatorDTO.class);
 
-        ResponseEntity<Object> result = testRestTemplate
-                .getForEntity(this.URL + "/getByUsername/" + username, Object.class);
-
-        Object body = result.getBody();
+        OperatorDTO body = (OperatorDTO) result.getBody();
         assertNotNull(body);
         assertEquals(result.getStatusCode(), HttpStatus.OK);
-        //assertThat(body.getUsername()).isEqualTo(username);
-        //assertThat(body.getAuthorityType()).isEqualTo(AuthorityType.OPERATER);
+        assertThat(body.getUsername()).isEqualTo(DB_VALID_OP_USER_NAME);
     }
 
     @Test
-    public void getByUsernameRegUser() {
-        String username = "username";
+    public void getOpByUsernameNotExisting() {
+        ResponseEntity<OperatorDTO> result = testRestTemplate
+                .getForEntity(this.URL + "/getOpByUsername/" + DB_INVALID_OP_USER_NAME, OperatorDTO.class);
 
-        ResponseEntity<Object> result = testRestTemplate
-                .getForEntity(this.URL + "/getByUsername/" + username, Object.class);
+        OperatorDTO body = (OperatorDTO) result.getBody();
 
-        Object body = result.getBody();
-
-        assertNotNull(body);
-        assertEquals(result.getStatusCode(), HttpStatus.OK);
-        //assertThat(body.getUsername()).isEqualTo(username);
-        //assertThat(body.getAuthorityType()).isEqualTo(AuthorityType.REGISTERED_USER);
+        assertNull(body.getId());
+        assertEquals(result.getStatusCode(), HttpStatus.NOT_FOUND);
     }
 
-    @Test
-    public void getByUsernameNotExisting() {
-        String username = "wrong_username";
-
-        ResponseEntity<Object> result = testRestTemplate
-                .getForEntity(this.URL + "/getByUsername/" + DB_INVALID_USER_NAME, Object.class);
-
-        RegisteredUser body = (RegisteredUser) result.getBody();
-
-        assertNull(body);
-        assertEquals(result.getStatusCode(), HttpStatus.NOT_ACCEPTABLE);
-    }
+//    @Test
+//    public void getByUsernameRegUser() {
+//        String username = "username";
+//
+//        ResponseEntity<Object> result = testRestTemplate
+//                .getForEntity(this.URL + "/getByUsername/" + username, Object.class);
+//
+//        Object body = result.getBody();
+//
+//        assertNotNull(body);
+//        assertEquals(result.getStatusCode(), HttpStatus.OK);
+//        //assertThat(body.getUsername()).isEqualTo(username);
+//        //assertThat(body.getAuthorityType()).isEqualTo(AuthorityType.REGISTERED_USER);
+//    }
+//
+//    @Test
+//    public void getByUsernameNotExisting() {
+//        String username = "wrong_username";
+//
+//        ResponseEntity<Object> result = testRestTemplate
+//                .getForEntity(this.URL + "/getByUsername/" + DB_INVALID_USER_NAME, Object.class);
+//
+//        RegisteredUser body = (RegisteredUser) result.getBody();
+//
+//        assertNull(body);
+//        assertEquals(result.getStatusCode(), HttpStatus.NOT_ACCEPTABLE);
+//    }
 
     @Test
     public void getRegUsersValid() {
@@ -555,7 +565,7 @@ public class UserControllerTest {
         assertEquals(body[0].getLastName(), DB_LAST_NAME);
         assertEquals(body[0].isActive(), true);
         assertEquals(body[0].getEmail(), DB_EMAIL);
-        assertEquals(body[0].getPassword(), DB_PASSWORD);
+        //assertEquals(body[0].getPassword(), DB_PASSWORD);
         assertEquals(result.getStatusCode(), HttpStatus.OK);
     }
 
@@ -604,7 +614,7 @@ public class UserControllerTest {
         assertEquals(body.getLastName(), DB_LAST_NAME);
         assertEquals(body.isActive(), true);
         assertEquals(body.getEmail(), DB_EMAIL);
-        assertEquals(body.getPassword(), DB_PASSWORD);
+        //assertEquals(body.getPassword(), DB_PASSWORD);
         assertEquals(result.getStatusCode(), HttpStatus.OK);
     }
 
@@ -621,6 +631,40 @@ public class UserControllerTest {
         assertEquals(body.getEmail(), "");
         assertEquals(body.getPassword(), "");
         assertEquals(result.getStatusCode(), HttpStatus.NOT_FOUND);
+    }
+
+    @Test
+    public void login(){
+        AuthenticationRequestDTO authDTO = new AuthenticationRequestDTO("null", "null");
+
+        ResponseEntity<AuthenticationResponseDTO> authResult = testRestTemplate
+                .postForEntity(this.URL + "/auth", authDTO, AuthenticationResponseDTO.class);
+
+        AuthenticationResponseDTO bodyLogin = authResult.getBody();
+        assertEquals(authResult.getStatusCode(), HttpStatus.OK);
+        assertEquals(bodyLogin.getUser().getUsername(), "null");
+    }
+
+    @Test
+    public void findCurrentUser(){
+        ResponseEntity<UserDTO> result = testRestTemplate
+                .getForEntity(this.URL + "/currentUser", UserDTO.class);
+
+        UserDTO body = (UserDTO) result.getBody();
+
+        assertNull(body);
+        assertEquals(result.getStatusCode(), HttpStatus.FORBIDDEN);
+
+
+//        ResponseEntity<String> res = testRestTemplate
+//                .getForEntity(this.URL + "/currentUser", String.class);
+//
+//
+//        System.out.println(res.toString());
+//        String bod = res.getBody();
+//        System.out.println(bod);
+//        assertNotNull(bod);
+//        assertEquals(res.getStatusCode(), HttpStatus.OK);
     }
 
 }

@@ -19,12 +19,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import javax.ws.rs.ForbiddenException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -139,6 +141,22 @@ public class UserController {
 //        }
 //    }
 
+
+    /**
+     * @param username of a operator that is being searched
+     * @return operator with the given username
+     */
+    @GetMapping("/getOpByUsername/{username}")
+    public ResponseEntity<OperatorDTO> getOpByUsername(@PathVariable String username) {
+        try {
+            return new ResponseEntity<>(UserConverter.fromEntity((Operator) userService.findByUsername(username)), HttpStatus.OK);
+        }catch (Exception e)
+        {
+            return new ResponseEntity<>(new OperatorDTO(), HttpStatus.NOT_FOUND);
+        }
+    }
+
+
     @GetMapping("/getRegByUsername/{username}")
     public ResponseEntity<UserDTO> getRegByUsername(@PathVariable String username) {
         try {
@@ -159,23 +177,27 @@ public class UserController {
      */
     @PostMapping("/auth")
     public ResponseEntity<Object> login(@Valid @RequestBody AuthenticationRequestDTO authenticationRequest) {
-        UsernamePasswordAuthenticationToken authToken =
-                new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword());
+        try {
+            UsernamePasswordAuthenticationToken authToken =
+                    new UsernamePasswordAuthenticationToken(authenticationRequest.getUsername(), authenticationRequest.getPassword());
 
-        Authentication authentication = authenticationManager.authenticate(authToken);
+            Authentication authentication = authenticationManager.authenticate(authToken);
 
-        //SecurityContextHolder.getContext().setAuthentication(authentication);
+            //SecurityContextHolder.getContext().setAuthentication(authentication);
 
-        UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
-        LoggedUserDTO user = UserConverter.fromLoggedEntity(userService.findByUsername(userDetails.getUsername()));
-        String token = tokenUtils.generateToken(userDetails);
+            UserDetails userDetails = userDetailsService.loadUserByUsername(authenticationRequest.getUsername());
+            LoggedUserDTO user = UserConverter.fromLoggedEntity(userService.findByUsername(userDetails.getUsername()));
+            String token = tokenUtils.generateToken(userDetails);
 
-        logger.info("Successfully logged in.");
-        return new ResponseEntity<>(new AuthenticationResponseDTO(user, token), HttpStatus.OK);
-        //}
+            logger.info("Successfully logged in.");
+            return new ResponseEntity<>(new AuthenticationResponseDTO(user, token), HttpStatus.OK);
+            //}
         /*logger.info("Failed to login, incorrect combination od username and password");
         return new ResponseEntity<Object>("Incorrect username or password, or user is not activated.",
                 HttpStatus.BAD_REQUEST);*/
+        }catch (Exception e){
+            return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+        }
     }
 
 
@@ -188,7 +210,11 @@ public class UserController {
      */
     @GetMapping("/currentUser")
     public ResponseEntity findCurrentUser() {
-        return new ResponseEntity<>(UserConverter.fromLoggedEntity(userService.findCurrentUser()), HttpStatus.OK);
+        try {
+            return new ResponseEntity<>(UserConverter.fromLoggedEntity(userService.findCurrentUser()), HttpStatus.OK);
+        } catch (Exception fe){
+            return new ResponseEntity(HttpStatus.FORBIDDEN);
+        }
     }
 
     @PutMapping("/addImage")

@@ -80,7 +80,7 @@ INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('106', '2
 INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('106', '23:45');
 INSERT INTO `schedule_departures` (`schedule_id`, `departure`) VALUES ('106', '00:00');
 
-INSERT INTO `user` (`type`, `id`, `active`, `authority`, `confirmation`, `email`, `last_name`, `first_name`, `password`, `telephone`, `username`, `balance`, `document`) VALUES ('REGISTERED_USER', '1', true, '0', '2', 'email@gmail.com', 'LastName', 'FirstName', 'password', '00213123', 'username', '100', 'asds');
+INSERT INTO `user` (`type`, `id`, `active`, `authority`, `confirmation`, `email`, `last_name`, `first_name`, `password`, `telephone`, `username`, `balance`, `document`) VALUES ('REGISTERED_USER', '1', true, '0', '2', 'email@gmail.com', 'LastName', 'FirstName', '$2a$04$JYoJwq17KGd63MK92h/uveV7bWi5vIdisGM58sfa8KIKKCkOUQoWm', '00213123', 'username', '100', 'asds');
 INSERT INTO `user` (`type`, `id`, `active`, `authority`, `email`, `last_name`, `first_name`, `password`, `username`) VALUES ('VALIDATOR', '2', true, '2', 'email@gmail.com', 'ValLastName', 'ValFirstName', 'valPassword', 'valUsername');
 INSERT INTO `user` (`type`, `id`, `active`, `authority`, `email`, `last_name`, `first_name`, `password`, `username`) VALUES ('OPERATOR', '3', true, '3', 'null@gmail.com', 'David', 'Davidovic', '$2a$04$CpdJcjORftUKRbJpynFIa.qUY2c/DoqNmta2dL.o6Wkw1I3ZLh79C', 'null');
 INSERT INTO `user` (`type`, `id`, `active`, `authority`, `email`, `last_name`, `first_name`, `password`, `username`) VALUES ('OPERATOR', '4', true, '3', 'mail@mail.com', 'Ime', 'Prezime', '$2a$04$mEe6vqwMvGidyoQ8K.w8E.dLMXs12a6j6GKHrQFW6POXFhk027CuC', 'operkor');

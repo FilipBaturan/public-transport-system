@@ -8,6 +8,7 @@ import construction_and_testing.public_transport_system.domain.enums.AuthorityTy
 import construction_and_testing.public_transport_system.domain.enums.UsersDocumentsStatus;
 import construction_and_testing.public_transport_system.service.definition.UserService;
 import construction_and_testing.public_transport_system.util.GeneralException;
+import construction_and_testing.public_transport_system.util.SecurityUtil;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringRunner;
 
 import javax.transaction.Transactional;
+import javax.ws.rs.ForbiddenException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -38,7 +40,6 @@ public class UserServiceImplIntegrationTest {
         assertEquals(user.getFirstName(), DB_FIRST_NAME);
         assertEquals(user.getLastName(), DB_LAST_NAME);
         assertEquals(user.getUsername(), DB_USERNAME);
-        assertEquals(user.getPassword(), DB_PASSWORD);
         assertEquals(user.getTelephone(), DB_TELEPHONE);
     }
 
@@ -66,7 +67,7 @@ public class UserServiceImplIntegrationTest {
         assertEquals(savedUser.getFirstName(), DB_FIRST_NAME);
         assertEquals(savedUser.getLastName(), DB_LAST_NAME);
         assertEquals(savedUser.getUsername(), DB_USERNAME);
-        assertEquals(savedUser.getPassword(), DB_PASSWORD);
+        //assertEquals(savedUser.getPassword(), DB_PASSWORD);
         assertEquals(savedUser.getTelephone(), DB_TELEPHONE);
 
         int sizeAfer = userService.findAll().size();
@@ -144,6 +145,28 @@ public class UserServiceImplIntegrationTest {
             assertThat(user.getConfirmation()).isEqualTo(UsersDocumentsStatus.UNCHECKED);
         }
         assertThat(users.size()).isEqualTo(DB_UNCHECKED_COUNT);
+    }
+
+
+    /**
+     * Test find current user when user is logged in.
+     */
+    @Test
+    public void findCurrentUserShouldReturnCurrentUserWhenUserIsLoggedIn() {
+        SecurityUtil.setAuthentication(DB_USERNAME);
+
+        User user = userService.findCurrentUser();
+        assertThat(user).isNotNull();
+        assertEquals(DB_USERNAME, user.getUsername());
+    }
+
+    /**
+     * Test find current user when user is not logged in.
+     * Throws NullPointer exception.
+     */
+    @Test(expected = ForbiddenException.class)
+    public void findCurrentUserShouldThrowExceptionWhenUserIsNotLoggedIn() {
+        userService.findCurrentUser();
     }
 
 
