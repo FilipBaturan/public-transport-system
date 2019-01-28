@@ -43,11 +43,11 @@ public class UpdateSchedulePageTest {
         welcomePage.ensureIsDisplayed();
         welcomePage.login("null", "null");
 
-        try {
-            Thread.sleep(1000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Thread.sleep(1000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
 
         navBarPage.ensureIsDisplayed();
         navBarPage.getUpdateScheduleLink().click();
@@ -84,28 +84,46 @@ public class UpdateSchedulePageTest {
 
         schedulePage.ensureHasCorrectSizeRows(5);
 
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
-        assertEquals(3, numColumns);
-        assertEquals(5, numRows);
-
-        try {
-            Thread.sleep(5000);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+//        try {
+//            Thread.sleep(5000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
+//        assertEquals(3, numColumns);
+//        assertEquals(5, numRows);
+//
+//        try {
+//            Thread.sleep(5000);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
 
         //assertEquals("R1-WORKDAY", schedulePage.getHeader1().getText());
 
         assertEquals("08:00", schedulePage.getCell1().getAttribute("ng-reflect-model"));
-        assertEquals("", schedulePage.getCell2().getAttribute("ng-reflect-model"));
-        assertEquals("22:00", schedulePage.getCell3().getAttribute("ng-reflect-model"));
+        assertEquals("22:00", schedulePage.getCell2().getAttribute("ng-reflect-model"));
 
         schedulePage.getCell1().clear();
         schedulePage.getCell1().sendKeys("07:50");
+
+        schedulePage.ensureIsDisplayedAddRemoveScheduleBtn();
+        schedulePage.getAddRemoveScheduleButton().click();
+
+        schedulePage.ensureIsDisplayedCell4();
+        schedulePage.getCell4().sendKeys("14:00");
+
+        schedulePage.ensureIsSaveScheduleBtn();
+        schedulePage.getSaveSchedule().click();
+
+        schedulePage.ensureIsDisplayedAddRemoveScheduleBtn();
+        schedulePage.getAddRemoveScheduleButton().click();
+
+        schedulePage.getCell1().clear();
+        schedulePage.getCell1().sendKeys("08:00");
+
+        schedulePage.ensureIsSaveScheduleBtn();
+        schedulePage.getSaveSchedule().click();
+        assertEquals("08:00", schedulePage.getCell1().getAttribute("ng-reflect-model"));
     }
 
     @AfterMethod

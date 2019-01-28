@@ -41,6 +41,21 @@ public class UpdateSchedulePage {
     @FindBy(xpath = "//*[@id=\"mat-input-2\"]")
     private WebElement cell3;
 
+    @FindBy(xpath = "//*[@id=\"mat-input-10\"]")
+    private WebElement cell4;
+
+    @FindBy(css = "mat-header-cell.mat-header-cell:nth-child(2) > button:nth-child(1)")
+    private WebElement addRemoveScheduleButton;
+
+    @FindBy(css = "button.schedule-btns-lower:nth-child(1)")
+    private WebElement addRowButton;
+
+    @FindBy(css = "button.schedule-btns-lower:nth-child(2)")
+    private WebElement removeRowButton;
+
+    @FindBy(css = "button.schedule-btns-lower:nth-child(3)")
+    private WebElement saveSchedule;
+
     public UpdateSchedulePage() {
     }
 
@@ -86,6 +101,26 @@ public class UpdateSchedulePage {
                 .until(ExpectedConditions.numberOfElementsToBe(By.cssSelector("mat-row"),numRows));
     }
 
+    public void ensureIsDisplayedAddRemoveScheduleBtn() {
+        (new WebDriverWait(driver, 20))
+                .until(ExpectedConditions.elementToBeClickable(addRemoveScheduleButton));
+    }
+
+    public void ensureIsSaveScheduleBtn() {
+        (new WebDriverWait(driver, 20))
+                .until(ExpectedConditions.elementToBeClickable(saveSchedule));
+    }
+
+    public void ensureIsAddRowButton() {
+        (new WebDriverWait(driver, 20))
+                .until(ExpectedConditions.elementToBeClickable(addRowButton));
+    }
+
+    public void ensureIsRemoveRowBtn() {
+        (new WebDriverWait(driver, 20))
+                .until(ExpectedConditions.elementToBeClickable(removeRowButton));
+    }
+
     public void ensureIsDisplayedCheckBox1() {
         (new WebDriverWait(driver, 20))
                 .until(ExpectedConditions.elementToBeClickable(checkTransportLine));
@@ -104,6 +139,11 @@ public class UpdateSchedulePage {
     public void ensureIsDisplayedCell1() {
         (new WebDriverWait(driver, 10))
                 .until(ExpectedConditions.textToBe(By.xpath("//*[@id=\"mat-input-0\"]"), "07:55"));
+    }
+
+    public void ensureIsDisplayedCell4() {
+        (new WebDriverWait(driver, 10))
+                .until(ExpectedConditions.textToBe(By.xpath("//*[@id=\"mat-input-10\"]"), ""));
     }
 
     public int getNumOfRows() {
@@ -172,6 +212,26 @@ public class UpdateSchedulePage {
 
     public void setCell3(WebElement cell3) {
         this.cell3 = cell3;
+    }
+
+    public WebElement getCell4() {
+        return cell4;
+    }
+
+    public WebElement getAddRemoveScheduleButton() {
+        return addRemoveScheduleButton;
+    }
+
+    public WebElement getAddRowButton() {
+        return addRowButton;
+    }
+
+    public WebElement getRemoveRowButton() {
+        return removeRowButton;
+    }
+
+    public WebElement getSaveSchedule() {
+        return saveSchedule;
     }
 
     public WebElement getScheduleTable() {
