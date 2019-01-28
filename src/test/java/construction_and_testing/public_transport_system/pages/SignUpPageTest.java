@@ -30,6 +30,8 @@ public class SignUpPageTest {
         signUpPage = PageFactory.initElements(browser, SignUpPage.class);
 
         welcomePage.ensureIsDisplayed();
+        welcomePage.getAccountSidebar().click();
+        welcomePage.ensureIsDisplayed();
         welcomePage.getButtonSignUp().click();
 
         assertEquals("http://localhost:4200/signup", browser.getCurrentUrl());

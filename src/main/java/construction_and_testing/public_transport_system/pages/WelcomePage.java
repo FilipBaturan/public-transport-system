@@ -22,7 +22,10 @@ public class WelcomePage {
     @FindBy(xpath = "//*[@id=\"signinButton\"]")
     private WebElement logInButton;
 
-    @FindBy(xpath = "//*[@id=\"content\"]/div/div[2]/div/div[2]/button")
+    @FindBy(xpath = "//*[@id=\"sidebar\"]/ul[1]/li[9]")
+    private WebElement accountSidebar;
+
+    @FindBy(xpath = "//*[@id=\"signupLink\"]")
     private WebElement buttonSignUp;
 
     @FindBy(xpath = "//*[@id=\"sidebar\"]/ul[2]/li/a")
@@ -75,13 +78,16 @@ public class WelcomePage {
         inputPassword.sendKeys(value);
     }
 
-
     public WebElement getButtonSignIn() {
         return logInButton;
     }
 
     public void ensureIsDisplayed() {
         (new WebDriverWait(driver, 10)).until(ExpectedConditions.visibilityOf(formLogin));
+    }
+
+    public WebElement getAccountSidebar() {
+        return accountSidebar;
     }
 
     public WebElement getButtonSignUp() {
