@@ -34,6 +34,7 @@ public class NewsConstants {
     public static final News DB_CHANGED_NEWS = new News(2L,DB_CHANGED_TITLE, DB_CHANGED_CONTENT,DB_CHANGED_TIME, new Operator(3L));
     public static final News DB_CHANGED_INVALID_NEWS = new News(DB_INVALID_ID, "Title1", "Content1",DB_TIME_1, new Operator(3L));
     public static final News DB_DELETED_NEWS = new News(1L,"Title1", "Content1",DB_TIME_1, new Operator(3L), false);
+    public static final News DB_CHANGED_NEWS_2 = new News(3L,DB_CHANGED_TITLE, DB_CHANGED_CONTENT,DB_CHANGED_TIME, new Operator(3L));
 
 
     public static boolean isSorted(List<News> news) {

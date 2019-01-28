@@ -47,7 +47,7 @@ public class PricelistController {
                 throw new GeneralException("Pricelist with given firstName already exist!", HttpStatus.BAD_REQUEST);
             }
         } catch (PricelistTimeIntervalException e) {
-            return new ResponseEntity<>(e.getHttpStatus());
+            return new ResponseEntity<>("Time validity is not correct!", e.getHttpStatus());
         }
     }
 

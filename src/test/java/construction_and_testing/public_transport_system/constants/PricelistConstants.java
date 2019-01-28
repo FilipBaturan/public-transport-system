@@ -76,8 +76,12 @@ public class PricelistConstants {
     public static final Pricelist DB_INVALID_NEW_PRICELIST_INTEGR_4 = new Pricelist(7L, DB_NEW_START_DATE_INVALID_INTEGR_4, DB_NEW_END_DATE_INVALID_INTEGR_4);
     public static final Pricelist DB_INVALID_NEW_PRICELIST_INTEGR_5 = new Pricelist(8L, DB_START_DATE_VALID_INTEGR, DB_END_DATE_VALID_INTEGR);
 
-
     public static final Pricelist DB_MODIFIED_PRICELIST = new Pricelist(DB_MODIFIED_ID, DB_NEW_MODIFIED_START_DATE_NOW, DB_END_DATE_VALID);
+
+    public static final LocalDateTime DB_NEW_START_DATE_VALID_INTEGR_MOD = LocalDateTime.of(2020, 6,1,0,0);
+    public static final LocalDateTime DB_NEW_END_DATE_VALID_INTEGR_MOD = LocalDateTime.of(2020, 12, 31, 0,0);
+
+    public static final Pricelist DB_MODIFIED_PRICELIST_INTEGR = new Pricelist(DB_INTEGR_DELETE_ID, DB_NEW_START_DATE_VALID_INTEGR_MOD, DB_NEW_END_DATE_VALID_INTEGR_MOD);
 
 
 }
