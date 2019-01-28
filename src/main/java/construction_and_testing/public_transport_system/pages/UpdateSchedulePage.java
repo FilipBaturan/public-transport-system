@@ -13,7 +13,7 @@ public class UpdateSchedulePage {
     private NavigationBarPage navBarPage;
 
     //@FindBy(xpath = "/html/body/app-root/app-schedule/div/div/angular2-multiselect[2]")
-    @FindBy(xpath = "/html/body/app-root/app-schedule-update/div/div/angular2-multiselect/div/div[1]/div")
+    @FindBy(css = ".c-btn")
     private WebElement transportLineComboCheckBox;
 
     @FindBy(xpath = "//*[@id=\"content\"]/angular2-multiselect/div/div[2]/div[3]/div[3]/ul/li[2]")
